@@ -19,6 +19,7 @@ ext {
 	logbackClassicVersion = '1.5.38'
 	mockitoVersion = '5.24.0'
 	slf4jVersion = '2.0.18'
+	snCommonVersion = '4.53.0'
 	ossrhUsername = 'ossrh-username'
 	ossrhPassword = 'ossrh-password'
 	
@@ -27,6 +28,8 @@ ext {
 		// Test dependencies.
 		testing: [
 			"org.assertj:assertj-core:${assertjVersion}",
+			'org.easymock:easymock:3.1',
+			'org.hamcrest:hamcrest-library:2.2',
 			"org.mockito:mockito-core:${mockitoVersion}",
 			"org.mockito:mockito-junit-jupiter:${mockitoVersion}",
 			"org.junit.platform:junit-platform-launcher:${junitVersion}"
@@ -79,6 +82,7 @@ subprojects {
 		if (rootProject.hasProperty('failOnWarnings') && rootProject.failOnWarnings.toBoolean()) {
 			it.options.compilerArgs += ["-Werror"]
 		}
+		it.options.errorprone.disable("InlineMeSuggester", "MixedMutabilityReturnType")
 	}
 
 	compileJava {
@@ -94,6 +98,7 @@ subprojects {
 		options.compilerArgs += [
 			"-Xlint:-serial"
 		]
+		options.errorprone.disable("BadImport", "CheckReturnValue")
 		it.options.errorprone.enabled = (rootProject.hasProperty('errorProneEnabledTest') && rootProject.errorProneEnabledTest.toBoolean());
 		it.options.errorprone {
 			option("NullAway:OnlyNullMarked", "true")
