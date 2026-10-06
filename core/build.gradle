@@ -9,7 +9,9 @@ description = 'Nifty SunSpec: Core'
 
 dependencies {
 	implementation project(':nifty-sunspec-api')
-	implementation "net.solarnetwork.common:net.solarnetwork.common:${snCommonVersion}"
+	implementation("net.solarnetwork.common:net.solarnetwork.common:${snCommonVersion}") {
+		transitive = false
+	}
 	implementation "org.slf4j:slf4j-api:${slf4jVersion}"
 	
 	// Testing
