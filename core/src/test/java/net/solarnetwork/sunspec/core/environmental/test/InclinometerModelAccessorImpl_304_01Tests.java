@@ -22,11 +22,8 @@
 
 package net.solarnetwork.sunspec.core.environmental.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -61,39 +58,86 @@ public class InclinometerModelAccessorImpl_304_01Tests {
 
 	@Test
 	public void findTypedModel() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
+
+		// WHEN
 		InclinometerModelAccessor accessor = data.findTypedModel(InclinometerModelAccessor.class);
-		assertThat(accessor, instanceOf(InclinometerModelAccessorImpl.class));
+
+		// THEN
+		// @formatter:off
+		then(accessor)
+			.as("Model found by accessor type")
+			.isInstanceOf(InclinometerModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		InclinometerModelAccessor model = getTestDataInstance()
 				.findTypedModel(InclinometerModelAccessor.class);
-		assertThat("Model base address", model.getBaseAddress(), equalTo(70));
-		assertThat("Model block address", model.getBlockAddress(), equalTo(72));
-		assertThat("Model ID", model.getModelId(), equalTo(EnvironmentalModelId.Inclinometer));
-		assertThat("Model fixed length", model.getFixedBlockLength(), equalTo(0));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				equalTo(6));
-		assertThat("Model length", model.getModelLength(), equalTo(12));
-		assertThat("Model length", model.getRepeatingBlockInstanceCount(), equalTo(2));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(70, from(InclinometerModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(72, from(InclinometerModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(EnvironmentalModelId.Inclinometer, from(InclinometerModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(0, from(InclinometerModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(6, from(InclinometerModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(12, from(InclinometerModelAccessor::getModelLength))
+			.as("Model length")
+			.returns(2, from(InclinometerModelAccessor::getRepeatingBlockInstanceCount))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void data() {
+		// GIVEN
 		InclinometerModelAccessor model = getTestDataInstance()
 				.findTypedModel(InclinometerModelAccessor.class);
+
+		// WHEN
 		List<Incline> inclines = model.getInclines();
-		assertThat("2 inclines returned", inclines, hasSize(2));
+
+		// THEN
+		// @formatter:off
+		then(inclines)
+			.as("2 inclines returned")
+			.hasSize(2)
+			;
+		// @formatter:on
 		Incline inc = inclines.get(0);
-		assertThat("Incline 1 x", inc.getInclineX(), is(equalTo(245.82f)));
-		assertThat("Incline 1 y", inc.getInclineY(), is(equalTo(10.82f)));
-		assertThat("Incline 1 z", inc.getInclineZ(), is(equalTo(735.98f)));
+		// @formatter:off
+		then(inc)
+			.as("Incline 1 x")
+			.returns(245.82f, from(Incline::getInclineX))
+			.as("Incline 1 y")
+			.returns(10.82f, from(Incline::getInclineY))
+			.as("Incline 1 z")
+			.returns(735.98f, from(Incline::getInclineZ))
+			;
+		// @formatter:on
 		inc = inclines.get(1);
-		assertThat("Incline 2 x", inc.getInclineX(), is(equalTo(12.0f)));
-		assertThat("Incline 2 y", inc.getInclineY(), is(equalTo(11.82f)));
-		assertThat("Incline 2 z", inc.getInclineZ(), is(equalTo(3.02f)));
+		// @formatter:off
+		then(inc)
+			.as("Incline 2 x")
+			.returns(12.0f, from(Incline::getInclineX))
+			.as("Incline 2 y")
+			.returns(11.82f, from(Incline::getInclineY))
+			.as("Incline 2 z")
+			.returns(3.02f, from(Incline::getInclineZ))
+			;
+		// @formatter:on
 	}
 
 }

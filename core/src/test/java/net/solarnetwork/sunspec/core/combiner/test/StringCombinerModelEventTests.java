@@ -22,11 +22,8 @@
 
 package net.solarnetwork.sunspec.core.combiner.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.EnumSet;
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.api.combiner.StringCombinerModelEvent;
 
@@ -40,31 +37,53 @@ public class StringCombinerModelEventTests {
 
 	@Test
 	public void forBitmask() {
-		assertThat("Events from bits", StringCombinerModelEvent.forBitmask(0x40001L), is(equalTo(
-				EnumSet.of(StringCombinerModelEvent.LowVoltage, StringCombinerModelEvent.ArcDetected))));
+		// @formatter:off
+		then(StringCombinerModelEvent.forBitmask(0x40001L))
+			.as("Events from bits")
+			.isEqualTo(EnumSet.of(StringCombinerModelEvent.LowVoltage,
+					StringCombinerModelEvent.ArcDetected))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_highestEvent() {
-		assertThat("Highest defined event", StringCombinerModelEvent.forBitmask(0x40000L),
-				is(equalTo(EnumSet.of(StringCombinerModelEvent.ArcDetected))));
+		// @formatter:off
+		then(StringCombinerModelEvent.forBitmask(0x40000L))
+			.as("Highest defined event")
+			.isEqualTo(EnumSet.of(StringCombinerModelEvent.ArcDetected))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_zero() {
-		assertThat("No events", StringCombinerModelEvent.forBitmask(0L), is(equalTo(Set.of())));
+		// @formatter:off
+		then(StringCombinerModelEvent.forBitmask(0L))
+			.as("No events")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_notImplemented() {
-		assertThat("Not implemented", StringCombinerModelEvent.forBitmask(0xFFFFFFFFL),
-				is(equalTo(Set.of())));
+		// @formatter:off
+		then(StringCombinerModelEvent.forBitmask(0xFFFFFFFFL))
+			.as("Not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_mostSignificantBit() {
-		assertThat("Most significant bit set means not implemented",
-				StringCombinerModelEvent.forBitmask(0x80000000L | 0x40001L), is(equalTo(Set.of())));
+		// @formatter:off
+		then(StringCombinerModelEvent.forBitmask(0x80000000L | 0x40001L))
+			.as("Most significant bit set means not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 }

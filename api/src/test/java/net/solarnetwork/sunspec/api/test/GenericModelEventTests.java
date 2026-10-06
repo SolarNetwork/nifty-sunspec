@@ -22,9 +22,7 @@
 
 package net.solarnetwork.sunspec.api.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.api.GenericModelEvent;
@@ -40,26 +38,43 @@ public class GenericModelEventTests {
 
 	@Test
 	public void forBitmask() {
-		assertThat("Events for the set bits", GenericModelEvent.forBitmask(0x40000005L),
-				is(equalTo(Set.<ModelEvent> of(new GenericModelEvent(0), new GenericModelEvent(2),
-						new GenericModelEvent(30)))));
+		// @formatter:off
+		then(GenericModelEvent.forBitmask(0x40000005L))
+			.as("Events for the set bits")
+			.isEqualTo(Set.<ModelEvent> of(new GenericModelEvent(0), new GenericModelEvent(2),
+					new GenericModelEvent(30)))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_none() {
-		assertThat("No events", GenericModelEvent.forBitmask(0L), is(equalTo(Set.of())));
+		// @formatter:off
+		then(GenericModelEvent.forBitmask(0L))
+			.as("No events")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_notImplemented() {
-		assertThat("Not implemented value has no events", GenericModelEvent.forBitmask(0xFFFFFFFFL),
-				is(equalTo(Set.of())));
+		// @formatter:off
+		then(GenericModelEvent.forBitmask(0xFFFFFFFFL))
+			.as("Not implemented value has no events")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_mostSignificantBit() {
-		assertThat("Bitmask with the most significant bit set is not implemented",
-				GenericModelEvent.forBitmask(0x80000001L), is(equalTo(Set.of())));
+		// @formatter:off
+		then(GenericModelEvent.forBitmask(0x80000001L))
+			.as("Bitmask with the most significant bit set is not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 }

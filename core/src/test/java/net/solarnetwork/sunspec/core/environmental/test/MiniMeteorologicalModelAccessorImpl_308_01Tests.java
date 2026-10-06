@@ -22,9 +22,8 @@
 
 package net.solarnetwork.sunspec.core.environmental.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,34 +56,69 @@ public class MiniMeteorologicalModelAccessorImpl_308_01Tests {
 
 	@Test
 	public void findTypedModel() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
+
+		// WHEN
 		MiniMeteorologicalModelAccessor accessor = data
 				.findTypedModel(MiniMeteorologicalModelAccessor.class);
-		assertThat(accessor, instanceOf(MiniMeteorologicalModelAccessorImpl.class));
+
+		// THEN
+		// @formatter:off
+		then(accessor)
+			.as("Model found by accessor type")
+			.isInstanceOf(MiniMeteorologicalModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		MiniMeteorologicalModelAccessor model = getTestDataInstance()
 				.findTypedModel(MiniMeteorologicalModelAccessor.class);
-		assertThat("Model base address", model.getBaseAddress(), equalTo(70));
-		assertThat("Model block address", model.getBlockAddress(), equalTo(72));
-		assertThat("Model ID", model.getModelId(), equalTo(EnvironmentalModelId.MiniMeteorolgical));
-		assertThat("Model fixed length", model.getFixedBlockLength(), equalTo(4));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				equalTo(0));
-		assertThat("Model length", model.getModelLength(), equalTo(4));
-		assertThat("Model length", model.getRepeatingBlockInstanceCount(), equalTo(0));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(70, from(MiniMeteorologicalModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(72, from(MiniMeteorologicalModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(EnvironmentalModelId.MiniMeteorolgical,
+					from(MiniMeteorologicalModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(4, from(MiniMeteorologicalModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(0, from(MiniMeteorologicalModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(4, from(MiniMeteorologicalModelAccessor::getModelLength))
+			.as("Model length")
+			.returns(0, from(MiniMeteorologicalModelAccessor::getRepeatingBlockInstanceCount))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void data() {
+		// GIVEN
 		MiniMeteorologicalModelAccessor model = getTestDataInstance()
 				.findTypedModel(MiniMeteorologicalModelAccessor.class);
-		assertThat("GHI", model.getGlobalHorizontalIrradiance(), equalTo(12345));
-		assertThat("BOM temp", model.getBackOfModuleTemperature(), equalTo(123.4f));
-		assertThat("Ambient temp", model.getAmbientTemperature(), equalTo(-2.3f));
-		assertThat("Wind speed", model.getWindSpeed(), equalTo(23));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("GHI")
+			.returns(12345, from(MiniMeteorologicalModelAccessor::getGlobalHorizontalIrradiance))
+			.as("BOM temp")
+			.returns(123.4f, from(MiniMeteorologicalModelAccessor::getBackOfModuleTemperature))
+			.as("Ambient temp")
+			.returns(-2.3f, from(MiniMeteorologicalModelAccessor::getAmbientTemperature))
+			.as("Wind speed")
+			.returns(23, from(MiniMeteorologicalModelAccessor::getWindSpeed))
+			;
+		// @formatter:on
 	}
 
 }

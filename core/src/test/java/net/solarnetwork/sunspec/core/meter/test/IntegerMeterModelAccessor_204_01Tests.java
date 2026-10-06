@@ -22,10 +22,8 @@
 
 package net.solarnetwork.sunspec.core.meter.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -61,41 +59,91 @@ public class IntegerMeterModelAccessor_204_01Tests {
 
 	@Test
 	public void commonModelProperties() {
+		// GIVEN
 		CommonModelAccessor data = getTestDataInstance();
-		assertThat("Manufacturer", data.getManufacturer(), equalTo("ACCUENERGY"));
-		assertThat("Model name", data.getModelName(), equalTo("Acuvim II"));
-		assertThat("Options", data.getOptions(), equalTo("Acuvim II"));
-		assertThat("Version", data.getVersion(), equalTo("H:2.32 S:3.66"));
-		assertThat("Serial number", data.getSerialNumber(), equalTo("AH17122035"));
-		assertThat("Device address", data.getDeviceAddress(), equalTo(100));
+
+		// THEN
+		// @formatter:off
+		then(data)
+			.as("Manufacturer")
+			.returns("ACCUENERGY", from(CommonModelAccessor::getManufacturer))
+			.as("Model name")
+			.returns("Acuvim II", from(CommonModelAccessor::getModelName))
+			.as("Options")
+			.returns("Acuvim II", from(CommonModelAccessor::getOptions))
+			.as("Version")
+			.returns("H:2.32 S:3.66", from(CommonModelAccessor::getVersion))
+			.as("Serial number")
+			.returns("AH17122035", from(CommonModelAccessor::getSerialNumber))
+			.as("Device address")
+			.returns(100, from(CommonModelAccessor::getDeviceAddress))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void findTypedModel() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
+
+		// WHEN
 		MeterModelAccessor meterAccessor = data.findTypedModel(MeterModelAccessor.class);
-		assertThat(meterAccessor, instanceOf(IntegerMeterModelAccessor.class));
+
+		// THEN
+		// @formatter:off
+		then(meterAccessor)
+			.as("Model found by accessor type")
+			.isInstanceOf(IntegerMeterModelAccessor.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
-		assertThat("Model base address", model.getBaseAddress(), equalTo(69));
-		assertThat("Model block address", model.getBlockAddress(), equalTo(71));
-		assertThat("Model ID", model.getModelId(),
-				equalTo(MeterModelId.DeltaConnectThreePhaseMeterInteger));
-		assertThat("Model fixed length", model.getFixedBlockLength(), equalTo(105));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				equalTo(0));
-		assertThat("Model length", model.getModelLength(), equalTo(81)); // SHOULD BE 105!
-		assertThat("Model length", model.getRepeatingBlockInstanceCount(), equalTo(0));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(69, from(MeterModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(71, from(MeterModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(MeterModelId.DeltaConnectThreePhaseMeterInteger,
+					from(MeterModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(105, from(MeterModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(0, from(MeterModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(81, from(MeterModelAccessor::getModelLength))
+			;
+		// @formatter:on // SHOULD BE 105!
+		// @formatter:off
+		then(model.getRepeatingBlockInstanceCount())
+			.as("Model length")
+			.isEqualTo(0)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void events() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
+
+		// WHEN
 		Set<? extends ModelEvent> events = model.getEvents();
-		assertThat(events, hasSize(0));
+
+		// THEN
+		// @formatter:off
+		then(events)
+			.as("No events")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 }

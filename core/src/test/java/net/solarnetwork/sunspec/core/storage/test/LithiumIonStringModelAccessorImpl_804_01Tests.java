@@ -22,12 +22,8 @@
 
 package net.solarnetwork.sunspec.core.storage.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.List;
@@ -68,94 +64,166 @@ public class LithiumIonStringModelAccessorImpl_804_01Tests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), is(instanceOf(LithiumIonStringModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(LithiumIonStringModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		LithiumIonStringModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(70)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(72)));
-		assertThat("Model ID", model.getModelId(), is(equalTo(StorageModelId.LithiumIonString)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(46)));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				is(equalTo(16)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(94)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(70, from(LithiumIonStringModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(72, from(LithiumIonStringModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(StorageModelId.LithiumIonString, from(LithiumIonStringModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(46, from(LithiumIonStringModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(16, from(LithiumIonStringModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(94, from(LithiumIonStringModelAccessor::getModelLength))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void string() {
+		// GIVEN
 		LithiumIonStringModelAccessor model = getTestModel();
-		assertThat("String index", model.getStringIndex(), is(equalTo(1)));
-		assertThat("Module count", model.getModuleCount(), is(equalTo(3)));
-		assertThat("Status", model.getStatus(), is(equalTo(
-				Set.of(BatteryConnectionStatus.Enabled, BatteryConnectionStatus.ContactorClosed))));
-		assertThat("Connection failure", model.getConnectionFailure(),
-				is(equalTo(BatteryConnectionFailure.None)));
-		assertThat("Balancing cell count", model.getBalancingCellCount(), is(equalTo(2)));
-		assertThat("State of charge", model.getStateOfCharge(), is(equalTo(76.5f)));
-		assertThat("Depth of discharge", model.getDepthOfDischarge(), is(equalTo(23.5f)));
-		assertThat("Cycle count", model.getCycleCount(), is(equalTo(145L)));
-		assertThat("State of health", model.getStateOfHealth(), is(equalTo(97.0f)));
-		assertThat("DC current", model.getDCCurrent(), is(equalTo(12.3f)));
-		assertThat("DC voltage", model.getDCVoltage(), is(equalTo(52.4f)));
-		assertThat("Maximum cell voltage", model.getMaximumCellVoltage(), is(equalTo(3.352f)));
-		assertThat("Maximum cell voltage module", model.getMaximumCellVoltageModuleIndex(),
-				is(equalTo(2)));
-		assertThat("Minimum cell voltage", model.getMinimumCellVoltage(), is(equalTo(3.301f)));
-		assertThat("Minimum cell voltage module", model.getMinimumCellVoltageModuleIndex(),
-				is(equalTo(3)));
-		assertThat("Average cell voltage", model.getAverageCellVoltage(), is(equalTo(3.33f)));
-		assertThat("Maximum module temperature", model.getMaximumModuleTemperature(),
-				is(equalTo(28.5f)));
-		assertThat("Maximum module temperature module", model.getMaximumModuleTemperatureModuleIndex(),
-				is(equalTo(2)));
-		assertThat("Minimum module temperature", model.getMinimumModuleTemperature(),
-				is(equalTo(24.0f)));
-		assertThat("Minimum module temperature module", model.getMinimumModuleTemperatureModuleIndex(),
-				is(equalTo(1)));
-		assertThat("Average module temperature", model.getAverageModuleTemperature(),
-				is(equalTo(26.2f)));
-		assertThat("Closed contactors", model.getClosedContactors(), is(equalTo(Set.of(0))));
-		assertThat("Events", model.getEvents(),
-				is(equalTo(Set.of(LithiumIonStringEvent.OverVoltageWarning))));
-		assertThat("Vendor events", model.getVendorEvents(), is(equalTo(new BitSet())));
-		assertThat("Enable operation in progress", model.getEnableOperation(),
-				is(equalTo(BatteryEnableOperation.Enable)));
-		assertThat("No connect operation in progress", model.getConnectOperation(), is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("String index")
+			.returns(1, from(LithiumIonStringModelAccessor::getStringIndex))
+			.as("Module count")
+			.returns(3, from(LithiumIonStringModelAccessor::getModuleCount))
+			.as("Status")
+			.returns(Set.of(BatteryConnectionStatus.Enabled, BatteryConnectionStatus.ContactorClosed),
+					from(LithiumIonStringModelAccessor::getStatus))
+			.as("Connection failure")
+			.returns(BatteryConnectionFailure.None,
+					from(LithiumIonStringModelAccessor::getConnectionFailure))
+			.as("Balancing cell count")
+			.returns(2, from(LithiumIonStringModelAccessor::getBalancingCellCount))
+			.as("State of charge")
+			.returns(76.5f, from(LithiumIonStringModelAccessor::getStateOfCharge))
+			.as("Depth of discharge")
+			.returns(23.5f, from(LithiumIonStringModelAccessor::getDepthOfDischarge))
+			.as("Cycle count")
+			.returns(145L, from(LithiumIonStringModelAccessor::getCycleCount))
+			.as("State of health")
+			.returns(97.0f, from(LithiumIonStringModelAccessor::getStateOfHealth))
+			.as("DC current")
+			.returns(12.3f, from(LithiumIonStringModelAccessor::getDCCurrent))
+			.as("DC voltage")
+			.returns(52.4f, from(LithiumIonStringModelAccessor::getDCVoltage))
+			.as("Maximum cell voltage")
+			.returns(3.352f, from(LithiumIonStringModelAccessor::getMaximumCellVoltage))
+			.as("Maximum cell voltage module")
+			.returns(2, from(LithiumIonStringModelAccessor::getMaximumCellVoltageModuleIndex))
+			.as("Minimum cell voltage")
+			.returns(3.301f, from(LithiumIonStringModelAccessor::getMinimumCellVoltage))
+			.as("Minimum cell voltage module")
+			.returns(3, from(LithiumIonStringModelAccessor::getMinimumCellVoltageModuleIndex))
+			.as("Average cell voltage")
+			.returns(3.33f, from(LithiumIonStringModelAccessor::getAverageCellVoltage))
+			.as("Maximum module temperature")
+			.returns(28.5f, from(LithiumIonStringModelAccessor::getMaximumModuleTemperature))
+			.as("Maximum module temperature module")
+			.returns(2, from(LithiumIonStringModelAccessor::getMaximumModuleTemperatureModuleIndex))
+			.as("Minimum module temperature")
+			.returns(24.0f, from(LithiumIonStringModelAccessor::getMinimumModuleTemperature))
+			.as("Minimum module temperature module")
+			.returns(1, from(LithiumIonStringModelAccessor::getMinimumModuleTemperatureModuleIndex))
+			.as("Average module temperature")
+			.returns(26.2f, from(LithiumIonStringModelAccessor::getAverageModuleTemperature))
+			.as("Closed contactors")
+			.returns(Set.of(0), from(LithiumIonStringModelAccessor::getClosedContactors))
+			.as("Events")
+			.returns(Set.of(LithiumIonStringEvent.OverVoltageWarning),
+					from(LithiumIonStringModelAccessor::getEvents))
+			.as("Vendor events")
+			.returns(new BitSet(), from(LithiumIonStringModelAccessor::getVendorEvents))
+			.as("Enable operation in progress")
+			.returns(BatteryEnableOperation.Enable,
+					from(LithiumIonStringModelAccessor::getEnableOperation))
+			.as("No connect operation in progress")
+			.returns(null, from(LithiumIonStringModelAccessor::getConnectOperation))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void modules() {
+		// WHEN
 		List<BatteryModule> modules = getTestModel().getModules();
-		assertThat("Modules", modules, hasSize(3));
+
+		// THEN
+		// @formatter:off
+		then(modules)
+			.as("Modules")
+			.hasSize(3)
+			;
+		// @formatter:on
 
 		BatteryModule module = modules.get(0);
-		assertThat("Index", module.getIndex(), is(equalTo(1)));
-		assertThat("Cell count", module.getCellCount(), is(equalTo(16)));
-		assertThat("State of charge", module.getStateOfCharge(), is(equalTo(77.0f)));
-		assertThat("State of health", module.getStateOfHealth(), is(equalTo(98.0f)));
-		assertThat("Maximum cell voltage", module.getMaximumCellVoltage(), is(equalTo(3.345f)));
-		assertThat("Maximum cell voltage cell", module.getMaximumCellVoltageCellIndex(), is(equalTo(5)));
-		assertThat("Minimum cell voltage", module.getMinimumCellVoltage(), is(equalTo(3.31f)));
-		assertThat("Minimum cell voltage cell", module.getMinimumCellVoltageCellIndex(),
-				is(equalTo(12)));
-		assertThat("Average cell voltage", module.getAverageCellVoltage(), is(equalTo(3.33f)));
-		assertThat("Maximum cell temperature", module.getMaximumCellTemperature(), is(equalTo(27.0f)));
-		assertThat("Maximum cell temperature cell", module.getMaximumCellTemperatureCellIndex(),
-				is(equalTo(1)));
-		assertThat("Minimum cell temperature", module.getMinimumCellTemperature(), is(equalTo(24.0f)));
-		assertThat("Minimum cell temperature cell", module.getMinimumCellTemperatureCellIndex(),
-				is(equalTo(16)));
-		assertThat("Average cell temperature", module.getAverageCellTemperature(), is(equalTo(25.5f)));
+		// @formatter:off
+		then(module)
+			.as("Index")
+			.returns(1, from(BatteryModule::getIndex))
+			.as("Cell count")
+			.returns(16, from(BatteryModule::getCellCount))
+			.as("State of charge")
+			.returns(77.0f, from(BatteryModule::getStateOfCharge))
+			.as("State of health")
+			.returns(98.0f, from(BatteryModule::getStateOfHealth))
+			.as("Maximum cell voltage")
+			.returns(3.345f, from(BatteryModule::getMaximumCellVoltage))
+			.as("Maximum cell voltage cell")
+			.returns(5, from(BatteryModule::getMaximumCellVoltageCellIndex))
+			.as("Minimum cell voltage")
+			.returns(3.31f, from(BatteryModule::getMinimumCellVoltage))
+			.as("Minimum cell voltage cell")
+			.returns(12, from(BatteryModule::getMinimumCellVoltageCellIndex))
+			.as("Average cell voltage")
+			.returns(3.33f, from(BatteryModule::getAverageCellVoltage))
+			.as("Maximum cell temperature")
+			.returns(27.0f, from(BatteryModule::getMaximumCellTemperature))
+			.as("Maximum cell temperature cell")
+			.returns(1, from(BatteryModule::getMaximumCellTemperatureCellIndex))
+			.as("Minimum cell temperature")
+			.returns(24.0f, from(BatteryModule::getMinimumCellTemperature))
+			.as("Minimum cell temperature cell")
+			.returns(16, from(BatteryModule::getMinimumCellTemperatureCellIndex))
+			.as("Average cell temperature")
+			.returns(25.5f, from(BatteryModule::getAverageCellTemperature))
+			;
+		// @formatter:on
 
 		BatteryModule module3 = modules.get(2);
-		assertThat("Module 3 index", module3.getIndex(), is(equalTo(3)));
-		assertThat("Module 3 state of charge not implemented", module3.getStateOfCharge(),
-				is(nullValue()));
-		assertThat("Module 3 state of health not implemented", module3.getStateOfHealth(),
-				is(nullValue()));
-		assertThat("Module 3 maximum cell voltage", module3.getMaximumCellVoltage(), is(equalTo(3.34f)));
+		// @formatter:off
+		then(module3)
+			.as("Module 3 index")
+			.returns(3, from(BatteryModule::getIndex))
+			.as("Module 3 state of charge not implemented")
+			.returns(null, from(BatteryModule::getStateOfCharge))
+			.as("Module 3 state of health not implemented")
+			.returns(null, from(BatteryModule::getStateOfHealth))
+			.as("Module 3 maximum cell voltage")
+			.returns(3.34f, from(BatteryModule::getMaximumCellVoltage))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -170,13 +238,23 @@ public class LithiumIonStringModelAccessorImpl_804_01Tests {
 		model.setConnectOperation(conn, BatteryOperation.Disconnect);
 
 		// THEN
-		assertThat("Writes", conn.getWrites(),
-				is(equalTo(List.of(List.of(72 + 34, 1), List.of(72 + 35, 1)))));
+		// @formatter:off
+		then(conn.getWrites())
+			.as("Writes")
+			.isEqualTo(List.of(List.of(72 + 34, 1), List.of(72 + 35, 1)))
+			;
+		// @formatter:on
 		LithiumIonStringModelAccessor device = discoverModel(conn);
-		assertThat("Enable operation", device.getEnableOperation(),
-				is(equalTo(BatteryEnableOperation.Disable)));
-		assertThat("Connect operation", device.getConnectOperation(),
-				is(equalTo(BatteryOperation.Disconnect)));
+		// @formatter:off
+		then(device)
+			.as("Enable operation")
+			.returns(BatteryEnableOperation.Disable,
+					from(LithiumIonStringModelAccessor::getEnableOperation))
+			.as("Connect operation")
+			.returns(BatteryOperation.Disconnect,
+					from(LithiumIonStringModelAccessor::getConnectOperation))
+			;
+		// @formatter:on
 	}
 
 }

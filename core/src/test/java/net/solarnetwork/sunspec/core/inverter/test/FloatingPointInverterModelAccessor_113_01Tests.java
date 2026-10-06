@@ -22,9 +22,8 @@
 
 package net.solarnetwork.sunspec.core.inverter.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,151 +57,315 @@ public class FloatingPointInverterModelAccessor_113_01Tests {
 
 	@Test
 	public void block() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Model base address", model.getBaseAddress(), equalTo(159));
-		assertThat("Model block address", model.getBlockAddress(), equalTo(161));
-		assertThat("Model ID", model.getModelId(), equalTo(InverterControlModelId.BasicSettings));
-		assertThat("Model fixed length", model.getFixedBlockLength(), equalTo(30));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				equalTo(0));
-		assertThat("Model length", model.getModelLength(), equalTo(30));
-		assertThat("Model length", model.getRepeatingBlockInstanceCount(), equalTo(0));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(159, from(InverterBasicSettingsModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(161, from(InverterBasicSettingsModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(InverterControlModelId.BasicSettings,
+					from(InverterBasicSettingsModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(30, from(InverterBasicSettingsModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(0, from(InverterBasicSettingsModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(30, from(InverterBasicSettingsModelAccessor::getModelLength))
+			.as("Model length")
+			.returns(0, from(InverterBasicSettingsModelAccessor::getRepeatingBlockInstanceCount))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void activePowerMaximum() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Active power max", model.getActivePowerMaximum(), equalTo(3000));
+
+		// THEN
+		// @formatter:off
+		then(model.getActivePowerMaximum())
+			.as("Active power max")
+			.isEqualTo(3000)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void pccVoltage() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("PCC voltage", model.getPccVoltage(), equalTo(240.0f));
+
+		// THEN
+		// @formatter:off
+		then(model.getPccVoltage())
+			.as("PCC voltage")
+			.isEqualTo(240.0f)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void pccVoltageOffset() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("PCC voltage offset", model.getPccVoltageOffset(), equalTo(0.0f));
+
+		// THEN
+		// @formatter:off
+		then(model.getPccVoltageOffset())
+			.as("PCC voltage offset")
+			.isEqualTo(0.0f)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void voltageMax() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Voltage max", model.getVoltageMaximum(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getVoltageMaximum())
+			.as("Voltage max")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void voltageMin() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Voltage min", model.getVoltageMinimum(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getVoltageMinimum())
+			.as("Voltage min")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void apparentPowerMax() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("VA max", model.getApparentPowerMaximum(), equalTo(3000));
+
+		// THEN
+		// @formatter:off
+		then(model.getApparentPowerMaximum())
+			.as("VA max")
+			.isEqualTo(3000)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void reactivePowerQ1Max() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("VAR Q1 max", model.getReactivePowerQ1Maximum(), equalTo(2140));
+
+		// THEN
+		// @formatter:off
+		then(model.getReactivePowerQ1Maximum())
+			.as("VAR Q1 max")
+			.isEqualTo(2140)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void reactivePowerQ2Max() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("VAR Q2 max", model.getReactivePowerQ2Maximum(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getReactivePowerQ2Maximum())
+			.as("VAR Q2 max")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void reactivePowerQ3Max() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("VAR Q3 max", model.getReactivePowerQ3Maximum(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getReactivePowerQ3Maximum())
+			.as("VAR Q3 max")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void reactivePowerQ4Max() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("VAR Q4 max", model.getReactivePowerQ4Maximum(), equalTo(-2140));
+
+		// THEN
+		// @formatter:off
+		then(model.getReactivePowerQ4Maximum())
+			.as("VAR Q4 max")
+			.isEqualTo(-2140)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void activePowerRampRate() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Active power ramp rate", model.getActivePowerRampRate(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getActivePowerRampRate())
+			.as("Active power ramp rate")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void powerFactorQ1Minimum() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Power factor Q1 minimum", model.getPowerFactorQ1Minimum(), equalTo(-0.850f));
+
+		// THEN
+		// @formatter:off
+		then(model.getPowerFactorQ1Minimum())
+			.as("Power factor Q1 minimum")
+			.isEqualTo(-0.850f)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void powerFactorQ2Minimum() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Power factor Q2 minimum", model.getPowerFactorQ2Minimum(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getPowerFactorQ2Minimum())
+			.as("Power factor Q2 minimum")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void powerFactorQ3Minimum() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Power factor Q3 minimum", model.getPowerFactorQ3Minimum(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getPowerFactorQ3Minimum())
+			.as("Power factor Q3 minimum")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void powerFactorQ4Minimum() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Power factor Q4 minimum", model.getPowerFactorQ4Minimum(), equalTo(0.850f));
+
+		// THEN
+		// @formatter:off
+		then(model.getPowerFactorQ4Minimum())
+			.as("Power factor Q4 minimum")
+			.isEqualTo(0.850f)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void importExportChangeReactivePowerAction() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Import export reactive power action",
-				model.getImportExportChangeReactivePowerAction(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getImportExportChangeReactivePowerAction())
+			.as("Import export reactive power action")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void apparentPowerCalculationMethod() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Apparent power calculation method", model.getApparentPowerCalculationMethod(),
-				nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getApparentPowerCalculationMethod())
+			.as("Apparent power calculation method")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void ecpFrequency() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Frequency min", model.getEcpFrequency(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getEcpFrequency())
+			.as("Frequency min")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void connectedPhase() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Connected phase", model.getConnectedPhase(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getConnectedPhase())
+			.as("Connected phase")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 }

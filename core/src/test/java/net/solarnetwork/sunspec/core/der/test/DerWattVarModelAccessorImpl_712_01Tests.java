@@ -22,12 +22,9 @@
 
 package net.solarnetwork.sunspec.core.der.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.BDDAssertions.catchThrowable;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -68,40 +65,79 @@ public class DerWattVarModelAccessorImpl_712_01Tests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), is(instanceOf(DerWattVarModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(DerWattVarModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		DerWattVarModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(1149)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(1151)));
-		assertThat("Model ID", model.getModelId(), is(equalTo(DerModelId.WattVar)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(12)));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				is(equalTo(16)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(60)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(1149, from(DerWattVarModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(1151, from(DerWattVarModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(DerModelId.WattVar, from(DerWattVarModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(12, from(DerWattVarModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(16, from(DerWattVarModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(60, from(DerWattVarModelAccessor::getModelLength))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void curves() {
+		// GIVEN
 		DerWattVarModelAccessor model = getTestModel();
-		assertThat("Enabled", model.isEnabled(), is(equalTo(false)));
-		assertThat("Curve count", model.getCurveCount(), is(equalTo(3)));
-		assertThat("Curve point count", model.getCurvePointCount(), is(equalTo(6)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Enabled")
+			.returns(false, from(DerWattVarModelAccessor::isEnabled))
+			.as("Curve count")
+			.returns(3, from(DerWattVarModelAccessor::getCurveCount))
+			.as("Curve point count")
+			.returns(6, from(DerWattVarModelAccessor::getCurvePointCount))
+			;
+		// @formatter:on
 
 		List<WattVarCurve> curves = model.getCurves();
-		assertThat("Curves", curves, hasSize(3));
+		// @formatter:off
+		then(curves)
+			.as("Curves")
+			.hasSize(3)
+			;
+		// @formatter:on
 		WattVarCurve curve = curves.get(0);
-		assertThat("Read-only", curve.isReadOnly(), is(equalTo(true)));
-		assertThat("Dependent reference", curve.getDependentReference(),
-				is(equalTo(DerReactivePowerReference.MaximumActivePowerPercent)));
-		assertThat("Power priority", curve.getPowerPriority(),
-				is(equalTo(DerReactivePowerPriority.ActivePower)));
-		assertThat("Points", curve.getPoints(),
-				is(equalTo(List.of(new DerCurvePoint(-100.0f, 0.0f), new DerCurvePoint(-50.0f, 0.0f),
-						new DerCurvePoint(-20.0f, 0.0f), new DerCurvePoint(20.0f, 0.0f),
-						new DerCurvePoint(50.0f, 0.0f), new DerCurvePoint(100.0f, -25.0f)))));
+		// @formatter:off
+		then(curve)
+			.as("Read-only")
+			.returns(true, from(WattVarCurve::isReadOnly))
+			.as("Dependent reference")
+			.returns(DerReactivePowerReference.MaximumActivePowerPercent,
+					from(WattVarCurve::getDependentReference))
+			.as("Power priority")
+			.returns(DerReactivePowerPriority.ActivePower, from(WattVarCurve::getPowerPriority))
+			.as("Points")
+			.returns(List.of(new DerCurvePoint(-100.0f, 0.0f), new DerCurvePoint(-50.0f, 0.0f),
+					new DerCurvePoint(-20.0f, 0.0f), new DerCurvePoint(20.0f, 0.0f),
+					new DerCurvePoint(50.0f, 0.0f), new DerCurvePoint(100.0f, -25.0f)),
+					from(WattVarCurve::getPoints))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -118,11 +154,17 @@ public class DerWattVarModelAccessorImpl_712_01Tests {
 
 		// THEN
 		WattVarCurve device = discoverModel(conn).getCurves().get(1);
-		assertThat("Dependent reference", device.getDependentReference(),
-				is(equalTo(DerReactivePowerReference.AvailableReactivePowerPercent)));
-		assertThat("Power priority", device.getPowerPriority(),
-				is(equalTo(DerReactivePowerPriority.ReactivePower)));
-		assertThat("Points", device.getPoints(), is(equalTo(NEW_POINTS)));
+		// @formatter:off
+		then(device)
+			.as("Dependent reference")
+			.returns(DerReactivePowerReference.AvailableReactivePowerPercent,
+					from(WattVarCurve::getDependentReference))
+			.as("Power priority")
+			.returns(DerReactivePowerPriority.ReactivePower, from(WattVarCurve::getPowerPriority))
+			.as("Points")
+			.returns(NEW_POINTS, from(WattVarCurve::getPoints))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -133,15 +175,20 @@ public class DerWattVarModelAccessorImpl_712_01Tests {
 		WattVarCurve curve = discoverModel(conn).getCurves().get(1);
 
 		// WHEN
-		try {
-			curve.setPowerPriority(conn, DerReactivePowerPriority.Vendor);
-			fail("The vendor priority is not supported by the watt-var model.");
-		} catch ( IllegalArgumentException e ) {
-			// expected
-		}
+		Throwable t = catchThrowable(
+				() -> curve.setPowerPriority(conn, DerReactivePowerPriority.Vendor));
 
 		// THEN
-		assertThat("Nothing written", conn.getWrites(), is(equalTo(List.of())));
+		// @formatter:off
+		then(t)
+			.as("Vendor priority not supported by the watt-var model")
+			.isInstanceOf(IllegalArgumentException.class)
+			;
+		then(conn.getWrites())
+			.as("Nothing written")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 }

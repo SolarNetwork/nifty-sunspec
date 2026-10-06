@@ -23,11 +23,8 @@
 package net.solarnetwork.sunspec.core.inverter.test;
 
 import static net.solarnetwork.sunspec.api.inverter.InverterOperatingState.Mppt;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -68,47 +65,94 @@ public class InverterMpptExtensionModelAccessor_113_01Tests {
 
 	@Test
 	public void modelAccessor() {
+		// GIVEN
 		InverterMpptExtensionModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterMpptExtensionModelAccessor.class);
-		assertThat("InverterMpptExtensionModelAccessor available", model, notNullValue());
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("InverterMpptExtensionModelAccessor available")
+			.isNotNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void timestampPeriod() {
+		// GIVEN
 		InverterMpptExtensionModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterMpptExtensionModelAccessor.class);
-		assertThat("Timestamp period", model.getTimestampPeriod(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getTimestampPeriod())
+			.as("Timestamp period")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void events() {
+		// GIVEN
 		InverterMpptExtensionModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterMpptExtensionModelAccessor.class);
-		assertThat("Events", model.getEvents(), hasSize(0));
+
+		// THEN
+		// @formatter:off
+		then(model.getEvents())
+			.as("Events")
+			.hasSize(0)
+			;
+		// @formatter:on
 	}
 
 	private void assertDcModule(String suffix, DcModule module, Integer id, String name, Long timestamp,
 			Float current, Long energyDelivered, Integer power, Float voltage, Float temperature,
 			OperatingState state, Set<ModelEvent> events) {
-		assertThat("Module ID " + suffix, module.getInputId(), equalTo(id));
-		assertThat("Module input name " + suffix, module.getInputName(), equalTo(name));
-		assertThat("Module data timestamp " + suffix, module.getDataTimestamp(), equalTo(timestamp));
-		assertThat("Module current " + suffix, module.getDCCurrent(), equalTo(current));
-		assertThat("Module energy delivered " + suffix, module.getDCEnergyDelivered(),
-				equalTo(energyDelivered));
-		assertThat("Module power " + suffix, module.getDCPower(), equalTo(power));
-		assertThat("Module voltage " + suffix, module.getDCVoltage(), equalTo(voltage));
-		assertThat("Module temperature " + suffix, module.getTemperature(), equalTo(temperature));
-		assertThat("Module operating state " + suffix, module.getOperatingState(), equalTo(state));
-		assertThat("Module events " + suffix, module.getEvents(), equalTo(events));
+		// @formatter:off
+		then(module)
+			.as("Module ID " + suffix)
+			.returns(id, from(DcModule::getInputId))
+			.as("Module input name " + suffix)
+			.returns(name, from(DcModule::getInputName))
+			.as("Module data timestamp " + suffix)
+			.returns(timestamp, from(DcModule::getDataTimestamp))
+			.as("Module current " + suffix)
+			.returns(current, from(DcModule::getDCCurrent))
+			.as("Module energy delivered " + suffix)
+			.returns(energyDelivered, from(DcModule::getDCEnergyDelivered))
+			.as("Module power " + suffix)
+			.returns(power, from(DcModule::getDCPower))
+			.as("Module voltage " + suffix)
+			.returns(voltage, from(DcModule::getDCVoltage))
+			.as("Module temperature " + suffix)
+			.returns(temperature, from(DcModule::getTemperature))
+			.as("Module operating state " + suffix)
+			.returns(state, from(DcModule::getOperatingState))
+			.as("Module events " + suffix)
+			.returns(events, from(DcModule::getEvents))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void dcModules() {
+		// GIVEN
 		InverterMpptExtensionModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterMpptExtensionModelAccessor.class);
+
+		// WHEN
 		List<DcModule> modules = model.getDcModules();
-		assertThat("DC modules", modules, hasSize(2));
+
+		// THEN
+		// @formatter:off
+		then(modules)
+			.as("DC modules")
+			.hasSize(2)
+			;
+		// @formatter:on
 
 		Set<ModelEvent> noEvents = Collections.emptySet();
 		assertDcModule("1", modules.get(0), 1, "String 1", 623608619L, 0.15f, 11937020L, 65, 439.7f,
@@ -134,7 +178,13 @@ public class InverterMpptExtensionModelAccessor_113_01Tests {
 		DcModule module = model.getDcModules().get(0);
 
 		// THEN
-		assertThat("Module power uses power scale factor", module.getDCPower(), equalTo(659));
-		assertThat("Module voltage uses voltage scale factor", module.getDCVoltage(), equalTo(439.7f));
+		// @formatter:off
+		then(module)
+			.as("Module power uses power scale factor")
+			.returns(659, from(DcModule::getDCPower))
+			.as("Module voltage uses voltage scale factor")
+			.returns(439.7f, from(DcModule::getDCVoltage))
+			;
+		// @formatter:on
 	}
 }

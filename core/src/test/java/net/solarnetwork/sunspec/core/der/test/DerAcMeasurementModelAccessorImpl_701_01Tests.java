@@ -22,12 +22,8 @@
 
 package net.solarnetwork.sunspec.core.der.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.Matchers.sameInstance;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.domain.AcPhase;
@@ -64,7 +60,12 @@ public class DerAcMeasurementModelAccessorImpl_701_01Tests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), is(instanceOf(DerAcMeasurementModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(DerAcMeasurementModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -76,154 +77,308 @@ public class DerAcMeasurementModelAccessorImpl_701_01Tests {
 		InverterModelAccessor model = data.findTypedModel(InverterModelAccessor.class);
 
 		// THEN
-		assertThat("DER AC measurement model found as inverter model", model,
-				is(instanceOf(DerAcMeasurementModelAccessorImpl.class)));
+		// @formatter:off
+		then(model)
+			.as("DER AC measurement model found as inverter model")
+			.isInstanceOf(DerAcMeasurementModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		DerAcMeasurementModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(177)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(179)));
-		assertThat("Model ID", model.getModelId(), is(equalTo(DerModelId.AcMeasurement)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(153)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(153)));
-		assertThat("Model repeating instance count", model.getRepeatingBlockInstanceCount(),
-				is(equalTo(0)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(177, from(DerAcMeasurementModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(179, from(DerAcMeasurementModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(DerModelId.AcMeasurement, from(DerAcMeasurementModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(153, from(DerAcMeasurementModelAccessor::getFixedBlockLength))
+			.as("Model length")
+			.returns(153, from(DerAcMeasurementModelAccessor::getModelLength))
+			.as("Model repeating instance count")
+			.returns(0, from(DerAcMeasurementModelAccessor::getRepeatingBlockInstanceCount))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void deviceInfo() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
-		assertThat("Manufacturer", data.getManufacturer(), is(equalTo("OutBack Power")));
-		assertThat("Model", data.getModelName(), is(equalTo("OGHI8048A")));
-		assertThat("Version", data.getVersion(), is(equalTo("1.0.20.3812")));
-		assertThat("Serial number", data.getSerialNumber(), is(equalTo("OGHI2232F0100079")));
+
+		// THEN
+		// @formatter:off
+		then(data)
+			.as("Manufacturer")
+			.returns("OutBack Power", from(ModelData::getManufacturer))
+			.as("Model")
+			.returns("OGHI8048A", from(ModelData::getModelName))
+			.as("Version")
+			.returns("1.0.20.3812", from(ModelData::getVersion))
+			.as("Serial number")
+			.returns("OGHI2232F0100079", from(ModelData::getSerialNumber))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void states() {
+		// GIVEN
 		DerAcMeasurementModelAccessor model = getTestModel();
-		assertThat("AC wiring type", model.getAcWiringType(), is(equalTo(DerAcWiringType.SplitPhase)));
-		assertThat("DER operating state", model.getDerOperatingState(),
-				is(equalTo(DerOperatingState.On)));
-		assertThat("Inverter state", model.getInverterState(), is(equalTo(DerInverterState.Running)));
-		assertThat("Inverter operating state", model.getOperatingState(),
-				is(equalTo(InverterOperatingState.Normal)));
-		assertThat("Grid connection state", model.getGridConnectionState(),
-				is(equalTo(DerGridConnectionState.Disconnected)));
-		assertThat("Operational characteristics", model.getOperationalCharacteristics(),
-				is(equalTo(Set.of(DerOperationalCharacteristic.GridForming))));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("AC wiring type")
+			.returns(DerAcWiringType.SplitPhase, from(DerAcMeasurementModelAccessor::getAcWiringType))
+			.as("DER operating state")
+			.returns(DerOperatingState.On, from(DerAcMeasurementModelAccessor::getDerOperatingState))
+			.as("Inverter state")
+			.returns(DerInverterState.Running, from(DerAcMeasurementModelAccessor::getInverterState))
+			.as("Inverter operating state")
+			.returns(InverterOperatingState.Normal,
+					from(DerAcMeasurementModelAccessor::getOperatingState))
+			.as("Grid connection state")
+			.returns(DerGridConnectionState.Disconnected,
+					from(DerAcMeasurementModelAccessor::getGridConnectionState))
+			.as("Operational characteristics")
+			.returns(Set.of(DerOperationalCharacteristic.GridForming),
+					from(DerAcMeasurementModelAccessor::getOperationalCharacteristics))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void alarms() {
+		// GIVEN
 		DerAcMeasurementModelAccessor model = getTestModel();
-		assertThat("Alarms", model.getEvents(), is(equalTo(Set.<ModelEvent> of(DerAlarm.GridDisconnect,
-				DerAlarm.UnderFrequency, DerAlarm.AcUnderVoltage))));
-		assertThat("Vendor events", model.getVendorEvents(), is(nullValue()));
-		assertThat("Manufacturer alarm info", model.getManufacturerAlarmInfo(), is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Alarms")
+			.returns(Set.<ModelEvent> of(DerAlarm.GridDisconnect, DerAlarm.UnderFrequency,
+					DerAlarm.AcUnderVoltage), from(DerAcMeasurementModelAccessor::getEvents))
+			.as("Vendor events")
+			.returns(null, from(DerAcMeasurementModelAccessor::getVendorEvents))
+			.as("Manufacturer alarm info")
+			.returns(null, from(DerAcMeasurementModelAccessor::getManufacturerAlarmInfo))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void throttling() {
+		// GIVEN
 		DerAcMeasurementModelAccessor model = getTestModel();
-		assertThat("Throttle percent", model.getThrottlePercent(), is(equalTo(0)));
-		assertThat("Throttle sources 0xFFFF9AC8 not implemented, as the MSB is set",
-				model.getThrottleSources(), is(equalTo(Set.of())));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Throttle percent")
+			.returns(0, from(DerAcMeasurementModelAccessor::getThrottlePercent))
+			.as("Throttle sources 0xFFFF9AC8 not implemented, as the MSB is set")
+			.returns(Set.of(), from(DerAcMeasurementModelAccessor::getThrottleSources))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void totals() {
+		// GIVEN
 		DerAcMeasurementModelAccessor model = getTestModel();
-		assertThat("Active power", model.getActivePower(), is(equalTo(0)));
-		assertThat("Apparent power", model.getApparentPower(), is(equalTo(0)));
-		assertThat("Reactive power", model.getReactivePower(), is(equalTo(0)));
-		assertThat("Power factor", model.getPowerFactor(), is(equalTo(0.0f)));
-		assertThat("Current", model.getCurrent(), is(equalTo(0.0f)));
-		assertThat("Line to neutral voltage", model.getVoltage(), is(equalTo(120.0f)));
-		assertThat("Line to line voltage", model.getLineVoltage(), is(equalTo(240.0f)));
-		assertThat("Frequency", model.getFrequency(), is(equalTo(60.0f)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Active power")
+			.returns(0, from(DerAcMeasurementModelAccessor::getActivePower))
+			.as("Apparent power")
+			.returns(0, from(DerAcMeasurementModelAccessor::getApparentPower))
+			.as("Reactive power")
+			.returns(0, from(DerAcMeasurementModelAccessor::getReactivePower))
+			.as("Power factor")
+			.returns(0.0f, from(DerAcMeasurementModelAccessor::getPowerFactor))
+			.as("Current")
+			.returns(0.0f, from(DerAcMeasurementModelAccessor::getCurrent))
+			.as("Line to neutral voltage")
+			.returns(120.0f, from(DerAcMeasurementModelAccessor::getVoltage))
+			.as("Line to line voltage")
+			.returns(240.0f, from(DerAcMeasurementModelAccessor::getLineVoltage))
+			.as("Frequency")
+			.returns(60.0f, from(DerAcMeasurementModelAccessor::getFrequency))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void energy() {
+		// GIVEN
 		DerAcMeasurementModelAccessor model = getTestModel();
-		assertThat("Active energy exported is injected", model.getActiveEnergyExported(),
-				is(equalTo(0L)));
-		assertThat("Active energy imported is absorbed", model.getActiveEnergyImported(),
-				is(equalTo(0L)));
-		assertThat("Reactive energy exported is injected", model.getReactiveEnergyExported(),
-				is(equalTo(0L)));
-		assertThat("Reactive energy imported is absorbed", model.getReactiveEnergyImported(),
-				is(equalTo(0L)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Active energy exported is injected")
+			.returns(0L, from(DerAcMeasurementModelAccessor::getActiveEnergyExported))
+			.as("Active energy imported is absorbed")
+			.returns(0L, from(DerAcMeasurementModelAccessor::getActiveEnergyImported))
+			.as("Reactive energy exported is injected")
+			.returns(0L, from(DerAcMeasurementModelAccessor::getReactiveEnergyExported))
+			.as("Reactive energy imported is absorbed")
+			.returns(0L, from(DerAcMeasurementModelAccessor::getReactiveEnergyImported))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void dc() {
+		// GIVEN
 		DerAcMeasurementModelAccessor model = getTestModel();
-		assertThat("DC current", model.getDcCurrent(), is(nullValue()));
-		assertThat("DC voltage", model.getDcVoltage(), is(nullValue()));
-		assertThat("DC power", model.getDcPower(), is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("DC current")
+			.returns(null, from(DerAcMeasurementModelAccessor::getDcCurrent))
+			.as("DC voltage")
+			.returns(null, from(DerAcMeasurementModelAccessor::getDcVoltage))
+			.as("DC power")
+			.returns(null, from(DerAcMeasurementModelAccessor::getDcPower))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void temperatures() {
+		// GIVEN
 		DerAcMeasurementModelAccessor model = getTestModel();
-		assertThat("Ambient", model.getAmbientTemperature(), is(nullValue()));
-		assertThat("Cabinet", model.getCabinetTemperature(), is(nullValue()));
-		assertThat("Heat sink", model.getHeatSinkTemperature(), is(nullValue()));
-		assertThat("Transformer", model.getTransformerTemperature(), is(equalTo(57.0f)));
-		assertThat("Switch", model.getSwitchTemperature(), is(equalTo(31.0f)));
-		assertThat("Other", model.getOtherTemperature(), is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Ambient")
+			.returns(null, from(DerAcMeasurementModelAccessor::getAmbientTemperature))
+			.as("Cabinet")
+			.returns(null, from(DerAcMeasurementModelAccessor::getCabinetTemperature))
+			.as("Heat sink")
+			.returns(null, from(DerAcMeasurementModelAccessor::getHeatSinkTemperature))
+			.as("Transformer")
+			.returns(57.0f, from(DerAcMeasurementModelAccessor::getTransformerTemperature))
+			.as("Switch")
+			.returns(31.0f, from(DerAcMeasurementModelAccessor::getSwitchTemperature))
+			.as("Other")
+			.returns(null, from(DerAcMeasurementModelAccessor::getOtherTemperature))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void phaseTotal() {
+		// GIVEN
 		DerAcMeasurementModelAccessor model = getTestModel();
-		assertThat("Total phase is model", model.accessorForPhase(AcPhase.Total),
-				is(sameInstance(model)));
+
+		// THEN
+		// @formatter:off
+		then(model.accessorForPhase(AcPhase.Total))
+			.as("Total phase is model")
+			.isSameAs(model)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void phaseA() {
+		// GIVEN
 		InverterModelAccessor phase = getTestModel().accessorForPhase(AcPhase.PhaseA);
-		assertThat("Active power", phase.getActivePower(), is(nullValue()));
-		assertThat("Apparent power", phase.getApparentPower(), is(nullValue()));
-		assertThat("Reactive power", phase.getReactivePower(), is(nullValue()));
-		assertThat("Power factor", phase.getPowerFactor(), is(equalTo(-0.001f)));
-		assertThat("Current", phase.getCurrent(), is(equalTo(0.0f)));
-		assertThat("Line voltage", phase.getLineVoltage(), is(nullValue()));
-		assertThat("Voltage", phase.getVoltage(), is(equalTo(120.04f)));
-		assertThat("Active energy exported", phase.getActiveEnergyExported(), is(nullValue()));
-		assertThat("Active energy imported", phase.getActiveEnergyImported(), is(nullValue()));
-		assertThat("Reactive energy exported", phase.getReactiveEnergyExported(), is(nullValue()));
-		assertThat("Reactive energy imported", phase.getReactiveEnergyImported(), is(nullValue()));
-		assertThat("Frequency is total", phase.getFrequency(), is(equalTo(60.0f)));
-		assertThat("Operating state is total", phase.getOperatingState(),
-				is(equalTo(InverterOperatingState.Normal)));
+
+		// THEN
+		// @formatter:off
+		then(phase)
+			.as("Active power")
+			.returns(null, from(InverterModelAccessor::getActivePower))
+			.as("Apparent power")
+			.returns(null, from(InverterModelAccessor::getApparentPower))
+			.as("Reactive power")
+			.returns(null, from(InverterModelAccessor::getReactivePower))
+			.as("Power factor")
+			.returns(-0.001f, from(InverterModelAccessor::getPowerFactor))
+			.as("Current")
+			.returns(0.0f, from(InverterModelAccessor::getCurrent))
+			.as("Line voltage")
+			.returns(null, from(InverterModelAccessor::getLineVoltage))
+			.as("Voltage")
+			.returns(120.04f, from(InverterModelAccessor::getVoltage))
+			.as("Active energy exported")
+			.returns(null, from(InverterModelAccessor::getActiveEnergyExported))
+			.as("Active energy imported")
+			.returns(null, from(InverterModelAccessor::getActiveEnergyImported))
+			.as("Reactive energy exported")
+			.returns(null, from(InverterModelAccessor::getReactiveEnergyExported))
+			.as("Reactive energy imported")
+			.returns(null, from(InverterModelAccessor::getReactiveEnergyImported))
+			.as("Frequency is total")
+			.returns(60.0f, from(InverterModelAccessor::getFrequency))
+			.as("Operating state is total")
+			.returns(InverterOperatingState.Normal, from(InverterModelAccessor::getOperatingState))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void phaseB() {
+		// GIVEN
 		InverterModelAccessor phase = getTestModel().accessorForPhase(AcPhase.PhaseB);
-		assertThat("Active power", phase.getActivePower(), is(nullValue()));
-		assertThat("Power factor", phase.getPowerFactor(), is(equalTo(-0.001f)));
-		assertThat("Current", phase.getCurrent(), is(equalTo(0.0f)));
-		assertThat("Line voltage", phase.getLineVoltage(), is(nullValue()));
-		assertThat("Voltage", phase.getVoltage(), is(equalTo(119.96f)));
-		assertThat("Active energy exported", phase.getActiveEnergyExported(), is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(phase)
+			.as("Active power")
+			.returns(null, from(InverterModelAccessor::getActivePower))
+			.as("Power factor")
+			.returns(-0.001f, from(InverterModelAccessor::getPowerFactor))
+			.as("Current")
+			.returns(0.0f, from(InverterModelAccessor::getCurrent))
+			.as("Line voltage")
+			.returns(null, from(InverterModelAccessor::getLineVoltage))
+			.as("Voltage")
+			.returns(119.96f, from(InverterModelAccessor::getVoltage))
+			.as("Active energy exported")
+			.returns(null, from(InverterModelAccessor::getActiveEnergyExported))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void phaseC() {
+		// GIVEN
 		InverterModelAccessor phase = getTestModel().accessorForPhase(AcPhase.PhaseC);
-		assertThat("Active power", phase.getActivePower(), is(nullValue()));
-		assertThat("Power factor", phase.getPowerFactor(), is(equalTo(-0.001f)));
-		assertThat("Current", phase.getCurrent(), is(nullValue()));
-		assertThat("Line voltage", phase.getLineVoltage(), is(nullValue()));
-		assertThat("Voltage", phase.getVoltage(), is(nullValue()));
-		assertThat("Active energy exported", phase.getActiveEnergyExported(), is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(phase)
+			.as("Active power")
+			.returns(null, from(InverterModelAccessor::getActivePower))
+			.as("Power factor")
+			.returns(-0.001f, from(InverterModelAccessor::getPowerFactor))
+			.as("Current")
+			.returns(null, from(InverterModelAccessor::getCurrent))
+			.as("Line voltage")
+			.returns(null, from(InverterModelAccessor::getLineVoltage))
+			.as("Voltage")
+			.returns(null, from(InverterModelAccessor::getVoltage))
+			.as("Active energy exported")
+			.returns(null, from(InverterModelAccessor::getActiveEnergyExported))
+			;
+		// @formatter:on
 	}
 
 }

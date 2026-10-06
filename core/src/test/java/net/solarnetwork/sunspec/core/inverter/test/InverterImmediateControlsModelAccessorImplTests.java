@@ -22,12 +22,9 @@
 
 package net.solarnetwork.sunspec.core.inverter.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.BDDAssertions.catchThrowable;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -70,93 +67,156 @@ public class InverterImmediateControlsModelAccessorImplTests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(FRONIUS_TEST_DATA),
-				is(instanceOf(InverterImmediateControlsModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel(FRONIUS_TEST_DATA))
+			.as("Model found by accessor type")
+			.isInstanceOf(InverterImmediateControlsModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		InverterImmediateControlsModelAccessor model = getTestModel(FRONIUS_TEST_DATA);
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(227)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(229)));
-		assertThat("Model ID", model.getModelId(),
-				is(equalTo(InverterControlModelId.ImmediateControls)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(24)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(24)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(227, from(InverterImmediateControlsModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(229, from(InverterImmediateControlsModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(InverterControlModelId.ImmediateControls,
+					from(InverterImmediateControlsModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(24, from(InverterImmediateControlsModelAccessor::getFixedBlockLength))
+			.as("Model length")
+			.returns(24, from(InverterImmediateControlsModelAccessor::getModelLength))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void values_fronius() {
+		// GIVEN
 		InverterImmediateControlsModelAccessor model = getTestModel(FRONIUS_TEST_DATA);
-		assertThat("Connection time window", model.getConnectionTimeWindow(), is(equalTo(0)));
-		assertThat("Connection reversion time", model.getConnectionReversionTime(), is(equalTo(0)));
-		assertThat("Connection control", model.getConnectionControl(),
-				is(equalTo(InverterConnectionControl.Disconnect)));
-		assertThat("Active power limit", model.getActivePowerLimitPercent(), is(equalTo(100.0f)));
-		assertThat("Active power limit time window", model.getActivePowerLimitTimeWindow(),
-				is(equalTo(0)));
-		assertThat("Active power limit reversion time", model.getActivePowerLimitReversionTime(),
-				is(equalTo(0)));
-		assertThat("Active power limit ramp time", model.getActivePowerLimitRampTime(), is(equalTo(0)));
-		assertThat("Active power limit enabled", model.isActivePowerLimitEnabled(), is(equalTo(false)));
-		assertThat("Fixed power factor", model.getFixedPowerFactor(), is(equalTo(0.0f)));
-		assertThat("Fixed power factor time window", model.getFixedPowerFactorTimeWindow(),
-				is(equalTo(0)));
-		assertThat("Fixed power factor reversion time", model.getFixedPowerFactorReversionTime(),
-				is(equalTo(0)));
-		assertThat("Fixed power factor ramp time", model.getFixedPowerFactorRampTime(), is(equalTo(0)));
-		assertThat("Fixed power factor enabled", model.isFixedPowerFactorEnabled(), is(equalTo(false)));
-		assertThat("Reactive power of maximum active power not implemented",
-				model.getReactivePowerPercentOfMaximumActivePower(), is(nullValue()));
-		assertThat("Reactive power of maximum reactive power",
-				model.getReactivePowerPercentOfMaximumReactivePower(), is(equalTo(0.0f)));
-		assertThat("Reactive power of available reactive power not implemented",
-				model.getReactivePowerPercentOfAvailableReactivePower(), is(nullValue()));
-		assertThat("Reactive power time window", model.getReactivePowerPercentTimeWindow(),
-				is(equalTo(0)));
-		assertThat("Reactive power reversion time", model.getReactivePowerPercentReversionTime(),
-				is(equalTo(0)));
-		assertThat("Reactive power ramp time", model.getReactivePowerPercentRampTime(), is(equalTo(0)));
-		assertThat("Reactive power mode", model.getReactivePowerPercentMode(),
-				is(equalTo(InverterReactivePowerPercentMode.MaximumReactivePowerPercent)));
-		assertThat("Reactive power enabled", model.isReactivePowerPercentEnabled(), is(equalTo(false)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Connection time window")
+			.returns(0, from(InverterImmediateControlsModelAccessor::getConnectionTimeWindow))
+			.as("Connection reversion time")
+			.returns(0, from(InverterImmediateControlsModelAccessor::getConnectionReversionTime))
+			.as("Connection control")
+			.returns(InverterConnectionControl.Disconnect,
+					from(InverterImmediateControlsModelAccessor::getConnectionControl))
+			.as("Active power limit")
+			.returns(100.0f, from(InverterImmediateControlsModelAccessor::getActivePowerLimitPercent))
+			.as("Active power limit time window")
+			.returns(0, from(InverterImmediateControlsModelAccessor::getActivePowerLimitTimeWindow))
+			.as("Active power limit reversion time")
+			.returns(0, from(InverterImmediateControlsModelAccessor::getActivePowerLimitReversionTime))
+			.as("Active power limit ramp time")
+			.returns(0, from(InverterImmediateControlsModelAccessor::getActivePowerLimitRampTime))
+			.as("Active power limit enabled")
+			.returns(false, from(InverterImmediateControlsModelAccessor::isActivePowerLimitEnabled))
+			.as("Fixed power factor")
+			.returns(0.0f, from(InverterImmediateControlsModelAccessor::getFixedPowerFactor))
+			.as("Fixed power factor time window")
+			.returns(0, from(InverterImmediateControlsModelAccessor::getFixedPowerFactorTimeWindow))
+			.as("Fixed power factor reversion time")
+			.returns(0, from(InverterImmediateControlsModelAccessor::getFixedPowerFactorReversionTime))
+			.as("Fixed power factor ramp time")
+			.returns(0, from(InverterImmediateControlsModelAccessor::getFixedPowerFactorRampTime))
+			.as("Fixed power factor enabled")
+			.returns(false, from(InverterImmediateControlsModelAccessor::isFixedPowerFactorEnabled))
+			.as("Reactive power of maximum active power not implemented")
+			.returns(null,
+					from(InverterImmediateControlsModelAccessor::getReactivePowerPercentOfMaximumActivePower))
+			.as("Reactive power of maximum reactive power")
+			.returns(0.0f,
+					from(InverterImmediateControlsModelAccessor::getReactivePowerPercentOfMaximumReactivePower))
+			.as("Reactive power of available reactive power not implemented")
+			.returns(null,
+					from(InverterImmediateControlsModelAccessor::getReactivePowerPercentOfAvailableReactivePower))
+			.as("Reactive power time window")
+			.returns(0, from(InverterImmediateControlsModelAccessor::getReactivePowerPercentTimeWindow))
+			.as("Reactive power reversion time")
+			.returns(0,
+					from(InverterImmediateControlsModelAccessor::getReactivePowerPercentReversionTime))
+			.as("Reactive power ramp time")
+			.returns(0, from(InverterImmediateControlsModelAccessor::getReactivePowerPercentRampTime))
+			.as("Reactive power mode")
+			.returns(InverterReactivePowerPercentMode.MaximumReactivePowerPercent,
+					from(InverterImmediateControlsModelAccessor::getReactivePowerPercentMode))
+			.as("Reactive power enabled")
+			.returns(false, from(InverterImmediateControlsModelAccessor::isReactivePowerPercentEnabled))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void values_sma() {
+		// GIVEN
 		InverterImmediateControlsModelAccessor model = getTestModel(SMA_TEST_DATA);
-		assertThat("Connection time window not implemented", model.getConnectionTimeWindow(),
-				is(nullValue()));
-		assertThat("Connection reversion time not implemented", model.getConnectionReversionTime(),
-				is(nullValue()));
-		assertThat("Connection control not implemented", model.getConnectionControl(), is(nullValue()));
-		assertThat("Active power limit not implemented", model.getActivePowerLimitPercent(),
-				is(nullValue()));
-		assertThat("Active power limit ramp time not implemented", model.getActivePowerLimitRampTime(),
-				is(nullValue()));
-		assertThat("Active power limit enabled", model.isActivePowerLimitEnabled(), is(equalTo(true)));
-		assertThat("Fixed power factor not implemented", model.getFixedPowerFactor(), is(nullValue()));
-		assertThat("Fixed power factor enabled", model.isFixedPowerFactorEnabled(), is(equalTo(true)));
-		assertThat("Reactive power of maximum reactive power not implemented",
-				model.getReactivePowerPercentOfMaximumReactivePower(), is(nullValue()));
-		assertThat("Reactive power mode", model.getReactivePowerPercentMode(),
-				is(equalTo(InverterReactivePowerPercentMode.MaximumActivePowerPercent)));
-		assertThat("Reactive power enabled", model.isReactivePowerPercentEnabled(), is(equalTo(false)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Connection time window not implemented")
+			.returns(null, from(InverterImmediateControlsModelAccessor::getConnectionTimeWindow))
+			.as("Connection reversion time not implemented")
+			.returns(null, from(InverterImmediateControlsModelAccessor::getConnectionReversionTime))
+			.as("Connection control not implemented")
+			.returns(null, from(InverterImmediateControlsModelAccessor::getConnectionControl))
+			.as("Active power limit not implemented")
+			.returns(null, from(InverterImmediateControlsModelAccessor::getActivePowerLimitPercent))
+			.as("Active power limit ramp time not implemented")
+			.returns(null, from(InverterImmediateControlsModelAccessor::getActivePowerLimitRampTime))
+			.as("Active power limit enabled")
+			.returns(true, from(InverterImmediateControlsModelAccessor::isActivePowerLimitEnabled))
+			.as("Fixed power factor not implemented")
+			.returns(null, from(InverterImmediateControlsModelAccessor::getFixedPowerFactor))
+			.as("Fixed power factor enabled")
+			.returns(true, from(InverterImmediateControlsModelAccessor::isFixedPowerFactorEnabled))
+			.as("Reactive power of maximum reactive power not implemented")
+			.returns(null,
+					from(InverterImmediateControlsModelAccessor::getReactivePowerPercentOfMaximumReactivePower))
+			.as("Reactive power mode")
+			.returns(InverterReactivePowerPercentMode.MaximumActivePowerPercent,
+					from(InverterImmediateControlsModelAccessor::getReactivePowerPercentMode))
+			.as("Reactive power enabled")
+			.returns(false, from(InverterImmediateControlsModelAccessor::isReactivePowerPercentEnabled))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void values_froniusSymo() {
+		// GIVEN
 		InverterImmediateControlsModelAccessor model = getTestModel(FRONIUS_SYMO_TEST_DATA);
-		assertThat("Connection control", model.getConnectionControl(),
-				is(equalTo(InverterConnectionControl.Connect)));
-		assertThat("Active power limit", model.getActivePowerLimitPercent(), is(equalTo(100.0f)));
-		assertThat("Active power limit ramp time not implemented", model.getActivePowerLimitRampTime(),
-				is(nullValue()));
-		assertThat("Fixed power factor", model.getFixedPowerFactor(), is(equalTo(1.0f)));
-		assertThat("Fixed power factor ramp time not implemented", model.getFixedPowerFactorRampTime(),
-				is(nullValue()));
-		assertThat("Reactive power ramp time not implemented", model.getReactivePowerPercentRampTime(),
-				is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Connection control")
+			.returns(InverterConnectionControl.Connect,
+					from(InverterImmediateControlsModelAccessor::getConnectionControl))
+			.as("Active power limit")
+			.returns(100.0f, from(InverterImmediateControlsModelAccessor::getActivePowerLimitPercent))
+			.as("Active power limit ramp time not implemented")
+			.returns(null, from(InverterImmediateControlsModelAccessor::getActivePowerLimitRampTime))
+			.as("Fixed power factor")
+			.returns(1.0f, from(InverterImmediateControlsModelAccessor::getFixedPowerFactor))
+			.as("Fixed power factor ramp time not implemented")
+			.returns(null, from(InverterImmediateControlsModelAccessor::getFixedPowerFactorRampTime))
+			.as("Reactive power ramp time not implemented")
+			.returns(null, from(InverterImmediateControlsModelAccessor::getReactivePowerPercentRampTime))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -191,46 +251,71 @@ public class InverterImmediateControlsModelAccessorImplTests {
 		model.setReactivePowerPercentEnabled(conn, true);
 
 		// THEN
-		assertThat("Each point written to its own register, in order", conn.getWrites(),
-				is(equalTo(IntStream.rangeClosed(229, 249).mapToObj(a -> List.of(a, 1)).toList())));
-		assertThat("Model data updated", model.getConnectionControl(),
-				is(equalTo(InverterConnectionControl.Connect)));
+		// @formatter:off
+		then(conn.getWrites())
+			.as("Each point written to its own register, in order")
+			.isEqualTo(IntStream.rangeClosed(229, 249).mapToObj(a -> List.of(a, 1)).toList())
+			;
+		then(model.getConnectionControl())
+			.as("Model data updated")
+			.isEqualTo(InverterConnectionControl.Connect)
+			;
+		// @formatter:on
 
 		InverterImmediateControlsModelAccessor device = discoverModel(conn);
-		assertThat("Connection time window", device.getConnectionTimeWindow(), is(equalTo(30)));
-		assertThat("Connection reversion time", device.getConnectionReversionTime(), is(equalTo(600)));
-		assertThat("Connection control", device.getConnectionControl(),
-				is(equalTo(InverterConnectionControl.Connect)));
-		assertThat("Active power limit", device.getActivePowerLimitPercent(), is(equalTo(75.0f)));
-		assertThat("Active power limit time window", device.getActivePowerLimitTimeWindow(),
-				is(equalTo(10)));
-		assertThat("Active power limit reversion time", device.getActivePowerLimitReversionTime(),
-				is(equalTo(900)));
-		assertThat("Active power limit ramp time", device.getActivePowerLimitRampTime(), is(equalTo(5)));
-		assertThat("Active power limit enabled", device.isActivePowerLimitEnabled(), is(equalTo(true)));
-		assertThat("Fixed power factor", device.getFixedPowerFactor(), is(equalTo(-0.95f)));
-		assertThat("Fixed power factor time window", device.getFixedPowerFactorTimeWindow(),
-				is(equalTo(20)));
-		assertThat("Fixed power factor reversion time", device.getFixedPowerFactorReversionTime(),
-				is(equalTo(1200)));
-		assertThat("Fixed power factor ramp time", device.getFixedPowerFactorRampTime(),
-				is(equalTo(15)));
-		assertThat("Fixed power factor enabled", device.isFixedPowerFactorEnabled(), is(equalTo(true)));
-		assertThat("Reactive power of maximum active power",
-				device.getReactivePowerPercentOfMaximumActivePower(), is(equalTo(-25.0f)));
-		assertThat("Reactive power of maximum reactive power",
-				device.getReactivePowerPercentOfMaximumReactivePower(), is(equalTo(40.0f)));
-		assertThat("Reactive power of available reactive power",
-				device.getReactivePowerPercentOfAvailableReactivePower(), is(equalTo(60.0f)));
-		assertThat("Reactive power time window", device.getReactivePowerPercentTimeWindow(),
-				is(equalTo(25)));
-		assertThat("Reactive power reversion time", device.getReactivePowerPercentReversionTime(),
-				is(equalTo(1800)));
-		assertThat("Reactive power ramp time", device.getReactivePowerPercentRampTime(),
-				is(equalTo(35)));
-		assertThat("Reactive power mode", device.getReactivePowerPercentMode(),
-				is(equalTo(InverterReactivePowerPercentMode.AvailableReactivePowerPercent)));
-		assertThat("Reactive power enabled", device.isReactivePowerPercentEnabled(), is(equalTo(true)));
+		// @formatter:off
+		then(device)
+			.as("Connection time window")
+			.returns(30, from(InverterImmediateControlsModelAccessor::getConnectionTimeWindow))
+			.as("Connection reversion time")
+			.returns(600, from(InverterImmediateControlsModelAccessor::getConnectionReversionTime))
+			.as("Connection control")
+			.returns(InverterConnectionControl.Connect,
+					from(InverterImmediateControlsModelAccessor::getConnectionControl))
+			.as("Active power limit")
+			.returns(75.0f, from(InverterImmediateControlsModelAccessor::getActivePowerLimitPercent))
+			.as("Active power limit time window")
+			.returns(10, from(InverterImmediateControlsModelAccessor::getActivePowerLimitTimeWindow))
+			.as("Active power limit reversion time")
+			.returns(900, from(InverterImmediateControlsModelAccessor::getActivePowerLimitReversionTime))
+			.as("Active power limit ramp time")
+			.returns(5, from(InverterImmediateControlsModelAccessor::getActivePowerLimitRampTime))
+			.as("Active power limit enabled")
+			.returns(true, from(InverterImmediateControlsModelAccessor::isActivePowerLimitEnabled))
+			.as("Fixed power factor")
+			.returns(-0.95f, from(InverterImmediateControlsModelAccessor::getFixedPowerFactor))
+			.as("Fixed power factor time window")
+			.returns(20, from(InverterImmediateControlsModelAccessor::getFixedPowerFactorTimeWindow))
+			.as("Fixed power factor reversion time")
+			.returns(1200,
+					from(InverterImmediateControlsModelAccessor::getFixedPowerFactorReversionTime))
+			.as("Fixed power factor ramp time")
+			.returns(15, from(InverterImmediateControlsModelAccessor::getFixedPowerFactorRampTime))
+			.as("Fixed power factor enabled")
+			.returns(true, from(InverterImmediateControlsModelAccessor::isFixedPowerFactorEnabled))
+			.as("Reactive power of maximum active power")
+			.returns(-25.0f,
+					from(InverterImmediateControlsModelAccessor::getReactivePowerPercentOfMaximumActivePower))
+			.as("Reactive power of maximum reactive power")
+			.returns(40.0f,
+					from(InverterImmediateControlsModelAccessor::getReactivePowerPercentOfMaximumReactivePower))
+			.as("Reactive power of available reactive power")
+			.returns(60.0f,
+					from(InverterImmediateControlsModelAccessor::getReactivePowerPercentOfAvailableReactivePower))
+			.as("Reactive power time window")
+			.returns(25, from(InverterImmediateControlsModelAccessor::getReactivePowerPercentTimeWindow))
+			.as("Reactive power reversion time")
+			.returns(1800,
+					from(InverterImmediateControlsModelAccessor::getReactivePowerPercentReversionTime))
+			.as("Reactive power ramp time")
+			.returns(35, from(InverterImmediateControlsModelAccessor::getReactivePowerPercentRampTime))
+			.as("Reactive power mode")
+			.returns(InverterReactivePowerPercentMode.AvailableReactivePowerPercent,
+					from(InverterImmediateControlsModelAccessor::getReactivePowerPercentMode))
+			.as("Reactive power enabled")
+			.returns(true, from(InverterImmediateControlsModelAccessor::isReactivePowerPercentEnabled))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -247,10 +332,17 @@ public class InverterImmediateControlsModelAccessorImplTests {
 
 		// THEN
 		InverterImmediateControlsModelAccessor device = discoverModel(conn);
-		assertThat("Active power limit", device.getActivePowerLimitPercent(), is(equalTo(62.5f)));
-		assertThat("Fixed power factor", device.getFixedPowerFactor(), is(equalTo(0.9876f)));
-		assertThat("Reactive power of maximum active power",
-				device.getReactivePowerPercentOfMaximumActivePower(), is(equalTo(12.34f)));
+		// @formatter:off
+		then(device)
+			.as("Active power limit")
+			.returns(62.5f, from(InverterImmediateControlsModelAccessor::getActivePowerLimitPercent))
+			.as("Fixed power factor")
+			.returns(0.9876f, from(InverterImmediateControlsModelAccessor::getFixedPowerFactor))
+			.as("Reactive power of maximum active power")
+			.returns(12.34f,
+					from(InverterImmediateControlsModelAccessor::getReactivePowerPercentOfMaximumActivePower))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -261,21 +353,24 @@ public class InverterImmediateControlsModelAccessorImplTests {
 		InverterImmediateControlsModelAccessor model = discoverModel(conn);
 
 		// WHEN
-		try {
-			model.setActivePowerLimitPercent(conn, 70000.0f);
-			fail("Scaled value larger than uint16 should be rejected.");
-		} catch ( IllegalArgumentException e ) {
-			// expected
-		}
-		try {
-			model.setConnectionTimeWindow(conn, -1);
-			fail("Negative uint16 value should be rejected.");
-		} catch ( IllegalArgumentException e ) {
-			// expected
-		}
+		Throwable tooLarge = catchThrowable(() -> model.setActivePowerLimitPercent(conn, 70000.0f));
+		Throwable negative = catchThrowable(() -> model.setConnectionTimeWindow(conn, -1));
 
 		// THEN
-		assertThat("Nothing written", conn.getWrites(), is(equalTo(List.of())));
+		// @formatter:off
+		then(tooLarge)
+			.as("Scaled value larger than uint16 rejected")
+			.isInstanceOf(IllegalArgumentException.class)
+			;
+		then(negative)
+			.as("Negative uint16 value rejected")
+			.isInstanceOf(IllegalArgumentException.class)
+			;
+		then(conn.getWrites())
+			.as("Nothing written")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 }

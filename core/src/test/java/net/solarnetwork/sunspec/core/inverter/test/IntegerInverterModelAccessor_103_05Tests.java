@@ -22,9 +22,8 @@
 
 package net.solarnetwork.sunspec.core.inverter.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,41 +59,90 @@ public class IntegerInverterModelAccessor_103_05Tests {
 
 	@Test
 	public void commonModelProperties() {
+		// GIVEN
 		CommonModelAccessor data = getTestDataInstance();
-		assertThat("Manufacturer", data.getManufacturer(), equalTo("SMA"));
-		assertThat("Model name", data.getModelName(), equalTo("Solar Inverter"));
-		assertThat("Options", data.getOptions(), equalTo("9338"));
-		assertThat("Version", data.getVersion(), equalTo("3.11.02.R"));
-		assertThat("Serial number", data.getSerialNumber(), equalTo("3009060251"));
-		assertThat("Device address", data.getDeviceAddress(), equalTo(65535));
+
+		// THEN
+		// @formatter:off
+		then(data)
+			.as("Manufacturer")
+			.returns("SMA", from(CommonModelAccessor::getManufacturer))
+			.as("Model name")
+			.returns("Solar Inverter", from(CommonModelAccessor::getModelName))
+			.as("Options")
+			.returns("9338", from(CommonModelAccessor::getOptions))
+			.as("Version")
+			.returns("3.11.02.R", from(CommonModelAccessor::getVersion))
+			.as("Serial number")
+			.returns("3009060251", from(CommonModelAccessor::getSerialNumber))
+			.as("Device address")
+			.returns(65535, from(CommonModelAccessor::getDeviceAddress))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void findTypedModel() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
+
+		// WHEN
 		InverterModelAccessor meterAccessor = data.findTypedModel(InverterModelAccessor.class);
-		assertThat(meterAccessor, instanceOf(IntegerInverterModelAccessor.class));
+
+		// THEN
+		// @formatter:off
+		then(meterAccessor)
+			.as("Model found by accessor type")
+			.isInstanceOf(IntegerInverterModelAccessor.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void getTypedModel() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
+
+		// WHEN
 		ModelAccessor accessor = data.getTypedModel();
-		assertThat(accessor, instanceOf(GenericModelAccessor.class));
-		assertThat(accessor.getModelId().getId(), equalTo(11));
+
+		// THEN
+		// @formatter:off
+		then(accessor)
+			.as("First model as typed accessor")
+			.isInstanceOf(GenericModelAccessor.class)
+			;
+		then(accessor.getModelId().getId())
+			.as("First model ID")
+			.isEqualTo(11)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		InverterModelAccessor model = getTestDataInstance().findTypedModel(InverterModelAccessor.class);
-		assertThat("Model base address", model.getBaseAddress(), equalTo(40185));
-		assertThat("Model block address", model.getBlockAddress(), equalTo(40187));
-		assertThat("Model ID", model.getModelId(), equalTo(InverterModelId.ThreePhaseInverterInteger));
-		assertThat("Model fixed length", model.getFixedBlockLength(), equalTo(50));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				equalTo(0));
-		assertThat("Model length", model.getModelLength(), equalTo(50));
-		assertThat("Model length", model.getRepeatingBlockInstanceCount(), equalTo(0));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(40185, from(InverterModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(40187, from(InverterModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(InverterModelId.ThreePhaseInverterInteger, from(InverterModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(50, from(InverterModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(0, from(InverterModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(50, from(InverterModelAccessor::getModelLength))
+			.as("Model length")
+			.returns(0, from(InverterModelAccessor::getRepeatingBlockInstanceCount))
+			;
+		// @formatter:on
 	}
 
 }

@@ -22,12 +22,9 @@
 
 package net.solarnetwork.sunspec.core.inverter.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.BDDAssertions.catchThrowable;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -120,170 +117,357 @@ public class InverterBasicSettingsModelAccessorImpl_101_01Tests {
 
 	@Test
 	public void commonModelProperties() {
+		// GIVEN
 		CommonModelAccessor data = getTestDataInstance();
-		assertThat("Manufacturer", data.getManufacturer(), equalTo("Fronius"));
-		assertThat("Model name", data.getModelName(), equalTo("IG+V11.4"));
-		assertThat("Options", data.getOptions(), equalTo("2.1.18"));
-		assertThat("Version", data.getVersion(), equalTo("5.10.0"));
-		assertThat("Serial number", data.getSerialNumber(), equalTo("50.213262"));
-		assertThat("Device address", data.getDeviceAddress(), equalTo(5));
+
+		// THEN
+		// @formatter:off
+		then(data)
+			.as("Manufacturer")
+			.returns("Fronius", from(CommonModelAccessor::getManufacturer))
+			.as("Model name")
+			.returns("IG+V11.4", from(CommonModelAccessor::getModelName))
+			.as("Options")
+			.returns("2.1.18", from(CommonModelAccessor::getOptions))
+			.as("Version")
+			.returns("5.10.0", from(CommonModelAccessor::getVersion))
+			.as("Serial number")
+			.returns("50.213262", from(CommonModelAccessor::getSerialNumber))
+			.as("Device address")
+			.returns(5, from(CommonModelAccessor::getDeviceAddress))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void findTypedModel() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
+
+		// WHEN
 		InverterBasicSettingsModelAccessor accessor = data
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat(accessor, instanceOf(InverterBasicSettingsModelAccessorImpl.class));
+
+		// THEN
+		// @formatter:off
+		then(accessor)
+			.as("Model found by accessor type")
+			.isInstanceOf(InverterBasicSettingsModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Model base address", model.getBaseAddress(), equalTo(149));
-		assertThat("Model block address", model.getBlockAddress(), equalTo(151));
-		assertThat("Model ID", model.getModelId(), equalTo(InverterControlModelId.BasicSettings));
-		assertThat("Model fixed length", model.getFixedBlockLength(), equalTo(30));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				equalTo(0));
-		assertThat("Model length", model.getModelLength(), equalTo(30));
-		assertThat("Model length", model.getRepeatingBlockInstanceCount(), equalTo(0));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(149, from(InverterBasicSettingsModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(151, from(InverterBasicSettingsModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(InverterControlModelId.BasicSettings,
+					from(InverterBasicSettingsModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(30, from(InverterBasicSettingsModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(0, from(InverterBasicSettingsModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(30, from(InverterBasicSettingsModelAccessor::getModelLength))
+			.as("Model length")
+			.returns(0, from(InverterBasicSettingsModelAccessor::getRepeatingBlockInstanceCount))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void activePowerMaximum() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Active power max", model.getActivePowerMaximum(), equalTo(11400));
+
+		// THEN
+		// @formatter:off
+		then(model.getActivePowerMaximum())
+			.as("Active power max")
+			.isEqualTo(11400)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void pccVoltage() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("PCC voltage", model.getPccVoltage(), equalTo(240.0f));
+
+		// THEN
+		// @formatter:off
+		then(model.getPccVoltage())
+			.as("PCC voltage")
+			.isEqualTo(240.0f)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void pccVoltageOffset() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("PCC voltage offset", model.getPccVoltageOffset(), equalTo(0.0f));
+
+		// THEN
+		// @formatter:off
+		then(model.getPccVoltageOffset())
+			.as("PCC voltage offset")
+			.isEqualTo(0.0f)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void voltageMax() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Voltage max", model.getVoltageMaximum(), equalTo(269.0f));
+
+		// THEN
+		// @formatter:off
+		then(model.getVoltageMaximum())
+			.as("Voltage max")
+			.isEqualTo(269.0f)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void voltageMin() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Voltage min", model.getVoltageMinimum(), equalTo(206.0f));
+
+		// THEN
+		// @formatter:off
+		then(model.getVoltageMinimum())
+			.as("Voltage min")
+			.isEqualTo(206.0f)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void apparentPowerMax() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("VA max", model.getApparentPowerMaximum(), equalTo(11400));
+
+		// THEN
+		// @formatter:off
+		then(model.getApparentPowerMaximum())
+			.as("VA max")
+			.isEqualTo(11400)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void reactivePowerQ1Max() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("VAR Q1 max", model.getReactivePowerQ1Maximum(), equalTo(6000));
+
+		// THEN
+		// @formatter:off
+		then(model.getReactivePowerQ1Maximum())
+			.as("VAR Q1 max")
+			.isEqualTo(6000)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void reactivePowerQ2Max() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("VAR Q2 max", model.getReactivePowerQ2Maximum(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getReactivePowerQ2Maximum())
+			.as("VAR Q2 max")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void reactivePowerQ3Max() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("VAR Q3 max", model.getReactivePowerQ3Maximum(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getReactivePowerQ3Maximum())
+			.as("VAR Q3 max")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void reactivePowerQ4Max() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("VAR Q4 max", model.getReactivePowerQ4Maximum(), equalTo(-6000));
+
+		// THEN
+		// @formatter:off
+		then(model.getReactivePowerQ4Maximum())
+			.as("VAR Q4 max")
+			.isEqualTo(-6000)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void activePowerRampRate() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Active power ramp rate", model.getActivePowerRampRate(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getActivePowerRampRate())
+			.as("Active power ramp rate")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void powerFactorQ1Minimum() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Power factor Q1 minimum", model.getPowerFactorQ1Minimum(), equalTo(-0.850f));
+
+		// THEN
+		// @formatter:off
+		then(model.getPowerFactorQ1Minimum())
+			.as("Power factor Q1 minimum")
+			.isEqualTo(-0.850f)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void powerFactorQ2Minimum() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Power factor Q2 minimum", model.getPowerFactorQ2Minimum(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getPowerFactorQ2Minimum())
+			.as("Power factor Q2 minimum")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void powerFactorQ3Minimum() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Power factor Q3 minimum", model.getPowerFactorQ3Minimum(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getPowerFactorQ3Minimum())
+			.as("Power factor Q3 minimum")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void powerFactorQ4Minimum() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Power factor Q4 minimum", model.getPowerFactorQ4Minimum(), equalTo(0.850f));
+
+		// THEN
+		// @formatter:off
+		then(model.getPowerFactorQ4Minimum())
+			.as("Power factor Q4 minimum")
+			.isEqualTo(0.850f)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void importExportChangeReactivePowerAction() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Import export reactive power action",
-				model.getImportExportChangeReactivePowerAction(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getImportExportChangeReactivePowerAction())
+			.as("Import export reactive power action")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void apparentPowerCalculationMethod() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Apparent power calculation method", model.getApparentPowerCalculationMethod(),
-				nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getApparentPowerCalculationMethod())
+			.as("Apparent power calculation method")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void ecpFrequency() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("ECP frequency", model.getEcpFrequency(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getEcpFrequency())
+			.as("ECP frequency")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void connectedPhase() {
+		// GIVEN
 		InverterBasicSettingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterBasicSettingsModelAccessor.class);
-		assertThat("Connected phase", model.getConnectedPhase(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getConnectedPhase())
+			.as("Connected phase")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -292,41 +476,68 @@ public class InverterBasicSettingsModelAccessorImpl_101_01Tests {
 		InverterBasicSettingsModelAccessor model = getTestModel(BLOCK_ADDRESS, SYNTHETIC_BLOCK);
 
 		// THEN
-		assertThat("Active power max", model.getActivePowerMaximum(), is(equalTo(11400)));
-		assertThat("PCC voltage", model.getPccVoltage(), is(equalTo(240.0f)));
-		assertThat("Negative PCC voltage offset", model.getPccVoltageOffset(), is(equalTo(-2.5f)));
-		assertThat("Voltage max", model.getVoltageMaximum(), is(equalTo(264.0f)));
-		assertThat("Voltage min", model.getVoltageMinimum(), is(equalTo(211.2f)));
-		assertThat("VA max", model.getApparentPowerMaximum(), is(equalTo(11400)));
-		assertThat("VAR Q1 max", model.getReactivePowerQ1Maximum(), is(equalTo(6000)));
-		assertThat("VAR Q2 max not implemented", model.getReactivePowerQ2Maximum(), is(nullValue()));
-		assertThat("VAR Q3 max", model.getReactivePowerQ3Maximum(), is(equalTo(-3000)));
-		assertThat("VAR Q4 max", model.getReactivePowerQ4Maximum(), is(equalTo(-6000)));
-		assertThat("Active power ramp rate", model.getActivePowerRampRate(), is(equalTo(10.0f)));
-		assertThat("Power factor Q1 minimum", model.getPowerFactorQ1Minimum(), is(equalTo(-0.85f)));
-		assertThat("Power factor Q2 minimum not implemented", model.getPowerFactorQ2Minimum(),
-				is(nullValue()));
-		assertThat("Power factor Q3 minimum", model.getPowerFactorQ3Minimum(), is(equalTo(-0.9f)));
-		assertThat("Power factor Q4 minimum", model.getPowerFactorQ4Minimum(), is(equalTo(0.85f)));
-		assertThat("Import export reactive power action",
-				model.getImportExportChangeReactivePowerAction(),
-				is(equalTo(InverterReactivePowerAction.Maintain)));
-		assertThat("Apparent power calculation method", model.getApparentPowerCalculationMethod(),
-				is(equalTo(InverterApparentPowerCalculationMethod.Vector)));
-		assertThat("Apparent power calculation method description",
-				model.getApparentPowerCalculationMethod().getDescription(), is(equalTo("Vector")));
-		assertThat("Active power ramp rate max with negative scale factor",
-				model.getActivePowerRampRateMaximum(), is(equalTo(50.0f)));
-		assertThat("ECP frequency with negative scale factor", model.getEcpFrequency(),
-				is(equalTo(60.0f)));
-		assertThat("Connected phase read from the model block", model.getConnectedPhase(),
-				is(equalTo(AcPhase.PhaseB)));
+		// @formatter:off
+		then(model)
+			.as("Active power max")
+			.returns(11400, from(InverterBasicSettingsModelAccessor::getActivePowerMaximum))
+			.as("PCC voltage")
+			.returns(240.0f, from(InverterBasicSettingsModelAccessor::getPccVoltage))
+			.as("Negative PCC voltage offset")
+			.returns(-2.5f, from(InverterBasicSettingsModelAccessor::getPccVoltageOffset))
+			.as("Voltage max")
+			.returns(264.0f, from(InverterBasicSettingsModelAccessor::getVoltageMaximum))
+			.as("Voltage min")
+			.returns(211.2f, from(InverterBasicSettingsModelAccessor::getVoltageMinimum))
+			.as("VA max")
+			.returns(11400, from(InverterBasicSettingsModelAccessor::getApparentPowerMaximum))
+			.as("VAR Q1 max")
+			.returns(6000, from(InverterBasicSettingsModelAccessor::getReactivePowerQ1Maximum))
+			.as("VAR Q2 max not implemented")
+			.returns(null, from(InverterBasicSettingsModelAccessor::getReactivePowerQ2Maximum))
+			.as("VAR Q3 max")
+			.returns(-3000, from(InverterBasicSettingsModelAccessor::getReactivePowerQ3Maximum))
+			.as("VAR Q4 max")
+			.returns(-6000, from(InverterBasicSettingsModelAccessor::getReactivePowerQ4Maximum))
+			.as("Active power ramp rate")
+			.returns(10.0f, from(InverterBasicSettingsModelAccessor::getActivePowerRampRate))
+			.as("Power factor Q1 minimum")
+			.returns(-0.85f, from(InverterBasicSettingsModelAccessor::getPowerFactorQ1Minimum))
+			.as("Power factor Q2 minimum not implemented")
+			.returns(null, from(InverterBasicSettingsModelAccessor::getPowerFactorQ2Minimum))
+			.as("Power factor Q3 minimum")
+			.returns(-0.9f, from(InverterBasicSettingsModelAccessor::getPowerFactorQ3Minimum))
+			.as("Power factor Q4 minimum")
+			.returns(0.85f, from(InverterBasicSettingsModelAccessor::getPowerFactorQ4Minimum))
+			.as("Import export reactive power action")
+			.returns(InverterReactivePowerAction.Maintain,
+					from(InverterBasicSettingsModelAccessor::getImportExportChangeReactivePowerAction))
+			.as("Apparent power calculation method")
+			.returns(InverterApparentPowerCalculationMethod.Vector,
+					from(InverterBasicSettingsModelAccessor::getApparentPowerCalculationMethod))
+			;
+		then(model.getApparentPowerCalculationMethod().getDescription())
+			.as("Apparent power calculation method description")
+			.isEqualTo("Vector")
+			;
+		then(model)
+			.as("Active power ramp rate max with negative scale factor")
+			.returns(50.0f, from(InverterBasicSettingsModelAccessor::getActivePowerRampRateMaximum))
+			.as("ECP frequency with negative scale factor")
+			.returns(60.0f, from(InverterBasicSettingsModelAccessor::getEcpFrequency))
+			.as("Connected phase read from the model block")
+			.returns(AcPhase.PhaseB, from(InverterBasicSettingsModelAccessor::getConnectedPhase))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void pccVoltageOffset_notImplemented() {
-		assertThat("PCC voltage offset not implemented",
-				getTestModel(BLOCK_ADDRESS + 2, 0x8000).getPccVoltageOffset(), is(nullValue()));
+		// @formatter:off
+		then(getTestModel(BLOCK_ADDRESS + 2, 0x8000).getPccVoltageOffset())
+			.as("PCC voltage offset not implemented")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -336,10 +547,15 @@ public class InverterBasicSettingsModelAccessorImpl_101_01Tests {
 		InverterBasicSettingsModelAccessor model = getTestModel(BLOCK_ADDRESS + 15, 0x0000, 0x0003);
 
 		// THEN
-		assertThat("Undefined reactive power action not available",
-				model.getImportExportChangeReactivePowerAction(), is(nullValue()));
-		assertThat("Undefined apparent power calculation method not available",
-				model.getApparentPowerCalculationMethod(), is(nullValue()));
+		// @formatter:off
+		then(model)
+			.as("Undefined reactive power action not available")
+			.returns(null,
+					from(InverterBasicSettingsModelAccessor::getImportExportChangeReactivePowerAction))
+			.as("Undefined apparent power calculation method not available")
+			.returns(null, from(InverterBasicSettingsModelAccessor::getApparentPowerCalculationMethod))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -372,35 +588,61 @@ public class InverterBasicSettingsModelAccessorImpl_101_01Tests {
 		model.setConnectedPhase(conn, AcPhase.PhaseC);
 
 		// THEN
-		assertThat("Each point written to its own register, in order", conn.getWrites(),
-				is(equalTo(IntStream.rangeClosed(BLOCK_ADDRESS, BLOCK_ADDRESS + 19)
-						.mapToObj(a -> List.of(a, 1)).toList())));
+		// @formatter:off
+		then(conn.getWrites())
+			.as("Each point written to its own register, in order")
+			.isEqualTo(IntStream.rangeClosed(BLOCK_ADDRESS, BLOCK_ADDRESS
+					+ 19).mapToObj(a -> List.of(a, 1)).toList())
+			;
+		// @formatter:on
 
 		InverterBasicSettingsModelAccessor device = discoverModel(conn);
-		assertThat("Active power max", device.getActivePowerMaximum(), is(equalTo(9000)));
-		assertThat("PCC voltage", device.getPccVoltage(), is(equalTo(230.5f)));
-		assertThat("PCC voltage offset", device.getPccVoltageOffset(), is(equalTo(-1.5f)));
-		assertThat("Voltage max", device.getVoltageMaximum(), is(equalTo(253.0f)));
-		assertThat("Voltage min", device.getVoltageMinimum(), is(equalTo(207.0f)));
-		assertThat("VA max", device.getApparentPowerMaximum(), is(equalTo(10000)));
-		assertThat("VAR Q1 max", device.getReactivePowerQ1Maximum(), is(equalTo(5000)));
-		assertThat("VAR Q2 max", device.getReactivePowerQ2Maximum(), is(equalTo(4000)));
-		assertThat("VAR Q3 max", device.getReactivePowerQ3Maximum(), is(equalTo(-4000)));
-		assertThat("VAR Q4 max", device.getReactivePowerQ4Maximum(), is(equalTo(-5000)));
-		assertThat("Active power ramp rate", device.getActivePowerRampRate(), is(equalTo(12.5f)));
-		assertThat("Power factor Q1 minimum", device.getPowerFactorQ1Minimum(), is(equalTo(-0.9f)));
-		assertThat("Power factor Q2 minimum", device.getPowerFactorQ2Minimum(), is(equalTo(0.95f)));
-		assertThat("Power factor Q3 minimum", device.getPowerFactorQ3Minimum(), is(equalTo(-0.95f)));
-		assertThat("Power factor Q4 minimum", device.getPowerFactorQ4Minimum(), is(equalTo(0.9f)));
-		assertThat("Import export reactive power action",
-				device.getImportExportChangeReactivePowerAction(),
-				is(equalTo(InverterReactivePowerAction.Switch)));
-		assertThat("Apparent power calculation method", device.getApparentPowerCalculationMethod(),
-				is(equalTo(InverterApparentPowerCalculationMethod.Arithmetic)));
-		assertThat("Active power ramp rate max", device.getActivePowerRampRateMaximum(),
-				is(equalTo(75.0f)));
-		assertThat("ECP frequency", device.getEcpFrequency(), is(equalTo(50.0f)));
-		assertThat("Connected phase", device.getConnectedPhase(), is(equalTo(AcPhase.PhaseC)));
+		// @formatter:off
+		then(device)
+			.as("Active power max")
+			.returns(9000, from(InverterBasicSettingsModelAccessor::getActivePowerMaximum))
+			.as("PCC voltage")
+			.returns(230.5f, from(InverterBasicSettingsModelAccessor::getPccVoltage))
+			.as("PCC voltage offset")
+			.returns(-1.5f, from(InverterBasicSettingsModelAccessor::getPccVoltageOffset))
+			.as("Voltage max")
+			.returns(253.0f, from(InverterBasicSettingsModelAccessor::getVoltageMaximum))
+			.as("Voltage min")
+			.returns(207.0f, from(InverterBasicSettingsModelAccessor::getVoltageMinimum))
+			.as("VA max")
+			.returns(10000, from(InverterBasicSettingsModelAccessor::getApparentPowerMaximum))
+			.as("VAR Q1 max")
+			.returns(5000, from(InverterBasicSettingsModelAccessor::getReactivePowerQ1Maximum))
+			.as("VAR Q2 max")
+			.returns(4000, from(InverterBasicSettingsModelAccessor::getReactivePowerQ2Maximum))
+			.as("VAR Q3 max")
+			.returns(-4000, from(InverterBasicSettingsModelAccessor::getReactivePowerQ3Maximum))
+			.as("VAR Q4 max")
+			.returns(-5000, from(InverterBasicSettingsModelAccessor::getReactivePowerQ4Maximum))
+			.as("Active power ramp rate")
+			.returns(12.5f, from(InverterBasicSettingsModelAccessor::getActivePowerRampRate))
+			.as("Power factor Q1 minimum")
+			.returns(-0.9f, from(InverterBasicSettingsModelAccessor::getPowerFactorQ1Minimum))
+			.as("Power factor Q2 minimum")
+			.returns(0.95f, from(InverterBasicSettingsModelAccessor::getPowerFactorQ2Minimum))
+			.as("Power factor Q3 minimum")
+			.returns(-0.95f, from(InverterBasicSettingsModelAccessor::getPowerFactorQ3Minimum))
+			.as("Power factor Q4 minimum")
+			.returns(0.9f, from(InverterBasicSettingsModelAccessor::getPowerFactorQ4Minimum))
+			.as("Import export reactive power action")
+			.returns(InverterReactivePowerAction.Switch,
+					from(InverterBasicSettingsModelAccessor::getImportExportChangeReactivePowerAction))
+			.as("Apparent power calculation method")
+			.returns(InverterApparentPowerCalculationMethod.Arithmetic,
+					from(InverterBasicSettingsModelAccessor::getApparentPowerCalculationMethod))
+			.as("Active power ramp rate max")
+			.returns(75.0f, from(InverterBasicSettingsModelAccessor::getActivePowerRampRateMaximum))
+			.as("ECP frequency")
+			.returns(50.0f, from(InverterBasicSettingsModelAccessor::getEcpFrequency))
+			.as("Connected phase")
+			.returns(AcPhase.PhaseC, from(InverterBasicSettingsModelAccessor::getConnectedPhase))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -411,15 +653,19 @@ public class InverterBasicSettingsModelAccessorImpl_101_01Tests {
 		InverterBasicSettingsModelAccessor model = discoverModel(conn);
 
 		// WHEN
-		try {
-			model.setEcpFrequency(conn, 60.0f);
-			fail("Scaled value without an implemented scale factor should be rejected.");
-		} catch ( IllegalStateException e ) {
-			// expected
-		}
+		Throwable t = catchThrowable(() -> model.setEcpFrequency(conn, 60.0f));
 
 		// THEN
-		assertThat("Nothing written", conn.getWrites(), is(equalTo(List.of())));
+		// @formatter:off
+		then(t)
+			.as("Scaled value without an implemented scale factor rejected")
+			.isInstanceOf(IllegalStateException.class)
+			;
+		then(conn.getWrites())
+			.as("Nothing written")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -430,15 +676,19 @@ public class InverterBasicSettingsModelAccessorImpl_101_01Tests {
 		InverterBasicSettingsModelAccessor model = discoverModel(conn);
 
 		// WHEN
-		try {
-			model.setConnectedPhase(conn, AcPhase.Total);
-			fail("Total is not a connected phase.");
-		} catch ( IllegalArgumentException e ) {
-			// expected
-		}
+		Throwable t = catchThrowable(() -> model.setConnectedPhase(conn, AcPhase.Total));
 
 		// THEN
-		assertThat("Nothing written", conn.getWrites(), is(equalTo(List.of())));
+		// @formatter:off
+		then(t)
+			.as("Total is not a connected phase")
+			.isInstanceOf(IllegalArgumentException.class)
+			;
+		then(conn.getWrites())
+			.as("Nothing written")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 }

@@ -22,12 +22,8 @@
 
 package net.solarnetwork.sunspec.core.inverter.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -72,138 +68,288 @@ public class InverterNameplateRatingsModelAccessorImpl_120_01Tests {
 
 	@Test
 	public void findTypedModel() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
+
+		// WHEN
 		InverterNameplateRatingsModelAccessor meterAccessor = data
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat(meterAccessor, instanceOf(InverterNameplateRatingsModelAccessorImpl.class));
+
+		// THEN
+		// @formatter:off
+		then(meterAccessor)
+			.as("Model found by accessor type")
+			.isInstanceOf(InverterNameplateRatingsModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		InverterNameplateRatingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat("Model base address", model.getBaseAddress(), equalTo(121));
-		assertThat("Model block address", model.getBlockAddress(), equalTo(123));
-		assertThat("Model ID", model.getModelId(), equalTo(InverterControlModelId.NameplateRatings));
-		assertThat("Model fixed length", model.getFixedBlockLength(), equalTo(26));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				equalTo(0));
-		assertThat("Model length", model.getModelLength(), equalTo(26));
-		assertThat("Model length", model.getRepeatingBlockInstanceCount(), equalTo(0));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(121, from(InverterNameplateRatingsModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(123, from(InverterNameplateRatingsModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(InverterControlModelId.NameplateRatings,
+					from(InverterNameplateRatingsModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(26, from(InverterNameplateRatingsModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(0, from(InverterNameplateRatingsModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(26, from(InverterNameplateRatingsModelAccessor::getModelLength))
+			.as("Model length")
+			.returns(0, from(InverterNameplateRatingsModelAccessor::getRepeatingBlockInstanceCount))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void derType() {
+		// GIVEN
 		InverterNameplateRatingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat("DER type", model.getDerType(), equalTo(InverterDerType.PV));
+
+		// THEN
+		// @formatter:off
+		then(model.getDerType())
+			.as("DER type")
+			.isEqualTo(InverterDerType.PV)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void activePowerRating() {
+		// GIVEN
 		InverterNameplateRatingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat("Active power rating", model.getActivePowerRating(), equalTo(11400));
+
+		// THEN
+		// @formatter:off
+		then(model.getActivePowerRating())
+			.as("Active power rating")
+			.isEqualTo(11400)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void apparentPowerRating() {
+		// GIVEN
 		InverterNameplateRatingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat("Apparent power rating", model.getApparentPowerRating(), equalTo(11400));
+
+		// THEN
+		// @formatter:off
+		then(model.getApparentPowerRating())
+			.as("Apparent power rating")
+			.isEqualTo(11400)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void reactivePowerQ1Rating() {
+		// GIVEN
 		InverterNameplateRatingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat("Reactive power Q1 rating", model.getReactivePowerQ1Rating(), equalTo(6000));
+
+		// THEN
+		// @formatter:off
+		then(model.getReactivePowerQ1Rating())
+			.as("Reactive power Q1 rating")
+			.isEqualTo(6000)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void reactivePowerQ2Rating() {
+		// GIVEN
 		InverterNameplateRatingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat("Reactive power Q2 rating", model.getReactivePowerQ2Rating(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getReactivePowerQ2Rating())
+			.as("Reactive power Q2 rating")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void reactivePowerQ3Rating() {
+		// GIVEN
 		InverterNameplateRatingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat("Reactive power Q3 rating", model.getReactivePowerQ3Rating(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getReactivePowerQ3Rating())
+			.as("Reactive power Q3 rating")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void reactivePowerQ4Rating() {
+		// GIVEN
 		InverterNameplateRatingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat("Reactive power Q4 rating", model.getReactivePowerQ4Rating(), equalTo(-6000));
+
+		// THEN
+		// @formatter:off
+		then(model.getReactivePowerQ4Rating())
+			.as("Reactive power Q4 rating")
+			.isEqualTo(-6000)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void currentRating() {
+		// GIVEN
 		InverterNameplateRatingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat("Current rating", model.getCurrentRating(), equalTo(47.50f));
+
+		// THEN
+		// @formatter:off
+		then(model.getCurrentRating())
+			.as("Current rating")
+			.isEqualTo(47.50f)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void powerFactorQ1Rating() {
+		// GIVEN
 		InverterNameplateRatingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat("Power factor Q1 rating", model.getPowerFactorQ1Rating(), equalTo(-0.850f));
+
+		// THEN
+		// @formatter:off
+		then(model.getPowerFactorQ1Rating())
+			.as("Power factor Q1 rating")
+			.isEqualTo(-0.850f)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void powerFactorQ2Rating() {
+		// GIVEN
 		InverterNameplateRatingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat("Power factor Q1 rating", model.getPowerFactorQ2Rating(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getPowerFactorQ2Rating())
+			.as("Power factor Q1 rating")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void powerFactorQ3Rating() {
+		// GIVEN
 		InverterNameplateRatingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat("Power factor Q3 rating", model.getPowerFactorQ3Rating(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getPowerFactorQ3Rating())
+			.as("Power factor Q3 rating")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void powerFactorQ4Rating() {
+		// GIVEN
 		InverterNameplateRatingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat("Power factor Q4 rating", model.getPowerFactorQ4Rating(), equalTo(0.850f));
+
+		// THEN
+		// @formatter:off
+		then(model.getPowerFactorQ4Rating())
+			.as("Power factor Q4 rating")
+			.isEqualTo(0.850f)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void storedEnergyRating() {
+		// GIVEN
 		InverterNameplateRatingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat("Stored energy rating", model.getStoredEnergyRating(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getStoredEnergyRating())
+			.as("Stored energy rating")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void storedChargeCapcity() {
+		// GIVEN
 		InverterNameplateRatingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat("Stored charge capcity", model.getStoredChargeCapacity(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getStoredChargeCapacity())
+			.as("Stored charge capcity")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void storedEnergyImportPowerRating() {
+		// GIVEN
 		InverterNameplateRatingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat("Stored energy import power rating", model.getStoredEnergyImportPowerRating(),
-				nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getStoredEnergyImportPowerRating())
+			.as("Stored energy import power rating")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void storedEnergyExportPowerRating() {
+		// GIVEN
 		InverterNameplateRatingsModelAccessor model = getTestDataInstance()
 				.findTypedModel(InverterNameplateRatingsModelAccessor.class);
-		assertThat("Stored energy export power rating", model.getStoredEnergyExportPowerRating(),
-				nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getStoredEnergyExportPowerRating())
+			.as("Stored energy export power rating")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -213,20 +359,32 @@ public class InverterNameplateRatingsModelAccessorImpl_120_01Tests {
 		InverterNameplateRatingsModelAccessor model = getTestModel(BLOCK_ADDRESS + 23, 0xC350, 0xFFFF);
 
 		// THEN
-		assertThat("Stored energy export power rating", model.getStoredEnergyExportPowerRating(),
-				is(equalTo(5000)));
+		// @formatter:off
+		then(model.getStoredEnergyExportPowerRating())
+			.as("Stored energy export power rating")
+			.isEqualTo(5000)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void derType_pvAndStorage() {
-		assertThat("DER type", getTestModel(BLOCK_ADDRESS, 82).getDerType(),
-				is(equalTo(InverterDerType.PVAndStorage)));
+		// @formatter:off
+		then(getTestModel(BLOCK_ADDRESS, 82).getDerType())
+			.as("DER type")
+			.isEqualTo(InverterDerType.PVAndStorage)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void derType_undefinedCode() {
-		assertThat("Undefined DER type not available", getTestModel(BLOCK_ADDRESS, 5).getDerType(),
-				is(nullValue()));
+		// @formatter:off
+		then(getTestModel(BLOCK_ADDRESS, 5).getDerType())
+			.as("Undefined DER type not available")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -240,7 +398,9 @@ public class InverterNameplateRatingsModelAccessorImpl_120_01Tests {
 
 		// THEN
 		// @formatter:off
-		assertThat("Info map keys populated", result.keySet(), contains(
+		then(result.keySet())
+			.as("Info map keys populated")
+			.containsExactly(
 				InverterNameplateRatingsModelAccessor.INFO_KEY_DER_TYPE,
 				InverterNameplateRatingsModelAccessor.INFO_KEY_DER_TYPE_CODE,
 				InverterNameplateRatingsModelAccessor.INFO_KEY_ACTIVE_POWER_RATING,
@@ -250,8 +410,11 @@ public class InverterNameplateRatingsModelAccessorImpl_120_01Tests {
 				InverterNameplateRatingsModelAccessor.INFO_KEY_CURRENT_RATING,
 				InverterNameplateRatingsModelAccessor.INFO_KEY_POWER_FACTOR_Q1_RATING,
 				InverterNameplateRatingsModelAccessor.INFO_KEY_POWER_FACTOR_Q4_RATING
-		));
-		assertThat("Info map values populated", result.values(), contains(
+			)
+			;
+		then(result.values())
+			.as("Info map values populated")
+			.containsExactly(
 				InverterDerType.PV.toString(),
 				InverterDerType.PV.getCode(),
 				11400,
@@ -261,7 +424,8 @@ public class InverterNameplateRatingsModelAccessorImpl_120_01Tests {
 				47.50f,
 				-0.850f,
 				0.850f
-		));
+			)
+			;
 		// @formatter:on
 
 	}

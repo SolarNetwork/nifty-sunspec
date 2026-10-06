@@ -22,10 +22,8 @@
 
 package net.solarnetwork.sunspec.core.environmental.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -61,32 +59,66 @@ public class GpsModelAccessorImpl_305_01Tests {
 
 	@Test
 	public void findTypedModel() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
+
+		// WHEN
 		GpsModelAccessor accessor = data.findTypedModel(GpsModelAccessor.class);
-		assertThat(accessor, instanceOf(GpsModelAccessorImpl.class));
+
+		// THEN
+		// @formatter:off
+		then(accessor)
+			.as("Model found by accessor type")
+			.isInstanceOf(GpsModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		GpsModelAccessor model = getTestDataInstance().findTypedModel(GpsModelAccessor.class);
-		assertThat("Model base address", model.getBaseAddress(), equalTo(70));
-		assertThat("Model block address", model.getBlockAddress(), equalTo(72));
-		assertThat("Model ID", model.getModelId(), equalTo(EnvironmentalModelId.GPS));
-		assertThat("Model fixed length", model.getFixedBlockLength(), equalTo(36));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				equalTo(0));
-		assertThat("Model length", model.getModelLength(), equalTo(36));
-		assertThat("Model length", model.getRepeatingBlockInstanceCount(), equalTo(0));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(70, from(GpsModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(72, from(GpsModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(EnvironmentalModelId.GPS, from(GpsModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(36, from(GpsModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(0, from(GpsModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(36, from(GpsModelAccessor::getModelLength))
+			.as("Model length")
+			.returns(0, from(GpsModelAccessor::getRepeatingBlockInstanceCount))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void data() {
+		// GIVEN
 		GpsModelAccessor model = getTestDataInstance().findTypedModel(GpsModelAccessor.class);
-		assertThat("GPS timestamp", model.getGpsTimestamp(), is(equalTo(
-				DateTimeFormatter.ISO_INSTANT.parse("2023-07-09T19:28:34.123Z", Instant::from))));
-		assertThat("Location", model.getLocationName(), is(equalTo("Home sweet home")));
-		assertThat("Latitude", model.getLatitude(), is(equalTo(new BigDecimal("-37.1133611"))));
-		assertThat("Latitude", model.getLongitude(), is(equalTo(new BigDecimal("175.8884328"))));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("GPS timestamp")
+			.returns(DateTimeFormatter.ISO_INSTANT.parse("2023-07-09T19:28:34.123Z", Instant::from),
+					from(GpsModelAccessor::getGpsTimestamp))
+			.as("Location")
+			.returns("Home sweet home", from(GpsModelAccessor::getLocationName))
+			.as("Latitude")
+			.returns(new BigDecimal("-37.1133611"), from(GpsModelAccessor::getLatitude))
+			.as("Latitude")
+			.returns(new BigDecimal("175.8884328"), from(GpsModelAccessor::getLongitude))
+			;
+		// @formatter:on
 	}
 
 }

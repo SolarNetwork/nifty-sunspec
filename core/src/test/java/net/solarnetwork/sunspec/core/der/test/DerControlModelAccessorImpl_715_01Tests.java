@@ -22,12 +22,9 @@
 
 package net.solarnetwork.sunspec.core.der.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.BDDAssertions.catchThrowable;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.api.der.DerControlModelAccessor;
@@ -62,29 +59,54 @@ public class DerControlModelAccessorImpl_715_01Tests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), is(instanceOf(DerControlModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(DerControlModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		DerControlModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(1265)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(1267)));
-		assertThat("Model ID", model.getModelId(), is(equalTo(DerModelId.Control)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(7)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(7)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(1265, from(DerControlModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(1267, from(DerControlModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(DerModelId.Control, from(DerControlModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(7, from(DerControlModelAccessor::getFixedBlockLength))
+			.as("Model length")
+			.returns(7, from(DerControlModelAccessor::getModelLength))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void values() {
+		// GIVEN
 		DerControlModelAccessor model = getTestModel();
-		assertThat("Local or remote control", model.getLocalRemoteControl(),
-				is(equalTo(DerLocalRemoteControl.Remote)));
-		assertThat("DER heartbeat", model.getDerHeartbeat(), is(equalTo(10615L)));
-		assertThat("Controller heartbeat not implemented", model.getControllerHeartbeat(),
-				is(nullValue()));
-		assertThat("Operation command", model.getOperationCommand(),
-				is(equalTo(DerOperationCommand.Start)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Local or remote control")
+			.returns(DerLocalRemoteControl.Remote, from(DerControlModelAccessor::getLocalRemoteControl))
+			.as("DER heartbeat")
+			.returns(10615L, from(DerControlModelAccessor::getDerHeartbeat))
+			.as("Controller heartbeat not implemented")
+			.returns(null, from(DerControlModelAccessor::getControllerHeartbeat))
+			.as("Operation command")
+			.returns(DerOperationCommand.Start, from(DerControlModelAccessor::getOperationCommand))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -100,16 +122,31 @@ public class DerControlModelAccessorImpl_715_01Tests {
 		model.resetAlarms(conn);
 
 		// THEN
-		assertThat("Model data updated", model.getOperationCommand(),
-				is(equalTo(DerOperationCommand.EnterStandby)));
+		// @formatter:off
+		then(model.getOperationCommand())
+			.as("Model data updated")
+			.isEqualTo(DerOperationCommand.EnterStandby)
+			;
+		// @formatter:on
 
 		DerControlModelAccessorImpl device = discoverModel(conn);
-		assertThat("Controller heartbeat", device.getControllerHeartbeat(), is(equalTo(123456L)));
-		assertThat("Operation command", device.getOperationCommand(),
-				is(equalTo(DerOperationCommand.EnterStandby)));
-		assertThat("Alarm reset", device.getIntegerValue(DerControlModelRegister.AlarmReset),
-				is(equalTo(1)));
-		assertThat("DER heartbeat unchanged", device.getDerHeartbeat(), is(equalTo(10615L)));
+		// @formatter:off
+		then(device)
+			.as("Controller heartbeat")
+			.returns(123456L, from(DerControlModelAccessorImpl::getControllerHeartbeat))
+			.as("Operation command")
+			.returns(DerOperationCommand.EnterStandby,
+					from(DerControlModelAccessorImpl::getOperationCommand))
+			;
+		then(device.getIntegerValue(DerControlModelRegister.AlarmReset))
+			.as("Alarm reset")
+			.isEqualTo(1)
+			;
+		then(device.getDerHeartbeat())
+			.as("DER heartbeat unchanged")
+			.isEqualTo(10615L)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -120,15 +157,19 @@ public class DerControlModelAccessorImpl_715_01Tests {
 		DerControlModelAccessor model = discoverModel(conn);
 
 		// WHEN
-		try {
-			model.setControllerHeartbeat(conn, 0xFFFFFFFFL);
-			fail("The uint32 not implemented value should be rejected.");
-		} catch ( IllegalArgumentException e ) {
-			// expected
-		}
+		Throwable t = catchThrowable(() -> model.setControllerHeartbeat(conn, 0xFFFFFFFFL));
 
 		// THEN
-		assertThat("Device not updated", discoverModel(conn).getControllerHeartbeat(), is(nullValue()));
+		// @formatter:off
+		then(t)
+			.as("The uint32 not implemented value rejected")
+			.isInstanceOf(IllegalArgumentException.class)
+			;
+		then(discoverModel(conn).getControllerHeartbeat())
+			.as("Device not updated")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 }

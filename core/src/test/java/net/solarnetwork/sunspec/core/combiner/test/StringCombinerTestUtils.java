@@ -22,9 +22,8 @@
 
 package net.solarnetwork.sunspec.core.combiner.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.Set;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.combiner.StringCombinerAdvancedModelAccessor.AdvancedDcInput;
@@ -62,11 +61,20 @@ public final class StringCombinerTestUtils {
 	 */
 	public static void assertDcInput(String prefix, DcInput input, Integer id, Float current,
 			Long charge, Set<ModelEvent> events, Set<ModelEvent> vendorEvents) {
-		assertThat(prefix + " ID", input.getInputId(), is(equalTo(id)));
-		assertThat(prefix + " current", input.getDCCurrent(), is(equalTo(current)));
-		assertThat(prefix + " charge", input.getDCChargeDelivered(), is(equalTo(charge)));
-		assertThat(prefix + " events", input.getEvents(), is(equalTo(events)));
-		assertThat(prefix + " vendor events", input.getVendorEvents(), is(equalTo(vendorEvents)));
+		// @formatter:off
+		then(input)
+			.as(prefix + " ID")
+			.returns(id, from(DcInput::getInputId))
+			.as(prefix + " current")
+			.returns(current, from(DcInput::getDCCurrent))
+			.as(prefix + " charge")
+			.returns(charge, from(DcInput::getDCChargeDelivered))
+			.as(prefix + " events")
+			.returns(events, from(DcInput::getEvents))
+			.as(prefix + " vendor events")
+			.returns(vendorEvents, from(DcInput::getVendorEvents))
+			;
+		// @formatter:on
 	}
 
 	/**
@@ -101,17 +109,30 @@ public final class StringCombinerTestUtils {
 			Float current, Long charge, Float voltage, Integer power, Long energy,
 			Float performanceRatio, Integer moduleCount, Set<ModelEvent> events,
 			Set<ModelEvent> vendorEvents) {
-		assertThat(prefix + " ID", input.getInputId(), is(equalTo(id)));
-		assertThat(prefix + " current", input.getDCCurrent(), is(equalTo(current)));
-		assertThat(prefix + " charge", input.getDCChargeDelivered(), is(equalTo(charge)));
-		assertThat(prefix + " voltage", input.getDCVoltage(), is(equalTo(voltage)));
-		assertThat(prefix + " power", input.getDCPower(), is(equalTo(power)));
-		assertThat(prefix + " energy", input.getDCEnergy(), is(equalTo(energy)));
-		assertThat(prefix + " performance ratio", input.getDCPerformanceRatio(),
-				is(equalTo(performanceRatio)));
-		assertThat(prefix + " module count", input.getModuleCount(), is(equalTo(moduleCount)));
-		assertThat(prefix + " events", input.getEvents(), is(equalTo(events)));
-		assertThat(prefix + " vendor events", input.getVendorEvents(), is(equalTo(vendorEvents)));
+		// @formatter:off
+		then(input)
+			.as(prefix + " ID")
+			.returns(id, from(AdvancedDcInput::getInputId))
+			.as(prefix + " current")
+			.returns(current, from(AdvancedDcInput::getDCCurrent))
+			.as(prefix + " charge")
+			.returns(charge, from(AdvancedDcInput::getDCChargeDelivered))
+			.as(prefix + " voltage")
+			.returns(voltage, from(AdvancedDcInput::getDCVoltage))
+			.as(prefix + " power")
+			.returns(power, from(AdvancedDcInput::getDCPower))
+			.as(prefix + " energy")
+			.returns(energy, from(AdvancedDcInput::getDCEnergy))
+			.as(prefix + " performance ratio")
+			.returns(performanceRatio, from(AdvancedDcInput::getDCPerformanceRatio))
+			.as(prefix + " module count")
+			.returns(moduleCount, from(AdvancedDcInput::getModuleCount))
+			.as(prefix + " events")
+			.returns(events, from(AdvancedDcInput::getEvents))
+			.as(prefix + " vendor events")
+			.returns(vendorEvents, from(AdvancedDcInput::getVendorEvents))
+			;
+		// @formatter:on
 	}
 
 }

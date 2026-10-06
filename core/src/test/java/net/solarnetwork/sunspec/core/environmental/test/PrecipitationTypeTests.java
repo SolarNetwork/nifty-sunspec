@@ -22,9 +22,7 @@
 
 package net.solarnetwork.sunspec.core.environmental.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.BDDAssertions.then;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.api.environmental.PrecipitationType;
 
@@ -38,8 +36,16 @@ public class PrecipitationTypeTests {
 
 	@Test
 	public void description() {
+		// WHEN
 		String msg = PrecipitationType.HeavyRain.getDescription();
-		assertThat(msg, is(equalTo("Rain, heavy")));
+
+		// THEN
+		// @formatter:off
+		then(msg)
+			.as("Heavy rain description")
+			.isEqualTo("Rain, heavy")
+			;
+		// @formatter:on
 	}
 
 }

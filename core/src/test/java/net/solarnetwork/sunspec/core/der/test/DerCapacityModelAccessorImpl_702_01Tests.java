@@ -22,12 +22,9 @@
 
 package net.solarnetwork.sunspec.core.der.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.BDDAssertions.catchThrowable;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -63,81 +60,134 @@ public class DerCapacityModelAccessorImpl_702_01Tests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), is(instanceOf(DerCapacityModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(DerCapacityModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		DerCapacityModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(332)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(334)));
-		assertThat("Model ID", model.getModelId(), is(equalTo(DerModelId.Capacity)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(50)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(50)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(332, from(DerCapacityModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(334, from(DerCapacityModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(DerModelId.Capacity, from(DerCapacityModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(50, from(DerCapacityModelAccessor::getFixedBlockLength))
+			.as("Model length")
+			.returns(50, from(DerCapacityModelAccessor::getModelLength))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void powerRatings() {
+		// GIVEN
 		DerCapacityModelAccessor model = getTestModel();
-		assertThat("Active power", model.getActivePowerMaximumRating(), is(equalTo(7680)));
-		assertThat("Active power over-excited", model.getActivePowerOverExcitedRating(),
-				is(equalTo(3072)));
-		assertThat("Over-excited power factor", model.getOverExcitedPowerFactorRating(),
-				is(equalTo(0.4f)));
-		assertThat("Active power under-excited", model.getActivePowerUnderExcitedRating(),
-				is(equalTo(3072)));
-		assertThat("Under-excited power factor", model.getUnderExcitedPowerFactorRating(),
-				is(equalTo(0.4f)));
-		assertThat("Apparent power", model.getApparentPowerMaximumRating(), is(equalTo(7680)));
-		assertThat("Reactive power injected", model.getReactivePowerInjectedMaximumRating(),
-				is(equalTo(4070)));
-		assertThat("Reactive power absorbed", model.getReactivePowerAbsorbedMaximumRating(),
-				is(equalTo(4070)));
-		assertThat("Active power charge rate", model.getActivePowerChargeRateMaximumRating(),
-				is(equalTo(7680)));
-		assertThat("Active power discharge rate", model.getActivePowerDischargeRateMaximumRating(),
-				is(equalTo(7680)));
-		assertThat("Apparent power charge rate", model.getApparentPowerChargeRateMaximumRating(),
-				is(equalTo(7680)));
-		assertThat("Apparent power discharge rate", model.getApparentPowerDischargeRateMaximumRating(),
-				is(equalTo(7680)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Active power")
+			.returns(7680, from(DerCapacityModelAccessor::getActivePowerMaximumRating))
+			.as("Active power over-excited")
+			.returns(3072, from(DerCapacityModelAccessor::getActivePowerOverExcitedRating))
+			.as("Over-excited power factor")
+			.returns(0.4f, from(DerCapacityModelAccessor::getOverExcitedPowerFactorRating))
+			.as("Active power under-excited")
+			.returns(3072, from(DerCapacityModelAccessor::getActivePowerUnderExcitedRating))
+			.as("Under-excited power factor")
+			.returns(0.4f, from(DerCapacityModelAccessor::getUnderExcitedPowerFactorRating))
+			.as("Apparent power")
+			.returns(7680, from(DerCapacityModelAccessor::getApparentPowerMaximumRating))
+			.as("Reactive power injected")
+			.returns(4070, from(DerCapacityModelAccessor::getReactivePowerInjectedMaximumRating))
+			.as("Reactive power absorbed")
+			.returns(4070, from(DerCapacityModelAccessor::getReactivePowerAbsorbedMaximumRating))
+			.as("Active power charge rate")
+			.returns(7680, from(DerCapacityModelAccessor::getActivePowerChargeRateMaximumRating))
+			.as("Active power discharge rate")
+			.returns(7680, from(DerCapacityModelAccessor::getActivePowerDischargeRateMaximumRating))
+			.as("Apparent power charge rate")
+			.returns(7680, from(DerCapacityModelAccessor::getApparentPowerChargeRateMaximumRating))
+			.as("Apparent power discharge rate")
+			.returns(7680, from(DerCapacityModelAccessor::getApparentPowerDischargeRateMaximumRating))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void otherRatings() {
+		// GIVEN
 		DerCapacityModelAccessor model = getTestModel();
-		assertThat("Voltage nominal", model.getVoltageNominalRating(), is(equalTo(240.0f)));
-		assertThat("Voltage maximum", model.getVoltageMaximumRating(), is(equalTo(264.0f)));
-		assertThat("Voltage minimum", model.getVoltageMinimumRating(), is(equalTo(211.0f)));
-		assertThat("Current maximum", model.getCurrentMaximumRating(), is(equalTo(32.0f)));
-		assertThat("Reactive susceptance", model.getReactiveSusceptanceRating(), is(equalTo(0.0f)));
-		assertThat("Normal operating category", model.getNormalOperatingCategory(),
-				is(equalTo(DerNormalOperatingCategory.CategoryB)));
-		assertThat("Abnormal operating category", model.getAbnormalOperatingCategory(),
-				is(equalTo(DerAbnormalOperatingCategory.CategoryIII)));
-		assertThat("Supported control modes", model.getSupportedControlModes(),
-				is(equalTo(Set.of(DerControlMode.MaxActivePower, DerControlMode.FixedActivePower,
-						DerControlMode.FixedReactivePower, DerControlMode.FixedPowerFactor,
-						DerControlMode.VoltVar, DerControlMode.FrequencyWatt,
-						DerControlMode.LowVoltageTrip, DerControlMode.HighVoltageTrip,
-						DerControlMode.WattVar, DerControlMode.VoltWatt, DerControlMode.LowFrequencyTrip,
-						DerControlMode.HighFrequencyTrip))));
-		assertThat("Intentional island categories", model.getIntentionalIslandCategoriesRating(),
-				is(equalTo(Set.of(DerIntentionalIslandCategory.IntentionalIslandCapable,
-						DerIntentionalIslandCategory.BlackStartCapable,
-						DerIntentionalIslandCategory.IsochronousCapable))));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Voltage nominal")
+			.returns(240.0f, from(DerCapacityModelAccessor::getVoltageNominalRating))
+			.as("Voltage maximum")
+			.returns(264.0f, from(DerCapacityModelAccessor::getVoltageMaximumRating))
+			.as("Voltage minimum")
+			.returns(211.0f, from(DerCapacityModelAccessor::getVoltageMinimumRating))
+			.as("Current maximum")
+			.returns(32.0f, from(DerCapacityModelAccessor::getCurrentMaximumRating))
+			.as("Reactive susceptance")
+			.returns(0.0f, from(DerCapacityModelAccessor::getReactiveSusceptanceRating))
+			.as("Normal operating category")
+			.returns(DerNormalOperatingCategory.CategoryB,
+					from(DerCapacityModelAccessor::getNormalOperatingCategory))
+			.as("Abnormal operating category")
+			.returns(DerAbnormalOperatingCategory.CategoryIII,
+					from(DerCapacityModelAccessor::getAbnormalOperatingCategory))
+			.as("Supported control modes")
+			.returns(Set.of(DerControlMode.MaxActivePower, DerControlMode.FixedActivePower,
+					DerControlMode.FixedReactivePower, DerControlMode.FixedPowerFactor,
+					DerControlMode.VoltVar, DerControlMode.FrequencyWatt, DerControlMode.LowVoltageTrip,
+					DerControlMode.HighVoltageTrip, DerControlMode.WattVar, DerControlMode.VoltWatt,
+					DerControlMode.LowFrequencyTrip, DerControlMode.HighFrequencyTrip),
+					from(DerCapacityModelAccessor::getSupportedControlModes))
+			.as("Intentional island categories")
+			.returns(Set.of(DerIntentionalIslandCategory.IntentionalIslandCapable,
+					DerIntentionalIslandCategory.BlackStartCapable,
+					DerIntentionalIslandCategory.IsochronousCapable),
+					from(DerCapacityModelAccessor::getIntentionalIslandCategoriesRating))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void settings() {
+		// GIVEN
 		DerCapacityModelAccessor model = getTestModel();
-		assertThat("Active power", model.getActivePowerMaximum(), is(nullValue()));
-		assertThat("Over-excited power factor", model.getOverExcitedPowerFactor(), is(nullValue()));
-		assertThat("Apparent power", model.getApparentPowerMaximum(), is(nullValue()));
-		assertThat("Voltage nominal", model.getVoltageNominal(), is(nullValue()));
-		assertThat("Current maximum", model.getCurrentMaximum(), is(nullValue()));
-		assertThat("Intentional island categories", model.getIntentionalIslandCategories(),
-				is(equalTo(Set.of())));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Active power")
+			.returns(null, from(DerCapacityModelAccessor::getActivePowerMaximum))
+			.as("Over-excited power factor")
+			.returns(null, from(DerCapacityModelAccessor::getOverExcitedPowerFactor))
+			.as("Apparent power")
+			.returns(null, from(DerCapacityModelAccessor::getApparentPowerMaximum))
+			.as("Voltage nominal")
+			.returns(null, from(DerCapacityModelAccessor::getVoltageNominal))
+			.as("Current maximum")
+			.returns(null, from(DerCapacityModelAccessor::getCurrentMaximum))
+			.as("Intentional island categories")
+			.returns(Set.of(), from(DerCapacityModelAccessor::getIntentionalIslandCategories))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -169,35 +219,54 @@ public class DerCapacityModelAccessorImpl_702_01Tests {
 						DerIntentionalIslandCategory.BlackStartCapable));
 
 		// THEN
-		assertThat("Model data updated", model.getActivePowerMaximum(), is(equalTo(7000)));
+		// @formatter:off
+		then(model.getActivePowerMaximum())
+			.as("Model data updated")
+			.isEqualTo(7000)
+			;
+		// @formatter:on
 
 		DerCapacityModelAccessor device = discoverModel(conn);
-		assertThat("Active power", device.getActivePowerMaximum(), is(equalTo(7000)));
-		assertThat("Active power over-excited", device.getActivePowerOverExcited(), is(equalTo(3000)));
-		assertThat("Over-excited power factor", device.getOverExcitedPowerFactor(), is(equalTo(0.9f)));
-		assertThat("Active power under-excited", device.getActivePowerUnderExcited(), is(equalTo(2900)));
-		assertThat("Under-excited power factor", device.getUnderExcitedPowerFactor(),
-				is(equalTo(0.85f)));
-		assertThat("Apparent power", device.getApparentPowerMaximum(), is(equalTo(7500)));
-		assertThat("Reactive power injected", device.getReactivePowerInjectedMaximum(),
-				is(equalTo(4000)));
-		assertThat("Reactive power absorbed", device.getReactivePowerAbsorbedMaximum(),
-				is(equalTo(3900)));
-		assertThat("Active power charge rate", device.getActivePowerChargeRateMaximum(),
-				is(equalTo(6000)));
-		assertThat("Active power discharge rate", device.getActivePowerDischargeRateMaximum(),
-				is(equalTo(6500)));
-		assertThat("Apparent power charge rate", device.getApparentPowerChargeRateMaximum(),
-				is(equalTo(6100)));
-		assertThat("Apparent power discharge rate", device.getApparentPowerDischargeRateMaximum(),
-				is(equalTo(6600)));
-		assertThat("Voltage nominal", device.getVoltageNominal(), is(equalTo(240.0f)));
-		assertThat("Voltage maximum", device.getVoltageMaximum(), is(equalTo(260.0f)));
-		assertThat("Voltage minimum", device.getVoltageMinimum(), is(equalTo(210.0f)));
-		assertThat("Current maximum", device.getCurrentMaximum(), is(equalTo(30.0f)));
-		assertThat("Intentional island categories", device.getIntentionalIslandCategories(),
-				is(equalTo(Set.of(DerIntentionalIslandCategory.IntentionalIslandCapable,
-						DerIntentionalIslandCategory.BlackStartCapable))));
+		// @formatter:off
+		then(device)
+			.as("Active power")
+			.returns(7000, from(DerCapacityModelAccessor::getActivePowerMaximum))
+			.as("Active power over-excited")
+			.returns(3000, from(DerCapacityModelAccessor::getActivePowerOverExcited))
+			.as("Over-excited power factor")
+			.returns(0.9f, from(DerCapacityModelAccessor::getOverExcitedPowerFactor))
+			.as("Active power under-excited")
+			.returns(2900, from(DerCapacityModelAccessor::getActivePowerUnderExcited))
+			.as("Under-excited power factor")
+			.returns(0.85f, from(DerCapacityModelAccessor::getUnderExcitedPowerFactor))
+			.as("Apparent power")
+			.returns(7500, from(DerCapacityModelAccessor::getApparentPowerMaximum))
+			.as("Reactive power injected")
+			.returns(4000, from(DerCapacityModelAccessor::getReactivePowerInjectedMaximum))
+			.as("Reactive power absorbed")
+			.returns(3900, from(DerCapacityModelAccessor::getReactivePowerAbsorbedMaximum))
+			.as("Active power charge rate")
+			.returns(6000, from(DerCapacityModelAccessor::getActivePowerChargeRateMaximum))
+			.as("Active power discharge rate")
+			.returns(6500, from(DerCapacityModelAccessor::getActivePowerDischargeRateMaximum))
+			.as("Apparent power charge rate")
+			.returns(6100, from(DerCapacityModelAccessor::getApparentPowerChargeRateMaximum))
+			.as("Apparent power discharge rate")
+			.returns(6600, from(DerCapacityModelAccessor::getApparentPowerDischargeRateMaximum))
+			.as("Voltage nominal")
+			.returns(240.0f, from(DerCapacityModelAccessor::getVoltageNominal))
+			.as("Voltage maximum")
+			.returns(260.0f, from(DerCapacityModelAccessor::getVoltageMaximum))
+			.as("Voltage minimum")
+			.returns(210.0f, from(DerCapacityModelAccessor::getVoltageMinimum))
+			.as("Current maximum")
+			.returns(30.0f, from(DerCapacityModelAccessor::getCurrentMaximum))
+			.as("Intentional island categories")
+			.returns(Set.of(DerIntentionalIslandCategory.IntentionalIslandCapable,
+					DerIntentionalIslandCategory.BlackStartCapable),
+					from(DerCapacityModelAccessor::getIntentionalIslandCategories))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -208,15 +277,19 @@ public class DerCapacityModelAccessorImpl_702_01Tests {
 		DerCapacityModelAccessor model = discoverModel(conn);
 
 		// WHEN
-		try {
-			model.setActivePowerMaximum(conn, 70000);
-			fail("Value larger than uint16 should be rejected.");
-		} catch ( IllegalArgumentException e ) {
-			// expected
-		}
+		Throwable t = catchThrowable(() -> model.setActivePowerMaximum(conn, 70000));
 
 		// THEN
-		assertThat("Device not updated", discoverModel(conn).getActivePowerMaximum(), is(nullValue()));
+		// @formatter:off
+		then(t)
+			.as("Value larger than uint16 rejected")
+			.isInstanceOf(IllegalArgumentException.class)
+			;
+		then(discoverModel(conn).getActivePowerMaximum())
+			.as("Device not updated")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 }

@@ -22,12 +22,8 @@
 
 package net.solarnetwork.sunspec.core.inverter.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -65,85 +61,192 @@ public class IntegerInverterModelAccessor_103_04Tests {
 
 	@Test
 	public void commonModelProperties() {
+		// GIVEN
 		CommonModelAccessor data = getTestDataInstance();
-		assertThat("Manufacturer", data.getManufacturer(), equalTo("SolarEdge"));
-		assertThat("Model name", data.getModelName(), equalTo("SE33.3K"));
-		assertThat("Options", data.getOptions(), nullValue());
-		assertThat("Version", data.getVersion(), equalTo("0003.2221"));
-		assertThat("Serial number", data.getSerialNumber(), equalTo("7E149EF5"));
-		assertThat("Device address", data.getDeviceAddress(), equalTo(12));
+
+		// THEN
+		// @formatter:off
+		then(data)
+			.as("Manufacturer")
+			.returns("SolarEdge", from(CommonModelAccessor::getManufacturer))
+			.as("Model name")
+			.returns("SE33.3K", from(CommonModelAccessor::getModelName))
+			.as("Options")
+			.returns(null, from(CommonModelAccessor::getOptions))
+			.as("Version")
+			.returns("0003.2221", from(CommonModelAccessor::getVersion))
+			.as("Serial number")
+			.returns("7E149EF5", from(CommonModelAccessor::getSerialNumber))
+			.as("Device address")
+			.returns(12, from(CommonModelAccessor::getDeviceAddress))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void findTypedModel() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
+
+		// WHEN
 		InverterModelAccessor meterAccessor = data.findTypedModel(InverterModelAccessor.class);
-		assertThat(meterAccessor, instanceOf(IntegerInverterModelAccessor.class));
+
+		// THEN
+		// @formatter:off
+		then(meterAccessor)
+			.as("Model found by accessor type")
+			.isInstanceOf(IntegerInverterModelAccessor.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void getTypedModel() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
+
+		// WHEN
 		InverterModelAccessor meterAccessor = data.getTypedModel();
-		assertThat(meterAccessor, instanceOf(IntegerInverterModelAccessor.class));
+
+		// THEN
+		// @formatter:off
+		then(meterAccessor)
+			.as("First model as typed accessor")
+			.isInstanceOf(IntegerInverterModelAccessor.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		InverterModelAccessor model = getTestDataInstance().getTypedModel();
-		assertThat("Model base address", model.getBaseAddress(), equalTo(69));
-		assertThat("Model block address", model.getBlockAddress(), equalTo(71));
-		assertThat("Model ID", model.getModelId(), equalTo(InverterModelId.ThreePhaseInverterInteger));
-		assertThat("Model fixed length", model.getFixedBlockLength(), equalTo(50));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				equalTo(0));
-		assertThat("Model length", model.getModelLength(), equalTo(50));
-		assertThat("Model length", model.getRepeatingBlockInstanceCount(), equalTo(0));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(69, from(InverterModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(71, from(InverterModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(InverterModelId.ThreePhaseInverterInteger, from(InverterModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(50, from(InverterModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(0, from(InverterModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(50, from(InverterModelAccessor::getModelLength))
+			.as("Model length")
+			.returns(0, from(InverterModelAccessor::getRepeatingBlockInstanceCount))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void frequency() {
+		// GIVEN
 		InverterModelAccessor model = getTestDataInstance().findTypedModel(InverterModelAccessor.class);
-		assertThat("Frequency", model.getFrequency(), equalTo(60.0f));
+
+		// THEN
+		// @formatter:off
+		then(model.getFrequency())
+			.as("Frequency")
+			.isEqualTo(60.0f)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void cabinetTemperature() {
+		// GIVEN
 		InverterModelAccessor model = getTestDataInstance().findTypedModel(InverterModelAccessor.class);
-		assertThat("Cabinet temperature", model.getCabinetTemperature(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getCabinetTemperature())
+			.as("Cabinet temperature")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void heatSinkTemperature() {
+		// GIVEN
 		InverterModelAccessor model = getTestDataInstance().findTypedModel(InverterModelAccessor.class);
-		assertThat("Heat sink temperature", model.getHeatSinkTemperature(), equalTo(52.11f));
+
+		// THEN
+		// @formatter:off
+		then(model.getHeatSinkTemperature())
+			.as("Heat sink temperature")
+			.isEqualTo(52.11f)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void transformerTemperature() {
+		// GIVEN
 		InverterModelAccessor model = getTestDataInstance().findTypedModel(InverterModelAccessor.class);
-		assertThat("Transformer temperature", model.getTransformerTemperature(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getTransformerTemperature())
+			.as("Transformer temperature")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void otherTemperature() {
+		// GIVEN
 		InverterModelAccessor model = getTestDataInstance().findTypedModel(InverterModelAccessor.class);
-		assertThat("Other temperature", model.getOtherTemperature(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model.getOtherTemperature())
+			.as("Other temperature")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void operatingState() {
+		// GIVEN
 		InverterModelAccessor model = getTestDataInstance().findTypedModel(InverterModelAccessor.class);
+
+		// WHEN
 		OperatingState state = model.getOperatingState();
-		assertThat("Operating state available", state, notNullValue());
-		assertThat("State value", state.getCode(), equalTo(InverterOperatingState.Mppt.getCode()));
+
+		// THEN
+		// @formatter:off
+		then(state)
+			.as("Operating state available")
+			.isNotNull()
+			.as("State value")
+			.returns(InverterOperatingState.Mppt.getCode(), from(OperatingState::getCode))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void events() {
+		// GIVEN
 		InverterModelAccessor model = getTestDataInstance().findTypedModel(InverterModelAccessor.class);
+
+		// WHEN
 		Set<? extends ModelEvent> events = model.getEvents();
-		assertThat("No events", events, hasSize(0));
+
+		// THEN
+		// @formatter:off
+		then(events)
+			.as("No events")
+			.hasSize(0)
+			;
+		// @formatter:on
 	}
 
 }

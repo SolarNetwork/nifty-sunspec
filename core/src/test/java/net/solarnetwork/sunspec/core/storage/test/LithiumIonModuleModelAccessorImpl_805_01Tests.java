@@ -22,11 +22,8 @@
 
 package net.solarnetwork.sunspec.core.storage.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -54,64 +51,129 @@ public class LithiumIonModuleModelAccessorImpl_805_01Tests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), is(instanceOf(LithiumIonModuleModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(LithiumIonModuleModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		LithiumIonModuleModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(70)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(72)));
-		assertThat("Model ID", model.getModelId(), is(equalTo(StorageModelId.LithiumIonModule)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(42)));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				is(equalTo(4)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(58)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(70, from(LithiumIonModuleModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(72, from(LithiumIonModuleModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(StorageModelId.LithiumIonModule, from(LithiumIonModuleModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(42, from(LithiumIonModuleModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(4, from(LithiumIonModuleModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(58, from(LithiumIonModuleModelAccessor::getModelLength))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void module() {
+		// GIVEN
 		LithiumIonModuleModelAccessor model = getTestModel();
-		assertThat("String index", model.getStringIndex(), is(equalTo(1)));
-		assertThat("Module index", model.getModuleIndex(), is(equalTo(2)));
-		assertThat("Cell count", model.getCellCount(), is(equalTo(4)));
-		assertThat("State of charge", model.getStateOfCharge(), is(equalTo(76.5f)));
-		assertThat("Depth of discharge", model.getDepthOfDischarge(), is(equalTo(23.5f)));
-		assertThat("State of health", model.getStateOfHealth(), is(equalTo(97.0f)));
-		assertThat("Cycle count", model.getCycleCount(), is(equalTo(145L)));
-		assertThat("DC voltage", model.getDCVoltage(), is(equalTo(13.32f)));
-		assertThat("Maximum cell voltage", model.getMaximumCellVoltage(), is(equalTo(3.335f)));
-		assertThat("Maximum cell voltage cell", model.getMaximumCellVoltageCellIndex(), is(equalTo(3)));
-		assertThat("Minimum cell voltage", model.getMinimumCellVoltage(), is(equalTo(3.32f)));
-		assertThat("Minimum cell voltage cell", model.getMinimumCellVoltageCellIndex(), is(equalTo(1)));
-		assertThat("Average cell voltage", model.getAverageCellVoltage(), is(equalTo(3.33f)));
-		assertThat("Maximum cell temperature", model.getMaximumCellTemperature(), is(equalTo(26.2f)));
-		assertThat("Maximum cell temperature cell", model.getMaximumCellTemperatureCellIndex(),
-				is(equalTo(2)));
-		assertThat("Minimum cell temperature", model.getMinimumCellTemperature(), is(equalTo(24.8f)));
-		assertThat("Minimum cell temperature cell", model.getMinimumCellTemperatureCellIndex(),
-				is(equalTo(4)));
-		assertThat("Average cell temperature", model.getAverageCellTemperature(), is(equalTo(25.5f)));
-		assertThat("Balancing cell count", model.getBalancingCellCount(), is(equalTo(1)));
-		assertThat("Serial number", model.getSerialNumber(), is(equalTo("LIM-0002-ABC")));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("String index")
+			.returns(1, from(LithiumIonModuleModelAccessor::getStringIndex))
+			.as("Module index")
+			.returns(2, from(LithiumIonModuleModelAccessor::getModuleIndex))
+			.as("Cell count")
+			.returns(4, from(LithiumIonModuleModelAccessor::getCellCount))
+			.as("State of charge")
+			.returns(76.5f, from(LithiumIonModuleModelAccessor::getStateOfCharge))
+			.as("Depth of discharge")
+			.returns(23.5f, from(LithiumIonModuleModelAccessor::getDepthOfDischarge))
+			.as("State of health")
+			.returns(97.0f, from(LithiumIonModuleModelAccessor::getStateOfHealth))
+			.as("Cycle count")
+			.returns(145L, from(LithiumIonModuleModelAccessor::getCycleCount))
+			.as("DC voltage")
+			.returns(13.32f, from(LithiumIonModuleModelAccessor::getDCVoltage))
+			.as("Maximum cell voltage")
+			.returns(3.335f, from(LithiumIonModuleModelAccessor::getMaximumCellVoltage))
+			.as("Maximum cell voltage cell")
+			.returns(3, from(LithiumIonModuleModelAccessor::getMaximumCellVoltageCellIndex))
+			.as("Minimum cell voltage")
+			.returns(3.32f, from(LithiumIonModuleModelAccessor::getMinimumCellVoltage))
+			.as("Minimum cell voltage cell")
+			.returns(1, from(LithiumIonModuleModelAccessor::getMinimumCellVoltageCellIndex))
+			.as("Average cell voltage")
+			.returns(3.33f, from(LithiumIonModuleModelAccessor::getAverageCellVoltage))
+			.as("Maximum cell temperature")
+			.returns(26.2f, from(LithiumIonModuleModelAccessor::getMaximumCellTemperature))
+			.as("Maximum cell temperature cell")
+			.returns(2, from(LithiumIonModuleModelAccessor::getMaximumCellTemperatureCellIndex))
+			.as("Minimum cell temperature")
+			.returns(24.8f, from(LithiumIonModuleModelAccessor::getMinimumCellTemperature))
+			.as("Minimum cell temperature cell")
+			.returns(4, from(LithiumIonModuleModelAccessor::getMinimumCellTemperatureCellIndex))
+			.as("Average cell temperature")
+			.returns(25.5f, from(LithiumIonModuleModelAccessor::getAverageCellTemperature))
+			.as("Balancing cell count")
+			.returns(1, from(LithiumIonModuleModelAccessor::getBalancingCellCount))
+			.as("Serial number")
+			.returns("LIM-0002-ABC", from(LithiumIonModuleModelAccessor::getSerialNumber))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void cells() {
+		// WHEN
 		List<BatteryCell> cells = getTestModel().getCells();
-		assertThat("Cells, from the model length", cells, hasSize(4));
+
+		// THEN
+		// @formatter:off
+		then(cells)
+			.as("Cells, from the model length")
+			.hasSize(4)
+			;
+		// @formatter:on
 
 		BatteryCell cell = cells.get(0);
-		assertThat("Index", cell.getIndex(), is(equalTo(1)));
-		assertThat("Voltage", cell.getVoltage(), is(equalTo(3.32f)));
-		assertThat("Temperature", cell.getTemperature(), is(equalTo(25.0f)));
-		assertThat("Status", cell.getStatus(), is(equalTo(Set.of())));
+		// @formatter:off
+		then(cell)
+			.as("Index")
+			.returns(1, from(BatteryCell::getIndex))
+			.as("Voltage")
+			.returns(3.32f, from(BatteryCell::getVoltage))
+			.as("Temperature")
+			.returns(25.0f, from(BatteryCell::getTemperature))
+			.as("Status")
+			.returns(Set.of(), from(BatteryCell::getStatus))
+			;
 
-		assertThat("Cell 3 balancing", cells.get(2).getStatus(),
-				is(equalTo(Set.of(LithiumIonCellStatus.Balancing))));
-		assertThat("Cell 4 status with the most significant bit set not implemented",
-				cells.get(3).getStatus(), is(equalTo(Set.of())));
-		assertThat("Cell 4 voltage", cells.get(3).getVoltage(), is(equalTo(3.337f)));
+		then(cells.get(2).getStatus())
+			.as("Cell 3 balancing")
+			.isEqualTo(Set.of(LithiumIonCellStatus.Balancing))
+			;
+		then(cells.get(3).getStatus())
+			.as("Cell 4 status with the most significant bit set not implemented")
+			.isEmpty()
+			;
+		then(cells.get(3).getVoltage())
+			.as("Cell 4 voltage")
+			.isEqualTo(3.337f)
+			;
+		// @formatter:on
 	}
 
 }

@@ -23,12 +23,8 @@
 package net.solarnetwork.sunspec.core.combiner.test;
 
 import static net.solarnetwork.sunspec.core.combiner.test.StringCombinerTestUtils.assertDcInput;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -58,47 +54,91 @@ public class StringCombinerModelAccessorImpl_401_01Tests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), instanceOf(StringCombinerModelAccessorImpl.class));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(StringCombinerModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		StringCombinerModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(70)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(72)));
-		assertThat("Model ID", model.getModelId(),
-				is(equalTo(StringCombinerModelId.BasicStringCombiner)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(14)));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				is(equalTo(8)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(38)));
-		assertThat("Model repeating instance count", model.getRepeatingBlockInstanceCount(),
-				is(equalTo(3)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(70, from(StringCombinerModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(72, from(StringCombinerModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(StringCombinerModelId.BasicStringCombiner,
+					from(StringCombinerModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(14, from(StringCombinerModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(8, from(StringCombinerModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(38, from(StringCombinerModelAccessor::getModelLength))
+			.as("Model repeating instance count")
+			.returns(3, from(StringCombinerModelAccessor::getRepeatingBlockInstanceCount))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void values() {
+		// GIVEN
 		StringCombinerModelAccessor model = getTestModel();
-		assertThat("Current", model.getDCCurrent(), is(equalTo(24.5f)));
-		assertThat("Charge, a uint32 for model 401", model.getDCChargeDelivered(), is(equalTo(0L)));
-		assertThat("Voltage", model.getDCVoltage(), is(equalTo(600.8f)));
-		assertThat("Temperature not implemented", model.getTemperature(), is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Current")
+			.returns(24.5f, from(StringCombinerModelAccessor::getDCCurrent))
+			.as("Charge, a uint32 for model 401")
+			.returns(0L, from(StringCombinerModelAccessor::getDCChargeDelivered))
+			.as("Voltage")
+			.returns(600.8f, from(StringCombinerModelAccessor::getDCVoltage))
+			.as("Temperature not implemented")
+			.returns(null, from(StringCombinerModelAccessor::getTemperature))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void events() {
+		// GIVEN
 		StringCombinerModelAccessor model = getTestModel();
-		assertThat("Events", model.getEvents(),
-				is(equalTo(Set.<ModelEvent> of(StringCombinerModelEvent.LowPower,
-						StringCombinerModelEvent.Temperature))));
-		assertThat("Vendor events", model.getVendorEvents(),
-				is(equalTo(Set.<ModelEvent> of(new GenericModelEvent(8)))));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Events")
+			.returns(Set.<ModelEvent> of(StringCombinerModelEvent.LowPower,
+					StringCombinerModelEvent.Temperature), from(StringCombinerModelAccessor::getEvents))
+			.as("Vendor events")
+			.returns(Set.<ModelEvent> of(new GenericModelEvent(8)),
+					from(StringCombinerModelAccessor::getVendorEvents))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void inputs() {
+		// WHEN
 		List<DcInput> inputs = getTestModel().getDcInputs();
-		assertThat("Inputs count", inputs, hasSize(3));
+
+		// THEN
+		// @formatter:off
+		then(inputs)
+			.as("Inputs count")
+			.hasSize(3)
+			;
+		// @formatter:on
 
 		// inputs use the model scale factors, and charge is a uint32 type
 		assertDcInput("Input 1", inputs.get(0), 1, 8.2f, 12340L,

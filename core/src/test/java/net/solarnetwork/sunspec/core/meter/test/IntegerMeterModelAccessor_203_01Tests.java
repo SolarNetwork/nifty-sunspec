@@ -25,10 +25,8 @@ package net.solarnetwork.sunspec.core.meter.test;
 import static net.solarnetwork.domain.AcPhase.PhaseA;
 import static net.solarnetwork.domain.AcPhase.PhaseB;
 import static net.solarnetwork.domain.AcPhase.PhaseC;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.BitSet;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -66,44 +64,92 @@ public class IntegerMeterModelAccessor_203_01Tests {
 
 	@Test
 	public void commonModelProperties() {
+		// GIVEN
 		CommonModelAccessor data = getTestDataInstance();
-		assertThat("Manufacturer", data.getManufacturer(), equalTo("Veris Industries"));
-		assertThat("Model name", data.getModelName(), equalTo("E51C2"));
-		assertThat("Options", data.getOptions(), equalTo("None"));
-		assertThat("Version", data.getVersion(), equalTo("2.115"));
-		assertThat("Serial number", data.getSerialNumber(), equalTo("4E4C3699"));
-		assertThat("Device address", data.getDeviceAddress(), equalTo(7));
+
+		// THEN
+		// @formatter:off
+		then(data)
+			.as("Manufacturer")
+			.returns("Veris Industries", from(CommonModelAccessor::getManufacturer))
+			.as("Model name")
+			.returns("E51C2", from(CommonModelAccessor::getModelName))
+			.as("Options")
+			.returns("None", from(CommonModelAccessor::getOptions))
+			.as("Version")
+			.returns("2.115", from(CommonModelAccessor::getVersion))
+			.as("Serial number")
+			.returns("4E4C3699", from(CommonModelAccessor::getSerialNumber))
+			.as("Device address")
+			.returns(7, from(CommonModelAccessor::getDeviceAddress))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void findTypedModel() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
+
+		// WHEN
 		MeterModelAccessor meterAccessor = data.findTypedModel(MeterModelAccessor.class);
-		assertThat(meterAccessor, instanceOf(IntegerMeterModelAccessor.class));
+
+		// THEN
+		// @formatter:off
+		then(meterAccessor)
+			.as("Model found by accessor type")
+			.isInstanceOf(IntegerMeterModelAccessor.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
-		assertThat("Model base address", model.getBaseAddress(), equalTo(69));
-		assertThat("Model block address", model.getBlockAddress(), equalTo(71));
-		assertThat("Model ID", model.getModelId(),
-				equalTo(MeterModelId.WyeConnectThreePhaseMeterInteger));
-		assertThat("Model fixed length", model.getFixedBlockLength(), equalTo(105));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				equalTo(0));
-		assertThat("Model length", model.getModelLength(), equalTo(105));
-		assertThat("Model length", model.getRepeatingBlockInstanceCount(), equalTo(0));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(69, from(MeterModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(71, from(MeterModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(MeterModelId.WyeConnectThreePhaseMeterInteger, from(MeterModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(105, from(MeterModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(0, from(MeterModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(105, from(MeterModelAccessor::getModelLength))
+			.as("Model length")
+			.returns(0, from(MeterModelAccessor::getRepeatingBlockInstanceCount))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void events() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
+
+		// WHEN
 		Set<? extends ModelEvent> events = model.getEvents();
 		BitSet bitset = new BitSet();
 		events.stream().mapToInt(ModelEvent::getIndex).forEach(i -> bitset.set(i));
-		assertThat(bitset.cardinality(), equalTo(1));
-		assertThat(bitset.get(3), equalTo(true));
+
+		// THEN
+		// @formatter:off
+		then(bitset.cardinality())
+			.as("Event count")
+			.isEqualTo(1)
+			;
+		then(bitset.get(3))
+			.as("Under voltage event")
+			.isTrue()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -114,143 +160,297 @@ public class IntegerMeterModelAccessor_203_01Tests {
 				"test-data-203-01.txt", 174, 0x8000, 0x0008).findTypedModel(MeterModelAccessor.class);
 
 		// THEN
-		assertThat("Events with the most significant bit set are not implemented", model.getEvents(),
-				equalTo(Set.of()));
+		// @formatter:off
+		then(model.getEvents())
+			.as("Events with the most significant bit set are not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void current() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
-		assertThat("Total", model.getCurrent(), equalTo(53.48f));
-		assertThat("Phase A", model.accessorForPhase(PhaseA).getCurrent(), equalTo(26.81f));
-		assertThat("Phase B", model.accessorForPhase(PhaseB).getCurrent(), equalTo(26.67f));
-		assertThat("Phase C", model.accessorForPhase(PhaseC).getCurrent(), equalTo(0f));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Total")
+			.returns(53.48f, from(MeterModelAccessor::getCurrent))
+			.as("Phase A")
+			.returns(26.81f, from(m -> m.accessorForPhase(PhaseA).getCurrent()))
+			.as("Phase B")
+			.returns(26.67f, from(m -> m.accessorForPhase(PhaseB).getCurrent()))
+			.as("Phase C")
+			.returns(0f, from(m -> m.accessorForPhase(PhaseC).getCurrent()))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void voltageLN() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
-		assertThat("Average", model.getVoltage(), equalTo(82.0f));
-		assertThat("Phase A", model.accessorForPhase(PhaseA).getVoltage(), equalTo(123.0f));
-		assertThat("Phase B", model.accessorForPhase(PhaseB).getVoltage(), equalTo(122.9f));
-		assertThat("Phase C", model.accessorForPhase(PhaseC).getVoltage(), equalTo(0.2f));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Average")
+			.returns(82.0f, from(MeterModelAccessor::getVoltage))
+			.as("Phase A")
+			.returns(123.0f, from(m -> m.accessorForPhase(PhaseA).getVoltage()))
+			.as("Phase B")
+			.returns(122.9f, from(m -> m.accessorForPhase(PhaseB).getVoltage()))
+			.as("Phase C")
+			.returns(0.2f, from(m -> m.accessorForPhase(PhaseC).getVoltage()))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void voltageLL() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
 		IntegerMeterModelAccessor imm = (IntegerMeterModelAccessor) model;
-		assertThat("Average", imm.getVoltageValue(IntegerMeterModelRegister.VoltageLineLineAverage),
-				equalTo(163.9f));
-		assertThat("Phase A", imm.getVoltageValue(IntegerMeterModelRegister.VoltagePhaseAPhaseB),
-				equalTo(245.9f));
-		assertThat("Phase B", imm.getVoltageValue(IntegerMeterModelRegister.VoltagePhaseBPhaseC),
-				equalTo(122.8f));
-		assertThat("Phase C", imm.getVoltageValue(IntegerMeterModelRegister.VoltagePhaseCPhaseA),
-				equalTo(123.0f));
+
+		// THEN
+		// @formatter:off
+		then(imm.getVoltageValue(IntegerMeterModelRegister.VoltageLineLineAverage))
+			.as("Average")
+			.isEqualTo(163.9f)
+			;
+		then(imm.getVoltageValue(IntegerMeterModelRegister.VoltagePhaseAPhaseB))
+			.as("Phase A")
+			.isEqualTo(245.9f)
+			;
+		then(imm.getVoltageValue(IntegerMeterModelRegister.VoltagePhaseBPhaseC))
+			.as("Phase B")
+			.isEqualTo(122.8f)
+			;
+		then(imm.getVoltageValue(IntegerMeterModelRegister.VoltagePhaseCPhaseA))
+			.as("Phase C")
+			.isEqualTo(123.0f)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void frequency() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
-		assertThat("Frequency", model.getFrequency(), equalTo(60.01f));
+
+		// THEN
+		// @formatter:off
+		then(model.getFrequency())
+			.as("Frequency")
+			.isEqualTo(60.01f)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void activePower() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
-		assertThat("Total", model.getActivePower(), equalTo(6540));
-		assertThat("Phase A", model.accessorForPhase(PhaseA).getActivePower(), equalTo(3280));
-		assertThat("Phase B", model.accessorForPhase(PhaseB).getActivePower(), equalTo(3260));
-		assertThat("Phase C", model.accessorForPhase(PhaseC).getActivePower(), equalTo(0));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Total")
+			.returns(6540, from(MeterModelAccessor::getActivePower))
+			.as("Phase A")
+			.returns(3280, from(m -> m.accessorForPhase(PhaseA).getActivePower()))
+			.as("Phase B")
+			.returns(3260, from(m -> m.accessorForPhase(PhaseB).getActivePower()))
+			.as("Phase C")
+			.returns(0, from(m -> m.accessorForPhase(PhaseC).getActivePower()))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void apparentPower() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
-		assertThat("Total", model.getApparentPower(), equalTo(6590));
-		assertThat("Phase A", model.accessorForPhase(PhaseA).getApparentPower(), equalTo(3300));
-		assertThat("Phase B", model.accessorForPhase(PhaseB).getApparentPower(), equalTo(3280));
-		assertThat("Phase C", model.accessorForPhase(PhaseC).getApparentPower(), equalTo(0));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Total")
+			.returns(6590, from(MeterModelAccessor::getApparentPower))
+			.as("Phase A")
+			.returns(3300, from(m -> m.accessorForPhase(PhaseA).getApparentPower()))
+			.as("Phase B")
+			.returns(3280, from(m -> m.accessorForPhase(PhaseB).getApparentPower()))
+			.as("Phase C")
+			.returns(0, from(m -> m.accessorForPhase(PhaseC).getApparentPower()))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void reactivePower() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
-		assertThat("Total", model.getReactivePower(), equalTo(-790));
-		assertThat("Phase A", model.accessorForPhase(PhaseA).getReactivePower(), equalTo(-390));
-		assertThat("Phase B", model.accessorForPhase(PhaseB).getReactivePower(), equalTo(-390));
-		assertThat("Phase C", model.accessorForPhase(PhaseC).getReactivePower(), equalTo(0));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Total")
+			.returns(-790, from(MeterModelAccessor::getReactivePower))
+			.as("Phase A")
+			.returns(-390, from(m -> m.accessorForPhase(PhaseA).getReactivePower()))
+			.as("Phase B")
+			.returns(-390, from(m -> m.accessorForPhase(PhaseB).getReactivePower()))
+			.as("Phase C")
+			.returns(0, from(m -> m.accessorForPhase(PhaseC).getReactivePower()))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void powerFactor() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
-		assertThat("Average", model.getPowerFactor(), equalTo(0.9925f));
-		assertThat("Phase A", model.accessorForPhase(PhaseA).getPowerFactor(), equalTo(0.9930f));
-		assertThat("Phase B", model.accessorForPhase(PhaseB).getPowerFactor(), equalTo(0.9930f));
-		assertThat("Phase C", model.accessorForPhase(PhaseC).getPowerFactor(), equalTo(1.0f));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Average")
+			.returns(0.9925f, from(MeterModelAccessor::getPowerFactor))
+			.as("Phase A")
+			.returns(0.9930f, from(m -> m.accessorForPhase(PhaseA).getPowerFactor()))
+			.as("Phase B")
+			.returns(0.9930f, from(m -> m.accessorForPhase(PhaseB).getPowerFactor()))
+			.as("Phase C")
+			.returns(1.0f, from(m -> m.accessorForPhase(PhaseC).getPowerFactor()))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void activeEnergyExport() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
-		assertThat("Total", model.getActiveEnergyExported(), nullValue());
-		assertThat("Phase A", model.accessorForPhase(PhaseA).getActiveEnergyExported(), nullValue());
-		assertThat("Phase B", model.accessorForPhase(PhaseB).getActiveEnergyExported(), nullValue());
-		assertThat("Phase C", model.accessorForPhase(PhaseC).getActiveEnergyExported(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Total")
+			.returns(null, from(MeterModelAccessor::getActiveEnergyExported))
+			.as("Phase A")
+			.returns(null, from(m -> m.accessorForPhase(PhaseA).getActiveEnergyExported()))
+			.as("Phase B")
+			.returns(null, from(m -> m.accessorForPhase(PhaseB).getActiveEnergyExported()))
+			.as("Phase C")
+			.returns(null, from(m -> m.accessorForPhase(PhaseC).getActiveEnergyExported()))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void activeEnergyImport() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
-		assertThat("Total", model.getActiveEnergyImported(), equalTo(906630L));
-		assertThat("Phase A", model.accessorForPhase(PhaseA).getActiveEnergyImported(),
-				equalTo(454560L));
-		assertThat("Phase B", model.accessorForPhase(PhaseB).getActiveEnergyImported(), equalTo(1250L));
-		assertThat("Phase C", model.accessorForPhase(PhaseC).getActiveEnergyImported(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Total")
+			.returns(906630L, from(MeterModelAccessor::getActiveEnergyImported))
+			.as("Phase A")
+			.returns(454560L, from(m -> m.accessorForPhase(PhaseA).getActiveEnergyImported()))
+			.as("Phase B")
+			.returns(1250L, from(m -> m.accessorForPhase(PhaseB).getActiveEnergyImported()))
+			.as("Phase C")
+			.returns(null, from(m -> m.accessorForPhase(PhaseC).getActiveEnergyImported()))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void apparentEnergyExport() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
-		assertThat("Total", model.getApparentEnergyExported(), equalTo(220L));
-		assertThat("Phase A", model.accessorForPhase(PhaseA).getApparentEnergyExported(), equalTo(240L));
-		assertThat("Phase B", model.accessorForPhase(PhaseB).getApparentEnergyExported(), equalTo(160L));
-		assertThat("Phase C", model.accessorForPhase(PhaseC).getApparentEnergyExported(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Total")
+			.returns(220L, from(MeterModelAccessor::getApparentEnergyExported))
+			.as("Phase A")
+			.returns(240L, from(m -> m.accessorForPhase(PhaseA).getApparentEnergyExported()))
+			.as("Phase B")
+			.returns(160L, from(m -> m.accessorForPhase(PhaseB).getApparentEnergyExported()))
+			.as("Phase C")
+			.returns(null, from(m -> m.accessorForPhase(PhaseC).getApparentEnergyExported()))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void apparentEnergyImport() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
-		assertThat("Total", model.getApparentEnergyImported(), equalTo(986930L));
-		assertThat("Phase A", model.accessorForPhase(PhaseA).getApparentEnergyImported(),
-				equalTo(493500L));
-		assertThat("Phase B", model.accessorForPhase(PhaseB).getApparentEnergyImported(),
-				equalTo(491010L));
-		assertThat("Phase C", model.accessorForPhase(PhaseC).getApparentEnergyImported(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Total")
+			.returns(986930L, from(MeterModelAccessor::getApparentEnergyImported))
+			.as("Phase A")
+			.returns(493500L, from(m -> m.accessorForPhase(PhaseA).getApparentEnergyImported()))
+			.as("Phase B")
+			.returns(491010L, from(m -> m.accessorForPhase(PhaseB).getApparentEnergyImported()))
+			.as("Phase C")
+			.returns(null, from(m -> m.accessorForPhase(PhaseC).getApparentEnergyImported()))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void reactiveEnergyImport() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
-		assertThat("Total", model.getReactiveEnergyImported(), equalTo((0x36D2L + 0x28L) * 10L));
-		assertThat("Phase A", model.accessorForPhase(PhaseA).getReactiveEnergyImported(),
-				equalTo((0x1BDDL + 0x18L) * 10L));
-		assertThat("Phase B", model.accessorForPhase(PhaseB).getReactiveEnergyImported(),
-				equalTo((0x1AF4L + 0x10L) * 10L));
-		assertThat("Phase C", model.accessorForPhase(PhaseC).getReactiveEnergyImported(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Total")
+			.returns((0x36D2L + 0x28L) * 10L, from(MeterModelAccessor::getReactiveEnergyImported))
+			.as("Phase A")
+			.returns((0x1BDDL + 0x18L) * 10L,
+					from(m -> m.accessorForPhase(PhaseA).getReactiveEnergyImported()))
+			.as("Phase B")
+			.returns((0x1AF4L + 0x10L) * 10L,
+					from(m -> m.accessorForPhase(PhaseB).getReactiveEnergyImported()))
+			.as("Phase C")
+			.returns(null, from(m -> m.accessorForPhase(PhaseC).getReactiveEnergyImported()))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void reactiveEnergyExport() {
+		// GIVEN
 		MeterModelAccessor model = getTestDataInstance().getTypedModel();
-		assertThat("Total", model.getReactiveEnergyExported(), equalTo((0x0 + 0x1D63L) * 10L));
-		assertThat("Phase A", model.accessorForPhase(PhaseA).getReactiveEnergyExported(),
-				equalTo((0x0 + 0x0E49L) * 10L));
-		assertThat("Phase B", model.accessorForPhase(PhaseB).getReactiveEnergyExported(),
-				equalTo((0x0L + 0x0F1AL) * 10L));
-		assertThat("Phase C", model.accessorForPhase(PhaseC).getReactiveEnergyExported(), nullValue());
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Total")
+			.returns((0x0 + 0x1D63L) * 10L, from(MeterModelAccessor::getReactiveEnergyExported))
+			.as("Phase A")
+			.returns((0x0 + 0x0E49L) * 10L,
+					from(m -> m.accessorForPhase(PhaseA).getReactiveEnergyExported()))
+			.as("Phase B")
+			.returns((0x0L + 0x0F1AL) * 10L,
+					from(m -> m.accessorForPhase(PhaseB).getReactiveEnergyExported()))
+			.as("Phase C")
+			.returns(null, from(m -> m.accessorForPhase(PhaseC).getReactiveEnergyExported()))
+			;
+		// @formatter:on
 	}
 
 }

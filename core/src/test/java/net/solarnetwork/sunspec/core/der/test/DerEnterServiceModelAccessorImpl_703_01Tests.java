@@ -22,11 +22,9 @@
 
 package net.solarnetwork.sunspec.core.der.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.BDDAssertions.catchThrowable;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.api.der.DerEnterServiceModelAccessor;
@@ -58,31 +56,64 @@ public class DerEnterServiceModelAccessorImpl_703_01Tests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), is(instanceOf(DerEnterServiceModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(DerEnterServiceModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		DerEnterServiceModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(384)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(386)));
-		assertThat("Model ID", model.getModelId(), is(equalTo(DerModelId.EnterService)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(17)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(17)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(384, from(DerEnterServiceModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(386, from(DerEnterServiceModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(DerModelId.EnterService, from(DerEnterServiceModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(17, from(DerEnterServiceModelAccessor::getFixedBlockLength))
+			.as("Model length")
+			.returns(17, from(DerEnterServiceModelAccessor::getModelLength))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void values() {
+		// GIVEN
 		DerEnterServiceModelAccessor model = getTestModel();
-		assertThat("Permitted", model.isEnterServicePermitted(), is(equalTo(true)));
-		assertThat("Voltage high", model.getVoltageHigh(), is(equalTo(106.0f)));
-		assertThat("Voltage low", model.getVoltageLow(), is(equalTo(95.0f)));
-		assertThat("Frequency high", model.getFrequencyHigh(), is(equalTo(61.0f)));
-		assertThat("Frequency low", model.getFrequencyLow(), is(equalTo(59.9f)));
-		assertThat("Delay", model.getDelay(), is(equalTo(600L)));
-		assertThat("Random delay", model.getRandomDelay(), is(equalTo(1000L)));
-		assertThat("Ramp time", model.getRampTime(), is(equalTo(1000L)));
-		assertThat("Delay remaining", model.getDelayRemaining(), is(equalTo(0L)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Permitted")
+			.returns(true, from(DerEnterServiceModelAccessor::isEnterServicePermitted))
+			.as("Voltage high")
+			.returns(106.0f, from(DerEnterServiceModelAccessor::getVoltageHigh))
+			.as("Voltage low")
+			.returns(95.0f, from(DerEnterServiceModelAccessor::getVoltageLow))
+			.as("Frequency high")
+			.returns(61.0f, from(DerEnterServiceModelAccessor::getFrequencyHigh))
+			.as("Frequency low")
+			.returns(59.9f, from(DerEnterServiceModelAccessor::getFrequencyLow))
+			.as("Delay")
+			.returns(600L, from(DerEnterServiceModelAccessor::getDelay))
+			.as("Random delay")
+			.returns(1000L, from(DerEnterServiceModelAccessor::getRandomDelay))
+			.as("Ramp time")
+			.returns(1000L, from(DerEnterServiceModelAccessor::getRampTime))
+			.as("Delay remaining")
+			.returns(0L, from(DerEnterServiceModelAccessor::getDelayRemaining))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -103,18 +134,36 @@ public class DerEnterServiceModelAccessorImpl_703_01Tests {
 		model.setRampTime(conn, 60);
 
 		// THEN
-		assertThat("Model data updated", model.isEnterServicePermitted(), is(equalTo(false)));
+		// @formatter:off
+		then(model.isEnterServicePermitted())
+			.as("Model data updated")
+			.isFalse()
+			;
+		// @formatter:on
 
 		DerEnterServiceModelAccessor device = discoverModel(conn);
-		assertThat("Permitted", device.isEnterServicePermitted(), is(equalTo(false)));
-		assertThat("Voltage high", device.getVoltageHigh(), is(equalTo(105.5f)));
-		assertThat("Voltage low", device.getVoltageLow(), is(equalTo(91.7f)));
-		assertThat("Frequency high", device.getFrequencyHigh(), is(equalTo(60.5f)));
-		assertThat("Frequency low", device.getFrequencyLow(), is(equalTo(59.55f)));
-		assertThat("Delay", device.getDelay(), is(equalTo(300L)));
-		assertThat("Random delay", device.getRandomDelay(), is(equalTo(120L)));
-		assertThat("Ramp time", device.getRampTime(), is(equalTo(60L)));
-		assertThat("Delay remaining unchanged", device.getDelayRemaining(), is(equalTo(0L)));
+		// @formatter:off
+		then(device)
+			.as("Permitted")
+			.returns(false, from(DerEnterServiceModelAccessor::isEnterServicePermitted))
+			.as("Voltage high")
+			.returns(105.5f, from(DerEnterServiceModelAccessor::getVoltageHigh))
+			.as("Voltage low")
+			.returns(91.7f, from(DerEnterServiceModelAccessor::getVoltageLow))
+			.as("Frequency high")
+			.returns(60.5f, from(DerEnterServiceModelAccessor::getFrequencyHigh))
+			.as("Frequency low")
+			.returns(59.55f, from(DerEnterServiceModelAccessor::getFrequencyLow))
+			.as("Delay")
+			.returns(300L, from(DerEnterServiceModelAccessor::getDelay))
+			.as("Random delay")
+			.returns(120L, from(DerEnterServiceModelAccessor::getRandomDelay))
+			.as("Ramp time")
+			.returns(60L, from(DerEnterServiceModelAccessor::getRampTime))
+			.as("Delay remaining unchanged")
+			.returns(0L, from(DerEnterServiceModelAccessor::getDelayRemaining))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -125,15 +174,19 @@ public class DerEnterServiceModelAccessorImpl_703_01Tests {
 		DerEnterServiceModelAccessor model = discoverModel(conn);
 
 		// WHEN
-		try {
-			model.setVoltageHigh(conn, 7000f);
-			fail("Scaled value larger than uint16 should be rejected.");
-		} catch ( IllegalArgumentException e ) {
-			// expected
-		}
+		Throwable t = catchThrowable(() -> model.setVoltageHigh(conn, 7000f));
 
 		// THEN
-		assertThat("Device not updated", discoverModel(conn).getVoltageHigh(), is(equalTo(106.0f)));
+		// @formatter:off
+		then(t)
+			.as("Scaled value larger than uint16 rejected")
+			.isInstanceOf(IllegalArgumentException.class)
+			;
+		then(discoverModel(conn).getVoltageHigh())
+			.as("Device not updated")
+			.isEqualTo(106.0f)
+			;
+		// @formatter:on
 	}
 
 }

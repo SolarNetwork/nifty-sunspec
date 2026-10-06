@@ -22,9 +22,8 @@
 
 package net.solarnetwork.sunspec.core.environmental.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,52 +58,107 @@ public class MeteorologicalModelAccessorImpl_307_01Tests {
 
 	@Test
 	public void commonModelProperties() {
+		// GIVEN
 		CommonModelAccessor data = getTestDataInstance();
-		assertThat("Manufacturer", data.getManufacturer(), equalTo("Rainwise_Inc"));
-		assertThat("Model name", data.getModelName(), equalTo("PVmet 500"));
-		assertThat("Options", data.getOptions(), equalTo("0"));
-		assertThat("Version", data.getVersion(), equalTo("1.2"));
-		assertThat("Serial number", data.getSerialNumber(), equalTo("123456"));
-		assertThat("Device address", data.getDeviceAddress(), equalTo(60));
+
+		// THEN
+		// @formatter:off
+		then(data)
+			.as("Manufacturer")
+			.returns("Rainwise_Inc", from(CommonModelAccessor::getManufacturer))
+			.as("Model name")
+			.returns("PVmet 500", from(CommonModelAccessor::getModelName))
+			.as("Options")
+			.returns("0", from(CommonModelAccessor::getOptions))
+			.as("Version")
+			.returns("1.2", from(CommonModelAccessor::getVersion))
+			.as("Serial number")
+			.returns("123456", from(CommonModelAccessor::getSerialNumber))
+			.as("Device address")
+			.returns(60, from(CommonModelAccessor::getDeviceAddress))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void findTypedModel() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
+
+		// WHEN
 		MeteorologicalModelAccessor accessor = data.findTypedModel(MeteorologicalModelAccessor.class);
-		assertThat(accessor, instanceOf(MeteorologicalModelAccessorImpl.class));
+
+		// THEN
+		// @formatter:off
+		then(accessor)
+			.as("Model found by accessor type")
+			.isInstanceOf(MeteorologicalModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		MeteorologicalModelAccessor model = getTestDataInstance()
 				.findTypedModel(MeteorologicalModelAccessor.class);
-		assertThat("Model base address", model.getBaseAddress(), equalTo(70));
-		assertThat("Model block address", model.getBlockAddress(), equalTo(72));
-		assertThat("Model ID", model.getModelId(), equalTo(EnvironmentalModelId.BaseMeteorolgical));
-		assertThat("Model fixed length", model.getFixedBlockLength(), equalTo(11));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				equalTo(0));
-		assertThat("Model length", model.getModelLength(), equalTo(11));
-		assertThat("Model length", model.getRepeatingBlockInstanceCount(), equalTo(0));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(70, from(MeteorologicalModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(72, from(MeteorologicalModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(EnvironmentalModelId.BaseMeteorolgical,
+					from(MeteorologicalModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(11, from(MeteorologicalModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(0, from(MeteorologicalModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(11, from(MeteorologicalModelAccessor::getModelLength))
+			.as("Model length")
+			.returns(0, from(MeteorologicalModelAccessor::getRepeatingBlockInstanceCount))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void data() {
+		// GIVEN
 		MeteorologicalModelAccessor model = getTestDataInstance()
 				.findTypedModel(MeteorologicalModelAccessor.class);
-		assertThat("Ambient temperature", model.getAmbientTemperature(), equalTo(328.5f));
-		assertThat("Relative humidity", model.getRelativeHumidity(), equalTo(1097));
-		assertThat("Atmospheric pressure", model.getAtmosphericPressure(), equalTo(110600));
-		assertThat("Wind speed", model.getWindSpeed(), equalTo(1082));
-		assertThat("Wind direciton", model.getWindDirection(), equalTo(-1));
-		assertThat("Rain", model.getRainAccumulation(), equalTo(2070));
-		assertThat("Snow", model.getSnowAccumulation(), equalTo(2090));
-		assertThat("Precipitation type", model.getPrecipitationType(),
-				equalTo(PrecipitationType.PatchyFog));
-		assertThat("Electric field", model.getElectricField(), equalTo(1172));
-		assertThat("Surface wetness", model.getSurfaceWetness(), equalTo(1182000));
-		assertThat("Soil moisture", model.getSoilMoisture(), equalTo(1176));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Ambient temperature")
+			.returns(328.5f, from(MeteorologicalModelAccessor::getAmbientTemperature))
+			.as("Relative humidity")
+			.returns(1097, from(MeteorologicalModelAccessor::getRelativeHumidity))
+			.as("Atmospheric pressure")
+			.returns(110600, from(MeteorologicalModelAccessor::getAtmosphericPressure))
+			.as("Wind speed")
+			.returns(1082, from(MeteorologicalModelAccessor::getWindSpeed))
+			.as("Wind direciton")
+			.returns(-1, from(MeteorologicalModelAccessor::getWindDirection))
+			.as("Rain")
+			.returns(2070, from(MeteorologicalModelAccessor::getRainAccumulation))
+			.as("Snow")
+			.returns(2090, from(MeteorologicalModelAccessor::getSnowAccumulation))
+			.as("Precipitation type")
+			.returns(PrecipitationType.PatchyFog,
+					from(MeteorologicalModelAccessor::getPrecipitationType))
+			.as("Electric field")
+			.returns(1172, from(MeteorologicalModelAccessor::getElectricField))
+			.as("Surface wetness")
+			.returns(1182000, from(MeteorologicalModelAccessor::getSurfaceWetness))
+			.as("Soil moisture")
+			.returns(1176, from(MeteorologicalModelAccessor::getSoilMoisture))
+			;
+		// @formatter:on
 	}
 
 }

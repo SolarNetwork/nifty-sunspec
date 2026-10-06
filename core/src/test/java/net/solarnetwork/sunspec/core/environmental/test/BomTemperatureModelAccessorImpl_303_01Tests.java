@@ -22,10 +22,8 @@
 
 package net.solarnetwork.sunspec.core.environmental.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -59,34 +57,72 @@ public class BomTemperatureModelAccessorImpl_303_01Tests {
 
 	@Test
 	public void findTypedModel() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
+
+		// WHEN
 		BomTemperatureModelAccessor accessor = data.findTypedModel(BomTemperatureModelAccessor.class);
-		assertThat(accessor, instanceOf(BomTemperatureModelAccessorImpl.class));
+
+		// THEN
+		// @formatter:off
+		then(accessor)
+			.as("Model found by accessor type")
+			.isInstanceOf(BomTemperatureModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		BomTemperatureModelAccessor model = getTestDataInstance()
 				.findTypedModel(BomTemperatureModelAccessor.class);
-		assertThat("Model base address", model.getBaseAddress(), equalTo(90));
-		assertThat("Model block address", model.getBlockAddress(), equalTo(92));
-		assertThat("Model ID", model.getModelId(),
-				equalTo(EnvironmentalModelId.BackOfModuleTemperature));
-		assertThat("Model fixed length", model.getFixedBlockLength(), equalTo(0));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				equalTo(1));
-		assertThat("Model length", model.getModelLength(), equalTo(3));
-		assertThat("Model length", model.getRepeatingBlockInstanceCount(), equalTo(3));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(90, from(BomTemperatureModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(92, from(BomTemperatureModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(EnvironmentalModelId.BackOfModuleTemperature,
+					from(BomTemperatureModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(0, from(BomTemperatureModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(1, from(BomTemperatureModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(3, from(BomTemperatureModelAccessor::getModelLength))
+			.as("Model length")
+			.returns(3, from(BomTemperatureModelAccessor::getRepeatingBlockInstanceCount))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void data() {
+		// GIVEN
 		BomTemperatureModelAccessor model = getTestDataInstance()
 				.findTypedModel(BomTemperatureModelAccessor.class);
+
+		// WHEN
 		List<Float> temps = model.getBackOfModuleTemperatures();
-		assertThat("3 temps returned", temps, hasSize(3));
+
+		// THEN
+		// @formatter:off
+		then(temps)
+			.as("3 temps returned")
+			.hasSize(3)
+			;
+		// @formatter:on
 		for ( int i = 0; i < 3; i++ ) {
-			assertThat(String.format("Temp %d", i + 1), temps.get(i), equalTo(23.4f + (0.1f * i)));
+			// @formatter:off
+			then(temps.get(i))
+				.as(String.format("Temp %d", i + 1))
+				.isEqualTo(23.4f + (0.1f * i))
+				;
+			// @formatter:on
 		}
 	}
 

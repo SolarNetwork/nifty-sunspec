@@ -22,11 +22,8 @@
 
 package net.solarnetwork.sunspec.core.inverter.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -70,47 +67,90 @@ public class InverterPricingSignalModelAccessorImplTests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), is(instanceOf(InverterPricingSignalModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(InverterPricingSignalModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		InverterPricingSignalModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(70)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(BLOCK_ADDRESS)));
-		assertThat("Model ID", model.getModelId(), is(equalTo(InverterControlModelId.PricingSignal)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(8)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(8)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(70, from(InverterPricingSignalModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(BLOCK_ADDRESS, from(InverterPricingSignalModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(InverterControlModelId.PricingSignal,
+					from(InverterPricingSignalModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(8, from(InverterPricingSignalModelAccessor::getFixedBlockLength))
+			.as("Model length")
+			.returns(8, from(InverterPricingSignalModelAccessor::getModelLength))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void values() {
+		// GIVEN
 		InverterPricingSignalModelAccessor model = getTestModel();
-		assertThat("Pricing enabled", model.isPricingEnabled(), is(equalTo(true)));
-		assertThat("Pricing signal type", model.getPricingSignalType(),
-				is(equalTo(InverterPricingSignalType.Absolute)));
-		assertThat("Pricing signal", model.getPricingSignal(), is(equalTo(23.5f)));
-		assertThat("Time window", model.getPricingTimeWindow(), is(equalTo(60)));
-		assertThat("Reversion time", model.getPricingReversionTime(), is(equalTo(3600)));
-		assertThat("Ramp time", model.getPricingRampTime(), is(equalTo(120)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Pricing enabled")
+			.returns(true, from(InverterPricingSignalModelAccessor::isPricingEnabled))
+			.as("Pricing signal type")
+			.returns(InverterPricingSignalType.Absolute,
+					from(InverterPricingSignalModelAccessor::getPricingSignalType))
+			.as("Pricing signal")
+			.returns(23.5f, from(InverterPricingSignalModelAccessor::getPricingSignal))
+			.as("Time window")
+			.returns(60, from(InverterPricingSignalModelAccessor::getPricingTimeWindow))
+			.as("Reversion time")
+			.returns(3600, from(InverterPricingSignalModelAccessor::getPricingReversionTime))
+			.as("Ramp time")
+			.returns(120, from(InverterPricingSignalModelAccessor::getPricingRampTime))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void pricingEnabled_notImplemented() {
-		assertThat("Pricing enabled not implemented",
-				getTestModel(BLOCK_ADDRESS, 0xFFFF).isPricingEnabled(), is(nullValue()));
+		// @formatter:off
+		then(getTestModel(BLOCK_ADDRESS, 0xFFFF).isPricingEnabled())
+			.as("Pricing enabled not implemented")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void pricingEnabled_mostSignificantBit() {
-		assertThat("Pricing enabled with MSB set not implemented",
-				getTestModel(BLOCK_ADDRESS, 0x8001).isPricingEnabled(), is(nullValue()));
+		// @formatter:off
+		then(getTestModel(BLOCK_ADDRESS, 0x8001).isPricingEnabled())
+			.as("Pricing enabled with MSB set not implemented")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void pricingEnabled_undefinedBits() {
-		assertThat("Undefined bits ignored", getTestModel(BLOCK_ADDRESS, 0x0002).isPricingEnabled(),
-				is(equalTo(false)));
+		// @formatter:off
+		then(getTestModel(BLOCK_ADDRESS, 0x0002).isPricingEnabled())
+			.as("Undefined bits ignored")
+			.isFalse()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -129,24 +169,46 @@ public class InverterPricingSignalModelAccessorImplTests {
 		model.setPricingRampTime(conn, 15);
 
 		// THEN
-		assertThat("Each point written to its own register, in order", conn.getWrites(),
-				is(equalTo(IntStream.rangeClosed(72, 77).mapToObj(a -> List.of(a, 1)).toList())));
-		assertThat("Model data updated", model.isPricingEnabled(), is(equalTo(false)));
+		// @formatter:off
+		then(conn.getWrites())
+			.as("Each point written to its own register, in order")
+			.isEqualTo(IntStream.rangeClosed(72, 77).mapToObj(a -> List.of(a, 1)).toList())
+			;
+		then(model.isPricingEnabled())
+			.as("Model data updated")
+			.isFalse()
+			;
+		// @formatter:on
 
 		InverterPricingSignalModelAccessor device = discoverModel(conn);
-		assertThat("Pricing enabled", device.isPricingEnabled(), is(equalTo(false)));
-		assertThat("Pricing signal type", device.getPricingSignalType(),
-				is(equalTo(InverterPricingSignalType.Relative)));
-		assertThat("Pricing signal", device.getPricingSignal(), is(equalTo(-5.25f)));
-		assertThat("Time window", device.getPricingTimeWindow(), is(equalTo(30)));
-		assertThat("Reversion time", device.getPricingReversionTime(), is(equalTo(900)));
-		assertThat("Ramp time", device.getPricingRampTime(), is(equalTo(15)));
+		// @formatter:off
+		then(device)
+			.as("Pricing enabled")
+			.returns(false, from(InverterPricingSignalModelAccessor::isPricingEnabled))
+			.as("Pricing signal type")
+			.returns(InverterPricingSignalType.Relative,
+					from(InverterPricingSignalModelAccessor::getPricingSignalType))
+			.as("Pricing signal")
+			.returns(-5.25f, from(InverterPricingSignalModelAccessor::getPricingSignal))
+			.as("Time window")
+			.returns(30, from(InverterPricingSignalModelAccessor::getPricingTimeWindow))
+			.as("Reversion time")
+			.returns(900, from(InverterPricingSignalModelAccessor::getPricingReversionTime))
+			.as("Ramp time")
+			.returns(15, from(InverterPricingSignalModelAccessor::getPricingRampTime))
+			;
+		// @formatter:on
 
 		// WHEN
 		device.setPricingEnabled(conn, true);
 
 		// THEN
-		assertThat("Pricing enabled again", discoverModel(conn).isPricingEnabled(), is(equalTo(true)));
+		// @formatter:off
+		then(discoverModel(conn).isPricingEnabled())
+			.as("Pricing enabled again")
+			.isTrue()
+			;
+		// @formatter:on
 	}
 
 }

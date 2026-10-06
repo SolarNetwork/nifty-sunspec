@@ -22,12 +22,9 @@
 
 package net.solarnetwork.sunspec.core.inverter.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.BDDAssertions.catchThrowable;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.List;
@@ -100,46 +97,86 @@ public class InverterBasicStorageControlsModelAccessorImplTests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), is(instanceOf(InverterBasicStorageControlsModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(InverterBasicStorageControlsModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		InverterBasicStorageControlsModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(369)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(BLOCK_ADDRESS)));
-		assertThat("Model ID", model.getModelId(),
-				is(equalTo(InverterControlModelId.BasicStorageControls)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(24)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(24)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(369, from(InverterBasicStorageControlsModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(BLOCK_ADDRESS, from(InverterBasicStorageControlsModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(InverterControlModelId.BasicStorageControls,
+					from(InverterBasicStorageControlsModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(24, from(InverterBasicStorageControlsModelAccessor::getFixedBlockLength))
+			.as("Model length")
+			.returns(24, from(InverterBasicStorageControlsModelAccessor::getModelLength))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void values() {
+		// GIVEN
 		// the device implements the points, but has no storage
 		InverterBasicStorageControlsModelAccessor model = getTestModel();
-		assertThat("Maximum charge rate not implemented", model.getActivePowerChargeRateMaximum(),
-				is(nullValue()));
-		assertThat("Charge ramp rate not implemented", model.getChargeRampRate(), is(nullValue()));
-		assertThat("Discharge ramp rate not implemented", model.getDischargeRampRate(), is(nullValue()));
-		assertThat("Storage control modes", model.getStorageControlModes(), is(equalTo(Set.of())));
-		assertThat("Maximum charge apparent power not implemented",
-				model.getApparentPowerChargeRateMaximum(), is(nullValue()));
-		assertThat("Minimum reserve not implemented", model.getStateOfChargeReserveMinimum(),
-				is(nullValue()));
-		assertThat("State of charge not implemented", model.getStateOfCharge(), is(nullValue()));
-		assertThat("Storage available not implemented", model.getStorageAvailable(), is(nullValue()));
-		assertThat("Battery voltage not implemented", model.getBatteryVoltage(), is(nullValue()));
-		assertThat("Charge status not implemented", model.getChargeStatus(), is(nullValue()));
-		assertThat("Discharge rate not implemented", model.getDischargeRatePercent(), is(nullValue()));
-		assertThat("Charge rate not implemented", model.getChargeRatePercent(), is(nullValue()));
-		assertThat("Rate time window not implemented", model.getChargeDischargeRateTimeWindow(),
-				is(nullValue()));
-		assertThat("Rate reversion time not implemented", model.getChargeDischargeRateReversionTime(),
-				is(nullValue()));
-		assertThat("Rate ramp time not implemented", model.getChargeDischargeRateRampTime(),
-				is(nullValue()));
-		assertThat("Charge source not implemented", model.getChargeSource(), is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Maximum charge rate not implemented")
+			.returns(null,
+					from(InverterBasicStorageControlsModelAccessor::getActivePowerChargeRateMaximum))
+			.as("Charge ramp rate not implemented")
+			.returns(null, from(InverterBasicStorageControlsModelAccessor::getChargeRampRate))
+			.as("Discharge ramp rate not implemented")
+			.returns(null, from(InverterBasicStorageControlsModelAccessor::getDischargeRampRate))
+			.as("Storage control modes")
+			.returns(Set.of(), from(InverterBasicStorageControlsModelAccessor::getStorageControlModes))
+			.as("Maximum charge apparent power not implemented")
+			.returns(null,
+					from(InverterBasicStorageControlsModelAccessor::getApparentPowerChargeRateMaximum))
+			.as("Minimum reserve not implemented")
+			.returns(null,
+					from(InverterBasicStorageControlsModelAccessor::getStateOfChargeReserveMinimum))
+			.as("State of charge not implemented")
+			.returns(null, from(InverterBasicStorageControlsModelAccessor::getStateOfCharge))
+			.as("Storage available not implemented")
+			.returns(null, from(InverterBasicStorageControlsModelAccessor::getStorageAvailable))
+			.as("Battery voltage not implemented")
+			.returns(null, from(InverterBasicStorageControlsModelAccessor::getBatteryVoltage))
+			.as("Charge status not implemented")
+			.returns(null, from(InverterBasicStorageControlsModelAccessor::getChargeStatus))
+			.as("Discharge rate not implemented")
+			.returns(null, from(InverterBasicStorageControlsModelAccessor::getDischargeRatePercent))
+			.as("Charge rate not implemented")
+			.returns(null, from(InverterBasicStorageControlsModelAccessor::getChargeRatePercent))
+			.as("Rate time window not implemented")
+			.returns(null,
+					from(InverterBasicStorageControlsModelAccessor::getChargeDischargeRateTimeWindow))
+			.as("Rate reversion time not implemented")
+			.returns(null,
+					from(InverterBasicStorageControlsModelAccessor::getChargeDischargeRateReversionTime))
+			.as("Rate ramp time not implemented")
+			.returns(null,
+					from(InverterBasicStorageControlsModelAccessor::getChargeDischargeRateRampTime))
+			.as("Charge source not implemented")
+			.returns(null, from(InverterBasicStorageControlsModelAccessor::getChargeSource))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -150,24 +187,50 @@ public class InverterBasicStorageControlsModelAccessorImplTests {
 				.findTypedModel(InverterBasicStorageControlsModelAccessor.class);
 
 		// THEN
-		assertThat("Maximum charge rate", model.getActivePowerChargeRateMaximum(), is(equalTo(5000)));
-		assertThat("Charge ramp rate", model.getChargeRampRate(), is(equalTo(10.0f)));
-		assertThat("Discharge ramp rate", model.getDischargeRampRate(), is(equalTo(20.0f)));
-		assertThat("Storage control modes", model.getStorageControlModes(), is(equalTo(
-				EnumSet.of(InverterStorageControlMode.Charge, InverterStorageControlMode.Discharge))));
-		assertThat("Maximum charge apparent power", model.getApparentPowerChargeRateMaximum(),
-				is(equalTo(5500)));
-		assertThat("Minimum reserve", model.getStateOfChargeReserveMinimum(), is(equalTo(15.0f)));
-		assertThat("State of charge", model.getStateOfCharge(), is(equalTo(85.3f)));
-		assertThat("Storage available", model.getStorageAvailable(), is(equalTo(123.4f)));
-		assertThat("Battery voltage", model.getBatteryVoltage(), is(equalTo(51.2f)));
-		assertThat("Charge status", model.getChargeStatus(), is(equalTo(BatteryChargeStatus.Charging)));
-		assertThat("Discharge rate", model.getDischargeRatePercent(), is(equalTo(75.0f)));
-		assertThat("Charge rate", model.getChargeRatePercent(), is(equalTo(-25.0f)));
-		assertThat("Rate time window", model.getChargeDischargeRateTimeWindow(), is(equalTo(60)));
-		assertThat("Rate reversion time", model.getChargeDischargeRateReversionTime(), is(equalTo(600)));
-		assertThat("Rate ramp time", model.getChargeDischargeRateRampTime(), is(equalTo(30)));
-		assertThat("Charge source", model.getChargeSource(), is(equalTo(InverterChargeSource.Grid)));
+		// @formatter:off
+		then(model)
+			.as("Maximum charge rate")
+			.returns(5000,
+					from(InverterBasicStorageControlsModelAccessor::getActivePowerChargeRateMaximum))
+			.as("Charge ramp rate")
+			.returns(10.0f, from(InverterBasicStorageControlsModelAccessor::getChargeRampRate))
+			.as("Discharge ramp rate")
+			.returns(20.0f, from(InverterBasicStorageControlsModelAccessor::getDischargeRampRate))
+			.as("Storage control modes")
+			.returns(EnumSet.of(InverterStorageControlMode.Charge, InverterStorageControlMode.Discharge),
+					from(InverterBasicStorageControlsModelAccessor::getStorageControlModes))
+			.as("Maximum charge apparent power")
+			.returns(5500,
+					from(InverterBasicStorageControlsModelAccessor::getApparentPowerChargeRateMaximum))
+			.as("Minimum reserve")
+			.returns(15.0f,
+					from(InverterBasicStorageControlsModelAccessor::getStateOfChargeReserveMinimum))
+			.as("State of charge")
+			.returns(85.3f, from(InverterBasicStorageControlsModelAccessor::getStateOfCharge))
+			.as("Storage available")
+			.returns(123.4f, from(InverterBasicStorageControlsModelAccessor::getStorageAvailable))
+			.as("Battery voltage")
+			.returns(51.2f, from(InverterBasicStorageControlsModelAccessor::getBatteryVoltage))
+			.as("Charge status")
+			.returns(BatteryChargeStatus.Charging,
+					from(InverterBasicStorageControlsModelAccessor::getChargeStatus))
+			.as("Discharge rate")
+			.returns(75.0f, from(InverterBasicStorageControlsModelAccessor::getDischargeRatePercent))
+			.as("Charge rate")
+			.returns(-25.0f, from(InverterBasicStorageControlsModelAccessor::getChargeRatePercent))
+			.as("Rate time window")
+			.returns(60,
+					from(InverterBasicStorageControlsModelAccessor::getChargeDischargeRateTimeWindow))
+			.as("Rate reversion time")
+			.returns(600,
+					from(InverterBasicStorageControlsModelAccessor::getChargeDischargeRateReversionTime))
+			.as("Rate ramp time")
+			.returns(30, from(InverterBasicStorageControlsModelAccessor::getChargeDischargeRateRampTime))
+			.as("Charge source")
+			.returns(InverterChargeSource.Grid,
+					from(InverterBasicStorageControlsModelAccessor::getChargeSource))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -192,28 +255,53 @@ public class InverterBasicStorageControlsModelAccessorImplTests {
 		model.setChargeSource(conn, InverterChargeSource.Pv);
 
 		// THEN
-		assertThat("Each point written to its own register", conn.getWrites(),
-				is(equalTo(List.of(List.of(371, 1), List.of(372, 1), List.of(373, 1), List.of(374, 1),
-						List.of(375, 1), List.of(376, 1), List.of(381, 1), List.of(382, 1),
-						List.of(383, 1), List.of(384, 1), List.of(385, 1), List.of(386, 1)))));
+		// @formatter:off
+		then(conn.getWrites())
+			.as("Each point written to its own register")
+			.isEqualTo(List.of(List.of(371, 1), List.of(372, 1), List.of(373, 1), List.of(374, 1),
+					List.of(375, 1), List.of(376, 1), List.of(381, 1), List.of(382, 1), List.of(383, 1),
+					List.of(384, 1), List.of(385, 1), List.of(386, 1)))
+			;
+		// @formatter:on
 
 		InverterBasicStorageControlsModelAccessor device = discoverModel(conn);
-		assertThat("Maximum charge rate", device.getActivePowerChargeRateMaximum(), is(equalTo(4000)));
-		assertThat("Charge ramp rate", device.getChargeRampRate(), is(equalTo(12.5f)));
-		assertThat("Discharge ramp rate", device.getDischargeRampRate(), is(equalTo(7.25f)));
-		assertThat("Storage control modes", device.getStorageControlModes(),
-				is(equalTo(EnumSet.of(InverterStorageControlMode.Discharge))));
-		assertThat("Maximum charge apparent power", device.getApparentPowerChargeRateMaximum(),
-				is(equalTo(4400)));
-		assertThat("Minimum reserve", device.getStateOfChargeReserveMinimum(), is(equalTo(20.5f)));
-		assertThat("Discharge rate", device.getDischargeRatePercent(), is(equalTo(33.3f)));
-		assertThat("Charge rate", device.getChargeRatePercent(), is(equalTo(-12.5f)));
-		assertThat("Rate time window", device.getChargeDischargeRateTimeWindow(), is(equalTo(120)));
-		assertThat("Rate reversion time", device.getChargeDischargeRateReversionTime(),
-				is(equalTo(3600)));
-		assertThat("Rate ramp time", device.getChargeDischargeRateRampTime(), is(equalTo(45)));
-		assertThat("Charge source", device.getChargeSource(), is(equalTo(InverterChargeSource.Pv)));
-		assertThat("Read-only state of charge unchanged", device.getStateOfCharge(), is(equalTo(85.3f)));
+		// @formatter:off
+		then(device)
+			.as("Maximum charge rate")
+			.returns(4000,
+					from(InverterBasicStorageControlsModelAccessor::getActivePowerChargeRateMaximum))
+			.as("Charge ramp rate")
+			.returns(12.5f, from(InverterBasicStorageControlsModelAccessor::getChargeRampRate))
+			.as("Discharge ramp rate")
+			.returns(7.25f, from(InverterBasicStorageControlsModelAccessor::getDischargeRampRate))
+			.as("Storage control modes")
+			.returns(EnumSet.of(InverterStorageControlMode.Discharge),
+					from(InverterBasicStorageControlsModelAccessor::getStorageControlModes))
+			.as("Maximum charge apparent power")
+			.returns(4400,
+					from(InverterBasicStorageControlsModelAccessor::getApparentPowerChargeRateMaximum))
+			.as("Minimum reserve")
+			.returns(20.5f,
+					from(InverterBasicStorageControlsModelAccessor::getStateOfChargeReserveMinimum))
+			.as("Discharge rate")
+			.returns(33.3f, from(InverterBasicStorageControlsModelAccessor::getDischargeRatePercent))
+			.as("Charge rate")
+			.returns(-12.5f, from(InverterBasicStorageControlsModelAccessor::getChargeRatePercent))
+			.as("Rate time window")
+			.returns(120,
+					from(InverterBasicStorageControlsModelAccessor::getChargeDischargeRateTimeWindow))
+			.as("Rate reversion time")
+			.returns(3600,
+					from(InverterBasicStorageControlsModelAccessor::getChargeDischargeRateReversionTime))
+			.as("Rate ramp time")
+			.returns(45, from(InverterBasicStorageControlsModelAccessor::getChargeDischargeRateRampTime))
+			.as("Charge source")
+			.returns(InverterChargeSource.Pv,
+					from(InverterBasicStorageControlsModelAccessor::getChargeSource))
+			.as("Read-only state of charge unchanged")
+			.returns(85.3f, from(InverterBasicStorageControlsModelAccessor::getStateOfCharge))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -227,8 +315,12 @@ public class InverterBasicStorageControlsModelAccessorImplTests {
 		model.setStorageControlModes(conn, Set.of());
 
 		// THEN
-		assertThat("Storage control modes cleared", discoverModel(conn).getStorageControlModes(),
-				is(equalTo(Set.of())));
+		// @formatter:off
+		then(discoverModel(conn).getStorageControlModes())
+			.as("Storage control modes cleared")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -239,19 +331,24 @@ public class InverterBasicStorageControlsModelAccessorImplTests {
 		InverterBasicStorageControlsModelAccessor model = discoverModel(conn);
 
 		// WHEN
-		try {
-			model.setChargeRampRate(conn, 10.0f);
-			fail("Scaled value without an implemented scale factor should be rejected.");
-		} catch ( IllegalStateException e ) {
-			// expected
-		}
+		Throwable t = catchThrowable(() -> model.setChargeRampRate(conn, 10.0f));
 		model.setActivePowerChargeRateMaximum(conn, 4000);
 
 		// THEN
-		assertThat("Only the point with an implemented scale factor written", conn.getWrites(),
-				is(equalTo(List.of(List.of(371, 1)))));
-		assertThat("Maximum charge rate", discoverModel(conn).getActivePowerChargeRateMaximum(),
-				is(equalTo(4000)));
+		// @formatter:off
+		then(t)
+			.as("Scaled value without an implemented scale factor rejected")
+			.isInstanceOf(IllegalStateException.class)
+			;
+		then(conn.getWrites())
+			.as("Only the point with an implemented scale factor written")
+			.isEqualTo(List.of(List.of(371, 1)))
+			;
+		then(discoverModel(conn).getActivePowerChargeRateMaximum())
+			.as("Maximum charge rate")
+			.isEqualTo(4000)
+			;
+		// @formatter:on
 	}
 
 }

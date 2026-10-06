@@ -22,11 +22,8 @@
 
 package net.solarnetwork.sunspec.api.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.EnumSet;
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.domain.Bitmaskable;
 import net.solarnetwork.sunspec.api.SunSpecUtils;
@@ -67,57 +64,92 @@ public class SunSpecUtilsTests {
 
 	@Test
 	public void bitfieldValues_null() {
-		assertThat("Not available", SunSpecUtils.bitfieldValues(null, 1, TestFlag.class),
-				is(equalTo(Set.of())));
+		// @formatter:off
+		then(SunSpecUtils.bitfieldValues(null, 1, TestFlag.class))
+			.as("Not available")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void bitfieldValues_zero() {
-		assertThat("No bits set", SunSpecUtils.bitfieldValues(0, 2, TestFlag.class),
-				is(equalTo(Set.of())));
+		// @formatter:off
+		then(SunSpecUtils.bitfieldValues(0, 2, TestFlag.class))
+			.as("No bits set")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void bitfieldValues_bitfield16() {
-		assertThat("Values for bits set", SunSpecUtils.bitfieldValues(0x0003, 1, TestFlag.class),
-				is(equalTo(EnumSet.of(TestFlag.A, TestFlag.B))));
+		// @formatter:off
+		then(SunSpecUtils.bitfieldValues(0x0003, 1, TestFlag.class))
+			.as("Values for bits set")
+			.isEqualTo(EnumSet.of(TestFlag.A, TestFlag.B))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void bitfieldValues_bitfield16MostSignificantBit() {
-		assertThat("Bitfield16 with MSB set not implemented",
-				SunSpecUtils.bitfieldValues(0x8003, 1, TestFlag.class), is(equalTo(Set.of())));
+		// @formatter:off
+		then(SunSpecUtils.bitfieldValues(0x8003, 1, TestFlag.class))
+			.as("Bitfield16 with MSB set not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void bitfieldValues_bitfield16NotImplemented() {
-		assertThat("Bitfield16 not implemented", SunSpecUtils.bitfieldValues(0xFFFF, 1, TestFlag.class),
-				is(equalTo(Set.of())));
+		// @formatter:off
+		then(SunSpecUtils.bitfieldValues(0xFFFF, 1, TestFlag.class))
+			.as("Bitfield16 not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void bitfieldValues_bitfield32() {
-		assertThat("Values for bits set, including bit 15",
-				SunSpecUtils.bitfieldValues(0x40008001L, 2, TestFlag.class),
-				is(equalTo(EnumSet.of(TestFlag.A, TestFlag.C, TestFlag.D))));
+		// @formatter:off
+		then(SunSpecUtils.bitfieldValues(0x40008001L, 2, TestFlag.class))
+			.as("Values for bits set, including bit 15")
+			.isEqualTo(EnumSet.of(TestFlag.A, TestFlag.C, TestFlag.D))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void bitfieldValues_bitfield32MostSignificantBit() {
-		assertThat("Bitfield32 with MSB set not implemented",
-				SunSpecUtils.bitfieldValues(0x80000001L, 2, TestFlag.class), is(equalTo(Set.of())));
+		// @formatter:off
+		then(SunSpecUtils.bitfieldValues(0x80000001L, 2, TestFlag.class))
+			.as("Bitfield32 with MSB set not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void bitfieldValues_bitfield32NotImplemented() {
-		assertThat("Bitfield32 not implemented",
-				SunSpecUtils.bitfieldValues(0xFFFFFFFFL, 2, TestFlag.class), is(equalTo(Set.of())));
+		// @formatter:off
+		then(SunSpecUtils.bitfieldValues(0xFFFFFFFFL, 2, TestFlag.class))
+			.as("Bitfield32 not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void bitfieldValues_undefinedBits() {
-		assertThat("Undefined bits ignored", SunSpecUtils.bitfieldValues(0x0005, 1, TestFlag.class),
-				is(equalTo(EnumSet.of(TestFlag.A))));
+		// @formatter:off
+		then(SunSpecUtils.bitfieldValues(0x0005, 1, TestFlag.class))
+			.as("Undefined bits ignored")
+			.isEqualTo(EnumSet.of(TestFlag.A))
+			;
+		// @formatter:on
 	}
 
 }

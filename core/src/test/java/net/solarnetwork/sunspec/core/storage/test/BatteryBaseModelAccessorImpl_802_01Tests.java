@@ -22,11 +22,8 @@
 
 package net.solarnetwork.sunspec.core.storage.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.BitSet;
@@ -76,67 +73,127 @@ public class BatteryBaseModelAccessorImpl_802_01Tests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), is(instanceOf(BatteryBaseModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(BatteryBaseModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		BatteryBaseModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(70)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(BLOCK_ADDRESS)));
-		assertThat("Model ID", model.getModelId(), is(equalTo(StorageModelId.BatteryBase)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(62)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(62)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(70, from(BatteryBaseModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(BLOCK_ADDRESS, from(BatteryBaseModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(StorageModelId.BatteryBase, from(BatteryBaseModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(62, from(BatteryBaseModelAccessor::getFixedBlockLength))
+			.as("Model length")
+			.returns(62, from(BatteryBaseModelAccessor::getModelLength))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void ratings() {
+		// GIVEN
 		BatteryBaseModelAccessor model = getTestModel();
-		assertThat("Charge capacity", model.getChargeCapacityRating(), is(equalTo(100.0f)));
-		assertThat("Energy capacity", model.getEnergyCapacityRating(), is(equalTo(13500L)));
-		assertThat("Maximum charge rate", model.getChargeRateMaximumRating(), is(equalTo(5000)));
-		assertThat("Maximum discharge rate", model.getDischargeRateMaximumRating(), is(equalTo(7000)));
-		assertThat("Self discharge rate", model.getSelfDischargeRate(), is(equalTo(0.5f)));
-		assertThat("Maximum state of charge", model.getStateOfChargeMaximumRating(),
-				is(equalTo(100.0f)));
-		assertThat("Minimum state of charge", model.getStateOfChargeMinimumRating(), is(equalTo(5.0f)));
-		assertThat("Maximum reserve", model.getStateOfChargeReserveMaximum(), is(equalTo(95.0f)));
-		assertThat("Minimum reserve", model.getStateOfChargeReserveMinimum(), is(equalTo(10.0f)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Charge capacity")
+			.returns(100.0f, from(BatteryBaseModelAccessor::getChargeCapacityRating))
+			.as("Energy capacity")
+			.returns(13500L, from(BatteryBaseModelAccessor::getEnergyCapacityRating))
+			.as("Maximum charge rate")
+			.returns(5000, from(BatteryBaseModelAccessor::getChargeRateMaximumRating))
+			.as("Maximum discharge rate")
+			.returns(7000, from(BatteryBaseModelAccessor::getDischargeRateMaximumRating))
+			.as("Self discharge rate")
+			.returns(0.5f, from(BatteryBaseModelAccessor::getSelfDischargeRate))
+			.as("Maximum state of charge")
+			.returns(100.0f, from(BatteryBaseModelAccessor::getStateOfChargeMaximumRating))
+			.as("Minimum state of charge")
+			.returns(5.0f, from(BatteryBaseModelAccessor::getStateOfChargeMinimumRating))
+			.as("Maximum reserve")
+			.returns(95.0f, from(BatteryBaseModelAccessor::getStateOfChargeReserveMaximum))
+			.as("Minimum reserve")
+			.returns(10.0f, from(BatteryBaseModelAccessor::getStateOfChargeReserveMinimum))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void status() {
+		// GIVEN
 		BatteryBaseModelAccessor model = getTestModel();
-		assertThat("State of charge", model.getStateOfCharge(), is(equalTo(87.3f)));
-		assertThat("Depth of discharge", model.getDepthOfDischarge(), is(equalTo(12.7f)));
-		assertThat("State of health", model.getStateOfHealth(), is(equalTo(98.5f)));
-		assertThat("Cycle count", model.getCycleCount(), is(equalTo(312L)));
-		assertThat("Charge status", model.getChargeStatus(),
-				is(equalTo(BatteryChargeStatus.Discharging)));
-		assertThat("Local or remote control", model.getLocalRemoteControl(),
-				is(equalTo(DerLocalRemoteControl.Remote)));
-		assertThat("Battery heartbeat", model.getBatteryHeartbeat(), is(equalTo(4242)));
-		assertThat("Controller heartbeat", model.getControllerHeartbeat(), is(equalTo(4240)));
-		assertThat("Alarm reset in progress", model.isAlarmResetInProgress(), is(equalTo(false)));
-		assertThat("Battery type", model.getBatteryType(), is(equalTo(BatteryType.LithiumIon)));
-		assertThat("Battery state", model.getBatteryState(), is(equalTo(BatteryState.Connected)));
-		assertThat("Vendor battery state not implemented", model.getVendorBatteryState(),
-				is(nullValue()));
-		assertThat("Warranty date, 10000 days after 1 January 2000", model.getWarrantyDate(),
-				is(equalTo(LocalDate.of(2027, 5, 19))));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("State of charge")
+			.returns(87.3f, from(BatteryBaseModelAccessor::getStateOfCharge))
+			.as("Depth of discharge")
+			.returns(12.7f, from(BatteryBaseModelAccessor::getDepthOfDischarge))
+			.as("State of health")
+			.returns(98.5f, from(BatteryBaseModelAccessor::getStateOfHealth))
+			.as("Cycle count")
+			.returns(312L, from(BatteryBaseModelAccessor::getCycleCount))
+			.as("Charge status")
+			.returns(BatteryChargeStatus.Discharging, from(BatteryBaseModelAccessor::getChargeStatus))
+			.as("Local or remote control")
+			.returns(DerLocalRemoteControl.Remote, from(BatteryBaseModelAccessor::getLocalRemoteControl))
+			.as("Battery heartbeat")
+			.returns(4242, from(BatteryBaseModelAccessor::getBatteryHeartbeat))
+			.as("Controller heartbeat")
+			.returns(4240, from(BatteryBaseModelAccessor::getControllerHeartbeat))
+			.as("Alarm reset in progress")
+			.returns(false, from(BatteryBaseModelAccessor::isAlarmResetInProgress))
+			.as("Battery type")
+			.returns(BatteryType.LithiumIon, from(BatteryBaseModelAccessor::getBatteryType))
+			.as("Battery state")
+			.returns(BatteryState.Connected, from(BatteryBaseModelAccessor::getBatteryState))
+			.as("Vendor battery state not implemented")
+			.returns(null, from(BatteryBaseModelAccessor::getVendorBatteryState))
+			.as("Warranty date, 10000 days after 1 January 2000")
+			.returns(LocalDate.of(2027, 5, 19), from(BatteryBaseModelAccessor::getWarrantyDate))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void events() {
+		// GIVEN
 		BatteryBaseModelAccessor model = getTestModel();
-		assertThat("Events", model.getEvents(), is(equalTo(Set.of(BatteryEvent.OverTemperatureWarning,
-				BatteryEvent.VoltageImbalanceWarning, BatteryEvent.Reserved1))));
+
+		// THEN
+		// @formatter:off
+		then(model.getEvents())
+			.as("Events")
+			.isEqualTo(Set.of(BatteryEvent.OverTemperatureWarning, BatteryEvent.VoltageImbalanceWarning,
+					BatteryEvent.Reserved1))
+			;
+		// @formatter:on
 		BitSet vendorEvents = new BitSet();
 		vendorEvents.set(0);
 		vendorEvents.set(2);
 		vendorEvents.set(32);
-		assertThat("Vendor events, with the second field offset by 32", model.getVendorEvents(),
-				is(equalTo(vendorEvents)));
+		// @formatter:off
+		then(model.getVendorEvents())
+			.as("Vendor events, with the second field offset by 32")
+			.isEqualTo(vendorEvents)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -147,12 +204,21 @@ public class BatteryBaseModelAccessorImpl_802_01Tests {
 				0x0005, 0x8000, 0x0001);
 
 		// THEN
-		assertThat("Events not implemented", model.getEvents(), is(equalTo(Set.of())));
+		// @formatter:off
+		then(model.getEvents())
+			.as("Events not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 		BitSet vendorEvents = new BitSet();
 		vendorEvents.set(0);
 		vendorEvents.set(2);
-		assertThat("Second vendor event field not implemented", model.getVendorEvents(),
-				is(equalTo(vendorEvents)));
+		// @formatter:off
+		then(model.getVendorEvents())
+			.as("Second vendor event field not implemented")
+			.isEqualTo(vendorEvents)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -161,41 +227,73 @@ public class BatteryBaseModelAccessorImpl_802_01Tests {
 		BatteryBaseModelAccessor model = getTestModel(BLOCK_ADDRESS + 22, 0xFFFF, 0xFFFF);
 
 		// THEN
-		assertThat("Warranty date not implemented", model.getWarrantyDate(), is(nullValue()));
+		// @formatter:off
+		then(model.getWarrantyDate())
+			.as("Warranty date not implemented")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void measurements() {
+		// GIVEN
 		BatteryBaseModelAccessor model = getTestModel();
-		assertThat("DC voltage", model.getDCVoltage(), is(equalTo(51.2f)));
-		assertThat("Maximum voltage", model.getMaximumVoltage(), is(equalTo(57.6f)));
-		assertThat("Minimum voltage", model.getMinimumVoltage(), is(equalTo(44.8f)));
-		assertThat("Maximum cell voltage", model.getMaximumCellVoltage(), is(equalTo(3.35f)));
-		assertThat("Maximum cell voltage string", model.getMaximumCellVoltageStringIndex(),
-				is(equalTo(1)));
-		assertThat("Maximum cell voltage module", model.getMaximumCellVoltageModuleIndex(),
-				is(equalTo(4)));
-		assertThat("Minimum cell voltage", model.getMinimumCellVoltage(), is(equalTo(3.31f)));
-		assertThat("Minimum cell voltage string", model.getMinimumCellVoltageStringIndex(),
-				is(equalTo(2)));
-		assertThat("Minimum cell voltage module", model.getMinimumCellVoltageModuleIndex(),
-				is(equalTo(7)));
-		assertThat("Average cell voltage", model.getAverageCellVoltage(), is(equalTo(3.33f)));
-		assertThat("DC current", model.getDCCurrent(), is(equalTo(-45.6f)));
-		assertThat("Maximum charge current", model.getMaximumChargeCurrent(), is(equalTo(100.0f)));
-		assertThat("Maximum discharge current", model.getMaximumDischargeCurrent(), is(equalTo(150.0f)));
-		assertThat("DC power", model.getDCPower(), is(equalTo(-2335)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("DC voltage")
+			.returns(51.2f, from(BatteryBaseModelAccessor::getDCVoltage))
+			.as("Maximum voltage")
+			.returns(57.6f, from(BatteryBaseModelAccessor::getMaximumVoltage))
+			.as("Minimum voltage")
+			.returns(44.8f, from(BatteryBaseModelAccessor::getMinimumVoltage))
+			.as("Maximum cell voltage")
+			.returns(3.35f, from(BatteryBaseModelAccessor::getMaximumCellVoltage))
+			.as("Maximum cell voltage string")
+			.returns(1, from(BatteryBaseModelAccessor::getMaximumCellVoltageStringIndex))
+			.as("Maximum cell voltage module")
+			.returns(4, from(BatteryBaseModelAccessor::getMaximumCellVoltageModuleIndex))
+			.as("Minimum cell voltage")
+			.returns(3.31f, from(BatteryBaseModelAccessor::getMinimumCellVoltage))
+			.as("Minimum cell voltage string")
+			.returns(2, from(BatteryBaseModelAccessor::getMinimumCellVoltageStringIndex))
+			.as("Minimum cell voltage module")
+			.returns(7, from(BatteryBaseModelAccessor::getMinimumCellVoltageModuleIndex))
+			.as("Average cell voltage")
+			.returns(3.33f, from(BatteryBaseModelAccessor::getAverageCellVoltage))
+			.as("DC current")
+			.returns(-45.6f, from(BatteryBaseModelAccessor::getDCCurrent))
+			.as("Maximum charge current")
+			.returns(100.0f, from(BatteryBaseModelAccessor::getMaximumChargeCurrent))
+			.as("Maximum discharge current")
+			.returns(150.0f, from(BatteryBaseModelAccessor::getMaximumDischargeCurrent))
+			.as("DC power")
+			.returns(-2335, from(BatteryBaseModelAccessor::getDCPower))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void requestsAndCommands() {
+		// GIVEN
 		BatteryBaseModelAccessor model = getTestModel();
-		assertThat("Inverter state request", model.getInverterStateRequest(),
-				is(equalTo(BatteryInverterStateRequest.NoRequest)));
-		assertThat("Power request", model.getPowerRequest(), is(equalTo(0)));
-		assertThat("Operation", model.getOperation(), is(equalTo(BatteryOperation.Connect)));
-		assertThat("Inverter state", model.getInverterState(),
-				is(equalTo(BatteryInverterState.Started)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Inverter state request")
+			.returns(BatteryInverterStateRequest.NoRequest,
+					from(BatteryBaseModelAccessor::getInverterStateRequest))
+			.as("Power request")
+			.returns(0, from(BatteryBaseModelAccessor::getPowerRequest))
+			.as("Operation")
+			.returns(BatteryOperation.Connect, from(BatteryBaseModelAccessor::getOperation))
+			.as("Inverter state")
+			.returns(BatteryInverterState.Started, from(BatteryBaseModelAccessor::getInverterState))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -215,14 +313,24 @@ public class BatteryBaseModelAccessorImpl_802_01Tests {
 
 		// THEN
 		BatteryBaseModelAccessor device = discoverModel(conn);
-		assertThat("Maximum reserve", device.getStateOfChargeReserveMaximum(), is(equalTo(90.5f)));
-		assertThat("Minimum reserve", device.getStateOfChargeReserveMinimum(), is(equalTo(12.0f)));
-		assertThat("Controller heartbeat", device.getControllerHeartbeat(), is(equalTo(4241)));
-		assertThat("Alarm reset in progress", device.isAlarmResetInProgress(), is(equalTo(true)));
-		assertThat("Operation", device.getOperation(), is(equalTo(BatteryOperation.Disconnect)));
-		assertThat("Inverter state", device.getInverterState(),
-				is(equalTo(BatteryInverterState.Standby)));
-		assertThat("Battery heartbeat unchanged", device.getBatteryHeartbeat(), is(equalTo(4242)));
+		// @formatter:off
+		then(device)
+			.as("Maximum reserve")
+			.returns(90.5f, from(BatteryBaseModelAccessor::getStateOfChargeReserveMaximum))
+			.as("Minimum reserve")
+			.returns(12.0f, from(BatteryBaseModelAccessor::getStateOfChargeReserveMinimum))
+			.as("Controller heartbeat")
+			.returns(4241, from(BatteryBaseModelAccessor::getControllerHeartbeat))
+			.as("Alarm reset in progress")
+			.returns(true, from(BatteryBaseModelAccessor::isAlarmResetInProgress))
+			.as("Operation")
+			.returns(BatteryOperation.Disconnect, from(BatteryBaseModelAccessor::getOperation))
+			.as("Inverter state")
+			.returns(BatteryInverterState.Standby, from(BatteryBaseModelAccessor::getInverterState))
+			.as("Battery heartbeat unchanged")
+			.returns(4242, from(BatteryBaseModelAccessor::getBatteryHeartbeat))
+			;
+		// @formatter:on
 	}
 
 }

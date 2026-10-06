@@ -22,11 +22,8 @@
 
 package net.solarnetwork.sunspec.core.environmental.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -61,41 +58,90 @@ public class ReferencePointModelAccessorImpl_306_01Tests {
 
 	@Test
 	public void findTypedModel() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
+
+		// WHEN
 		ReferencePointModelAccessor accessor = data.findTypedModel(ReferencePointModelAccessor.class);
-		assertThat(accessor, instanceOf(ReferencePointModelAccessorImpl.class));
+
+		// THEN
+		// @formatter:off
+		then(accessor)
+			.as("Model found by accessor type")
+			.isInstanceOf(ReferencePointModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		ReferencePointModelAccessor model = getTestDataInstance()
 				.findTypedModel(ReferencePointModelAccessor.class);
-		assertThat("Model base address", model.getBaseAddress(), equalTo(70));
-		assertThat("Model block address", model.getBlockAddress(), equalTo(72));
-		assertThat("Model ID", model.getModelId(), equalTo(EnvironmentalModelId.ReferencePoint));
-		assertThat("Model fixed length", model.getFixedBlockLength(), equalTo(0));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				equalTo(7));
-		assertThat("Model length", model.getModelLength(), equalTo(14));
-		assertThat("Model length", model.getRepeatingBlockInstanceCount(), equalTo(2));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(70, from(ReferencePointModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(72, from(ReferencePointModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(EnvironmentalModelId.ReferencePoint, from(ReferencePointModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(0, from(ReferencePointModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(7, from(ReferencePointModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(14, from(ReferencePointModelAccessor::getModelLength))
+			.as("Model length")
+			.returns(2, from(ReferencePointModelAccessor::getRepeatingBlockInstanceCount))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void data() {
+		// GIVEN
 		ReferencePointModelAccessor model = getTestDataInstance()
 				.findTypedModel(ReferencePointModelAccessor.class);
+
+		// WHEN
 		List<ReferencePoint> points = model.getReferencePoints();
-		assertThat("2 reference points returned", points, hasSize(2));
+
+		// THEN
+		// @formatter:off
+		then(points)
+			.as("2 reference points returned")
+			.hasSize(2)
+			;
+		// @formatter:on
 		ReferencePoint p = points.get(0);
-		assertThat("ReferencePoint 1 irradiance", p.getIrradiance(), is(equalTo(12345)));
-		assertThat("ReferencePoint 1 current", p.getCurrent(), is(equalTo(1.23f)));
-		assertThat("ReferencePoint 1 voltage", p.getVoltage(), is(equalTo(2.34f)));
-		assertThat("ReferencePoint 1 temperature", p.getTemperature(), is(equalTo(34.5f)));
+		// @formatter:off
+		then(p)
+			.as("ReferencePoint 1 irradiance")
+			.returns(12345, from(ReferencePoint::getIrradiance))
+			.as("ReferencePoint 1 current")
+			.returns(1.23f, from(ReferencePoint::getCurrent))
+			.as("ReferencePoint 1 voltage")
+			.returns(2.34f, from(ReferencePoint::getVoltage))
+			.as("ReferencePoint 1 temperature")
+			.returns(34.5f, from(ReferencePoint::getTemperature))
+			;
+		// @formatter:on
 		p = points.get(1);
-		assertThat("ReferencePoint 2 irradiance", p.getIrradiance(), is(equalTo(23456)));
-		assertThat("ReferencePoint 2 current", p.getCurrent(), is(equalTo(-2.34f)));
-		assertThat("ReferencePoint 2 voltage", p.getVoltage(), is(equalTo(-3.45f)));
-		assertThat("ReferencePoint 2 temperature", p.getTemperature(), is(equalTo(-45.6f)));
+		// @formatter:off
+		then(p)
+			.as("ReferencePoint 2 irradiance")
+			.returns(23456, from(ReferencePoint::getIrradiance))
+			.as("ReferencePoint 2 current")
+			.returns(-2.34f, from(ReferencePoint::getCurrent))
+			.as("ReferencePoint 2 voltage")
+			.returns(-3.45f, from(ReferencePoint::getVoltage))
+			.as("ReferencePoint 2 temperature")
+			.returns(-45.6f, from(ReferencePoint::getTemperature))
+			;
+		// @formatter:on
 	}
 
 }

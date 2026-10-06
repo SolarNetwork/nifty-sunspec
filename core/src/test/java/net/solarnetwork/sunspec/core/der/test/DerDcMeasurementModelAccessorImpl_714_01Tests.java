@@ -22,12 +22,8 @@
 
 package net.solarnetwork.sunspec.core.der.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -74,56 +70,104 @@ public class DerDcMeasurementModelAccessorImpl_714_01Tests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), is(instanceOf(DerDcMeasurementModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(DerDcMeasurementModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		DerDcMeasurementModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(1220)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(BLOCK_ADDRESS)));
-		assertThat("Model ID", model.getModelId(), is(equalTo(DerModelId.DcMeasurement)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(18)));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				is(equalTo(25)));
-		assertThat("Model repeating instance count", model.getRepeatingBlockInstanceCount(),
-				is(equalTo(1)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(43)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(1220, from(DerDcMeasurementModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(BLOCK_ADDRESS, from(DerDcMeasurementModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(DerModelId.DcMeasurement, from(DerDcMeasurementModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(18, from(DerDcMeasurementModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(25, from(DerDcMeasurementModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model repeating instance count")
+			.returns(1, from(DerDcMeasurementModelAccessor::getRepeatingBlockInstanceCount))
+			.as("Model length")
+			.returns(43, from(DerDcMeasurementModelAccessor::getModelLength))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void values() {
+		// GIVEN
 		DerDcMeasurementModelAccessor model = getTestModel();
-		assertThat("No ports with alarms", model.getAlarmedPortIndexes(), is(equalTo(Set.of())));
-		assertThat("Port count", model.getPortCount(), is(equalTo(1)));
-		assertThat("DC current", model.getDCCurrent(), is(equalTo(0.0f)));
-		assertThat("DC power", model.getDCPower(), is(equalTo(0)));
-		assertThat("DC energy injected, from words 08A1 0000 0000 0000", model.getDCEnergyInjected(),
-				is(equalTo(0x08A1000000000000L)));
-		assertThat("DC energy absorbed, from words FF42 FFFF FFFF FFFF, larger than a long",
-				model.getDCEnergyAbsorbed(), is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("No ports with alarms")
+			.returns(Set.of(), from(DerDcMeasurementModelAccessor::getAlarmedPortIndexes))
+			.as("Port count")
+			.returns(1, from(DerDcMeasurementModelAccessor::getPortCount))
+			.as("DC current")
+			.returns(0.0f, from(DerDcMeasurementModelAccessor::getDCCurrent))
+			.as("DC power")
+			.returns(0, from(DerDcMeasurementModelAccessor::getDCPower))
+			.as("DC energy injected, from words 08A1 0000 0000 0000")
+			.returns(0x08A1000000000000L, from(DerDcMeasurementModelAccessor::getDCEnergyInjected))
+			.as("DC energy absorbed, from words FF42 FFFF FFFF FFFF, larger than a long")
+			.returns(null, from(DerDcMeasurementModelAccessor::getDCEnergyAbsorbed))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void ports() {
+		// WHEN
 		List<DcPort> ports = getTestModel().getDcPorts();
-		assertThat("Port count", ports, hasSize(1));
+
+		// THEN
+		// @formatter:off
+		then(ports)
+			.as("Port count")
+			.hasSize(1)
+			;
+		// @formatter:on
 
 		DcPort port = ports.get(0);
-		assertThat("Port type", port.getPortType(), is(equalTo(DerDcPortType.EnergyStorageSystem)));
-		assertThat("Port ID", port.getPortId(), is(equalTo(0)));
-		assertThat("Port name", port.getPortName(), is(equalTo("Battery")));
-		assertThat("DC current", port.getDCCurrent(), is(equalTo(0.0f)));
-		assertThat("DC voltage", port.getDCVoltage(), is(equalTo(56.09f)));
-		assertThat("DC power", port.getDCPower(), is(equalTo(0)));
-		assertThat("DC energy injected, from words 08A1 0000 0000 0000", port.getDCEnergyInjected(),
-				is(equalTo(0x08A1000000000000L)));
-		assertThat("DC energy absorbed, from words FF42 FFFF FFFF FFFF, larger than a long",
-				port.getDCEnergyAbsorbed(), is(nullValue()));
-		assertThat("Temperature, as reported with a 0 scale factor", port.getTemperature(),
-				is(equalTo(199.0f)));
-		assertThat("Status", port.getPortStatus(), is(equalTo(DerDcPortStatus.On)));
-		assertThat("No alarms", port.getEvents(), is(equalTo(Set.of())));
+		// @formatter:off
+		then(port)
+			.as("Port type")
+			.returns(DerDcPortType.EnergyStorageSystem, from(DcPort::getPortType))
+			.as("Port ID")
+			.returns(0, from(DcPort::getPortId))
+			.as("Port name")
+			.returns("Battery", from(DcPort::getPortName))
+			.as("DC current")
+			.returns(0.0f, from(DcPort::getDCCurrent))
+			.as("DC voltage")
+			.returns(56.09f, from(DcPort::getDCVoltage))
+			.as("DC power")
+			.returns(0, from(DcPort::getDCPower))
+			.as("DC energy injected, from words 08A1 0000 0000 0000")
+			.returns(0x08A1000000000000L, from(DcPort::getDCEnergyInjected))
+			.as("DC energy absorbed, from words FF42 FFFF FFFF FFFF, larger than a long")
+			.returns(null, from(DcPort::getDCEnergyAbsorbed))
+			.as("Temperature, as reported with a 0 scale factor")
+			.returns(199.0f, from(DcPort::getTemperature))
+			.as("Status")
+			.returns(DerDcPortStatus.On, from(DcPort::getPortStatus))
+			.as("No alarms")
+			.returns(Set.of(), from(DcPort::getEvents))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -132,7 +176,12 @@ public class DerDcMeasurementModelAccessorImpl_714_01Tests {
 		DerDcMeasurementModelAccessor model = getTestModel(BLOCK_ADDRESS, 0x0000, 0x0005);
 
 		// THEN
-		assertThat("Bits 0 and 2 set", model.getAlarmedPortIndexes(), is(equalTo(Set.of(0, 2))));
+		// @formatter:off
+		then(model.getAlarmedPortIndexes())
+			.as("Bits 0 and 2 set")
+			.isEqualTo(Set.of(0, 2))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -141,8 +190,12 @@ public class DerDcMeasurementModelAccessorImpl_714_01Tests {
 		DerDcMeasurementModelAccessor model = getTestModel(BLOCK_ADDRESS, 0x8000, 0x0001);
 
 		// THEN
-		assertThat("Bitfield with MSB set not implemented", model.getAlarmedPortIndexes(),
-				is(equalTo(Set.of())));
+		// @formatter:off
+		then(model.getAlarmedPortIndexes())
+			.as("Bitfield with MSB set not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -152,9 +205,13 @@ public class DerDcMeasurementModelAccessorImpl_714_01Tests {
 		DerDcMeasurementModelAccessor model = getTestModel(PORT_ADDRESS + 23, 0x0008, 0x1085);
 
 		// THEN
-		assertThat("Alarms", model.getDcPorts().get(0).getEvents(),
-				is(equalTo(Set.of(DerDcPortAlarm.GroundFault, DerDcPortAlarm.OverTemperature,
-						DerDcPortAlarm.BlownFuse, DerDcPortAlarm.Reserved))));
+		// @formatter:off
+		then(model.getDcPorts().get(0).getEvents())
+			.as("Alarms")
+			.isEqualTo(Set.of(DerDcPortAlarm.GroundFault, DerDcPortAlarm.OverTemperature,
+					DerDcPortAlarm.BlownFuse, DerDcPortAlarm.Reserved))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -163,8 +220,16 @@ public class DerDcMeasurementModelAccessorImpl_714_01Tests {
 		DerDcMeasurementModelAccessor model = getTestModel(BLOCK_ADDRESS + 2, 3);
 
 		// THEN
-		assertThat("Port count", model.getPortCount(), is(equalTo(3)));
-		assertThat("Ports limited to model length", model.getDcPorts(), hasSize(1));
+		// @formatter:off
+		then(model.getPortCount())
+			.as("Port count")
+			.isEqualTo(3)
+			;
+		then(model.getDcPorts())
+			.as("Ports limited to model length")
+			.hasSize(1)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -173,8 +238,16 @@ public class DerDcMeasurementModelAccessorImpl_714_01Tests {
 		DerDcMeasurementModelAccessor model = getTestModel(BLOCK_ADDRESS + 2, 0xFFFF);
 
 		// THEN
-		assertThat("Port count not implemented", model.getPortCount(), is(nullValue()));
-		assertThat("Ports from model length", model.getDcPorts(), hasSize(1));
+		// @formatter:off
+		then(model.getPortCount())
+			.as("Port count not implemented")
+			.isNull()
+			;
+		then(model.getDcPorts())
+			.as("Ports from model length")
+			.hasSize(1)
+			;
+		// @formatter:on
 	}
 
 }

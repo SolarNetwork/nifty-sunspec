@@ -28,8 +28,6 @@ ext {
 		// Test dependencies.
 		testing: [
 			"org.assertj:assertj-core:${assertjVersion}",
-			'org.easymock:easymock:3.1',
-			'org.hamcrest:hamcrest-library:2.2',
 			"org.mockito:mockito-core:${mockitoVersion}",
 			"org.mockito:mockito-junit-jupiter:${mockitoVersion}",
 			"org.junit.platform:junit-platform-launcher:${junitVersion}"
@@ -96,7 +94,8 @@ subprojects {
 
 	compileTestJava {
 		options.compilerArgs += [
-			"-Xlint:-serial"
+			"-Xlint:-serial",
+			"-Xlint:-static"
 		]
 		options.errorprone.disable("BadImport", "CheckReturnValue")
 		it.options.errorprone.enabled = (rootProject.hasProperty('errorProneEnabledTest') && rootProject.errorProneEnabledTest.toBoolean());

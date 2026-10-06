@@ -22,11 +22,8 @@
 
 package net.solarnetwork.sunspec.core.inverter.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.time.Instant;
 import java.util.EnumSet;
 import java.util.Set;
@@ -65,81 +62,143 @@ public class InverterExtendedMeasurementsModelAccessorImplTests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(FRONIUS_TEST_DATA),
-				is(instanceOf(InverterExtendedMeasurementsModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel(FRONIUS_TEST_DATA))
+			.as("Model found by accessor type")
+			.isInstanceOf(InverterExtendedMeasurementsModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		InverterExtendedMeasurementsModelAccessor model = getTestModel(FRONIUS_TEST_DATA);
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(181)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(183)));
-		assertThat("Model ID", model.getModelId(),
-				is(equalTo(InverterControlModelId.ExtendedMeasurements)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(44)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(44)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(181, from(InverterExtendedMeasurementsModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(183, from(InverterExtendedMeasurementsModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(InverterControlModelId.ExtendedMeasurements,
+					from(InverterExtendedMeasurementsModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(44, from(InverterExtendedMeasurementsModelAccessor::getFixedBlockLength))
+			.as("Model length")
+			.returns(44, from(InverterExtendedMeasurementsModelAccessor::getModelLength))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void values_fronius() {
+		// GIVEN
 		InverterExtendedMeasurementsModelAccessor model = getTestModel(FRONIUS_TEST_DATA);
-		assertThat("PV connection status", model.getPvConnectionStatus(), is(equalTo(
-				EnumSet.of(InverterConnectionStatus.Available, InverterConnectionStatus.Operating))));
-		assertThat("Storage connection status", model.getStorageConnectionStatus(),
-				is(equalTo(Set.of())));
-		assertThat("ECP connected", model.isEcpConnected(), is(equalTo(false)));
-		assertThat("Active energy", model.getActiveEnergyExported(), is(equalTo(76476024L)));
-		assertThat("Apparent energy not accumulated", model.getApparentEnergyExported(),
-				is(nullValue()));
-		assertThat("Reactive energy Q1 not accumulated", model.getReactiveEnergyQ1(), is(nullValue()));
-		assertThat("Reactive energy Q2 not accumulated", model.getReactiveEnergyQ2(), is(nullValue()));
-		assertThat("Reactive energy Q3 not accumulated", model.getReactiveEnergyQ3(), is(nullValue()));
-		assertThat("Reactive energy Q4 not accumulated", model.getReactiveEnergyQ4(), is(nullValue()));
-		assertThat("Reactive power available not implemented", model.getReactivePowerAvailable(),
-				is(nullValue()));
-		assertThat("Active power available not implemented", model.getActivePowerAvailable(),
-				is(nullValue()));
-		assertThat("Setpoint limits not implemented", model.getSetpointLimitsReached(),
-				is(equalTo(Set.of())));
-		assertThat("Active controls", model.getActiveControls(), is(equalTo(Set.of())));
-		assertThat("Time source", model.getTimeSource(), is(equalTo("RTC")));
-		assertThat("Device time is the SunSpec epoch", model.getDeviceTime(),
-				is(equalTo(Instant.parse("2000-01-01T00:00:00Z"))));
-		assertThat("Ride-throughs not implemented", model.getActiveRideThroughs(),
-				is(equalTo(Set.of())));
-		assertThat("Isolation resistance", model.getIsolationResistance(), is(equalTo(0.0f)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("PV connection status")
+			.returns(EnumSet.of(InverterConnectionStatus.Available, InverterConnectionStatus.Operating),
+					from(InverterExtendedMeasurementsModelAccessor::getPvConnectionStatus))
+			.as("Storage connection status")
+			.returns(Set.of(),
+					from(InverterExtendedMeasurementsModelAccessor::getStorageConnectionStatus))
+			.as("ECP connected")
+			.returns(false, from(InverterExtendedMeasurementsModelAccessor::isEcpConnected))
+			.as("Active energy")
+			.returns(76476024L, from(InverterExtendedMeasurementsModelAccessor::getActiveEnergyExported))
+			.as("Apparent energy not accumulated")
+			.returns(null, from(InverterExtendedMeasurementsModelAccessor::getApparentEnergyExported))
+			.as("Reactive energy Q1 not accumulated")
+			.returns(null, from(InverterExtendedMeasurementsModelAccessor::getReactiveEnergyQ1))
+			.as("Reactive energy Q2 not accumulated")
+			.returns(null, from(InverterExtendedMeasurementsModelAccessor::getReactiveEnergyQ2))
+			.as("Reactive energy Q3 not accumulated")
+			.returns(null, from(InverterExtendedMeasurementsModelAccessor::getReactiveEnergyQ3))
+			.as("Reactive energy Q4 not accumulated")
+			.returns(null, from(InverterExtendedMeasurementsModelAccessor::getReactiveEnergyQ4))
+			.as("Reactive power available not implemented")
+			.returns(null, from(InverterExtendedMeasurementsModelAccessor::getReactivePowerAvailable))
+			.as("Active power available not implemented")
+			.returns(null, from(InverterExtendedMeasurementsModelAccessor::getActivePowerAvailable))
+			.as("Setpoint limits not implemented")
+			.returns(Set.of(), from(InverterExtendedMeasurementsModelAccessor::getSetpointLimitsReached))
+			.as("Active controls")
+			.returns(Set.of(), from(InverterExtendedMeasurementsModelAccessor::getActiveControls))
+			.as("Time source")
+			.returns("RTC", from(InverterExtendedMeasurementsModelAccessor::getTimeSource))
+			.as("Device time is the SunSpec epoch")
+			.returns(Instant.parse("2000-01-01T00:00:00Z"),
+					from(InverterExtendedMeasurementsModelAccessor::getDeviceTime))
+			.as("Ride-throughs not implemented")
+			.returns(Set.of(), from(InverterExtendedMeasurementsModelAccessor::getActiveRideThroughs))
+			.as("Isolation resistance")
+			.returns(0.0f, from(InverterExtendedMeasurementsModelAccessor::getIsolationResistance))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void values_sma() {
+		// GIVEN
 		InverterExtendedMeasurementsModelAccessor model = getTestModel(SMA_TEST_DATA);
-		assertThat("PV connection status", model.getPvConnectionStatus(), is(equalTo(
-				EnumSet.of(InverterConnectionStatus.Connected, InverterConnectionStatus.Operating))));
-		assertThat("Storage connection status not implemented", model.getStorageConnectionStatus(),
-				is(equalTo(Set.of())));
-		assertThat("ECP connected", model.isEcpConnected(), is(equalTo(true)));
-		assertThat("Active energy", model.getActiveEnergyExported(), is(equalTo(4418970L)));
-		assertThat("Apparent energy not accumulated", model.getApparentEnergyExported(),
-				is(nullValue()));
-		assertThat("Active controls not implemented", model.getActiveControls(), is(equalTo(Set.of())));
-		assertThat("Time source not implemented", model.getTimeSource(), is(nullValue()));
-		assertThat("Device time not implemented", model.getDeviceTime(), is(nullValue()));
-		assertThat("Isolation resistance", model.getIsolationResistance(), is(equalTo(2040000.0f)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("PV connection status")
+			.returns(EnumSet.of(InverterConnectionStatus.Connected, InverterConnectionStatus.Operating),
+					from(InverterExtendedMeasurementsModelAccessor::getPvConnectionStatus))
+			.as("Storage connection status not implemented")
+			.returns(Set.of(),
+					from(InverterExtendedMeasurementsModelAccessor::getStorageConnectionStatus))
+			.as("ECP connected")
+			.returns(true, from(InverterExtendedMeasurementsModelAccessor::isEcpConnected))
+			.as("Active energy")
+			.returns(4418970L, from(InverterExtendedMeasurementsModelAccessor::getActiveEnergyExported))
+			.as("Apparent energy not accumulated")
+			.returns(null, from(InverterExtendedMeasurementsModelAccessor::getApparentEnergyExported))
+			.as("Active controls not implemented")
+			.returns(Set.of(), from(InverterExtendedMeasurementsModelAccessor::getActiveControls))
+			.as("Time source not implemented")
+			.returns(null, from(InverterExtendedMeasurementsModelAccessor::getTimeSource))
+			.as("Device time not implemented")
+			.returns(null, from(InverterExtendedMeasurementsModelAccessor::getDeviceTime))
+			.as("Isolation resistance")
+			.returns(2040000.0f, from(InverterExtendedMeasurementsModelAccessor::getIsolationResistance))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void values_froniusSymo() {
+		// GIVEN
 		InverterExtendedMeasurementsModelAccessor model = getTestModel(FRONIUS_SYMO_TEST_DATA);
-		assertThat("PV connection status", model.getPvConnectionStatus(),
-				is(equalTo(EnumSet.of(InverterConnectionStatus.Connected,
-						InverterConnectionStatus.Available, InverterConnectionStatus.Operating))));
-		assertThat("ECP connected", model.isEcpConnected(), is(equalTo(true)));
-		assertThat("Active energy", model.getActiveEnergyExported(), is(equalTo(11937020L)));
-		assertThat("Time source", model.getTimeSource(), is(equalTo("RTC")));
-		assertThat("Device time", model.getDeviceTime(),
-				is(equalTo(Instant.parse("2019-10-05T16:36:59Z"))));
-		assertThat("Isolation resistance not implemented", model.getIsolationResistance(),
-				is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("PV connection status")
+			.returns(EnumSet.of(InverterConnectionStatus.Connected, InverterConnectionStatus.Available,
+					InverterConnectionStatus.Operating),
+					from(InverterExtendedMeasurementsModelAccessor::getPvConnectionStatus))
+			.as("ECP connected")
+			.returns(true, from(InverterExtendedMeasurementsModelAccessor::isEcpConnected))
+			.as("Active energy")
+			.returns(11937020L, from(InverterExtendedMeasurementsModelAccessor::getActiveEnergyExported))
+			.as("Time source")
+			.returns("RTC", from(InverterExtendedMeasurementsModelAccessor::getTimeSource))
+			.as("Device time")
+			.returns(Instant.parse("2019-10-05T16:36:59Z"),
+					from(InverterExtendedMeasurementsModelAccessor::getDeviceTime))
+			.as("Isolation resistance not implemented")
+			.returns(null, from(InverterExtendedMeasurementsModelAccessor::getIsolationResistance))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -170,33 +229,53 @@ public class InverterExtendedMeasurementsModelAccessorImplTests {
 				).findTypedModel(InverterExtendedMeasurementsModelAccessor.class);
 
 		// THEN
-		assertThat("PV connection status", model.getPvConnectionStatus(), is(
-				equalTo(EnumSet.of(InverterConnectionStatus.Connected, InverterConnectionStatus.Test))));
-		assertThat("Storage connection status", model.getStorageConnectionStatus(),
-				is(equalTo(EnumSet.of(InverterConnectionStatus.Available))));
-		assertThat("ECP connection status with MSB set not implemented", model.isEcpConnected(),
-				is(nullValue()));
-		assertThat("Active energy larger than a long not available", model.getActiveEnergyExported(),
-				is(nullValue()));
-		assertThat("Apparent energy", model.getApparentEnergyExported(), is(equalTo(65536L)));
-		assertThat("Reactive energy Q1", model.getReactiveEnergyQ1(), is(equalTo(1L)));
-		assertThat("Reactive energy Q2", model.getReactiveEnergyQ2(), is(equalTo(2L)));
-		assertThat("Reactive energy Q3", model.getReactiveEnergyQ3(), is(equalTo(3L)));
-		assertThat("Reactive energy Q4", model.getReactiveEnergyQ4(), is(equalTo(4L)));
-		assertThat("Reactive power available", model.getReactivePowerAvailable(), is(equalTo(-1250)));
-		assertThat("Active power available", model.getActivePowerAvailable(), is(equalTo(3450)));
-		assertThat("Setpoint limits", model.getSetpointLimitsReached(),
-				is(equalTo(EnumSet.of(InverterSetpointLimit.MaximumActivePower,
-						InverterSetpointLimit.MinimumPowerFactorQ1,
-						InverterSetpointLimit.MinimumPowerFactorQ4))));
-		assertThat("Active controls", model.getActiveControls(), is(equalTo(EnumSet
-				.of(InverterControlFunction.FixedPowerFactor, InverterControlFunction.Scheduled))));
-		assertThat("Time source", model.getTimeSource(), is(equalTo("NTP")));
-		assertThat("Device time", model.getDeviceTime(),
-				is(equalTo(Instant.parse("2026-10-06T07:30:00Z"))));
-		assertThat("Ride-throughs", model.getActiveRideThroughs(), is(equalTo(
-				EnumSet.of(InverterRideThrough.HighVoltage, InverterRideThrough.HighFrequency))));
-		assertThat("Isolation resistance", model.getIsolationResistance(), is(equalTo(1500000.0f)));
+		// @formatter:off
+		then(model)
+			.as("PV connection status")
+			.returns(EnumSet.of(InverterConnectionStatus.Connected, InverterConnectionStatus.Test),
+					from(InverterExtendedMeasurementsModelAccessor::getPvConnectionStatus))
+			.as("Storage connection status")
+			.returns(EnumSet.of(InverterConnectionStatus.Available),
+					from(InverterExtendedMeasurementsModelAccessor::getStorageConnectionStatus))
+			.as("ECP connection status with MSB set not implemented")
+			.returns(null, from(InverterExtendedMeasurementsModelAccessor::isEcpConnected))
+			.as("Active energy larger than a long not available")
+			.returns(null, from(InverterExtendedMeasurementsModelAccessor::getActiveEnergyExported))
+			.as("Apparent energy")
+			.returns(65536L, from(InverterExtendedMeasurementsModelAccessor::getApparentEnergyExported))
+			.as("Reactive energy Q1")
+			.returns(1L, from(InverterExtendedMeasurementsModelAccessor::getReactiveEnergyQ1))
+			.as("Reactive energy Q2")
+			.returns(2L, from(InverterExtendedMeasurementsModelAccessor::getReactiveEnergyQ2))
+			.as("Reactive energy Q3")
+			.returns(3L, from(InverterExtendedMeasurementsModelAccessor::getReactiveEnergyQ3))
+			.as("Reactive energy Q4")
+			.returns(4L, from(InverterExtendedMeasurementsModelAccessor::getReactiveEnergyQ4))
+			.as("Reactive power available")
+			.returns(-1250, from(InverterExtendedMeasurementsModelAccessor::getReactivePowerAvailable))
+			.as("Active power available")
+			.returns(3450, from(InverterExtendedMeasurementsModelAccessor::getActivePowerAvailable))
+			.as("Setpoint limits")
+			.returns(EnumSet.of(InverterSetpointLimit.MaximumActivePower,
+					InverterSetpointLimit.MinimumPowerFactorQ1,
+					InverterSetpointLimit.MinimumPowerFactorQ4),
+					from(InverterExtendedMeasurementsModelAccessor::getSetpointLimitsReached))
+			.as("Active controls")
+			.returns(EnumSet.of(InverterControlFunction.FixedPowerFactor,
+					InverterControlFunction.Scheduled),
+					from(InverterExtendedMeasurementsModelAccessor::getActiveControls))
+			.as("Time source")
+			.returns("NTP", from(InverterExtendedMeasurementsModelAccessor::getTimeSource))
+			.as("Device time")
+			.returns(Instant.parse("2026-10-06T07:30:00Z"),
+					from(InverterExtendedMeasurementsModelAccessor::getDeviceTime))
+			.as("Ride-throughs")
+			.returns(EnumSet.of(InverterRideThrough.HighVoltage, InverterRideThrough.HighFrequency),
+					from(InverterExtendedMeasurementsModelAccessor::getActiveRideThroughs))
+			.as("Isolation resistance")
+			.returns(1500000.0f, from(InverterExtendedMeasurementsModelAccessor::getIsolationResistance))
+			;
+		// @formatter:on
 	}
 
 }

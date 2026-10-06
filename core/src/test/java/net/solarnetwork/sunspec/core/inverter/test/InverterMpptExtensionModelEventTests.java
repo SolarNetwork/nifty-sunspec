@@ -22,11 +22,8 @@
 
 package net.solarnetwork.sunspec.core.inverter.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.EnumSet;
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.api.inverter.InverterMpptExtensionModelEvent;
 
@@ -40,39 +37,63 @@ public class InverterMpptExtensionModelEventTests {
 
 	@Test
 	public void forBitmask() {
-		assertThat("Events from bits", InverterMpptExtensionModelEvent.forBitmask(0x8001L),
-				is(equalTo(EnumSet.of(InverterMpptExtensionModelEvent.GroundFault,
-						InverterMpptExtensionModelEvent.ArcDetection))));
+		// @formatter:off
+		then(InverterMpptExtensionModelEvent.forBitmask(0x8001L))
+			.as("Events from bits")
+			.isEqualTo(EnumSet.of(InverterMpptExtensionModelEvent.GroundFault,
+					InverterMpptExtensionModelEvent.ArcDetection))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_highestEvent() {
-		assertThat("Highest defined event", InverterMpptExtensionModelEvent.forBitmask(0x400000L),
-				is(equalTo(EnumSet.of(InverterMpptExtensionModelEvent.DcOverCurrent))));
+		// @formatter:off
+		then(InverterMpptExtensionModelEvent.forBitmask(0x400000L))
+			.as("Highest defined event")
+			.isEqualTo(EnumSet.of(InverterMpptExtensionModelEvent.DcOverCurrent))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_undefinedBits() {
-		assertThat("Undefined bits ignored", InverterMpptExtensionModelEvent.forBitmask(0x5L),
-				is(equalTo(EnumSet.of(InverterMpptExtensionModelEvent.GroundFault))));
+		// @formatter:off
+		then(InverterMpptExtensionModelEvent.forBitmask(0x5L))
+			.as("Undefined bits ignored")
+			.isEqualTo(EnumSet.of(InverterMpptExtensionModelEvent.GroundFault))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_zero() {
-		assertThat("No events", InverterMpptExtensionModelEvent.forBitmask(0L), is(equalTo(Set.of())));
+		// @formatter:off
+		then(InverterMpptExtensionModelEvent.forBitmask(0L))
+			.as("No events")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_notImplemented() {
-		assertThat("Not implemented", InverterMpptExtensionModelEvent.forBitmask(0xFFFFFFFFL),
-				is(equalTo(Set.of())));
+		// @formatter:off
+		then(InverterMpptExtensionModelEvent.forBitmask(0xFFFFFFFFL))
+			.as("Not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_mostSignificantBit() {
-		assertThat("Most significant bit set means not implemented",
-				InverterMpptExtensionModelEvent.forBitmask(0x80000000L | 0x8001L),
-				is(equalTo(Set.of())));
+		// @formatter:off
+		then(InverterMpptExtensionModelEvent.forBitmask(0x80000000L | 0x8001L))
+			.as("Most significant bit set means not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 }

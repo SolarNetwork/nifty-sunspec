@@ -22,13 +22,10 @@
 
 package net.solarnetwork.sunspec.core.der.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.BDDAssertions.catchThrowable;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
+import static org.assertj.core.api.BDDAssertions.thenThrownBy;
 import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -79,75 +76,134 @@ public class DerVoltVarModelAccessorImpl_705_01Tests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), is(instanceOf(DerVoltVarModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(DerVoltVarModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		DerVoltVarModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(470)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(BLOCK_ADDRESS)));
-		assertThat("Model ID", model.getModelId(), is(equalTo(DerModelId.VoltVar)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(13)));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				is(equalTo(18)));
-		assertThat("Model repeating instance count", model.getRepeatingBlockInstanceCount(),
-				is(equalTo(3)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(67)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(470, from(DerVoltVarModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(BLOCK_ADDRESS, from(DerVoltVarModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(DerModelId.VoltVar, from(DerVoltVarModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(13, from(DerVoltVarModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(18, from(DerVoltVarModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model repeating instance count")
+			.returns(3, from(DerVoltVarModelAccessor::getRepeatingBlockInstanceCount))
+			.as("Model length")
+			.returns(67, from(DerVoltVarModelAccessor::getModelLength))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void curveManagement() {
+		// GIVEN
 		DerVoltVarModelAccessor model = getTestModel();
-		assertThat("Enabled", model.isEnabled(), is(equalTo(false)));
-		assertThat("Curve count", model.getCurveCount(), is(equalTo(3)));
-		assertThat("Curve point count", model.getCurvePointCount(), is(equalTo(4)));
-		assertThat("Adopt curve request", model.getAdoptCurveRequest(), is(equalTo(0)));
-		assertThat("Adopt curve result", model.getAdoptCurveResult(),
-				is(equalTo(DerAdoptResult.InProgress)));
-		assertThat("Reversion time not implemented", model.getReversionTime(), is(nullValue()));
-		assertThat("Reversion time remaining not implemented", model.getReversionTimeRemaining(),
-				is(nullValue()));
-		assertThat("Reversion curve not implemented", model.getReversionCurve(), is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Enabled")
+			.returns(false, from(DerVoltVarModelAccessor::isEnabled))
+			.as("Curve count")
+			.returns(3, from(DerVoltVarModelAccessor::getCurveCount))
+			.as("Curve point count")
+			.returns(4, from(DerVoltVarModelAccessor::getCurvePointCount))
+			.as("Adopt curve request")
+			.returns(0, from(DerVoltVarModelAccessor::getAdoptCurveRequest))
+			.as("Adopt curve result")
+			.returns(DerAdoptResult.InProgress, from(DerVoltVarModelAccessor::getAdoptCurveResult))
+			.as("Reversion time not implemented")
+			.returns(null, from(DerVoltVarModelAccessor::getReversionTime))
+			.as("Reversion time remaining not implemented")
+			.returns(null, from(DerVoltVarModelAccessor::getReversionTimeRemaining))
+			.as("Reversion curve not implemented")
+			.returns(null, from(DerVoltVarModelAccessor::getReversionCurve))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void activeCurve() {
+		// WHEN
 		List<VoltVarCurve> curves = getTestModel().getCurves();
-		assertThat("Curves", curves, hasSize(3));
+
+		// THEN
+		// @formatter:off
+		then(curves)
+			.as("Curves")
+			.hasSize(3)
+			;
+		// @formatter:on
 
 		VoltVarCurve curve = curves.get(0);
-		assertThat("Index", curve.getIndex(), is(equalTo(1)));
-		assertThat("Read-only", curve.isReadOnly(), is(equalTo(true)));
-		assertThat("Active point count", curve.getActivePointCount(), is(equalTo(4)));
-		assertThat("Dependent reference", curve.getDependentReference(),
-				is(equalTo(DerReactivePowerReference.MaximumActivePowerPercent)));
-		assertThat("Power priority", curve.getPowerPriority(),
-				is(equalTo(DerReactivePowerPriority.ActivePower)));
-		assertThat("Voltage reference", curve.getVoltageReference(), is(equalTo(100.0f)));
-		assertThat("Autonomous voltage reference", curve.getAutonomousVoltageReference(),
-				is(equalTo(100.0f)));
-		assertThat("Autonomous voltage reference enabled", curve.isAutonomousVoltageReferenceEnabled(),
-				is(equalTo(false)));
-		assertThat("Autonomous voltage reference time constant",
-				curve.getAutonomousVoltageReferenceTimeConstant(), is(equalTo(301)));
-		assertThat("Open loop response time", curve.getOpenLoopResponseTime(), is(equalTo(10.0f)));
-		assertThat("Points", curve.getPoints(),
-				is(equalTo(List.of(new DerCurvePoint(90.0f, 25.0f), new DerCurvePoint(100.0f, 0.0f),
-						new DerCurvePoint(100.0f, 0.0f), new DerCurvePoint(110.0f, -25.0f)))));
+		// @formatter:off
+		then(curve)
+			.as("Index")
+			.returns(1, from(VoltVarCurve::getIndex))
+			.as("Read-only")
+			.returns(true, from(VoltVarCurve::isReadOnly))
+			.as("Active point count")
+			.returns(4, from(VoltVarCurve::getActivePointCount))
+			.as("Dependent reference")
+			.returns(DerReactivePowerReference.MaximumActivePowerPercent,
+					from(VoltVarCurve::getDependentReference))
+			.as("Power priority")
+			.returns(DerReactivePowerPriority.ActivePower, from(VoltVarCurve::getPowerPriority))
+			.as("Voltage reference")
+			.returns(100.0f, from(VoltVarCurve::getVoltageReference))
+			.as("Autonomous voltage reference")
+			.returns(100.0f, from(VoltVarCurve::getAutonomousVoltageReference))
+			.as("Autonomous voltage reference enabled")
+			.returns(false, from(VoltVarCurve::isAutonomousVoltageReferenceEnabled))
+			.as("Autonomous voltage reference time constant")
+			.returns(301, from(VoltVarCurve::getAutonomousVoltageReferenceTimeConstant))
+			.as("Open loop response time")
+			.returns(10.0f, from(VoltVarCurve::getOpenLoopResponseTime))
+			.as("Points")
+			.returns(List.of(new DerCurvePoint(90.0f, 25.0f), new DerCurvePoint(100.0f, 0.0f),
+					new DerCurvePoint(100.0f, 0.0f), new DerCurvePoint(110.0f, -25.0f)),
+					from(VoltVarCurve::getPoints))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void storedCurves() {
+		// WHEN
 		List<VoltVarCurve> curves = getTestModel().getCurves();
+
+		// THEN
 		for ( int i = 1; i < 3; i++ ) {
 			VoltVarCurve curve = curves.get(i);
 			String prefix = "Curve " + (i + 1);
-			assertThat(prefix + " index", curve.getIndex(), is(equalTo(i + 1)));
-			assertThat(prefix + " read-only", curve.isReadOnly(), is(equalTo(false)));
-			assertThat(prefix + " points", curve.getPoints(),
-					is(equalTo(List.of(new DerCurvePoint(0.0f, 0.0f), new DerCurvePoint(0.0f, 0.0f),
-							new DerCurvePoint(0.0f, 0.0f), new DerCurvePoint(0.0f, 0.0f)))));
+			// @formatter:off
+			then(curve)
+				.as(prefix + " index")
+				.returns(i + 1, from(VoltVarCurve::getIndex))
+				.as(prefix + " read-only")
+				.returns(false, from(VoltVarCurve::isReadOnly))
+				.as(prefix + " points")
+				.returns(List.of(new DerCurvePoint(0.0f, 0.0f), new DerCurvePoint(0.0f, 0.0f),
+						new DerCurvePoint(0.0f, 0.0f), new DerCurvePoint(0.0f, 0.0f)),
+						from(VoltVarCurve::getPoints))
+				;
+			// @formatter:on
 		}
 	}
 
@@ -170,23 +226,35 @@ public class DerVoltVarModelAccessorImpl_705_01Tests {
 		// THEN
 		List<VoltVarCurve> curves = discoverModel(conn).getCurves();
 		VoltVarCurve device = curves.get(1);
-		assertThat("Dependent reference", device.getDependentReference(),
-				is(equalTo(DerReactivePowerReference.MaximumReactivePowerPercent)));
-		assertThat("Power priority", device.getPowerPriority(),
-				is(equalTo(DerReactivePowerPriority.ReactivePower)));
-		assertThat("Voltage reference", device.getVoltageReference(), is(equalTo(101.5f)));
-		assertThat("Autonomous voltage reference enabled", device.isAutonomousVoltageReferenceEnabled(),
-				is(equalTo(true)));
-		assertThat("Autonomous voltage reference time constant",
-				device.getAutonomousVoltageReferenceTimeConstant(), is(equalTo(120)));
-		assertThat("Open loop response time", device.getOpenLoopResponseTime(), is(equalTo(5.5f)));
-		assertThat("Points", device.getPoints(),
-				is(equalTo(List.of(new DerCurvePoint(92.0f, 30.0f), new DerCurvePoint(98.0f, 0.0f),
-						new DerCurvePoint(102.0f, 0.0f), new DerCurvePoint(108.0f, -30.0f)))));
-		assertThat("Active curve unchanged", curves.get(0).getPoints().get(0),
-				is(equalTo(new DerCurvePoint(90.0f, 25.0f))));
-		assertThat("Curve 3 unchanged", curves.get(2).getPoints().get(0),
-				is(equalTo(new DerCurvePoint(0.0f, 0.0f))));
+		// @formatter:off
+		then(device)
+			.as("Dependent reference")
+			.returns(DerReactivePowerReference.MaximumReactivePowerPercent,
+					from(VoltVarCurve::getDependentReference))
+			.as("Power priority")
+			.returns(DerReactivePowerPriority.ReactivePower, from(VoltVarCurve::getPowerPriority))
+			.as("Voltage reference")
+			.returns(101.5f, from(VoltVarCurve::getVoltageReference))
+			.as("Autonomous voltage reference enabled")
+			.returns(true, from(VoltVarCurve::isAutonomousVoltageReferenceEnabled))
+			.as("Autonomous voltage reference time constant")
+			.returns(120, from(VoltVarCurve::getAutonomousVoltageReferenceTimeConstant))
+			.as("Open loop response time")
+			.returns(5.5f, from(VoltVarCurve::getOpenLoopResponseTime))
+			.as("Points")
+			.returns(List.of(new DerCurvePoint(92.0f, 30.0f), new DerCurvePoint(98.0f, 0.0f),
+					new DerCurvePoint(102.0f, 0.0f), new DerCurvePoint(108.0f, -30.0f)),
+					from(VoltVarCurve::getPoints))
+			;
+		then(curves.get(0).getPoints().get(0))
+			.as("Active curve unchanged")
+			.isEqualTo(new DerCurvePoint(90.0f, 25.0f))
+			;
+		then(curves.get(2).getPoints().get(0))
+			.as("Curve 3 unchanged")
+			.isEqualTo(new DerCurvePoint(0.0f, 0.0f))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -200,8 +268,12 @@ public class DerVoltVarModelAccessorImpl_705_01Tests {
 				new DerCurvePoint(102.0f, 0.0f), new DerCurvePoint(108.0f, -30.0f)));
 
 		// THEN
-		assertThat("Points written in one request, then the active point count", conn.getWrites(),
-				is(equalTo(List.of(List.of(CURVE_2_POINTS_ADDRESS, 8), List.of(CURVE_2_ADDRESS, 1)))));
+		// @formatter:off
+		then(conn.getWrites())
+			.as("Points written in one request, then the active point count")
+			.isEqualTo(List.of(List.of(CURVE_2_POINTS_ADDRESS, 8), List.of(CURVE_2_ADDRESS, 1)))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -216,10 +288,15 @@ public class DerVoltVarModelAccessorImpl_705_01Tests {
 
 		// THEN
 		VoltVarCurve device = discoverModel(conn).getCurves().get(1);
-		assertThat("Active point count", device.getActivePointCount(), is(equalTo(3)));
-		assertThat("Active points", device.getPoints(),
-				is(equalTo(List.of(new DerCurvePoint(95.0f, 10.0f), new DerCurvePoint(100.0f, 0.0f),
-						new DerCurvePoint(105.0f, -10.0f)))));
+		// @formatter:off
+		then(device)
+			.as("Active point count")
+			.returns(3, from(VoltVarCurve::getActivePointCount))
+			.as("Active points")
+			.returns(List.of(new DerCurvePoint(95.0f, 10.0f), new DerCurvePoint(100.0f, 0.0f),
+					new DerCurvePoint(105.0f, -10.0f)), from(VoltVarCurve::getPoints))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -232,9 +309,16 @@ public class DerVoltVarModelAccessorImpl_705_01Tests {
 		curve.setActivePointCount(conn, 2);
 
 		// THEN
-		assertThat("Active point count written", conn.getWrites(),
-				is(equalTo(List.of(List.of(CURVE_2_ADDRESS, 1)))));
-		assertThat("Active point count", discoverModel(conn).getCurves().get(1).getPoints(), hasSize(2));
+		// @formatter:off
+		then(conn.getWrites())
+			.as("Active point count written")
+			.isEqualTo(List.of(List.of(CURVE_2_ADDRESS, 1)))
+			;
+		then(discoverModel(conn).getCurves().get(1).getPoints())
+			.as("Active point count")
+			.hasSize(2)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -245,21 +329,22 @@ public class DerVoltVarModelAccessorImpl_705_01Tests {
 		DerCurvePoint p = new DerCurvePoint(100.0f, 0.0f);
 
 		// THEN
+		// @formatter:off
 		for ( List<DerCurvePoint> points : List.of(List.<DerCurvePoint> of(), List.of(p, p, p, p, p)) ) {
-			try {
-				curve.setPoints(conn, points);
-				fail("Point count " + points.size() + " should be rejected.");
-			} catch ( IllegalArgumentException e ) {
-				// expected
-			}
+			thenThrownBy(() -> curve.setPoints(conn, points))
+				.as("Point count %d rejected", points.size())
+				.isInstanceOf(IllegalArgumentException.class)
+				;
 		}
-		try {
-			curve.setActivePointCount(conn, 5);
-			fail("Active point count above the curve point count should be rejected.");
-		} catch ( IllegalArgumentException e ) {
-			// expected
-		}
-		assertThat("Nothing written", conn.getWrites(), is(equalTo(List.of())));
+		thenThrownBy(() -> curve.setActivePointCount(conn, 5))
+			.as("Active point count above the curve point count rejected")
+			.isInstanceOf(IllegalArgumentException.class)
+			;
+		then(conn.getWrites())
+			.as("Nothing written")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -269,16 +354,20 @@ public class DerVoltVarModelAccessorImpl_705_01Tests {
 		VoltVarCurve curve = discoverModel(conn).getCurves().get(1);
 
 		// WHEN
-		try {
-			curve.setPoints(conn,
-					List.of(new DerCurvePoint(100.0f, 0.0f), new DerCurvePoint(7000.0f, 0.0f)));
-			fail("Scaled value larger than uint16 should be rejected.");
-		} catch ( IllegalArgumentException e ) {
-			// expected
-		}
+		Throwable t = catchThrowable(() -> curve.setPoints(conn,
+				List.of(new DerCurvePoint(100.0f, 0.0f), new DerCurvePoint(7000.0f, 0.0f))));
 
 		// THEN
-		assertThat("Nothing written", conn.getWrites(), is(equalTo(List.of())));
+		// @formatter:off
+		then(t)
+			.as("Scaled value larger than uint16 rejected")
+			.isInstanceOf(IllegalArgumentException.class)
+			;
+		then(conn.getWrites())
+			.as("Nothing written")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -288,19 +377,21 @@ public class DerVoltVarModelAccessorImpl_705_01Tests {
 		VoltVarCurve curve = discoverModel(conn).getCurves().get(0);
 
 		// THEN
-		try {
-			curve.setPoints(conn, List.of(new DerCurvePoint(100.0f, 0.0f)));
-			fail("Writing points to the read-only curve should be rejected.");
-		} catch ( UnsupportedOperationException e ) {
-			// expected
-		}
-		try {
-			curve.setDependentReference(conn, DerReactivePowerReference.MaximumApparentPowerPercent);
-			fail("Writing a setting to the read-only curve should be rejected.");
-		} catch ( UnsupportedOperationException e ) {
-			// expected
-		}
-		assertThat("Nothing written", conn.getWrites(), is(equalTo(List.of())));
+		// @formatter:off
+		thenThrownBy(() -> curve.setPoints(conn, List.of(new DerCurvePoint(100.0f, 0.0f))))
+			.as("Writing points to the read-only curve rejected")
+			.isInstanceOf(UnsupportedOperationException.class)
+			;
+		thenThrownBy(() -> curve.setDependentReference(conn,
+				DerReactivePowerReference.MaximumApparentPowerPercent))
+			.as("Writing a setting to the read-only curve rejected")
+			.isInstanceOf(UnsupportedOperationException.class)
+			;
+		then(conn.getWrites())
+			.as("Nothing written")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -313,9 +404,16 @@ public class DerVoltVarModelAccessorImpl_705_01Tests {
 		model.adoptCurve(conn, 2);
 
 		// THEN
-		assertThat("Adopt curve request written", conn.getWrites(),
-				is(equalTo(List.of(List.of(BLOCK_ADDRESS + 1, 1)))));
-		assertThat("Adopt curve request", discoverModel(conn).getAdoptCurveRequest(), is(equalTo(2)));
+		// @formatter:off
+		then(conn.getWrites())
+			.as("Adopt curve request written")
+			.isEqualTo(List.of(List.of(BLOCK_ADDRESS + 1, 1)))
+			;
+		then(discoverModel(conn).getAdoptCurveRequest())
+			.as("Adopt curve request")
+			.isEqualTo(2)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -325,15 +423,18 @@ public class DerVoltVarModelAccessorImpl_705_01Tests {
 		DerVoltVarModelAccessor model = discoverModel(conn);
 
 		// THEN
+		// @formatter:off
 		for ( int index : new int[] { 0, 1, 4 } ) {
-			try {
-				model.adoptCurve(conn, index);
-				fail("Curve index " + index + " should be rejected.");
-			} catch ( IllegalArgumentException e ) {
-				// expected
-			}
+			thenThrownBy(() -> model.adoptCurve(conn, index))
+				.as("Curve index %d rejected", index)
+				.isInstanceOf(IllegalArgumentException.class)
+				;
 		}
-		assertThat("Nothing written", conn.getWrites(), is(equalTo(List.of())));
+		then(conn.getWrites())
+			.as("Nothing written")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -349,9 +450,16 @@ public class DerVoltVarModelAccessorImpl_705_01Tests {
 
 		// THEN
 		DerVoltVarModelAccessor device = discoverModel(conn);
-		assertThat("Enabled", device.isEnabled(), is(equalTo(true)));
-		assertThat("Reversion time", device.getReversionTime(), is(equalTo(600L)));
-		assertThat("Reversion curve", device.getReversionCurve(), is(equalTo(3)));
+		// @formatter:off
+		then(device)
+			.as("Enabled")
+			.returns(true, from(DerVoltVarModelAccessor::isEnabled))
+			.as("Reversion time")
+			.returns(600L, from(DerVoltVarModelAccessor::getReversionTime))
+			.as("Reversion curve")
+			.returns(3, from(DerVoltVarModelAccessor::getReversionCurve))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -361,15 +469,18 @@ public class DerVoltVarModelAccessorImpl_705_01Tests {
 		DerVoltVarModelAccessor model = discoverModel(conn);
 
 		// THEN
+		// @formatter:off
 		for ( int index : new int[] { 0, 4 } ) {
-			try {
-				model.setReversionCurve(conn, index);
-				fail("Curve index " + index + " should be rejected.");
-			} catch ( IllegalArgumentException e ) {
-				// expected
-			}
+			thenThrownBy(() -> model.setReversionCurve(conn, index))
+				.as("Curve index %d rejected", index)
+				.isInstanceOf(IllegalArgumentException.class)
+				;
 		}
-		assertThat("Nothing written", conn.getWrites(), is(equalTo(List.of())));
+		then(conn.getWrites())
+			.as("Nothing written")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 }

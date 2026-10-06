@@ -22,9 +22,8 @@
 
 package net.solarnetwork.sunspec.core.environmental.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,34 +56,69 @@ public class IrradianceModelAccessorImpl_302_01Tests {
 
 	@Test
 	public void findTypedModel() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
+
+		// WHEN
 		IrradianceModelAccessor accessor = data.findTypedModel(IrradianceModelAccessor.class);
-		assertThat(accessor, instanceOf(IrradianceModelAccessorImpl.class));
+
+		// THEN
+		// @formatter:off
+		then(accessor)
+			.as("Model found by accessor type")
+			.isInstanceOf(IrradianceModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		IrradianceModelAccessor model = getTestDataInstance()
 				.findTypedModel(IrradianceModelAccessor.class);
-		assertThat("Model base address", model.getBaseAddress(), equalTo(83));
-		assertThat("Model block address", model.getBlockAddress(), equalTo(85));
-		assertThat("Model ID", model.getModelId(), equalTo(EnvironmentalModelId.Irradiance));
-		assertThat("Model fixed length", model.getFixedBlockLength(), equalTo(5));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				equalTo(0));
-		assertThat("Model length", model.getModelLength(), equalTo(5));
-		assertThat("Model length", model.getRepeatingBlockInstanceCount(), equalTo(0));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(83, from(IrradianceModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(85, from(IrradianceModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(EnvironmentalModelId.Irradiance, from(IrradianceModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(5, from(IrradianceModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(0, from(IrradianceModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(5, from(IrradianceModelAccessor::getModelLength))
+			.as("Model length")
+			.returns(0, from(IrradianceModelAccessor::getRepeatingBlockInstanceCount))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void data() {
+		// GIVEN
 		IrradianceModelAccessor model = getTestDataInstance()
 				.findTypedModel(IrradianceModelAccessor.class);
-		assertThat("GHI", model.getGlobalHorizontalIrradiance(), equalTo(257));
-		assertThat("POAI", model.getPlaneOfArrayIrradiance(), equalTo(258));
-		assertThat("DFI", model.getDiffuseIrradiance(), equalTo(259));
-		assertThat("DNI", model.getDirectNormalIrradiance(), equalTo(260));
-		assertThat("OTI", model.getOtherIrradiance(), equalTo(261));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("GHI")
+			.returns(257, from(IrradianceModelAccessor::getGlobalHorizontalIrradiance))
+			.as("POAI")
+			.returns(258, from(IrradianceModelAccessor::getPlaneOfArrayIrradiance))
+			.as("DFI")
+			.returns(259, from(IrradianceModelAccessor::getDiffuseIrradiance))
+			.as("DNI")
+			.returns(260, from(IrradianceModelAccessor::getDirectNormalIrradiance))
+			.as("OTI")
+			.returns(261, from(IrradianceModelAccessor::getOtherIrradiance))
+			;
+		// @formatter:on
 	}
 
 }

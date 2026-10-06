@@ -22,11 +22,8 @@
 
 package net.solarnetwork.sunspec.modbus.support.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -80,32 +77,71 @@ public class ModelDataTests {
 
 	@Test
 	public void findTypedModel() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
+
+		// WHEN
 		CommonModelAccessor commonAccessor = data.findTypedModel(CommonModelAccessor.class);
-		assertThat(commonAccessor, instanceOf(ModelData.class));
+
+		// THEN
+		// @formatter:off
+		then(commonAccessor)
+			.as("Model found by accessor type")
+			.isInstanceOf(ModelData.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		ModelData data = getTestDataInstance();
-		assertThat("Model base address", data.getBaseAddress(), equalTo(40002));
-		assertThat("Model ID", data.getModelId().getId(), equalTo(CommonModelId.CommonModel.getId()));
-		assertThat("Model fixed length", data.getFixedBlockLength(), equalTo(65));
-		assertThat("Model repeating instance length", data.getRepeatingBlockInstanceLength(),
-				equalTo(0));
-		assertThat("Model length", data.getModelLength(), equalTo(65));
-		assertThat("Model length", data.getRepeatingBlockInstanceCount(), equalTo(0));
+
+		// THEN
+		// @formatter:off
+		then(data.getBaseAddress())
+			.as("Model base address")
+			.isEqualTo(40002)
+			;
+		then(data.getModelId().getId())
+			.as("Model ID")
+			.isEqualTo(CommonModelId.CommonModel.getId())
+			;
+		then(data)
+			.as("Model fixed length")
+			.returns(65, from(ModelData::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(0, from(ModelData::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(65, from(ModelData::getModelLength))
+			.as("Model length")
+			.returns(0, from(ModelData::getRepeatingBlockInstanceCount))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void commonModelProperties() {
+		// GIVEN
 		CommonModelAccessor data = getTestDataInstance();
-		assertThat("Manufacturer", data.getManufacturer(), equalTo("Veris Industries"));
-		assertThat("Model name", data.getModelName(), equalTo("E51C2"));
-		assertThat("Options", data.getOptions(), equalTo("None"));
-		assertThat("Version", data.getVersion(), equalTo("2.103"));
-		assertThat("Serial number", data.getSerialNumber(), equalTo("4E390476"));
-		assertThat("Device address", data.getDeviceAddress(), equalTo(10));
+
+		// THEN
+		// @formatter:off
+		then(data)
+			.as("Manufacturer")
+			.returns("Veris Industries", from(CommonModelAccessor::getManufacturer))
+			.as("Model name")
+			.returns("E51C2", from(CommonModelAccessor::getModelName))
+			.as("Options")
+			.returns("None", from(CommonModelAccessor::getOptions))
+			.as("Version")
+			.returns("2.103", from(CommonModelAccessor::getVersion))
+			.as("Serial number")
+			.returns("4E390476", from(CommonModelAccessor::getSerialNumber))
+			.as("Device address")
+			.returns(10, from(CommonModelAccessor::getDeviceAddress))
+			;
+		// @formatter:on
 	}
 
 	private static ModelData stringData(byte[] bytes) {
@@ -124,45 +160,88 @@ public class ModelDataTests {
 
 	@Test
 	public void stringValue_utf8() {
+		// GIVEN
 		ModelData data = stringData("Größe".getBytes(StandardCharsets.UTF_8));
-		assertThat("UTF-8 decoded", data.getStringValue(CommonModelRegister.Options, 0),
-				is(equalTo("Größe")));
+
+		// THEN
+		// @formatter:off
+		then(data.getStringValue(CommonModelRegister.Options, 0))
+			.as("UTF-8 decoded")
+			.isEqualTo("Größe")
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void stringValue_latin1() {
+		// GIVEN
 		// a Latin-1 encoded e-acute is not valid UTF-8
 		ModelData data = stringData(new byte[] { 'C', 'a', 'f', (byte) 0xE9 });
-		assertThat("Invalid UTF-8 replaced", data.getStringValue(CommonModelRegister.Options, 0),
-				is(equalTo("Caf�")));
+
+		// THEN
+		// @formatter:off
+		then(data.getStringValue(CommonModelRegister.Options, 0))
+			.as("Invalid UTF-8 replaced")
+			.isEqualTo("Caf�")
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void stringValue_nullTerminated() {
+		// GIVEN
 		ModelData data = stringData(new byte[] { 'A', 'B', 'C', 0, 'x', 'y', 'z' });
-		assertThat("Bytes after NULL ignored", data.getStringValue(CommonModelRegister.Options, 0),
-				is(equalTo("ABC")));
+
+		// THEN
+		// @formatter:off
+		then(data.getStringValue(CommonModelRegister.Options, 0))
+			.as("Bytes after NULL ignored")
+			.isEqualTo("ABC")
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void stringValue_trimmed() {
+		// GIVEN
 		ModelData data = stringData("  ABC ".getBytes(StandardCharsets.UTF_8));
-		assertThat("Whitespace removed", data.getStringValue(CommonModelRegister.Options, 0),
-				is(equalTo("ABC")));
+
+		// THEN
+		// @formatter:off
+		then(data.getStringValue(CommonModelRegister.Options, 0))
+			.as("Whitespace removed")
+			.isEqualTo("ABC")
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void stringValue_empty() {
+		// GIVEN
 		// SunSpec recommends 0x0080 in the first register to represent an empty string
 		ModelData data = stringData(new byte[] { 0x00, (byte) 0x80 });
-		assertThat("Empty string", data.getStringValue(CommonModelRegister.Options, 0), is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(data.getStringValue(CommonModelRegister.Options, 0))
+			.as("Empty string")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void stringValue_notImplemented() {
+		// GIVEN
 		ModelData data = stringData(new byte[0]);
-		assertThat("All NULL not implemented", data.getStringValue(CommonModelRegister.Options, 0),
-				is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(data.getStringValue(CommonModelRegister.Options, 0))
+			.as("All NULL not implemented")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 }

@@ -32,13 +32,8 @@ import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int32;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt32;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt64;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.comparesEqualTo;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.BDDAssertions.then;
+import static org.assertj.core.api.BDDAssertions.thenThrownBy;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -193,14 +188,17 @@ public class BaseModelAccessorTests {
 	}
 
 	private void assertWriteRejected(String message, Class<? extends RuntimeException> errorType,
-			WriteAction action) throws IOException {
-		try {
-			action.write();
-			fail(message);
-		} catch ( RuntimeException e ) {
-			assertThat(message, e, is(instanceOf(errorType)));
-		}
-		assertThat("Nothing written to device", deviceData.size(), is(equalTo(0)));
+			WriteAction action) {
+		// @formatter:off
+		thenThrownBy(action::write)
+			.as(message)
+			.isInstanceOf(errorType)
+			;
+		then(deviceData.size())
+			.as("Nothing written to device")
+			.isEqualTo(0)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -212,7 +210,12 @@ public class BaseModelAccessorTests {
 		Number result = accessor.getValue(TestRegister.UInt32Value);
 
 		// THEN
-		assertThat("uint32 0xFFFFFFFF is not implemented", result, is(nullValue()));
+		// @formatter:off
+		then(result)
+			.as("uint32 0xFFFFFFFF is not implemented")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -224,7 +227,12 @@ public class BaseModelAccessorTests {
 		Number result = accessor.getValue(TestRegister.UInt32Value);
 
 		// THEN
-		assertThat("uint32 0xFFFFFFFE is a value", result, is(equalTo((Number) 0xFFFFFFFEL)));
+		// @formatter:off
+		then(result)
+			.as("uint32 0xFFFFFFFE is a value")
+			.isEqualTo(0xFFFFFFFEL)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -236,7 +244,12 @@ public class BaseModelAccessorTests {
 		Number result = accessor.getValue(TestRegister.Enum32Value);
 
 		// THEN
-		assertThat("enum32 0xFFFFFFFF is not implemented", result, is(nullValue()));
+		// @formatter:off
+		then(result)
+			.as("enum32 0xFFFFFFFF is not implemented")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -248,7 +261,12 @@ public class BaseModelAccessorTests {
 		Number result = accessor.getValue(TestRegister.Acc32Value);
 
 		// THEN
-		assertThat("acc32 0 is not accumulated", result, is(nullValue()));
+		// @formatter:off
+		then(result)
+			.as("acc32 0 is not accumulated")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -260,7 +278,12 @@ public class BaseModelAccessorTests {
 		Number result = accessor.getValue(TestRegister.Acc32Value);
 
 		// THEN
-		assertThat("acc32 0xFFFFFFFF is a value", result, is(equalTo((Number) 0xFFFFFFFFL)));
+		// @formatter:off
+		then(result)
+			.as("acc32 0xFFFFFFFF is a value")
+			.isEqualTo(0xFFFFFFFFL)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -272,7 +295,12 @@ public class BaseModelAccessorTests {
 		Number result = accessor.getValue(TestRegister.Acc16Value);
 
 		// THEN
-		assertThat("acc16 0xFFFF is a value", result, is(equalTo((Number) 0xFFFF)));
+		// @formatter:off
+		then(result)
+			.as("acc16 0xFFFF is a value")
+			.isEqualTo(0xFFFF)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -284,7 +312,12 @@ public class BaseModelAccessorTests {
 		Number result = accessor.getValue(TestRegister.Acc64Value);
 
 		// THEN
-		assertThat("acc64 0 is not accumulated", result, is(nullValue()));
+		// @formatter:off
+		then(result)
+			.as("acc64 0 is not accumulated")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -296,8 +329,12 @@ public class BaseModelAccessorTests {
 		Number result = accessor.getValue(TestRegister.Acc64Value);
 
 		// THEN
-		assertThat("acc64 0x100000000 is a value", result,
-				is(equalTo((Number) new BigInteger("100000000", 16))));
+		// @formatter:off
+		then(result)
+			.as("acc64 0x100000000 is a value")
+			.isEqualTo(new BigInteger("100000000", 16))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -309,8 +346,12 @@ public class BaseModelAccessorTests {
 		Number result = accessor.getValue(TestRegister.Acc64Value);
 
 		// THEN
-		assertThat("acc64 0xFFFFFFFFFFFFFFFF is a value", result,
-				is(equalTo((Number) new BigInteger("FFFFFFFFFFFFFFFF", 16))));
+		// @formatter:off
+		then(result)
+			.as("acc64 0xFFFFFFFFFFFFFFFF is a value")
+			.isEqualTo(new BigInteger("FFFFFFFFFFFFFFFF", 16))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -322,7 +363,12 @@ public class BaseModelAccessorTests {
 		Number result = accessor.getValue(TestRegister.UInt64Value);
 
 		// THEN
-		assertThat("uint64 0xFFFFFFFFFFFFFFFF is not implemented", result, is(nullValue()));
+		// @formatter:off
+		then(result)
+			.as("uint64 0xFFFFFFFFFFFFFFFF is not implemented")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -334,8 +380,12 @@ public class BaseModelAccessorTests {
 		Number result = accessor.getValue(TestRegister.UInt64Value);
 
 		// THEN
-		assertThat("uint64 0xFFFFFFFFFFFFFFFE is a value", result,
-				is(equalTo((Number) new BigInteger("FFFFFFFFFFFFFFFE", 16))));
+		// @formatter:off
+		then(result)
+			.as("uint64 0xFFFFFFFFFFFFFFFE is a value")
+			.isEqualTo(new BigInteger("FFFFFFFFFFFFFFFE", 16))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -344,10 +394,16 @@ public class BaseModelAccessorTests {
 		accessor.writeValue(conn, TestRegister.RwUInt16Value, 1234);
 
 		// THEN
-		assertThat("Device register written", deviceRegisters(TestRegister.RwUInt16Value),
-				is(equalTo(new int[] { 1234 })));
-		assertThat("Model data updated", accessor.getIntegerValue(TestRegister.RwUInt16Value),
-				is(equalTo(1234)));
+		// @formatter:off
+		then(deviceRegisters(TestRegister.RwUInt16Value))
+			.as("Device register written")
+			.containsExactly(1234)
+			;
+		then(accessor.getIntegerValue(TestRegister.RwUInt16Value))
+			.as("Model data updated")
+			.isEqualTo(1234)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -356,10 +412,16 @@ public class BaseModelAccessorTests {
 		accessor.writeValue(conn, TestRegister.RwInt16Value, -5);
 
 		// THEN
-		assertThat("Device register written", deviceRegisters(TestRegister.RwInt16Value),
-				is(equalTo(new int[] { 0xFFFB })));
-		assertThat("Model data updated", accessor.getIntegerValue(TestRegister.RwInt16Value),
-				is(equalTo(-5)));
+		// @formatter:off
+		then(deviceRegisters(TestRegister.RwInt16Value))
+			.as("Device register written")
+			.containsExactly(0xFFFB)
+			;
+		then(accessor.getIntegerValue(TestRegister.RwInt16Value))
+			.as("Model data updated")
+			.isEqualTo(-5)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -368,10 +430,16 @@ public class BaseModelAccessorTests {
 		accessor.writeValue(conn, TestRegister.RwUInt32Value, 70000);
 
 		// THEN
-		assertThat("Device registers written", deviceRegisters(TestRegister.RwUInt32Value),
-				is(equalTo(new int[] { 0x0001, 0x1170 })));
-		assertThat("Model data updated", accessor.getLongValue(TestRegister.RwUInt32Value),
-				is(equalTo(70000L)));
+		// @formatter:off
+		then(deviceRegisters(TestRegister.RwUInt32Value))
+			.as("Device registers written")
+			.containsExactly(0x0001, 0x1170)
+			;
+		then(accessor.getLongValue(TestRegister.RwUInt32Value))
+			.as("Model data updated")
+			.isEqualTo(70000L)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -380,10 +448,16 @@ public class BaseModelAccessorTests {
 		accessor.writeValue(conn, TestRegister.RwInt32Value, -70000);
 
 		// THEN
-		assertThat("Device registers written", deviceRegisters(TestRegister.RwInt32Value),
-				is(equalTo(new int[] { 0xFFFE, 0xEE90 })));
-		assertThat("Model data updated", accessor.getIntegerValue(TestRegister.RwInt32Value),
-				is(equalTo(-70000)));
+		// @formatter:off
+		then(deviceRegisters(TestRegister.RwInt32Value))
+			.as("Device registers written")
+			.containsExactly(0xFFFE, 0xEE90)
+			;
+		then(accessor.getIntegerValue(TestRegister.RwInt32Value))
+			.as("Model data updated")
+			.isEqualTo(-70000)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -392,8 +466,12 @@ public class BaseModelAccessorTests {
 		accessor.writeValue(conn, TestRegister.RwUInt16Value, 2.5f);
 
 		// THEN
-		assertThat("Value rounded half up", deviceRegisters(TestRegister.RwUInt16Value),
-				is(equalTo(new int[] { 3 })));
+		// @formatter:off
+		then(deviceRegisters(TestRegister.RwUInt16Value))
+			.as("Value rounded half up")
+			.containsExactly(3)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -402,11 +480,13 @@ public class BaseModelAccessorTests {
 		accessor.writeValue(conn, TestRegister.RwUInt16Value, accessor.getBlockAddress() + 100, 7);
 
 		// THEN
-		assertThat("Device register written at offset",
-				deviceData.getValue(
-						accessor.getBlockAddress() + 100 + TestRegister.RwUInt16Value.getAddress())
-						& 0xFFFF,
-				is(equalTo(7)));
+		// @formatter:off
+		then(deviceData.getValue(accessor.getBlockAddress() + 100
+				+ TestRegister.RwUInt16Value.getAddress()) & 0xFFFF)
+			.as("Device register written at offset")
+			.isEqualTo(7)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -467,11 +547,16 @@ public class BaseModelAccessorTests {
 				599.95);
 
 		// THEN
-		assertThat("Device registers written", deviceRegisters(TestRegister.RwUInt32Value),
-				is(equalTo(new int[] { 0x0000, 0xEA5B })));
-		assertThat("Model data updated",
-				accessor.getScaledValue(TestRegister.RwUInt32Value, TestRegister.ScaleFactorValue),
-				is(equalTo(new BigDecimal("599.95"))));
+		// @formatter:off
+		then(deviceRegisters(TestRegister.RwUInt32Value))
+			.as("Device registers written")
+			.containsExactly(0x0000, 0xEA5B)
+			;
+		then(accessor.getScaledValue(TestRegister.RwUInt32Value, TestRegister.ScaleFactorValue))
+			.as("Model data updated")
+			.isEqualTo(new BigDecimal("599.95"))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -484,8 +569,12 @@ public class BaseModelAccessorTests {
 				new BigDecimal("12.35"));
 
 		// THEN
-		assertThat("Value rounded half up", deviceRegisters(TestRegister.RwUInt16Value),
-				is(equalTo(new int[] { 124 })));
+		// @formatter:off
+		then(deviceRegisters(TestRegister.RwUInt16Value))
+			.as("Value rounded half up")
+			.containsExactly(124)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -497,8 +586,12 @@ public class BaseModelAccessorTests {
 		accessor.writeScaledValue(conn, TestRegister.RwInt16Value, TestRegister.ScaleFactorValue, -1250);
 
 		// THEN
-		assertThat("Value divided by 100 and rounded half up",
-				deviceRegisters(TestRegister.RwInt16Value), is(equalTo(new int[] { 0xFFF3 })));
+		// @formatter:off
+		then(deviceRegisters(TestRegister.RwInt16Value))
+			.as("Value divided by 100 and rounded half up")
+			.containsExactly(0xFFF3)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -535,9 +628,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Enum16Value, 1);
 
 		// THEN
-		assertThat("Code resolved",
-				accessor.getCodedValue(TestRegister.Enum16Value, DerAcWiringType.class),
-				is(equalTo(DerAcWiringType.SplitPhase)));
+		// @formatter:off
+		then(accessor.getCodedValue(TestRegister.Enum16Value, DerAcWiringType.class))
+			.as("Code resolved")
+			.isEqualTo(DerAcWiringType.SplitPhase)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -546,9 +642,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Enum16Value, 9);
 
 		// THEN
-		assertThat("Unknown code is null",
-				accessor.getCodedValue(TestRegister.Enum16Value, DerAcWiringType.class),
-				is(nullValue()));
+		// @formatter:off
+		then(accessor.getCodedValue(TestRegister.Enum16Value, DerAcWiringType.class))
+			.as("Unknown code is null")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -557,9 +656,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Enum16Value, 0xFFFF);
 
 		// THEN
-		assertThat("Not implemented is null",
-				accessor.getCodedValue(TestRegister.Enum16Value, DerAcWiringType.class),
-				is(nullValue()));
+		// @formatter:off
+		then(accessor.getCodedValue(TestRegister.Enum16Value, DerAcWiringType.class))
+			.as("Not implemented is null")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -568,11 +670,14 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Bitfield16Value, 0x0003);
 
 		// THEN
-		assertThat("Bits resolved",
-				accessor.getBitmaskableValues(TestRegister.Bitfield16Value,
-						DerOperationalCharacteristic.class),
-				is(equalTo(Set.of(DerOperationalCharacteristic.GridFollowing,
-						DerOperationalCharacteristic.GridForming))));
+		// @formatter:off
+		then(accessor.getBitmaskableValues(TestRegister.Bitfield16Value,
+				DerOperationalCharacteristic.class))
+			.as("Bits resolved")
+			.isEqualTo(Set.of(DerOperationalCharacteristic.GridFollowing,
+					DerOperationalCharacteristic.GridForming))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -581,10 +686,13 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Bitfield16Value, 0x000C);
 
 		// THEN
-		assertThat("Unknown bit 3 ignored",
-				accessor.getBitmaskableValues(TestRegister.Bitfield16Value,
-						DerOperationalCharacteristic.class),
-				is(equalTo(Set.of(DerOperationalCharacteristic.PvClipped))));
+		// @formatter:off
+		then(accessor.getBitmaskableValues(TestRegister.Bitfield16Value,
+				DerOperationalCharacteristic.class))
+			.as("Unknown bit 3 ignored")
+			.isEqualTo(Set.of(DerOperationalCharacteristic.PvClipped))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -593,9 +701,13 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Bitfield16Value, 0x8001);
 
 		// THEN
-		assertThat("Bitfield16 with MSB set not implemented", accessor
-				.getBitmaskableValues(TestRegister.Bitfield16Value, DerOperationalCharacteristic.class),
-				is(equalTo(Set.of())));
+		// @formatter:off
+		then(accessor.getBitmaskableValues(TestRegister.Bitfield16Value,
+				DerOperationalCharacteristic.class))
+			.as("Bitfield16 with MSB set not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -604,9 +716,13 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Bitfield32Value, 0x8000, 0x0001);
 
 		// THEN
-		assertThat("Bitfield32 with MSB set not implemented", accessor
-				.getBitmaskableValues(TestRegister.Bitfield32Value, DerOperationalCharacteristic.class),
-				is(equalTo(Set.of())));
+		// @formatter:off
+		then(accessor.getBitmaskableValues(TestRegister.Bitfield32Value,
+				DerOperationalCharacteristic.class))
+			.as("Bitfield32 with MSB set not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -615,9 +731,13 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Bitfield32Value, 0xFFFF, 0xFFFF);
 
 		// THEN
-		assertThat("Bitfield32 not implemented", accessor
-				.getBitmaskableValues(TestRegister.Bitfield32Value, DerOperationalCharacteristic.class),
-				is(equalTo(Set.of())));
+		// @formatter:off
+		then(accessor.getBitmaskableValues(TestRegister.Bitfield32Value,
+				DerOperationalCharacteristic.class))
+			.as("Bitfield32 not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -626,7 +746,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Enum16Value, 0);
 
 		// THEN
-		assertThat("0 is false", accessor.getBooleanValue(TestRegister.Enum16Value), is(equalTo(false)));
+		// @formatter:off
+		then(accessor.getBooleanValue(TestRegister.Enum16Value))
+			.as("0 is false")
+			.isFalse()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -635,7 +760,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Enum16Value, 1);
 
 		// THEN
-		assertThat("1 is true", accessor.getBooleanValue(TestRegister.Enum16Value), is(equalTo(true)));
+		// @formatter:off
+		then(accessor.getBooleanValue(TestRegister.Enum16Value))
+			.as("1 is true")
+			.isTrue()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -644,8 +774,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Enum16Value, 2);
 
 		// THEN
-		assertThat("Unknown code is null", accessor.getBooleanValue(TestRegister.Enum16Value),
-				is(nullValue()));
+		// @formatter:off
+		then(accessor.getBooleanValue(TestRegister.Enum16Value))
+			.as("Unknown code is null")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -654,8 +788,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Enum16Value, 0xFFFF);
 
 		// THEN
-		assertThat("Not implemented is null", accessor.getBooleanValue(TestRegister.Enum16Value),
-				is(nullValue()));
+		// @formatter:off
+		then(accessor.getBooleanValue(TestRegister.Enum16Value))
+			.as("Not implemented is null")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -665,9 +803,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.ScaleFactorValue, 0xFFFE); // -2
 
 		// THEN
-		assertThat("Value scaled",
-				accessor.getScaledFloatValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue),
-				is(equalTo(12.34f)));
+		// @formatter:off
+		then(accessor.getScaledFloatValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue))
+			.as("Value scaled")
+			.isEqualTo(12.34f)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -677,9 +818,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.ScaleFactorValue, 0xFFFE); // -2
 
 		// THEN
-		assertThat("Not implemented is null",
-				accessor.getScaledFloatValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue),
-				is(nullValue()));
+		// @formatter:off
+		then(accessor.getScaledFloatValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue))
+			.as("Not implemented is null")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -689,9 +833,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.ScaleFactorValue, 0xFFFF); // -1
 
 		// THEN
-		assertThat("Fraction discarded",
-				accessor.getScaledIntegerValue(TestRegister.RwInt16Value, TestRegister.ScaleFactorValue),
-				is(equalTo(-123)));
+		// @formatter:off
+		then(accessor.getScaledIntegerValue(TestRegister.RwInt16Value, TestRegister.ScaleFactorValue))
+			.as("Fraction discarded")
+			.isEqualTo(-123)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -701,9 +848,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.ScaleFactorValue, 3);
 
 		// THEN
-		assertThat("Value scaled",
-				accessor.getScaledLongValue(TestRegister.RwUInt32Value, TestRegister.ScaleFactorValue),
-				is(equalTo(65536000L)));
+		// @formatter:off
+		then(accessor.getScaledLongValue(TestRegister.RwUInt32Value, TestRegister.ScaleFactorValue))
+			.as("Value scaled")
+			.isEqualTo(65536000L)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -713,8 +863,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.ScaleFactorValue, 0);
 
 		// THEN
-		assertThat("Largest integer value", accessor.getScaledIntegerValue(TestRegister.RwUInt32Value,
-				TestRegister.ScaleFactorValue), is(equalTo(Integer.MAX_VALUE)));
+		// @formatter:off
+		then(accessor.getScaledIntegerValue(TestRegister.RwUInt32Value, TestRegister.ScaleFactorValue))
+			.as("Largest integer value")
+			.isEqualTo(Integer.MAX_VALUE)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -724,8 +878,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.ScaleFactorValue, 0);
 
 		// THEN
-		assertThat("Value larger than an integer is not available", accessor.getScaledIntegerValue(
-				TestRegister.RwUInt32Value, TestRegister.ScaleFactorValue), is(nullValue()));
+		// @formatter:off
+		then(accessor.getScaledIntegerValue(TestRegister.RwUInt32Value, TestRegister.ScaleFactorValue))
+			.as("Value larger than an integer is not available")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -735,9 +893,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.ScaleFactorValue, 0);
 
 		// THEN
-		assertThat("Largest long value",
-				accessor.getScaledLongValue(TestRegister.UInt64Value, TestRegister.ScaleFactorValue),
-				is(equalTo(Long.MAX_VALUE)));
+		// @formatter:off
+		then(accessor.getScaledLongValue(TestRegister.UInt64Value, TestRegister.ScaleFactorValue))
+			.as("Largest long value")
+			.isEqualTo(Long.MAX_VALUE)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -747,9 +908,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.ScaleFactorValue, 0);
 
 		// THEN
-		assertThat("Value larger than a long is not available",
-				accessor.getScaledLongValue(TestRegister.UInt64Value, TestRegister.ScaleFactorValue),
-				is(nullValue()));
+		// @formatter:off
+		then(accessor.getScaledLongValue(TestRegister.UInt64Value, TestRegister.ScaleFactorValue))
+			.as("Value larger than a long is not available")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -759,12 +923,16 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.ScaleFactorValue, 0x8000);
 
 		// THEN
-		assertThat("Value with not implemented scale factor is not available",
-				accessor.getScaledValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue),
-				is(nullValue()));
-		assertThat("Integer value with not implemented scale factor is not available", accessor
-				.getScaledIntegerValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue),
-				is(nullValue()));
+		// @formatter:off
+		then(accessor.getScaledValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue))
+			.as("Value with not implemented scale factor is not available")
+			.isNull()
+			;
+		then(accessor.getScaledIntegerValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue))
+			.as("Integer value with not implemented scale factor is not available")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -774,9 +942,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.ScaleFactorValue, 0x8000);
 
 		// THEN
-		assertThat("Zero value with not implemented scale factor is not available",
-				accessor.getScaledValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue),
-				is(nullValue()));
+		// @formatter:off
+		then(accessor.getScaledValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue))
+			.as("Zero value with not implemented scale factor is not available")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -786,9 +957,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.ScaleFactorValue, 11);
 
 		// THEN
-		assertThat("Value with scale factor above 10 is not available",
-				accessor.getScaledValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue),
-				is(nullValue()));
+		// @formatter:off
+		then(accessor.getScaledValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue))
+			.as("Value with scale factor above 10 is not available")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -798,9 +972,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.ScaleFactorValue, 0xFFF5); // -11
 
 		// THEN
-		assertThat("Value with scale factor below -10 is not available",
-				accessor.getScaledValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue),
-				is(nullValue()));
+		// @formatter:off
+		then(accessor.getScaledValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue))
+			.as("Value with scale factor below -10 is not available")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -810,15 +987,21 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.ScaleFactorValue, 10);
 
 		// THEN
-		assertThat("Scale factor 10 applied",
-				accessor.getScaledValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue),
-				is(comparesEqualTo(new BigDecimal("1234E10"))));
+		// @formatter:off
+		then(accessor.getScaledValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue))
+			.as("Scale factor 10 applied")
+			.isEqualByComparingTo(new BigDecimal("1234E10"))
+			;
+		// @formatter:on
 
 		// AND
 		saveRegisters(TestRegister.ScaleFactorValue, 0xFFF6); // -10
-		assertThat("Scale factor -10 applied",
-				accessor.getScaledValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue),
-				is(comparesEqualTo(new BigDecimal("1234E-10"))));
+		// @formatter:off
+		then(accessor.getScaledValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue))
+			.as("Scale factor -10 applied")
+			.isEqualByComparingTo(new BigDecimal("1234E-10"))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -827,8 +1010,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Bitfield32Value, 0x0000, 0x0105);
 
 		// THEN
-		assertThat("Indexes of the set bits", accessor.getBitfieldIndexes(TestRegister.Bitfield32Value),
-				is(equalTo(Set.of(0, 2, 8))));
+		// @formatter:off
+		then(accessor.getBitfieldIndexes(TestRegister.Bitfield32Value))
+			.as("Indexes of the set bits")
+			.isEqualTo(Set.of(0, 2, 8))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -837,8 +1024,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Bitfield16Value, 0x4001);
 
 		// THEN
-		assertThat("Indexes of the set bits, up to the bit before the most significant bit",
-				accessor.getBitfieldIndexes(TestRegister.Bitfield16Value), is(equalTo(Set.of(0, 14))));
+		// @formatter:off
+		then(accessor.getBitfieldIndexes(TestRegister.Bitfield16Value))
+			.as("Indexes of the set bits, up to the bit before the most significant bit")
+			.isEqualTo(Set.of(0, 14))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -848,10 +1039,16 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Bitfield32Value, 0x8000, 0x0001);
 
 		// THEN
-		assertThat("Bitfield16 with MSB set not implemented",
-				accessor.getBitfieldIndexes(TestRegister.Bitfield16Value), is(equalTo(Set.of())));
-		assertThat("Bitfield32 with MSB set not implemented",
-				accessor.getBitfieldIndexes(TestRegister.Bitfield32Value), is(equalTo(Set.of())));
+		// @formatter:off
+		then(accessor.getBitfieldIndexes(TestRegister.Bitfield16Value))
+			.as("Bitfield16 with MSB set not implemented")
+			.isEmpty()
+			;
+		then(accessor.getBitfieldIndexes(TestRegister.Bitfield32Value))
+			.as("Bitfield32 with MSB set not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -866,9 +1063,12 @@ public class BaseModelAccessorTests {
 		expected.set(2);
 		expected.set(32);
 		expected.set(62);
-		assertThat("Second bitfield bits follow the first",
-				accessor.getBitfieldBits(TestRegister.Bitfield32Value, TestRegister.Bitfield32Value2),
-				is(equalTo(expected)));
+		// @formatter:off
+		then(accessor.getBitfieldBits(TestRegister.Bitfield32Value, TestRegister.Bitfield32Value2))
+			.as("Second bitfield bits follow the first")
+			.isEqualTo(expected)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -880,9 +1080,12 @@ public class BaseModelAccessorTests {
 		// THEN
 		BitSet expected = new BitSet();
 		expected.set(33);
-		assertThat("Not implemented bitfield contributes no bits",
-				accessor.getBitfieldBits(TestRegister.Bitfield32Value, TestRegister.Bitfield32Value2),
-				is(equalTo(expected)));
+		// @formatter:off
+		then(accessor.getBitfieldBits(TestRegister.Bitfield32Value, TestRegister.Bitfield32Value2))
+			.as("Not implemented bitfield contributes no bits")
+			.isEqualTo(expected)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -895,9 +1098,12 @@ public class BaseModelAccessorTests {
 		BitSet expected = new BitSet();
 		expected.set(0);
 		expected.set(16);
-		assertThat("Bitfield32 bits follow the 16 bitfield16 bits",
-				accessor.getBitfieldBits(TestRegister.Bitfield16Value, TestRegister.Bitfield32Value),
-				is(equalTo(expected)));
+		// @formatter:off
+		then(accessor.getBitfieldBits(TestRegister.Bitfield16Value, TestRegister.Bitfield32Value))
+			.as("Bitfield32 bits follow the 16 bitfield16 bits")
+			.isEqualTo(expected)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -906,12 +1112,20 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Bitfield16Value, 0x0005);
 
 		// THEN
-		assertThat("Bit 0 set", accessor.getBitfieldBit(TestRegister.Bitfield16Value, 0),
-				is(equalTo(true)));
-		assertThat("Bit 1 not set", accessor.getBitfieldBit(TestRegister.Bitfield16Value, 1),
-				is(equalTo(false)));
-		assertThat("Bit 2 set", accessor.getBitfieldBit(TestRegister.Bitfield16Value, 2),
-				is(equalTo(true)));
+		// @formatter:off
+		then(accessor.getBitfieldBit(TestRegister.Bitfield16Value, 0))
+			.as("Bit 0 set")
+			.isTrue()
+			;
+		then(accessor.getBitfieldBit(TestRegister.Bitfield16Value, 1))
+			.as("Bit 1 not set")
+			.isFalse()
+			;
+		then(accessor.getBitfieldBit(TestRegister.Bitfield16Value, 2))
+			.as("Bit 2 set")
+			.isTrue()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -920,10 +1134,16 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Bitfield32Value, 0x0001, 0x0000);
 
 		// THEN
-		assertThat("Bit 0 not set", accessor.getBitfieldBit(TestRegister.Bitfield32Value, 0),
-				is(equalTo(false)));
-		assertThat("Bit 16 set", accessor.getBitfieldBit(TestRegister.Bitfield32Value, 16),
-				is(equalTo(true)));
+		// @formatter:off
+		then(accessor.getBitfieldBit(TestRegister.Bitfield32Value, 0))
+			.as("Bit 0 not set")
+			.isFalse()
+			;
+		then(accessor.getBitfieldBit(TestRegister.Bitfield32Value, 16))
+			.as("Bit 16 set")
+			.isTrue()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -933,10 +1153,16 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Bitfield32Value, 0x8000, 0x0001);
 
 		// THEN
-		assertThat("Bitfield16 with MSB set not implemented",
-				accessor.getBitfieldBit(TestRegister.Bitfield16Value, 0), is(nullValue()));
-		assertThat("Bitfield32 with MSB set not implemented",
-				accessor.getBitfieldBit(TestRegister.Bitfield32Value, 0), is(nullValue()));
+		// @formatter:off
+		then(accessor.getBitfieldBit(TestRegister.Bitfield16Value, 0))
+			.as("Bitfield16 with MSB set not implemented")
+			.isNull()
+			;
+		then(accessor.getBitfieldBit(TestRegister.Bitfield32Value, 0))
+			.as("Bitfield32 with MSB set not implemented")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -946,10 +1172,16 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.Bitfield32Value, 0xFFFF, 0xFFFF);
 
 		// THEN
-		assertThat("Bitfield16 not implemented",
-				accessor.getBitfieldBit(TestRegister.Bitfield16Value, 0), is(nullValue()));
-		assertThat("Bitfield32 not implemented",
-				accessor.getBitfieldBit(TestRegister.Bitfield32Value, 0), is(nullValue()));
+		// @formatter:off
+		then(accessor.getBitfieldBit(TestRegister.Bitfield16Value, 0))
+			.as("Bitfield16 not implemented")
+			.isNull()
+			;
+		then(accessor.getBitfieldBit(TestRegister.Bitfield32Value, 0))
+			.as("Bitfield32 not implemented")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -958,8 +1190,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.UInt64Value, 0x7FFF, 0xFFFF, 0xFFFF, 0xFFFF);
 
 		// THEN
-		assertThat("Largest long value", accessor.getLongValue(TestRegister.UInt64Value),
-				is(equalTo(Long.MAX_VALUE)));
+		// @formatter:off
+		then(accessor.getLongValue(TestRegister.UInt64Value))
+			.as("Largest long value")
+			.isEqualTo(Long.MAX_VALUE)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -968,8 +1204,12 @@ public class BaseModelAccessorTests {
 		saveRegisters(TestRegister.UInt64Value, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFE);
 
 		// THEN
-		assertThat("Value larger than a long is not available",
-				accessor.getLongValue(TestRegister.UInt64Value), is(nullValue()));
+		// @formatter:off
+		then(accessor.getLongValue(TestRegister.UInt64Value))
+			.as("Value larger than a long is not available")
+			.isNull()
+			;
+		// @formatter:on
 	}
 
 }

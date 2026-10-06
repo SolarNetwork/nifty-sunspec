@@ -23,12 +23,8 @@
 package net.solarnetwork.sunspec.core.combiner.test;
 
 import static net.solarnetwork.sunspec.core.combiner.test.StringCombinerTestUtils.assertAdvancedDcInput;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -58,51 +54,98 @@ public class StringCombinerAdvancedModelAccessorImpl_402_02Tests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), instanceOf(StringCombinerAdvancedModelAccessorImpl.class));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(StringCombinerAdvancedModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		StringCombinerAdvancedModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(70)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(72)));
-		assertThat("Model ID", model.getModelId(),
-				is(equalTo(StringCombinerModelId.AdvancedStringCombiner)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(20)));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				is(equalTo(14)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(62)));
-		assertThat("Model repeating instance count", model.getRepeatingBlockInstanceCount(),
-				is(equalTo(3)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(70, from(StringCombinerAdvancedModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(72, from(StringCombinerAdvancedModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(StringCombinerModelId.AdvancedStringCombiner,
+					from(StringCombinerAdvancedModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(20, from(StringCombinerAdvancedModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(14, from(StringCombinerAdvancedModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(62, from(StringCombinerAdvancedModelAccessor::getModelLength))
+			.as("Model repeating instance count")
+			.returns(3, from(StringCombinerAdvancedModelAccessor::getRepeatingBlockInstanceCount))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void values() {
+		// GIVEN
 		StringCombinerAdvancedModelAccessor model = getTestModel();
-		assertThat("Current", model.getDCCurrent(), is(equalTo(24.68f)));
-		assertThat("Charge", model.getDCChargeDelivered(), is(equalTo(1000L)));
-		assertThat("Voltage", model.getDCVoltage(), is(equalTo(601.2f)));
-		assertThat("Temperature", model.getTemperature(), is(equalTo(31.0f)));
-		assertThat("Power", model.getDCPower(), is(equalTo(14840)));
-		assertThat("Energy 0xFFFFFFFF not implemented, a uint32 for model 402", model.getDCEnergy(),
-				is(nullValue()));
-		assertThat("Performance ratio", model.getDCPerformanceRatio(), is(equalTo(0.92f)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Current")
+			.returns(24.68f, from(StringCombinerAdvancedModelAccessor::getDCCurrent))
+			.as("Charge")
+			.returns(1000L, from(StringCombinerAdvancedModelAccessor::getDCChargeDelivered))
+			.as("Voltage")
+			.returns(601.2f, from(StringCombinerAdvancedModelAccessor::getDCVoltage))
+			.as("Temperature")
+			.returns(31.0f, from(StringCombinerAdvancedModelAccessor::getTemperature))
+			.as("Power")
+			.returns(14840, from(StringCombinerAdvancedModelAccessor::getDCPower))
+			.as("Energy 0xFFFFFFFF not implemented, a uint32 for model 402")
+			.returns(null, from(StringCombinerAdvancedModelAccessor::getDCEnergy))
+			.as("Performance ratio")
+			.returns(0.92f, from(StringCombinerAdvancedModelAccessor::getDCPerformanceRatio))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void events() {
+		// GIVEN
 		StringCombinerAdvancedModelAccessor model = getTestModel();
-		assertThat("Events", model.getEvents(),
-				is(equalTo(Set.<ModelEvent> of(StringCombinerModelEvent.LowVoltage,
-						StringCombinerModelEvent.GroundFault))));
-		assertThat("Vendor events", model.getVendorEvents(),
-				is(equalTo(Set.<ModelEvent> of(new GenericModelEvent(0), new GenericModelEvent(2)))));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Events")
+			.returns(Set.<ModelEvent> of(StringCombinerModelEvent.LowVoltage,
+					StringCombinerModelEvent.GroundFault),
+					from(StringCombinerAdvancedModelAccessor::getEvents))
+			.as("Vendor events")
+			.returns(Set.<ModelEvent> of(new GenericModelEvent(0), new GenericModelEvent(2)),
+					from(StringCombinerAdvancedModelAccessor::getVendorEvents))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void inputs() {
+		// WHEN
 		List<AdvancedDcInput> inputs = getTestModel().getAdvancedDcInputs();
-		assertThat("Inputs count", inputs, hasSize(3));
+
+		// THEN
+		// @formatter:off
+		then(inputs)
+			.as("Inputs count")
+			.hasSize(3)
+			;
+		// @formatter:on
 
 		// input power uses DCWh_SF and input energy is not scaled, per the model 402 definition
 		assertAdvancedDcInput("Input 1", inputs.get(0), 1, 8.23f, 333L, 601.0f, 5000, 1234567L, 0.95f,

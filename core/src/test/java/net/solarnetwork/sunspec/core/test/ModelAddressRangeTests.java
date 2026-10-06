@@ -22,13 +22,8 @@
 
 package net.solarnetwork.sunspec.core.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.BDDAssertions.then;
+import static org.assertj.core.api.BDDAssertions.thenThrownBy;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -179,76 +174,132 @@ public class ModelAddressRangeTests {
 
 	@Test
 	public void addressRanges_fits() {
+		// GIVEN
 		ModelAccessor model = testAccessor(2, 10, new IntRange(5, 6));
-		assertThat("Model that fits read in one range", List.of(model.getAddressRanges(10)),
-				contains(new IntRange(2, 11)));
-		assertThat("Unlimited read length", List.of(model.getAddressRanges(Integer.MAX_VALUE)),
-				contains(new IntRange(2, 11)));
+
+		// THEN
+		// @formatter:off
+		then(List.of(model.getAddressRanges(10)))
+			.as("Model that fits read in one range")
+			.containsExactly(new IntRange(2, 11))
+			;
+		then(List.of(model.getAddressRanges(Integer.MAX_VALUE)))
+			.as("Unlimited read length")
+			.containsExactly(new IntRange(2, 11))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void addressRanges_noUnsplittableRanges() {
+		// GIVEN
 		ModelAccessor model = testAccessor(2, 25);
-		assertThat("Model split into maximum length ranges", List.of(model.getAddressRanges(10)),
-				contains(new IntRange(2, 11), new IntRange(12, 21), new IntRange(22, 26)));
+
+		// THEN
+		// @formatter:off
+		then(List.of(model.getAddressRanges(10)))
+			.as("Model split into maximum length ranges")
+			.containsExactly(new IntRange(2, 11), new IntRange(12, 21), new IntRange(22, 26))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void addressRanges_endBeforeUnsplittableRange() {
+		// GIVEN
 		ModelAccessor model = testAccessor(0, 30, new IntRange(9, 10));
-		assertThat("Range ends before a multi-register value", List.of(model.getAddressRanges(10)),
-				contains(new IntRange(0, 8), new IntRange(9, 18), new IntRange(19, 28),
-						new IntRange(29, 29)));
+
+		// THEN
+		// @formatter:off
+		then(List.of(model.getAddressRanges(10)))
+			.as("Range ends before a multi-register value")
+			.containsExactly(new IntRange(0, 8), new IntRange(9, 18), new IntRange(19, 28),
+					new IntRange(29, 29))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void addressRanges_adjacentUnsplittableRanges() {
+		// GIVEN
 		ModelAccessor model = testAccessor(0, 20, new IntRange(8, 9), new IntRange(10, 11));
-		assertThat("Range ends between adjacent multi-register values",
-				List.of(model.getAddressRanges(10)), contains(new IntRange(0, 9), new IntRange(10, 19)));
+
+		// THEN
+		// @formatter:off
+		then(List.of(model.getAddressRanges(10)))
+			.as("Range ends between adjacent multi-register values")
+			.containsExactly(new IntRange(0, 9), new IntRange(10, 19))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void addressRanges_overlappingUnsplittableRanges() {
+		// GIVEN
 		// overlapping ranges are treated as one, so the range does not end inside either
 		ModelAccessor model = testAccessor(0, 30, new IntRange(10, 15), new IntRange(5, 11));
-		assertThat("Range ends before overlapping multi-register values",
-				List.of(model.getAddressRanges(12)), contains(new IntRange(0, 4), new IntRange(5, 16),
-						new IntRange(17, 28), new IntRange(29, 29)));
+
+		// THEN
+		// @formatter:off
+		then(List.of(model.getAddressRanges(12)))
+			.as("Range ends before overlapping multi-register values")
+			.containsExactly(new IntRange(0, 4), new IntRange(5, 16), new IntRange(17, 28),
+					new IntRange(29, 29))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void addressRanges_unsplittableRangeLongerThanMaximum() {
+		// GIVEN
 		ModelAccessor model = testAccessor(0, 25, new IntRange(0, 24));
-		assertThat("Range longer than the maximum is split", List.of(model.getAddressRanges(10)),
-				contains(new IntRange(0, 9), new IntRange(10, 19), new IntRange(20, 24)));
+
+		// THEN
+		// @formatter:off
+		then(List.of(model.getAddressRanges(10)))
+			.as("Range longer than the maximum is split")
+			.containsExactly(new IntRange(0, 9), new IntRange(10, 19), new IntRange(20, 24))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void addressRange_fromAddress() {
+		// GIVEN
 		ModelAccessor model = testAccessor(0, 30, new IntRange(19, 20));
-		assertThat("Range from an address", model.getAddressRange(10, 10),
-				is(equalTo(new IntRange(10, 18))));
-		assertThat("Range to the end of the model", model.getAddressRange(25, 10),
-				is(equalTo(new IntRange(25, 29))));
+
+		// THEN
+		// @formatter:off
+		then(model.getAddressRange(10, 10))
+			.as("Range from an address")
+			.isEqualTo(new IntRange(10, 18))
+			;
+		then(model.getAddressRange(25, 10))
+			.as("Range to the end of the model")
+			.isEqualTo(new IntRange(25, 29))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void addressRange_invalidArguments() {
+		// GIVEN
 		ModelAccessor model = testAccessor(2, 10);
+
+		// THEN
+		// @formatter:off
 		for ( int[] args : new int[][] { { 1, 10 }, { 12, 10 }, { 2, 0 } } ) {
-			try {
-				model.getAddressRange(args[0], args[1]);
-				fail(String.format("Address %d with maximum length %d should be rejected.", args[0],
-						args[1]));
-			} catch ( IllegalArgumentException e ) {
-				// expected
-			}
+			thenThrownBy(() -> model.getAddressRange(args[0], args[1]))
+				.as("Address %d with maximum length %d rejected", args[0], args[1])
+				.isInstanceOf(IllegalArgumentException.class)
+				;
 		}
+		// @formatter:on
 	}
 
 	@Test
 	public void unsplittableAddressRanges_matchSunSpecModels() throws IOException {
+		// WHEN
 		final List<String> errors = new ArrayList<>();
 		int count = 0;
 		for ( Map.Entry<String, List<ModelPoints>> e : multiRegisterPoints().entrySet() ) {
@@ -262,13 +313,23 @@ public class ModelAddressRangeTests {
 				count++;
 			}
 		}
-		assertThat("Models compared", count, is(greaterThan(80)));
-		assertThat("Model multi-register ranges match the SunSpec definitions", errors,
-				is(equalTo(List.of())));
+
+		// THEN
+		// @formatter:off
+		then(count)
+			.as("Models compared")
+			.isGreaterThan(80)
+			;
+		then(errors)
+			.as("Model multi-register ranges match the SunSpec definitions")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void readModelData_doesNotSplitPoints() throws IOException {
+		// WHEN
 		final List<String> errors = new ArrayList<>();
 		for ( Map.Entry<String, List<ModelPoints>> e : multiRegisterPoints().entrySet() ) {
 			final List<IntRange> points = new ArrayList<>();
@@ -307,8 +368,14 @@ public class ModelAddressRangeTests {
 				}
 			}
 		}
-		assertThat("Model data read without splitting multi-register points", errors,
-				is(equalTo(List.of())));
+
+		// THEN
+		// @formatter:off
+		then(errors)
+			.as("Model data read without splitting multi-register points")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -322,9 +389,19 @@ public class ModelAddressRangeTests {
 		final ModelData data = ModelDataFactory.getInstance().getModelData(conn, 10);
 
 		// THEN
-		assertThat("Model data read", data.getManufacturer(), is(equalTo("OutBack Power")));
+		// @formatter:off
+		then(data.getManufacturer())
+			.as("Model data read")
+			.isEqualTo("OutBack Power")
+			;
+		// @formatter:on
 		for ( List<Integer> req : conn.getReads() ) {
-			assertThat("Read no longer than maximum", req.get(1) <= 10, is(equalTo(true)));
+			// @formatter:off
+			then(req.get(1) <= 10)
+				.as("Read no longer than maximum")
+				.isTrue()
+				;
+			// @formatter:on
 		}
 	}
 
@@ -342,9 +419,16 @@ public class ModelAddressRangeTests {
 
 		// THEN
 		final List<List<Integer>> firstReads = modelReads(conn.getReads(), blockAddress, end);
-		assertThat("Fixed block read first, as the curve set layout is not known yet", firstReads.get(0),
-				is(equalTo(List.of(blockAddress, 7))));
-		assertThat("Curve sets read after the fixed block", firstReads, hasSize(3));
+		// @formatter:off
+		then(firstReads.get(0))
+			.as("Fixed block read first, as the curve set layout is not known yet")
+			.isEqualTo(List.of(blockAddress, 7))
+			;
+		then(firstReads)
+			.as("Curve sets read after the fixed block")
+			.hasSize(3)
+			;
+		// @formatter:on
 
 		// WHEN
 		conn.getReads().clear();
@@ -352,9 +436,16 @@ public class ModelAddressRangeTests {
 
 		// THEN
 		final List<List<Integer>> nextReads = modelReads(conn.getReads(), blockAddress, end);
-		assertThat("Curve set layout known from the earlier read", nextReads, hasSize(2));
-		assertThat("First read longer than the fixed block", nextReads.get(0).get(1),
-				is(greaterThan(7)));
+		// @formatter:off
+		then(nextReads)
+			.as("Curve set layout known from the earlier read")
+			.hasSize(2)
+			;
+		then(nextReads.get(0).get(1))
+			.as("First read longer than the fixed block")
+			.isGreaterThan(7)
+			;
+		// @formatter:on
 	}
 
 	private static List<List<Integer>> modelReads(List<List<Integer>> reads, int blockAddress, int end) {

@@ -22,12 +22,9 @@
 
 package net.solarnetwork.sunspec.core.der.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.BDDAssertions.catchThrowable;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -72,114 +69,197 @@ public class DerAcControlsModelAccessorImpl_704_01Tests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), is(instanceOf(DerAcControlsModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(DerAcControlsModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		DerAcControlsModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(403)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(BLOCK_ADDRESS)));
-		assertThat("Model ID", model.getModelId(), is(equalTo(DerModelId.AcControls)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(65)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(65)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(403, from(DerAcControlsModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(BLOCK_ADDRESS, from(DerAcControlsModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(DerModelId.AcControls, from(DerAcControlsModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(65, from(DerAcControlsModelAccessor::getFixedBlockLength))
+			.as("Model length")
+			.returns(65, from(DerAcControlsModelAccessor::getModelLength))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void powerFactorWhenInjecting() {
+		// GIVEN
 		DerAcControlsModelAccessor model = getTestModel();
-		assertThat("Enabled", model.isPowerFactorWhenInjectingEnabled(), is(equalTo(true)));
-		assertThat("Power factor", model.getPowerFactorWhenInjecting(), is(equalTo(1.0f)));
-		assertThat("Excitation", model.getPowerFactorExcitationWhenInjecting(),
-				is(equalTo(DerPowerFactorExcitation.UnderExcited)));
-		assertThat("Reversion enabled not implemented",
-				model.isPowerFactorWhenInjectingReversionEnabled(), is(nullValue()));
-		assertThat("Reversion time not implemented", model.getPowerFactorWhenInjectingReversionTime(),
-				is(nullValue()));
-		assertThat("Reversion time remaining not implemented",
-				model.getPowerFactorWhenInjectingReversionTimeRemaining(), is(nullValue()));
-		assertThat("Reversion power factor not implemented",
-				model.getReversionPowerFactorWhenInjecting(), is(nullValue()));
-		assertThat("Reversion excitation not implemented",
-				model.getReversionPowerFactorExcitationWhenInjecting(), is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Enabled")
+			.returns(true, from(DerAcControlsModelAccessor::isPowerFactorWhenInjectingEnabled))
+			.as("Power factor")
+			.returns(1.0f, from(DerAcControlsModelAccessor::getPowerFactorWhenInjecting))
+			.as("Excitation")
+			.returns(DerPowerFactorExcitation.UnderExcited,
+					from(DerAcControlsModelAccessor::getPowerFactorExcitationWhenInjecting))
+			.as("Reversion enabled not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::isPowerFactorWhenInjectingReversionEnabled))
+			.as("Reversion time not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::getPowerFactorWhenInjectingReversionTime))
+			.as("Reversion time remaining not implemented")
+			.returns(null,
+					from(DerAcControlsModelAccessor::getPowerFactorWhenInjectingReversionTimeRemaining))
+			.as("Reversion power factor not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::getReversionPowerFactorWhenInjecting))
+			.as("Reversion excitation not implemented")
+			.returns(null,
+					from(DerAcControlsModelAccessor::getReversionPowerFactorExcitationWhenInjecting))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void powerFactorWhenAbsorbing() {
+		// GIVEN
 		DerAcControlsModelAccessor model = getTestModel();
-		assertThat("Enabled", model.isPowerFactorWhenAbsorbingEnabled(), is(equalTo(true)));
-		assertThat("Power factor", model.getPowerFactorWhenAbsorbing(), is(equalTo(1.0f)));
-		assertThat("Excitation", model.getPowerFactorExcitationWhenAbsorbing(),
-				is(equalTo(DerPowerFactorExcitation.OverExcited)));
-		assertThat("Reversion enabled not implemented",
-				model.isPowerFactorWhenAbsorbingReversionEnabled(), is(nullValue()));
-		assertThat("Reversion time not implemented", model.getPowerFactorWhenAbsorbingReversionTime(),
-				is(nullValue()));
-		assertThat("Reversion power factor not implemented",
-				model.getReversionPowerFactorWhenAbsorbing(), is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Enabled")
+			.returns(true, from(DerAcControlsModelAccessor::isPowerFactorWhenAbsorbingEnabled))
+			.as("Power factor")
+			.returns(1.0f, from(DerAcControlsModelAccessor::getPowerFactorWhenAbsorbing))
+			.as("Excitation")
+			.returns(DerPowerFactorExcitation.OverExcited,
+					from(DerAcControlsModelAccessor::getPowerFactorExcitationWhenAbsorbing))
+			.as("Reversion enabled not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::isPowerFactorWhenAbsorbingReversionEnabled))
+			.as("Reversion time not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::getPowerFactorWhenAbsorbingReversionTime))
+			.as("Reversion power factor not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::getReversionPowerFactorWhenAbsorbing))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void activePowerLimit() {
+		// GIVEN
 		DerAcControlsModelAccessor model = getTestModel();
-		assertThat("Enabled", model.isActivePowerLimitEnabled(), is(equalTo(true)));
-		assertThat("Limit", model.getActivePowerLimitPercent(), is(equalTo(100.0f)));
-		assertThat("Reversion limit not implemented", model.getReversionActivePowerLimitPercent(),
-				is(nullValue()));
-		assertThat("Reversion enabled not implemented", model.isActivePowerLimitReversionEnabled(),
-				is(nullValue()));
-		assertThat("Reversion time not implemented", model.getActivePowerLimitReversionTime(),
-				is(nullValue()));
-		assertThat("Reversion time remaining not implemented",
-				model.getActivePowerLimitReversionTimeRemaining(), is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Enabled")
+			.returns(true, from(DerAcControlsModelAccessor::isActivePowerLimitEnabled))
+			.as("Limit")
+			.returns(100.0f, from(DerAcControlsModelAccessor::getActivePowerLimitPercent))
+			.as("Reversion limit not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::getReversionActivePowerLimitPercent))
+			.as("Reversion enabled not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::isActivePowerLimitReversionEnabled))
+			.as("Reversion time not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::getActivePowerLimitReversionTime))
+			.as("Reversion time remaining not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::getActivePowerLimitReversionTimeRemaining))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void activePowerSetpoint() {
+		// GIVEN
 		DerAcControlsModelAccessor model = getTestModel();
-		assertThat("Enabled", model.isActivePowerSetpointEnabled(), is(equalTo(false)));
-		assertThat("Mode", model.getActivePowerSetpointMode(),
-				is(equalTo(DerActivePowerSetpointMode.MaximumActivePowerPercent)));
-		assertThat("Setpoint not implemented", model.getActivePowerSetpoint(), is(nullValue()));
-		assertThat("Reversion setpoint not implemented", model.getReversionActivePowerSetpoint(),
-				is(nullValue()));
-		assertThat("Setpoint percent", model.getActivePowerSetpointPercent(), is(equalTo(-100.0f)));
-		assertThat("Reversion setpoint percent not implemented",
-				model.getReversionActivePowerSetpointPercent(), is(nullValue()));
-		assertThat("Reversion enabled not implemented", model.isActivePowerSetpointReversionEnabled(),
-				is(nullValue()));
-		assertThat("Reversion time not implemented", model.getActivePowerSetpointReversionTime(),
-				is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Enabled")
+			.returns(false, from(DerAcControlsModelAccessor::isActivePowerSetpointEnabled))
+			.as("Mode")
+			.returns(DerActivePowerSetpointMode.MaximumActivePowerPercent,
+					from(DerAcControlsModelAccessor::getActivePowerSetpointMode))
+			.as("Setpoint not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::getActivePowerSetpoint))
+			.as("Reversion setpoint not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::getReversionActivePowerSetpoint))
+			.as("Setpoint percent")
+			.returns(-100.0f, from(DerAcControlsModelAccessor::getActivePowerSetpointPercent))
+			.as("Reversion setpoint percent not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::getReversionActivePowerSetpointPercent))
+			.as("Reversion enabled not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::isActivePowerSetpointReversionEnabled))
+			.as("Reversion time not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::getActivePowerSetpointReversionTime))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void reactivePowerSetpoint() {
+		// GIVEN
 		DerAcControlsModelAccessor model = getTestModel();
-		assertThat("Enabled", model.isReactivePowerSetpointEnabled(), is(equalTo(false)));
-		assertThat("Mode", model.getReactivePowerSetpointMode(),
-				is(equalTo(DerReactivePowerSetpointMode.MaximumActivePowerPercent)));
-		assertThat("Priority", model.getReactivePowerPriority(),
-				is(equalTo(DerReactivePowerPriority.ReactivePower)));
-		assertThat("Setpoint not implemented", model.getReactivePowerSetpoint(), is(nullValue()));
-		assertThat("Reversion setpoint not implemented", model.getReversionReactivePowerSetpoint(),
-				is(nullValue()));
-		assertThat("Setpoint percent", model.getReactivePowerSetpointPercent(), is(equalTo(100.0f)));
-		assertThat("Reversion setpoint percent not implemented",
-				model.getReversionReactivePowerSetpointPercent(), is(nullValue()));
-		assertThat("Reversion enabled not implemented", model.isReactivePowerSetpointReversionEnabled(),
-				is(nullValue()));
-		assertThat("Reversion time remaining not implemented",
-				model.getReactivePowerSetpointReversionTimeRemaining(), is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Enabled")
+			.returns(false, from(DerAcControlsModelAccessor::isReactivePowerSetpointEnabled))
+			.as("Mode")
+			.returns(DerReactivePowerSetpointMode.MaximumActivePowerPercent,
+					from(DerAcControlsModelAccessor::getReactivePowerSetpointMode))
+			.as("Priority")
+			.returns(DerReactivePowerPriority.ReactivePower,
+					from(DerAcControlsModelAccessor::getReactivePowerPriority))
+			.as("Setpoint not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::getReactivePowerSetpoint))
+			.as("Reversion setpoint not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::getReversionReactivePowerSetpoint))
+			.as("Setpoint percent")
+			.returns(100.0f, from(DerAcControlsModelAccessor::getReactivePowerSetpointPercent))
+			.as("Reversion setpoint percent not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::getReversionReactivePowerSetpointPercent))
+			.as("Reversion enabled not implemented")
+			.returns(null, from(DerAcControlsModelAccessor::isReactivePowerSetpointReversionEnabled))
+			.as("Reversion time remaining not implemented")
+			.returns(null,
+					from(DerAcControlsModelAccessor::getReactivePowerSetpointReversionTimeRemaining))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void rampRatesAndAntiIslanding() {
+		// GIVEN
 		DerAcControlsModelAccessor model = getTestModel();
-		assertThat("Active power ramp rate", model.getActivePowerRampRate(), is(equalTo(1000)));
-		assertThat("Active power ramp rate reference", model.getActivePowerRampRateReference(),
-				is(equalTo(DerRampRateReference.MaximumActivePower)));
-		assertThat("Reactive power ramp rate", model.getReactivePowerRampRate(), is(equalTo(0)));
-		assertThat("Anti-islanding enabled", model.isAntiIslandingEnabled(), is(equalTo(true)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Active power ramp rate")
+			.returns(1000, from(DerAcControlsModelAccessor::getActivePowerRampRate))
+			.as("Active power ramp rate reference")
+			.returns(DerRampRateReference.MaximumActivePower,
+					from(DerAcControlsModelAccessor::getActivePowerRampRateReference))
+			.as("Reactive power ramp rate")
+			.returns(0, from(DerAcControlsModelAccessor::getReactivePowerRampRate))
+			.as("Anti-islanding enabled")
+			.returns(true, from(DerAcControlsModelAccessor::isAntiIslandingEnabled))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -192,15 +272,25 @@ public class DerAcControlsModelAccessorImpl_704_01Tests {
 		model.setPowerFactorWhenInjecting(conn, 0.95f, DerPowerFactorExcitation.OverExcited);
 
 		// THEN
-		assertThat("Power factor and excitation written together in one request", conn.getWrites(),
-				is(equalTo(List.of(List.of(BLOCK_ADDRESS + 57, 2)))));
+		// @formatter:off
+		then(conn.getWrites())
+			.as("Power factor and excitation written together in one request")
+			.isEqualTo(List.of(List.of(BLOCK_ADDRESS + 57, 2)))
+			;
+		// @formatter:on
 
 		DerAcControlsModelAccessor device = discoverModel(conn);
-		assertThat("Power factor", device.getPowerFactorWhenInjecting(), is(equalTo(0.95f)));
-		assertThat("Excitation", device.getPowerFactorExcitationWhenInjecting(),
-				is(equalTo(DerPowerFactorExcitation.OverExcited)));
-		assertThat("Absorbing power factor unchanged", device.getPowerFactorWhenAbsorbing(),
-				is(equalTo(1.0f)));
+		// @formatter:off
+		then(device)
+			.as("Power factor")
+			.returns(0.95f, from(DerAcControlsModelAccessor::getPowerFactorWhenInjecting))
+			.as("Excitation")
+			.returns(DerPowerFactorExcitation.OverExcited,
+					from(DerAcControlsModelAccessor::getPowerFactorExcitationWhenInjecting))
+			.as("Absorbing power factor unchanged")
+			.returns(1.0f, from(DerAcControlsModelAccessor::getPowerFactorWhenAbsorbing))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -215,24 +305,34 @@ public class DerAcControlsModelAccessorImpl_704_01Tests {
 		model.setReversionPowerFactorWhenAbsorbing(conn, 0.8f, DerPowerFactorExcitation.OverExcited);
 
 		// THEN
-		assertThat("Each pair written in one request", conn.getWrites(),
-				is(equalTo(List.of(List.of(BLOCK_ADDRESS + 59, 2), List.of(BLOCK_ADDRESS + 61, 2),
-						List.of(BLOCK_ADDRESS + 63, 2)))));
+		// @formatter:off
+		then(conn.getWrites())
+			.as("Each pair written in one request")
+			.isEqualTo(List.of(List.of(BLOCK_ADDRESS + 59, 2), List.of(BLOCK_ADDRESS + 61, 2),
+					List.of(BLOCK_ADDRESS + 63, 2)))
+			;
+		// @formatter:on
 
 		DerAcControlsModelAccessor device = discoverModel(conn);
-		assertThat("Reversion power factor injecting", device.getReversionPowerFactorWhenInjecting(),
-				is(equalTo(0.9f)));
-		assertThat("Reversion excitation injecting",
-				device.getReversionPowerFactorExcitationWhenInjecting(),
-				is(equalTo(DerPowerFactorExcitation.OverExcited)));
-		assertThat("Power factor absorbing", device.getPowerFactorWhenAbsorbing(), is(equalTo(0.85f)));
-		assertThat("Excitation absorbing", device.getPowerFactorExcitationWhenAbsorbing(),
-				is(equalTo(DerPowerFactorExcitation.UnderExcited)));
-		assertThat("Reversion power factor absorbing", device.getReversionPowerFactorWhenAbsorbing(),
-				is(equalTo(0.8f)));
-		assertThat("Reversion excitation absorbing",
-				device.getReversionPowerFactorExcitationWhenAbsorbing(),
-				is(equalTo(DerPowerFactorExcitation.OverExcited)));
+		// @formatter:off
+		then(device)
+			.as("Reversion power factor injecting")
+			.returns(0.9f, from(DerAcControlsModelAccessor::getReversionPowerFactorWhenInjecting))
+			.as("Reversion excitation injecting")
+			.returns(DerPowerFactorExcitation.OverExcited,
+					from(DerAcControlsModelAccessor::getReversionPowerFactorExcitationWhenInjecting))
+			.as("Power factor absorbing")
+			.returns(0.85f, from(DerAcControlsModelAccessor::getPowerFactorWhenAbsorbing))
+			.as("Excitation absorbing")
+			.returns(DerPowerFactorExcitation.UnderExcited,
+					from(DerAcControlsModelAccessor::getPowerFactorExcitationWhenAbsorbing))
+			.as("Reversion power factor absorbing")
+			.returns(0.8f, from(DerAcControlsModelAccessor::getReversionPowerFactorWhenAbsorbing))
+			.as("Reversion excitation absorbing")
+			.returns(DerPowerFactorExcitation.OverExcited,
+					from(DerAcControlsModelAccessor::getReversionPowerFactorExcitationWhenAbsorbing))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -242,15 +342,20 @@ public class DerAcControlsModelAccessorImpl_704_01Tests {
 		DerAcControlsModelAccessor model = discoverModel(conn);
 
 		// WHEN
-		try {
-			model.setPowerFactorWhenInjecting(conn, 70f, DerPowerFactorExcitation.OverExcited);
-			fail("Scaled value larger than uint16 should be rejected.");
-		} catch ( IllegalArgumentException e ) {
-			// expected
-		}
+		Throwable t = catchThrowable(() -> model.setPowerFactorWhenInjecting(conn, 70f,
+				DerPowerFactorExcitation.OverExcited));
 
 		// THEN
-		assertThat("Nothing written", conn.getWrites(), is(equalTo(List.of())));
+		// @formatter:off
+		then(t)
+			.as("Scaled value larger than uint16 rejected")
+			.isInstanceOf(IllegalArgumentException.class)
+			;
+		then(conn.getWrites())
+			.as("Nothing written")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -293,57 +398,75 @@ public class DerAcControlsModelAccessorImpl_704_01Tests {
 
 		// THEN
 		DerAcControlsModelAccessor device = discoverModel(conn);
-		assertThat("PF injecting enabled", device.isPowerFactorWhenInjectingEnabled(),
-				is(equalTo(false)));
-		assertThat("PF injecting reversion enabled", device.isPowerFactorWhenInjectingReversionEnabled(),
-				is(equalTo(true)));
-		assertThat("PF injecting reversion time", device.getPowerFactorWhenInjectingReversionTime(),
-				is(equalTo(300L)));
-		assertThat("PF injecting reversion time remaining unchanged",
-				device.getPowerFactorWhenInjectingReversionTimeRemaining(), is(nullValue()));
-		assertThat("PF absorbing enabled", device.isPowerFactorWhenAbsorbingEnabled(),
-				is(equalTo(false)));
-		assertThat("PF absorbing reversion time", device.getPowerFactorWhenAbsorbingReversionTime(),
-				is(equalTo(600L)));
-		assertThat("Limit enabled", device.isActivePowerLimitEnabled(), is(equalTo(false)));
-		assertThat("Limit", device.getActivePowerLimitPercent(), is(equalTo(80.5f)));
-		assertThat("Reversion limit", device.getReversionActivePowerLimitPercent(), is(equalTo(100.0f)));
-		assertThat("Limit reversion enabled", device.isActivePowerLimitReversionEnabled(),
-				is(equalTo(true)));
-		assertThat("Limit reversion time", device.getActivePowerLimitReversionTime(), is(equalTo(900L)));
-		assertThat("Set active power enabled", device.isActivePowerSetpointEnabled(), is(equalTo(true)));
-		assertThat("Set active power mode", device.getActivePowerSetpointMode(),
-				is(equalTo(DerActivePowerSetpointMode.Watts)));
-		assertThat("Active power setpoint", device.getActivePowerSetpoint(), is(equalTo(-2500)));
-		assertThat("Reversion active power setpoint", device.getReversionActivePowerSetpoint(),
-				is(equalTo(0)));
-		assertThat("Active power setpoint percent", device.getActivePowerSetpointPercent(),
-				is(equalTo(50.5f)));
-		assertThat("Reversion active power setpoint percent",
-				device.getReversionActivePowerSetpointPercent(), is(equalTo(-25.0f)));
-		assertThat("Set active power reversion enabled", device.isActivePowerSetpointReversionEnabled(),
-				is(equalTo(true)));
-		assertThat("Set active power reversion time", device.getActivePowerSetpointReversionTime(),
-				is(equalTo(60L)));
-		assertThat("Set reactive power enabled", device.isReactivePowerSetpointEnabled(),
-				is(equalTo(true)));
-		assertThat("Set reactive power mode", device.getReactivePowerSetpointMode(),
-				is(equalTo(DerReactivePowerSetpointMode.MaximumApparentPowerPercent)));
-		assertThat("Reactive power priority", device.getReactivePowerPriority(),
-				is(equalTo(DerReactivePowerPriority.ActivePower)));
-		assertThat("Reactive power setpoint percent", device.getReactivePowerSetpointPercent(),
-				is(equalTo(-30.5f)));
-		assertThat("Reversion reactive power setpoint percent",
-				device.getReversionReactivePowerSetpointPercent(), is(equalTo(0.0f)));
-		assertThat("Set reactive power reversion enabled",
-				device.isReactivePowerSetpointReversionEnabled(), is(equalTo(false)));
-		assertThat("Set reactive power reversion time", device.getReactivePowerSetpointReversionTime(),
-				is(equalTo(120L)));
-		assertThat("Active power ramp rate", device.getActivePowerRampRate(), is(equalTo(20)));
-		assertThat("Active power ramp rate reference", device.getActivePowerRampRateReference(),
-				is(equalTo(DerRampRateReference.MaximumCurrent)));
-		assertThat("Reactive power ramp rate", device.getReactivePowerRampRate(), is(equalTo(15)));
-		assertThat("Anti-islanding enabled", device.isAntiIslandingEnabled(), is(equalTo(false)));
+		// @formatter:off
+		then(device)
+			.as("PF injecting enabled")
+			.returns(false, from(DerAcControlsModelAccessor::isPowerFactorWhenInjectingEnabled))
+			.as("PF injecting reversion enabled")
+			.returns(true, from(DerAcControlsModelAccessor::isPowerFactorWhenInjectingReversionEnabled))
+			.as("PF injecting reversion time")
+			.returns(300L, from(DerAcControlsModelAccessor::getPowerFactorWhenInjectingReversionTime))
+			.as("PF injecting reversion time remaining unchanged")
+			.returns(null,
+					from(DerAcControlsModelAccessor::getPowerFactorWhenInjectingReversionTimeRemaining))
+			.as("PF absorbing enabled")
+			.returns(false, from(DerAcControlsModelAccessor::isPowerFactorWhenAbsorbingEnabled))
+			.as("PF absorbing reversion time")
+			.returns(600L, from(DerAcControlsModelAccessor::getPowerFactorWhenAbsorbingReversionTime))
+			.as("Limit enabled")
+			.returns(false, from(DerAcControlsModelAccessor::isActivePowerLimitEnabled))
+			.as("Limit")
+			.returns(80.5f, from(DerAcControlsModelAccessor::getActivePowerLimitPercent))
+			.as("Reversion limit")
+			.returns(100.0f, from(DerAcControlsModelAccessor::getReversionActivePowerLimitPercent))
+			.as("Limit reversion enabled")
+			.returns(true, from(DerAcControlsModelAccessor::isActivePowerLimitReversionEnabled))
+			.as("Limit reversion time")
+			.returns(900L, from(DerAcControlsModelAccessor::getActivePowerLimitReversionTime))
+			.as("Set active power enabled")
+			.returns(true, from(DerAcControlsModelAccessor::isActivePowerSetpointEnabled))
+			.as("Set active power mode")
+			.returns(DerActivePowerSetpointMode.Watts,
+					from(DerAcControlsModelAccessor::getActivePowerSetpointMode))
+			.as("Active power setpoint")
+			.returns(-2500, from(DerAcControlsModelAccessor::getActivePowerSetpoint))
+			.as("Reversion active power setpoint")
+			.returns(0, from(DerAcControlsModelAccessor::getReversionActivePowerSetpoint))
+			.as("Active power setpoint percent")
+			.returns(50.5f, from(DerAcControlsModelAccessor::getActivePowerSetpointPercent))
+			.as("Reversion active power setpoint percent")
+			.returns(-25.0f, from(DerAcControlsModelAccessor::getReversionActivePowerSetpointPercent))
+			.as("Set active power reversion enabled")
+			.returns(true, from(DerAcControlsModelAccessor::isActivePowerSetpointReversionEnabled))
+			.as("Set active power reversion time")
+			.returns(60L, from(DerAcControlsModelAccessor::getActivePowerSetpointReversionTime))
+			.as("Set reactive power enabled")
+			.returns(true, from(DerAcControlsModelAccessor::isReactivePowerSetpointEnabled))
+			.as("Set reactive power mode")
+			.returns(DerReactivePowerSetpointMode.MaximumApparentPowerPercent,
+					from(DerAcControlsModelAccessor::getReactivePowerSetpointMode))
+			.as("Reactive power priority")
+			.returns(DerReactivePowerPriority.ActivePower,
+					from(DerAcControlsModelAccessor::getReactivePowerPriority))
+			.as("Reactive power setpoint percent")
+			.returns(-30.5f, from(DerAcControlsModelAccessor::getReactivePowerSetpointPercent))
+			.as("Reversion reactive power setpoint percent")
+			.returns(0.0f, from(DerAcControlsModelAccessor::getReversionReactivePowerSetpointPercent))
+			.as("Set reactive power reversion enabled")
+			.returns(false, from(DerAcControlsModelAccessor::isReactivePowerSetpointReversionEnabled))
+			.as("Set reactive power reversion time")
+			.returns(120L, from(DerAcControlsModelAccessor::getReactivePowerSetpointReversionTime))
+			.as("Active power ramp rate")
+			.returns(20, from(DerAcControlsModelAccessor::getActivePowerRampRate))
+			.as("Active power ramp rate reference")
+			.returns(DerRampRateReference.MaximumCurrent,
+					from(DerAcControlsModelAccessor::getActivePowerRampRateReference))
+			.as("Reactive power ramp rate")
+			.returns(15, from(DerAcControlsModelAccessor::getReactivePowerRampRate))
+			.as("Anti-islanding enabled")
+			.returns(false, from(DerAcControlsModelAccessor::isAntiIslandingEnabled))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -353,15 +476,19 @@ public class DerAcControlsModelAccessorImpl_704_01Tests {
 		DerAcControlsModelAccessor model = discoverModel(conn);
 
 		// WHEN
-		try {
-			model.setReactivePowerSetpoint(conn, 1000);
-			fail("The not implemented VarSet_SF scale factor should prevent writing.");
-		} catch ( IllegalStateException e ) {
-			// expected
-		}
+		Throwable t = catchThrowable(() -> model.setReactivePowerSetpoint(conn, 1000));
 
 		// THEN
-		assertThat("Nothing written", conn.getWrites(), is(equalTo(List.of())));
+		// @formatter:off
+		then(t)
+			.as("Not implemented VarSet_SF scale factor prevents writing")
+			.isInstanceOf(IllegalStateException.class)
+			;
+		then(conn.getWrites())
+			.as("Nothing written")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 }

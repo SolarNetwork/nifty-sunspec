@@ -22,11 +22,8 @@
 
 package net.solarnetwork.sunspec.core.inverter.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.util.EnumSet;
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.api.inverter.InverterModelEvent;
 
@@ -40,30 +37,52 @@ public class InverterModelEventTests {
 
 	@Test
 	public void forBitmask() {
-		assertThat("Events from bits", InverterModelEvent.forBitmask(0x5L), is(
-				equalTo(EnumSet.of(InverterModelEvent.GroundFault, InverterModelEvent.AcDisconnect))));
+		// @formatter:off
+		then(InverterModelEvent.forBitmask(0x5L))
+			.as("Events from bits")
+			.isEqualTo(EnumSet.of(InverterModelEvent.GroundFault, InverterModelEvent.AcDisconnect))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_highestEvent() {
-		assertThat("Highest defined event", InverterModelEvent.forBitmask(0x40000000L),
-				is(equalTo(EnumSet.of(InverterModelEvent.OEM_15))));
+		// @formatter:off
+		then(InverterModelEvent.forBitmask(0x40000000L))
+			.as("Highest defined event")
+			.isEqualTo(EnumSet.of(InverterModelEvent.OEM_15))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_zero() {
-		assertThat("No events", InverterModelEvent.forBitmask(0L), is(equalTo(Set.of())));
+		// @formatter:off
+		then(InverterModelEvent.forBitmask(0L))
+			.as("No events")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_notImplemented() {
-		assertThat("Not implemented", InverterModelEvent.forBitmask(0xFFFFFFFFL), is(equalTo(Set.of())));
+		// @formatter:off
+		then(InverterModelEvent.forBitmask(0xFFFFFFFFL))
+			.as("Not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_mostSignificantBit() {
-		assertThat("Most significant bit set means not implemented",
-				InverterModelEvent.forBitmask(0x80000000L | 0x5L), is(equalTo(Set.of())));
+		// @formatter:off
+		then(InverterModelEvent.forBitmask(0x80000000L | 0x5L))
+			.as("Most significant bit set means not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 }

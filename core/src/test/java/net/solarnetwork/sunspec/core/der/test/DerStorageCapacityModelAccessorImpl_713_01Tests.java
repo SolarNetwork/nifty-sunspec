@@ -22,11 +22,8 @@
 
 package net.solarnetwork.sunspec.core.der.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.api.der.DerModelId;
 import net.solarnetwork.sunspec.api.der.DerStorageCapacityModelAccessor;
@@ -51,27 +48,56 @@ public class DerStorageCapacityModelAccessorImpl_713_01Tests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), is(instanceOf(DerStorageCapacityModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(DerStorageCapacityModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		DerStorageCapacityModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(1211)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(1213)));
-		assertThat("Model ID", model.getModelId(), is(equalTo(DerModelId.StorageCapacity)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(7)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(7)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(1211, from(DerStorageCapacityModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(1213, from(DerStorageCapacityModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(DerModelId.StorageCapacity, from(DerStorageCapacityModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(7, from(DerStorageCapacityModelAccessor::getFixedBlockLength))
+			.as("Model length")
+			.returns(7, from(DerStorageCapacityModelAccessor::getModelLength))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void values() {
+		// GIVEN
 		DerStorageCapacityModelAccessor model = getTestModel();
-		assertThat("Energy rating not implemented", model.getEnergyRating(), is(nullValue()));
-		assertThat("Energy available not implemented", model.getEnergyAvailable(), is(nullValue()));
-		assertThat("State of charge", model.getStateOfCharge(), is(equalTo(100.0f)));
-		assertThat("State of health not implemented", model.getStateOfHealth(), is(nullValue()));
-		assertThat("Status not implemented", model.getStorageStatus(), is(nullValue()));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Energy rating not implemented")
+			.returns(null, from(DerStorageCapacityModelAccessor::getEnergyRating))
+			.as("Energy available not implemented")
+			.returns(null, from(DerStorageCapacityModelAccessor::getEnergyAvailable))
+			.as("State of charge")
+			.returns(100.0f, from(DerStorageCapacityModelAccessor::getStateOfCharge))
+			.as("State of health not implemented")
+			.returns(null, from(DerStorageCapacityModelAccessor::getStateOfHealth))
+			.as("Status not implemented")
+			.returns(null, from(DerStorageCapacityModelAccessor::getStorageStatus))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -84,11 +110,20 @@ public class DerStorageCapacityModelAccessorImpl_713_01Tests {
 				.findTypedModel(DerStorageCapacityModelAccessor.class);
 
 		// THEN
-		assertThat("Energy rating", model.getEnergyRating(), is(equalTo(13500L)));
-		assertThat("Energy available", model.getEnergyAvailable(), is(equalTo(12150L)));
-		assertThat("State of charge", model.getStateOfCharge(), is(equalTo(90.0f)));
-		assertThat("State of health", model.getStateOfHealth(), is(equalTo(100.0f)));
-		assertThat("Status", model.getStorageStatus(), is(equalTo(DerStorageStatus.Warning)));
+		// @formatter:off
+		then(model)
+			.as("Energy rating")
+			.returns(13500L, from(DerStorageCapacityModelAccessor::getEnergyRating))
+			.as("Energy available")
+			.returns(12150L, from(DerStorageCapacityModelAccessor::getEnergyAvailable))
+			.as("State of charge")
+			.returns(90.0f, from(DerStorageCapacityModelAccessor::getStateOfCharge))
+			.as("State of health")
+			.returns(100.0f, from(DerStorageCapacityModelAccessor::getStateOfHealth))
+			.as("Status")
+			.returns(DerStorageStatus.Warning, from(DerStorageCapacityModelAccessor::getStorageStatus))
+			;
+		// @formatter:on
 	}
 
 }

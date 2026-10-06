@@ -22,14 +22,12 @@
 
 package net.solarnetwork.sunspec.core.der.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.BDDAssertions.catchThrowable;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
+import static org.assertj.core.api.BDDAssertions.thenThrownBy;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -99,62 +97,118 @@ public class DerTripLowVoltageModelAccessorImpl_707_01Tests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), is(instanceOf(DerTripLowVoltageModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(DerTripLowVoltageModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		DerTripLowVoltageModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(581)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(BLOCK_ADDRESS)));
-		assertThat("Model ID", model.getModelId(), is(equalTo(DerModelId.TripLowVoltage)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(7)));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				is(equalTo(67)));
-		assertThat("Model repeating instance count", model.getRepeatingBlockInstanceCount(),
-				is(equalTo(2)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(141)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(581, from(DerTripLowVoltageModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(BLOCK_ADDRESS, from(DerTripLowVoltageModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(DerModelId.TripLowVoltage, from(DerTripLowVoltageModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(7, from(DerTripLowVoltageModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(67, from(DerTripLowVoltageModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model repeating instance count")
+			.returns(2, from(DerTripLowVoltageModelAccessor::getRepeatingBlockInstanceCount))
+			.as("Model length")
+			.returns(141, from(DerTripLowVoltageModelAccessor::getModelLength))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void curveManagement() {
+		// GIVEN
 		DerTripLowVoltageModelAccessor model = getTestModel();
-		assertThat("Enabled", model.isEnabled(), is(equalTo(true)));
-		assertThat("Curve set count", model.getCurveSetCount(), is(equalTo(2)));
-		assertThat("Curve point count", model.getCurvePointCount(), is(equalTo(7)));
-		assertThat("Adopt curve request", model.getAdoptCurveRequest(), is(equalTo(0)));
-		assertThat("Adopt curve result", model.getAdoptCurveResult(),
-				is(equalTo(DerAdoptResult.InProgress)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Enabled")
+			.returns(true, from(DerTripLowVoltageModelAccessor::isEnabled))
+			.as("Curve set count")
+			.returns(2, from(DerTripLowVoltageModelAccessor::getCurveSetCount))
+			.as("Curve point count")
+			.returns(7, from(DerTripLowVoltageModelAccessor::getCurvePointCount))
+			.as("Adopt curve request")
+			.returns(0, from(DerTripLowVoltageModelAccessor::getAdoptCurveRequest))
+			.as("Adopt curve result")
+			.returns(DerAdoptResult.InProgress,
+					from(DerTripLowVoltageModelAccessor::getAdoptCurveResult))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void curveSets() {
+		// WHEN
 		List<DerTripCurveSet> sets = getTestModel().getCurveSets();
-		assertThat("Curve sets", sets, hasSize(2));
+
+		// THEN
+		// @formatter:off
+		then(sets)
+			.as("Curve sets")
+			.hasSize(2)
+			;
+		// @formatter:on
 		for ( DerTripCurveSet set : sets ) {
 			String prefix = "Set " + set.getIndex();
 			boolean active = set.getIndex() == 1;
-			assertThat(prefix + " read-only", set.isReadOnly(), is(equalTo(active)));
+			// @formatter:off
+			then(set.isReadOnly())
+				.as(prefix + " read-only")
+				.isEqualTo(active)
+				;
+			// @formatter:on
 
 			DerCurve mustTrip = set.getMustTripCurve();
-			assertThat(prefix + " must trip index", mustTrip.getIndex(), is(equalTo(set.getIndex())));
-			assertThat(prefix + " must trip read-only", mustTrip.isReadOnly(), is(equalTo(active)));
-			assertThat(prefix + " must trip active points", mustTrip.getActivePointCount(),
-					is(equalTo(5)));
-			assertThat(prefix + " must trip points", mustTrip.getPoints(),
-					is(equalTo(MUST_TRIP_POINTS)));
+			// @formatter:off
+			then(mustTrip)
+				.as(prefix + " must trip index")
+				.returns(set.getIndex(), from(DerCurve::getIndex))
+				.as(prefix + " must trip read-only")
+				.returns(active, from(DerCurve::isReadOnly))
+				.as(prefix + " must trip active points")
+				.returns(5, from(DerCurve::getActivePointCount))
+				.as(prefix + " must trip points")
+				.returns(MUST_TRIP_POINTS, from(DerCurve::getPoints))
+				;
+			// @formatter:on
 
 			DerCurve mayTrip = set.getMayTripCurve();
-			assertThat(prefix + " may trip active points not implemented", mayTrip.getActivePointCount(),
-					is(nullValue()));
-			assertThat(prefix + " may trip points", mayTrip.getPoints(),
-					is(equalTo(Collections.emptyList())));
+			// @formatter:off
+			then(mayTrip)
+				.as(prefix + " may trip active points not implemented")
+				.returns(null, from(DerCurve::getActivePointCount))
+				.as(prefix + " may trip points")
+				.returns(Collections.emptyList(), from(DerCurve::getPoints))
+				;
+			// @formatter:on
 
 			DerCurve momCess = set.getMomentaryCessationCurve();
-			assertThat(prefix + " momentary cessation active points", momCess.getActivePointCount(),
-					is(equalTo(2)));
-			assertThat(prefix + " momentary cessation points", momCess.getPoints(),
-					is(equalTo(MOM_CESS_POINTS)));
+			// @formatter:off
+			then(momCess)
+				.as(prefix + " momentary cessation active points")
+				.returns(2, from(DerCurve::getActivePointCount))
+				.as(prefix + " momentary cessation points")
+				.returns(MOM_CESS_POINTS, from(DerCurve::getPoints))
+				;
+			// @formatter:on
 		}
 	}
 
@@ -168,17 +222,29 @@ public class DerTripLowVoltageModelAccessorImpl_707_01Tests {
 		curve.setPoints(conn, NEW_MUST_TRIP_POINTS);
 
 		// THEN
-		assertThat("Points written in one request, then the active point count", conn.getWrites(),
-				is(equalTo(List.of(List.of(SET_2_MUST_TRIP_ADDRESS + 1, 15),
-						List.of(SET_2_MUST_TRIP_ADDRESS, 1)))));
+		// @formatter:off
+		then(conn.getWrites())
+			.as("Points written in one request, then the active point count")
+			.isEqualTo(List.of(List.of(SET_2_MUST_TRIP_ADDRESS + 1, 15),
+					List.of(SET_2_MUST_TRIP_ADDRESS, 1)))
+			;
+		// @formatter:on
 
 		List<DerTripCurveSet> sets = discoverModel(conn).getCurveSets();
-		assertThat("Must trip points", sets.get(1).getMustTripCurve().getPoints(),
-				is(equalTo(NEW_MUST_TRIP_POINTS)));
-		assertThat("Momentary cessation unchanged", sets.get(1).getMomentaryCessationCurve().getPoints(),
-				is(equalTo(MOM_CESS_POINTS)));
-		assertThat("Active set unchanged", sets.get(0).getMustTripCurve().getPoints(),
-				is(equalTo(MUST_TRIP_POINTS)));
+		// @formatter:off
+		then(sets.get(1).getMustTripCurve().getPoints())
+			.as("Must trip points")
+			.isEqualTo(NEW_MUST_TRIP_POINTS)
+			;
+		then(sets.get(1).getMomentaryCessationCurve().getPoints())
+			.as("Momentary cessation unchanged")
+			.isEqualTo(MOM_CESS_POINTS)
+			;
+		then(sets.get(0).getMustTripCurve().getPoints())
+			.as("Active set unchanged")
+			.isEqualTo(MUST_TRIP_POINTS)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -191,11 +257,21 @@ public class DerTripLowVoltageModelAccessorImpl_707_01Tests {
 		curve.setPoints(conn, List.of());
 
 		// THEN
-		assertThat("Only the active point count written", conn.getWrites(),
-				is(equalTo(List.of(List.of(SET_2_MAY_TRIP_ADDRESS, 1)))));
+		// @formatter:off
+		then(conn.getWrites())
+			.as("Only the active point count written")
+			.isEqualTo(List.of(List.of(SET_2_MAY_TRIP_ADDRESS, 1)))
+			;
+		// @formatter:on
 		DerCurve device = discoverModel(conn).getCurveSets().get(1).getMayTripCurve();
-		assertThat("Active point count", device.getActivePointCount(), is(equalTo(0)));
-		assertThat("Points", device.getPoints(), is(equalTo(Collections.emptyList())));
+		// @formatter:off
+		then(device)
+			.as("Active point count")
+			.returns(0, from(DerCurve::getActivePointCount))
+			.as("Points")
+			.returns(Collections.emptyList(), from(DerCurve::getPoints))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -208,9 +284,12 @@ public class DerTripLowVoltageModelAccessorImpl_707_01Tests {
 		curve.setActivePointCount(conn, 1);
 
 		// THEN
-		assertThat("Points",
-				discoverModel(conn).getCurveSets().get(1).getMomentaryCessationCurve().getPoints(),
-				is(equalTo(MOM_CESS_POINTS.subList(0, 1))));
+		// @formatter:off
+		then(discoverModel(conn).getCurveSets().get(1).getMomentaryCessationCurve().getPoints())
+			.as("Points")
+			.isEqualTo(MOM_CESS_POINTS.subList(0, 1))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -221,21 +300,22 @@ public class DerTripLowVoltageModelAccessorImpl_707_01Tests {
 		DerCurvePoint p = new DerCurvePoint(50.0f, 1.0f);
 
 		// THEN
-		try {
-			curve.setPoints(conn, List.of(p, p, p, p, p, p, p, p));
-			fail("More points than the curve point count should be rejected.");
-		} catch ( IllegalArgumentException e ) {
-			// expected
-		}
+		// @formatter:off
+		thenThrownBy(() -> curve.setPoints(conn, List.of(p, p, p, p, p, p, p, p)))
+			.as("More points than the curve point count rejected")
+			.isInstanceOf(IllegalArgumentException.class)
+			;
 		for ( int count : new int[] { -1, 8 } ) {
-			try {
-				curve.setActivePointCount(conn, count);
-				fail("Active point count " + count + " should be rejected.");
-			} catch ( IllegalArgumentException e ) {
-				// expected
-			}
+			thenThrownBy(() -> curve.setActivePointCount(conn, count))
+				.as("Active point count %d rejected", count)
+				.isInstanceOf(IllegalArgumentException.class)
+				;
 		}
-		assertThat("Nothing written", conn.getWrites(), is(equalTo(List.of())));
+		then(conn.getWrites())
+			.as("Nothing written")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -245,19 +325,20 @@ public class DerTripLowVoltageModelAccessorImpl_707_01Tests {
 		DerTripCurveSet set = discoverModel(conn).getCurveSets().get(0);
 
 		// THEN
-		try {
-			set.getMustTripCurve().setPoints(conn, NEW_MUST_TRIP_POINTS);
-			fail("Writing points to the read-only curve set should be rejected.");
-		} catch ( UnsupportedOperationException e ) {
-			// expected
-		}
-		try {
-			set.getMayTripCurve().setActivePointCount(conn, 0);
-			fail("Writing the active point count to the read-only curve set should be rejected.");
-		} catch ( UnsupportedOperationException e ) {
-			// expected
-		}
-		assertThat("Nothing written", conn.getWrites(), is(equalTo(List.of())));
+		// @formatter:off
+		thenThrownBy(() -> set.getMustTripCurve().setPoints(conn, NEW_MUST_TRIP_POINTS))
+			.as("Writing points to the read-only curve set rejected")
+			.isInstanceOf(UnsupportedOperationException.class)
+			;
+		thenThrownBy(() -> set.getMayTripCurve().setActivePointCount(conn, 0))
+			.as("Writing the active point count to the read-only curve set rejected")
+			.isInstanceOf(UnsupportedOperationException.class)
+			;
+		then(conn.getWrites())
+			.as("Nothing written")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -267,23 +348,33 @@ public class DerTripLowVoltageModelAccessorImpl_707_01Tests {
 		DerTripLowVoltageModelAccessor model = discoverModel(conn);
 
 		// WHEN
+		final List<Throwable> errors = new ArrayList<>();
 		for ( int index : new int[] { 1, 3 } ) {
-			try {
-				model.adoptCurveSet(conn, index);
-				fail("Curve set index " + index + " should be rejected.");
-			} catch ( IllegalArgumentException e ) {
-				// expected
-			}
+			errors.add(catchThrowable(() -> model.adoptCurveSet(conn, index)));
 		}
 		model.adoptCurveSet(conn, 2);
 		model.setEnabled(conn, false);
 
 		// THEN
-		assertThat("Writes", conn.getWrites(),
-				is(equalTo(List.of(List.of(BLOCK_ADDRESS + 1, 1), List.of(BLOCK_ADDRESS, 1)))));
+		// @formatter:off
+		then(errors)
+			.as("Curve set indexes 1 and 3 rejected")
+			.hasOnlyElementsOfType(IllegalArgumentException.class)
+			;
+		then(conn.getWrites())
+			.as("Writes")
+			.isEqualTo(List.of(List.of(BLOCK_ADDRESS + 1, 1), List.of(BLOCK_ADDRESS, 1)))
+			;
+		// @formatter:on
 		DerTripLowVoltageModelAccessor device = discoverModel(conn);
-		assertThat("Adopt curve request", device.getAdoptCurveRequest(), is(equalTo(2)));
-		assertThat("Enabled", device.isEnabled(), is(equalTo(false)));
+		// @formatter:off
+		then(device)
+			.as("Adopt curve request")
+			.returns(2, from(DerTripLowVoltageModelAccessor::getAdoptCurveRequest))
+			.as("Enabled")
+			.returns(false, from(DerTripLowVoltageModelAccessor::isEnabled))
+			;
+		// @formatter:on
 	}
 
 }

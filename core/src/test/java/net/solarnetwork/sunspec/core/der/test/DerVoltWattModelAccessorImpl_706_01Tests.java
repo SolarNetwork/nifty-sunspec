@@ -22,11 +22,8 @@
 
 package net.solarnetwork.sunspec.core.der.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -67,38 +64,81 @@ public class DerVoltWattModelAccessorImpl_706_01Tests {
 
 	@Test
 	public void findTypedModel() {
-		assertThat(getTestModel(), is(instanceOf(DerVoltWattModelAccessorImpl.class)));
+		// @formatter:off
+		then(getTestModel())
+			.as("Model found by accessor type")
+			.isInstanceOf(DerVoltWattModelAccessorImpl.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void block() {
+		// GIVEN
 		DerVoltWattModelAccessor model = getTestModel();
-		assertThat("Model base address", model.getBaseAddress(), is(equalTo(539)));
-		assertThat("Model block address", model.getBlockAddress(), is(equalTo(BLOCK_ADDRESS)));
-		assertThat("Model ID", model.getModelId(), is(equalTo(DerModelId.VoltWatt)));
-		assertThat("Model fixed length", model.getFixedBlockLength(), is(equalTo(13)));
-		assertThat("Model repeating instance length", model.getRepeatingBlockInstanceLength(),
-				is(equalTo(9)));
-		assertThat("Model length", model.getModelLength(), is(equalTo(40)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Model base address")
+			.returns(539, from(DerVoltWattModelAccessor::getBaseAddress))
+			.as("Model block address")
+			.returns(BLOCK_ADDRESS, from(DerVoltWattModelAccessor::getBlockAddress))
+			.as("Model ID")
+			.returns(DerModelId.VoltWatt, from(DerVoltWattModelAccessor::getModelId))
+			.as("Model fixed length")
+			.returns(13, from(DerVoltWattModelAccessor::getFixedBlockLength))
+			.as("Model repeating instance length")
+			.returns(9, from(DerVoltWattModelAccessor::getRepeatingBlockInstanceLength))
+			.as("Model length")
+			.returns(40, from(DerVoltWattModelAccessor::getModelLength))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void curves() {
+		// GIVEN
 		DerVoltWattModelAccessor model = getTestModel();
-		assertThat("Enabled", model.isEnabled(), is(equalTo(true)));
-		assertThat("Curve count", model.getCurveCount(), is(equalTo(3)));
-		assertThat("Curve point count", model.getCurvePointCount(), is(equalTo(2)));
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Enabled")
+			.returns(true, from(DerVoltWattModelAccessor::isEnabled))
+			.as("Curve count")
+			.returns(3, from(DerVoltWattModelAccessor::getCurveCount))
+			.as("Curve point count")
+			.returns(2, from(DerVoltWattModelAccessor::getCurvePointCount))
+			;
+		// @formatter:on
 
 		List<VoltWattCurve> curves = model.getCurves();
-		assertThat("Curves", curves, hasSize(3));
+		// @formatter:off
+		then(curves)
+			.as("Curves")
+			.hasSize(3)
+			;
+		// @formatter:on
 		VoltWattCurve curve = curves.get(0);
-		assertThat("Read-only", curve.isReadOnly(), is(equalTo(true)));
-		assertThat("Dependent reference", curve.getDependentReference(),
-				is(equalTo(DerActivePowerReference.MaximumActivePowerPercent)));
-		assertThat("Open loop response time", curve.getOpenLoopResponseTime(), is(equalTo(10.0f)));
-		assertThat("Points", curve.getPoints(), is(
-				equalTo(List.of(new DerCurvePoint(106.0f, 100.0f), new DerCurvePoint(110.0f, 20.0f)))));
-		assertThat("Stored curve read-only", curves.get(2).isReadOnly(), is(equalTo(false)));
+		// @formatter:off
+		then(curve)
+			.as("Read-only")
+			.returns(true, from(VoltWattCurve::isReadOnly))
+			.as("Dependent reference")
+			.returns(DerActivePowerReference.MaximumActivePowerPercent,
+					from(VoltWattCurve::getDependentReference))
+			.as("Open loop response time")
+			.returns(10.0f, from(VoltWattCurve::getOpenLoopResponseTime))
+			.as("Points")
+			.returns(List.of(new DerCurvePoint(106.0f, 100.0f), new DerCurvePoint(110.0f, 20.0f)),
+					from(VoltWattCurve::getPoints))
+			;
+		then(curves.get(2).isReadOnly())
+			.as("Stored curve read-only")
+			.isFalse()
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -115,16 +155,27 @@ public class DerVoltWattModelAccessorImpl_706_01Tests {
 				List.of(new DerCurvePoint(105.0f, 100.0f), new DerCurvePoint(109.0f, 0.0f)));
 
 		// THEN
-		assertThat("Writes", conn.getWrites(),
-				is(equalTo(List.of(List.of(CURVE_3_ADDRESS + 1, 1), List.of(CURVE_3_ADDRESS + 2, 2),
-						List.of(CURVE_3_ADDRESS + 5, 4), List.of(CURVE_3_ADDRESS, 1)))));
+		// @formatter:off
+		then(conn.getWrites())
+			.as("Writes")
+			.isEqualTo(List.of(List.of(CURVE_3_ADDRESS + 1, 1), List.of(CURVE_3_ADDRESS + 2, 2),
+					List.of(CURVE_3_ADDRESS + 5, 4), List.of(CURVE_3_ADDRESS, 1)))
+			;
+		// @formatter:on
 
 		VoltWattCurve device = discoverModel(conn).getCurves().get(2);
-		assertThat("Dependent reference", device.getDependentReference(),
-				is(equalTo(DerActivePowerReference.AvailableActivePowerPercent)));
-		assertThat("Open loop response time", device.getOpenLoopResponseTime(), is(equalTo(2.5f)));
-		assertThat("Points", device.getPoints(), is(
-				equalTo(List.of(new DerCurvePoint(105.0f, 100.0f), new DerCurvePoint(109.0f, 0.0f)))));
+		// @formatter:off
+		then(device)
+			.as("Dependent reference")
+			.returns(DerActivePowerReference.AvailableActivePowerPercent,
+					from(VoltWattCurve::getDependentReference))
+			.as("Open loop response time")
+			.returns(2.5f, from(VoltWattCurve::getOpenLoopResponseTime))
+			.as("Points")
+			.returns(List.of(new DerCurvePoint(105.0f, 100.0f), new DerCurvePoint(109.0f, 0.0f)),
+					from(VoltWattCurve::getPoints))
+			;
+		// @formatter:on
 	}
 
 }

@@ -22,11 +22,7 @@
 
 package net.solarnetwork.sunspec.core.meter.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import java.util.Set;
+import static org.assertj.core.api.BDDAssertions.then;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.api.meter.MeterModelEvent;
 
@@ -40,30 +36,52 @@ public class MeterModelEventTests {
 
 	@Test
 	public void forBitmask() {
-		assertThat("Events from bits", MeterModelEvent.forBitmask(0x14L),
-				contains(MeterModelEvent.PowerFailure, MeterModelEvent.LowPowerFactor));
+		// @formatter:off
+		then(MeterModelEvent.forBitmask(0x14L))
+			.as("Events from bits")
+			.containsExactly(MeterModelEvent.PowerFailure, MeterModelEvent.LowPowerFactor)
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_highestEvent() {
-		assertThat("Event from bit 30", MeterModelEvent.forBitmask(0x40000000L),
-				contains(MeterModelEvent.forIndex(30)));
+		// @formatter:off
+		then(MeterModelEvent.forBitmask(0x40000000L))
+			.as("Event from bit 30")
+			.containsExactly(MeterModelEvent.forIndex(30))
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_zero() {
-		assertThat("No events", MeterModelEvent.forBitmask(0L), is(equalTo(Set.of())));
+		// @formatter:off
+		then(MeterModelEvent.forBitmask(0L))
+			.as("No events")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_notImplemented() {
-		assertThat("Not implemented", MeterModelEvent.forBitmask(0xFFFFFFFFL), is(equalTo(Set.of())));
+		// @formatter:off
+		then(MeterModelEvent.forBitmask(0xFFFFFFFFL))
+			.as("Not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 	@Test
 	public void forBitmask_mostSignificantBit() {
-		assertThat("Most significant bit set means not implemented",
-				MeterModelEvent.forBitmask(0x80000014L), is(equalTo(Set.of())));
+		// @formatter:off
+		then(MeterModelEvent.forBitmask(0x80000014L))
+			.as("Most significant bit set means not implemented")
+			.isEmpty()
+			;
+		// @formatter:on
 	}
 
 }

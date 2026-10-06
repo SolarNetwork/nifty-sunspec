@@ -25,27 +25,29 @@ package net.solarnetwork.sunspec.core.test;
 import static net.solarnetwork.domain.AcPhase.PhaseA;
 import static net.solarnetwork.domain.AcPhase.PhaseB;
 import static net.solarnetwork.domain.AcPhase.PhaseC;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static net.solarnetwork.sunspec.modbus.ModbusReadFunction.ReadHoldingRegister;
+import static org.assertj.core.api.BDDAssertions.and;
+import static org.assertj.core.api.BDDAssertions.catchThrowable;
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
-import org.easymock.EasyMock;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import net.solarnetwork.sunspec.api.ModelRegister;
 import net.solarnetwork.sunspec.api.meter.MeterModelAccessor;
 import net.solarnetwork.sunspec.core.ModelDataFactory;
 import net.solarnetwork.sunspec.core.meter.test.IntegerMeterModelAccessorTests;
 import net.solarnetwork.sunspec.modbus.ModbusConnection;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
 import net.solarnetwork.sunspec.modbus.support.StaticDataMapReadonlyModbusConnection;
 import net.solarnetwork.sunspec.test.DataUtils;
@@ -58,66 +60,78 @@ import net.solarnetwork.util.IntShortMap;
  * @author matt
  * @version 1.1
  */
+@SuppressWarnings("static-access")
+@ExtendWith(MockitoExtension.class)
 public class ModelDataFactoryTests {
 
 	public static final int[] SUNSPEC_START_00 = new int[] { 0x5375, 0x6E53 };
 
+	@Mock
 	private ModbusConnection conn;
-
-	@BeforeEach
-	public void setup() {
-		conn = EasyMock.createMock(ModbusConnection.class);
-	}
 
 	@Test
 	public void createIntegerMeterModel() throws IOException {
-		expect(conn.getUnitId()).andReturn(1).anyTimes();
-
+		// GIVEN
 		// find base address
-		expect(conn.readString(ModbusReadFunction.ReadHoldingRegister, 40000, 2, true, ByteUtils.ASCII))
-				.andReturn(ModelRegister.BASE_ADDRESS_MAGIC_STRING);
+		given(conn.readString(ReadHoldingRegister, 40000, 2, true, ByteUtils.ASCII))
+				.willReturn(ModelRegister.BASE_ADDRESS_MAGIC_STRING);
 
-		expect(conn.readWords(ModbusReadFunction.ReadHoldingRegister, 40002, 2))
-				.andReturn(new short[] { 1, 65 });
+		// common model
+		given(conn.readWords(ReadHoldingRegister, 40002, 2)).willReturn(new short[] { 1, 65 });
+		given(conn.readWords(ReadHoldingRegister, 40004, 65)).willReturn(DataUtils.COMMON_MODEL_02);
 
-		expect(conn.readWords(ModbusReadFunction.ReadHoldingRegister, 40004, 65))
-				.andReturn(DataUtils.COMMON_MODEL_02);
+		// meter model header, followed by the end marker
+		given(conn.readWords(ReadHoldingRegister, 40069, 2))
+				.willReturn(IntegerMeterModelAccessorTests.INT_METER_MODEL_HEADER_69);
+		given(conn.readWords(ReadHoldingRegister, 40176, 2))
+				.willReturn(new short[] { (short) 0xFFFF, 0x0000 });
 
-		expect(conn.readWords(ModbusReadFunction.ReadHoldingRegister, 40069, 2))
-				.andReturn(IntegerMeterModelAccessorTests.INT_METER_MODEL_HEADER_69);
+		// meter model
+		given(conn.readWords(ReadHoldingRegister, 40071, 105))
+				.willReturn(IntegerMeterModelAccessorTests.INT_METER_MODEL_71);
 
-		expect(conn.readWords(ModbusReadFunction.ReadHoldingRegister, 40176, 2))
-				.andReturn(new short[] { (short) 0xFFFF, 0x0000 });
-
-		expect(conn.readWords(ModbusReadFunction.ReadHoldingRegister, 40071, 105))
-				.andReturn(IntegerMeterModelAccessorTests.INT_METER_MODEL_71);
-
-		replay(conn);
-
+		// WHEN
 		ModelData data = ModelDataFactory.getInstance().getModelData(conn, Integer.MAX_VALUE);
 
-		verify(conn);
+		// THEN
+		// @formatter:off
+		// strict stubs require every stubbed read, so these counts verify each was made
+		// exactly once, and no others were made
+		then(conn).should().readString(any(), anyInt(), anyInt(), anyBoolean(), any());
+		then(conn).should(times(5)).readWords(any(), anyInt(), anyInt());
 
-		assertThat("Model count", data.getModels(), hasSize(1));
-		assertThat("Meter model", data.getModel(), instanceOf(MeterModelAccessor.class));
+		and.then(data.getModels())
+			.as("Model count")
+			.hasSize(1)
+			;
+		and.then(data.getModel())
+			.as("Meter model")
+			.isInstanceOf(MeterModelAccessor.class)
+			;
 
-		MeterModelAccessor model = data.getTypedModel();
-		assertThat("Energy export Total", model.getActiveEnergyExported(), equalTo(1090000L));
-		assertThat("Energy export Phase A", model.accessorForPhase(PhaseA).getActiveEnergyExported(),
-				equalTo(1009000L));
-		assertThat("Energy export Phase B", model.accessorForPhase(PhaseB).getActiveEnergyExported(),
-				equalTo(33600L));
-		assertThat("Energy export Phase C", model.accessorForPhase(PhaseC).getActiveEnergyExported(),
-				equalTo(47300L));
+		final MeterModelAccessor model = data.getTypedModel();
+		and.then(model)
+			.as("Energy export Total")
+			.returns(1090000L, from(MeterModelAccessor::getActiveEnergyExported))
+			.as("Energy export Phase A")
+			.returns(1009000L, from(m -> m.accessorForPhase(PhaseA).getActiveEnergyExported()))
+			.as("Energy export Phase B")
+			.returns(33600L, from(m -> m.accessorForPhase(PhaseB).getActiveEnergyExported()))
+			.as("Energy export Phase C")
+			.returns(47300L, from(m -> m.accessorForPhase(PhaseC).getActiveEnergyExported()))
+			;
 
-		assertThat("Energy import Total", model.getActiveEnergyImported(), equalTo(1001509000L));
-		assertThat("Energy import Phase A", model.accessorForPhase(PhaseA).getActiveEnergyImported(),
-				equalTo(350516800L));
-		assertThat("Energy import Phase B", model.accessorForPhase(PhaseB).getActiveEnergyImported(),
-				equalTo(273085000L));
-		assertThat("Energy import Phase C", model.accessorForPhase(PhaseC).getActiveEnergyImported(),
-				equalTo(377907200L));
-
+		and.then(model)
+			.as("Energy import Total")
+			.returns(1001509000L, from(MeterModelAccessor::getActiveEnergyImported))
+			.as("Energy import Phase A")
+			.returns(350516800L, from(m -> m.accessorForPhase(PhaseA).getActiveEnergyImported()))
+			.as("Energy import Phase B")
+			.returns(273085000L, from(m -> m.accessorForPhase(PhaseB).getActiveEnergyImported()))
+			.as("Energy import Phase C")
+			.returns(377907200L, from(m -> m.accessorForPhase(PhaseC).getActiveEnergyImported()))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -137,12 +151,22 @@ public class ModelDataFactoryTests {
 				ModelDataFactory.DEFAULT_MAX_READ_WORDS_COUNT, 1000);
 
 		// THEN
-		assertThat("Manufacturer", data.getManufacturer(), equalTo("Veris Industries"));
-		assertThat("Model name", data.getModelName(), equalTo("E51C2"));
-		assertThat("Options", data.getOptions(), equalTo("None"));
-		assertThat("Version", data.getVersion(), equalTo("2.115"));
-		assertThat("Serial number", data.getSerialNumber(), equalTo("4E4C3699"));
-		assertThat("Device address", data.getDeviceAddress(), equalTo(7));
+		// @formatter:off
+		and.then(data)
+			.as("Manufacturer")
+			.returns("Veris Industries", from(ModelData::getManufacturer))
+			.as("Model name")
+			.returns("E51C2", from(ModelData::getModelName))
+			.as("Options")
+			.returns("None", from(ModelData::getOptions))
+			.as("Version")
+			.returns("2.115", from(ModelData::getVersion))
+			.as("Serial number")
+			.returns("4E4C3699", from(ModelData::getSerialNumber))
+			.as("Device address")
+			.returns(7, from(ModelData::getDeviceAddress))
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -152,10 +176,16 @@ public class ModelDataFactoryTests {
 		ModbusConnection conn = new StaticDataMapReadonlyModbusConnection(map);
 
 		// WHEN
-		assertThrows(IOException.class, () -> {
-			ModelDataFactory.getInstance().getModelData(conn,
-					ModelDataFactory.DEFAULT_MAX_READ_WORDS_COUNT);
-		});
+		Throwable t = catchThrowable(() -> ModelDataFactory.getInstance().getModelData(conn,
+				ModelDataFactory.DEFAULT_MAX_READ_WORDS_COUNT));
+
+		// THEN
+		// @formatter:off
+		and.then(t)
+			.as("Base address not found without the SunSpec marker")
+			.isInstanceOf(IOException.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -170,10 +200,16 @@ public class ModelDataFactoryTests {
 		ModbusConnection conn = new StaticDataMapReadonlyModbusConnection(map);
 
 		// WHEN
-		assertThrows(IOException.class, () -> {
-			ModelDataFactory.getInstance().getModelData(conn,
-					ModelDataFactory.DEFAULT_MAX_READ_WORDS_COUNT);
-		});
+		Throwable t = catchThrowable(() -> ModelDataFactory.getInstance().getModelData(conn,
+				ModelDataFactory.DEFAULT_MAX_READ_WORDS_COUNT));
+
+		// THEN
+		// @formatter:off
+		and.then(t)
+			.as("Base address not found when the SunSpec marker does not match")
+			.isInstanceOf(IOException.class)
+			;
+		// @formatter:on
 	}
 
 	@Test
@@ -183,10 +219,16 @@ public class ModelDataFactoryTests {
 		ModbusConnection conn = new StaticDataMapReadonlyModbusConnection(map);
 
 		// WHEN
-		assertThrows(IOException.class, () -> {
-			ModelDataFactory.getInstance().getModelData(conn,
-					ModelDataFactory.DEFAULT_MAX_READ_WORDS_COUNT, 0);
-		});
+		Throwable t = catchThrowable(() -> ModelDataFactory.getInstance().getModelData(conn,
+				ModelDataFactory.DEFAULT_MAX_READ_WORDS_COUNT, 0));
+
+		// THEN
+		// @formatter:off
+		and.then(t)
+			.as("SunSpec marker required at the fixed base address")
+			.isInstanceOf(IOException.class)
+			;
+		// @formatter:on
 	}
 
 }
