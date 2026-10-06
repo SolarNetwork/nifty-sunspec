@@ -9,11 +9,11 @@ description = 'Nifty SunSpec: Core'
 
 dependencies {
 	implementation project(':nifty-sunspec-api')
-	implementation("net.solarnetwork.common:net.solarnetwork.common:${snCommonVersion}") {
+	implementation("net.solarnetwork.common:net.solarnetwork.common:${rootProject.ext.snCommonVersion}") {
 		transitive = false
 	}
-	implementation "org.jspecify:jspecify:${jSpecifyVersion}"
-	implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+	implementation "org.jspecify:jspecify:${rootProject.ext.jSpecifyVersion}"
+	implementation "org.slf4j:slf4j-api:${rootProject.ext.slf4jVersion}"
 	
 	// Testing
 	testImplementation project(':nifty-sunspec-test')

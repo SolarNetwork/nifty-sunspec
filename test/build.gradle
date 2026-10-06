@@ -7,11 +7,11 @@ apply plugin: 'java-library'
 description = 'Nifty SunSpec: Core Test'
 
 dependencies {
-	api "ch.qos.logback:logback-classic:${logbackClassicVersion}"
-	api "org.assertj:assertj-core:${assertjVersion}"
-	api "org.jspecify:jspecify:${jSpecifyVersion}"
-	api "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
-	api "org.slf4j:slf4j-api:${slf4jVersion}"
+	api "ch.qos.logback:logback-classic:${rootProject.ext.logbackClassicVersion}"
+	api "org.assertj:assertj-core:${rootProject.ext.assertjVersion}"
+	api "org.jspecify:jspecify:${rootProject.ext.jSpecifyVersion}"
+	api "org.junit.jupiter:junit-jupiter-api:${rootProject.ext.junitVersion}"
+	api "org.slf4j:slf4j-api:${rootProject.ext.slf4jVersion}"
 }
 
 jar.manifest {
