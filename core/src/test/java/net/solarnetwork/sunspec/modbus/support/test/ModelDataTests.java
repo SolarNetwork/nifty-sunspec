@@ -34,9 +34,9 @@ import net.solarnetwork.sunspec.api.CommonModelAccessor;
 import net.solarnetwork.sunspec.api.CommonModelId;
 import net.solarnetwork.sunspec.api.CommonModelRegister;
 import net.solarnetwork.sunspec.api.ModelRegister;
-import net.solarnetwork.sunspec.modbus.support.ModelData;
 import net.solarnetwork.sunspec.modbus.support.ModbusData.ModbusDataUpdateAction;
 import net.solarnetwork.sunspec.modbus.support.ModbusData.MutableModbusData;
+import net.solarnetwork.sunspec.modbus.support.ModelData;
 import net.solarnetwork.sunspec.test.DataUtils;
 
 /**
@@ -59,7 +59,7 @@ public class ModelDataTests {
 
 				@Override
 				public boolean updateModbusData(MutableModbusData m) {
-					m.saveDataArray(DataUtils.COMMON_MODEL_02, baseAddress + 2);
+					m.saveDataArray(DataUtils.commonModel02(), baseAddress + 2);
 					return true;
 				}
 			});

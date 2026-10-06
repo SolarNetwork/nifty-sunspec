@@ -78,7 +78,7 @@ public class ModelDataFactoryTests {
 
 		// common model
 		given(conn.readWords(ReadHoldingRegister, 40002, 2)).willReturn(new short[] { 1, 65 });
-		given(conn.readWords(ReadHoldingRegister, 40004, 65)).willReturn(DataUtils.COMMON_MODEL_02);
+		given(conn.readWords(ReadHoldingRegister, 40004, 65)).willReturn(DataUtils.commonModel02());
 
 		// meter model header, followed by the end marker
 		given(conn.readWords(ReadHoldingRegister, 40069, 2))

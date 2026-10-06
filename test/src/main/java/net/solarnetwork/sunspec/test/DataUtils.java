@@ -1,21 +1,21 @@
 /* ==================================================================
  * DataUtils.java - 4/08/2018 9:20:59 AM
- * 
+ *
  * Copyright 2018 SolarNetwork.net Dev Team
- * 
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License 
- * along with this program; if not, write to the Free Software 
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
  * 02111-1307 USA
  * ==================================================================
  */
@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 /**
  * Helper class for parsing test data files, commonly captured from devices via
  * other tools for use in unit tests.
- * 
+ *
  * @author matt
  * @version 1.1
  */
@@ -40,26 +40,26 @@ public final class DataUtils {
 
 	/**
 	 * Parse Modbus register lines encoded in hex.
-	 * 
+	 *
 	 * <p>
 	 * This method expects the lines to contain a single hex integer value at
 	 * the end (excluding whitespace) but can be proceeded by anything. For
 	 * example the output of the {@literal mbpoll} command produces output like
 	 * this, which can be parsed by this method:
 	 * </p>
-	 * 
+	 *
 	 * <pre>
 	 * [0]:    0x4031
 	 * [1]:    0x0632
 	 * [2]:    0x01F0
 	 * </pre>
-	 * 
+	 *
 	 * <p>
 	 * Internally this method calls
 	 * {@link #parseIntLines(BufferedReader, Pattern, int)} so lines commented
 	 * with a {@literal #} character are ignored.
 	 * </p>
-	 * 
+	 *
 	 * @param in
 	 *        the input to read from
 	 * @return the parsed values
@@ -73,14 +73,14 @@ public final class DataUtils {
 
 	/**
 	 * Parse hex encoded integers from lines.
-	 * 
+	 *
 	 * <p>
 	 * This method will read all lines from the given {@code Reader}, skip those
 	 * starting with a {@literal #} character or not matching {@code pat}, and
 	 * then parse the first matching group from {@code pat} as an integer
 	 * string.
 	 * </p>
-	 * 
+	 *
 	 * @param in
 	 *        the input to read lines from
 	 * @param pat
@@ -104,26 +104,26 @@ public final class DataUtils {
 
 	/**
 	 * Parse Modbus register lines encoded in hex.
-	 * 
+	 *
 	 * <p>
 	 * This method expects the lines to contain a single decimal integer
 	 * register number followed by a hexadecimal integer register value at the
 	 * end (excluding whitespace), as output by the {@literal mbpoll} command.
 	 * For example:
 	 * </p>
-	 * 
+	 *
 	 * <pre>
 	 * [0]:    0x4031
 	 * [1]:    0x0632
 	 * [2]:    0x01F0
 	 * </pre>
-	 * 
+	 *
 	 * <p>
 	 * Internally this method calls
 	 * {@link #parseIntKeyIntValueMappingLines(BufferedReader, Pattern, int, int)}
 	 * so lines commented with a {@literal #} character are ignored.
 	 * </p>
-	 * 
+	 *
 	 * @param in
 	 *        the input to read from
 	 * @return the parsed values
@@ -138,14 +138,14 @@ public final class DataUtils {
 
 	/**
 	 * Parse integer key/value pairs from lines.
-	 * 
+	 *
 	 * <p>
 	 * This method will read all lines from the given {@code Reader}, skip those
 	 * starting with a {@literal #} character or not matching {@code pat}, and
 	 * then parse the first matching group from {@code pat} as an integer key
 	 * and the second matching group as a integer value.
 	 * </p>
-	 * 
+	 *
 	 * @param in
 	 *        the input to read lines from
 	 * @param pat
@@ -174,7 +174,7 @@ public final class DataUtils {
 
 	/**
 	 * Extract an array of integer values based on a range of keys in a map.
-	 * 
+	 *
 	 * @param data
 	 *        the data map
 	 * @param start
@@ -195,7 +195,7 @@ public final class DataUtils {
 	}
 
 	// @formatter:off
-	public static final short[] COMMON_MODEL_02 = new short[] {
+	private static final short[] COMMON_MODEL_02 = new short[] {
 			0x0001,
 			0x0041,
 			0x5665,
@@ -264,5 +264,14 @@ public final class DataUtils {
 			0x0000,
 			0x000A,
 	};
+
+	/**
+	 * Get a "common model 02" test fixture.
+	 *
+	 * @return the common model
+	 */
+	public static short[] commonModel02() {
+		return COMMON_MODEL_02.clone();
+	}
 
 }
