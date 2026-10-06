@@ -9,4 +9,5 @@ build
 gradle.properties
 logback.xml
 *.jpage
+CLAUDE.md
 README-Local.md
