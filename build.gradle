@@ -1,0 +1,177 @@
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		maven { url = "https://plugins.gradle.org/m2/" }
+	}
+}
+
+plugins {
+	id "com.vanniktech.maven.publish" version "0.34.0" apply false
+	id 'net.ltgt.errorprone' version '5.1.1' apply false
+	id 'com.diffplug.spotless' version "8.10.2" apply false
+}
+
+ext {
+	assertjVersion = '3.27.7'
+	jSpecifyVersion = '1.0.0'
+	junitVersion = '6.1.3'
+	logbackClassicVersion = '1.5.38'
+	mockitoVersion = '5.24.0'
+	slf4jVersion = '2.0.18'
+	ossrhUsername = 'ossrh-username'
+	ossrhPassword = 'ossrh-password'
+	
+
+	libraries = [
+		// Test dependencies.
+		testing: [
+			"org.assertj:assertj-core:${assertjVersion}",
+			"org.mockito:mockito-core:${mockitoVersion}",
+			"org.mockito:mockito-junit-jupiter:${mockitoVersion}",
+			"org.junit.platform:junit-platform-launcher:${junitVersion}"
+		]
+	]
+}
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+	apply plugin: 'net.ltgt.errorprone'
+	apply plugin: 'com.diffplug.spotless'
+
+    repositories {
+        mavenCentral()
+		maven { url = "https://plugins.gradle.org/m2/" }
+    }
+}
+
+subprojects {
+    group = 'net.solarnetwork.common'
+	version = '0.0.1-dev.0'
+
+	base {
+		archivesName = project.name
+	}
+
+	java {
+		toolchain {
+	        languageVersion = JavaLanguageVersion.of(25)
+	    }
+	}
+
+	repositories {
+		mavenCentral()
+	}
+	
+	[
+		compileJava,
+		compileTestJava
+	].each() {
+		it.options.release = 17
+		it.options.compilerArgs += [
+			"-Xlint:all",
+			"-Xlint:-options",
+			"-Xlint:-path",
+			"-Xlint:-try"
+		]
+		it.options.encoding = "UTF-8"
+		if (rootProject.hasProperty('failOnWarnings') && rootProject.failOnWarnings.toBoolean()) {
+			it.options.compilerArgs += ["-Werror"]
+		}
+	}
+
+	compileJava {
+		it.options.errorprone.enabled = !(rootProject.hasProperty('errorProneDisabled') && rootProject.errorProneDisabled.toBoolean());
+		it.options.errorprone {
+			error("NullAway")
+			option("NullAway:OnlyNullMarked", "true")
+			option("NullAway:JSpecifyMode", "true")
+		}
+	}
+
+	compileTestJava {
+		options.compilerArgs += [
+			"-Xlint:-serial"
+		]
+		it.options.errorprone.enabled = (rootProject.hasProperty('errorProneEnabledTest') && rootProject.errorProneEnabledTest.toBoolean());
+		it.options.errorprone {
+			option("NullAway:OnlyNullMarked", "true")
+			option("NullAway:JSpecifyMode", "true")
+		}
+	}
+
+	jar.manifest {
+		attributes('Implementation-Title': name,
+		'Implementation-Version': version,
+		'Built-By': System.getProperty('user.name'),
+		'Built-JDK': System.getProperty('java.version'))
+	}
+
+	javadoc.options {
+		encoding = 'UTF-8'
+		use = true
+		source = "17"
+	}
+
+	dependencies {
+		testImplementation libraries.testing
+		errorprone 'com.google.errorprone:error_prone_core:2.50.0'
+		errorprone 'com.uber.nullaway:nullaway:0.13.6'
+	}
+
+	allprojects {
+		tasks.withType(Javadoc) {
+			options.addStringOption('Xdoclint:none', '-quiet')
+		}
+	}
+
+	testing {
+		suites { 
+			test { 
+				useJUnitJupiter() 
+			}
+		}
+	}
+	
+	// At a test failure, log the stack trace to the console so that we don't
+	// have to open the HTML in a browser.
+	test {
+		testLogging {
+			exceptionFormat = 'full'
+			showExceptions = true
+			showCauses = true
+			showStackTraces = true
+		}
+		maxHeapSize = '1500m'
+
+		// Pass on system properties that enable optional tests, such as those
+		// that need a serial device, e.g. -Dnifty.modbus.test.jsc.port=/dev/ttyUSB0
+		System.properties.each { k, v ->
+			if ( k.toString().startsWith('nifty.sunspec.test.') ) {
+				systemProperty k.toString(), v
+			}
+		}
+	}
+
+	spotless {
+		java {
+			eclipse()
+				.configFile("${project.rootDir}/config/codeformatter.xml")
+			
+		}
+	}
+
+	jacocoTestReport {
+		reports {
+			xml.required = true
+		}
+	}
+
+	check.dependsOn jacocoTestReport
+}
+
+jacoco {
+    toolVersion = "0.8.10"
+    reportsDirectory = file("$buildDir/reports/jacoco")
+}

@@ -1,0 +1,23 @@
+plugins {
+    id 'java-library'
+}
+
+apply plugin: 'java-library'
+
+description = 'Nifty SunSpec: Core Test'
+
+dependencies {
+	api "ch.qos.logback:logback-classic:${logbackClassicVersion}"
+	api "org.assertj:assertj-core:${assertjVersion}"
+	api "org.jspecify:jspecify:${jSpecifyVersion}"
+	api "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+	api "org.slf4j:slf4j-api:${slf4jVersion}"
+}
+
+jar.manifest {
+    attributes('Implementation-Version': version)
+}
+
+javadoc {
+	enabled = false
+}

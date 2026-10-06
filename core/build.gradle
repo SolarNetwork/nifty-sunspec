@@ -1,0 +1,33 @@
+plugins {
+    id 'java-library'
+    id 'biz.aQute.bnd.builder'
+}
+
+apply plugin: 'java-library'
+
+description = 'Nifty SunSpec: Core'
+
+dependencies {
+	implementation project(':nifty-sunspec-api')
+	implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+	
+	// Testing
+	testImplementation project(':nifty-sunspec-test')
+}
+
+jar.manifest {
+    attributes('Implementation-Version': version)
+}
+
+tasks.withType(Jar).matching { it.name.contains('sources') }.configureEach {
+	manifest {
+		attributes(
+			'Bundle-SymbolicName': 'net.solarnetwork.sunspec.core.sources',
+			'Bundle-Name': 'SolarNetwork SunSpec Core Sources',
+			'Bundle-Version': version,
+			'Bundle-ManifestVersion': '2',
+			'Eclipse-SourceBundle': 'net.solarnetwork.sunspec.core;version="'
+				+ version + '";roots:="."'
+		)
+	}
+}

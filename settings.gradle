@@ -1,0 +1,19 @@
+pluginManagement {
+  plugins {
+    id "biz.aQute.bnd.builder" version "7.1.0"
+  }
+}
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
+rootProject.name = 'nifty-sunspec'
+
+include('api')
+include('core')
+include('test')
+
+project(':api').name = 'nifty-sunspec-api'
+project(':core').name = 'nifty-sunspec-core'
+project(':test').name = 'nifty-sunspec-test'

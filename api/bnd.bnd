@@ -1,0 +1,8 @@
+Bundle-SymbolicName: net.solarnetwork.sunspec.api
+Bundle-Name: SolarNetwork SunSpec API
+Bundle-Description: Core SunSpec API.
+Bundle-Vendor: SolarNetwork
+Export-Package: \
+	net.solarnetwork.sunspec.*
+Import-Package: \
+	!java.*, *
