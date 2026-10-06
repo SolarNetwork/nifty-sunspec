@@ -6,6 +6,8 @@ Export-Package: \
 	net.solarnetwork.sunspec.core.*,\
 	net.solarnetwork.sunspec.modbus.support.*
 Import-Package: \
-	!java.*, *
+	!java.*,\
+	!org.jspecify.annotations,\
+	*
 Private-Package: \
 	net.solarnetwork.sunspec.core.internal

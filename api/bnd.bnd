@@ -5,4 +5,6 @@ Bundle-Vendor: SolarNetwork
 Export-Package: \
 	net.solarnetwork.sunspec.*
 Import-Package: \
-	!java.*, *
+	!java.*,\
+	!org.jspecify.annotations,\
+	*
