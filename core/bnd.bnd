@@ -3,6 +3,9 @@ Bundle-Name: SolarNetwork SunSpec Core
 Bundle-Description: Core SunSpec implementation.
 Bundle-Vendor: SolarNetwork
 Export-Package: \
-	net.solarnetwork.sunspec.core.*
+	net.solarnetwork.sunspec.core.*,\
+	net.solarnetwork.sunspec.modbus.support.*
 Import-Package: \
 	!java.*, *
+Private-Package: \
+	net.solarnetwork.sunspec.core.internal
