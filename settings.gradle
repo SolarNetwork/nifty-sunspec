@@ -1,6 +1,6 @@
 pluginManagement {
   plugins {
-    id "biz.aQute.bnd.builder" version "7.1.0"
+    id "biz.aQute.bnd.builder" version "7.4.0"
   }
 }
 
