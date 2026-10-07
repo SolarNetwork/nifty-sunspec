@@ -89,4 +89,9 @@ public enum CommonModelRegister implements ModbusReference {
 		return wordLength;
 	}
 
+	@Override
+	public String getName() {
+		return name();
+	}
+
 }

@@ -85,4 +85,9 @@ public enum BomTemperatureModelRegister implements ModbusReference {
 		return classification;
 	}
 
+	@Override
+	public String getName() {
+		return name();
+	}
+
 }

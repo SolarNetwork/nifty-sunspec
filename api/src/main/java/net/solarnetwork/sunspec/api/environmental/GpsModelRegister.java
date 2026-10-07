@@ -100,4 +100,9 @@ public enum GpsModelRegister implements ModbusReference {
 		return classification;
 	}
 
+	@Override
+	public String getName() {
+		return name();
+	}
+
 }

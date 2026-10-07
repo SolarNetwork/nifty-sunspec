@@ -171,4 +171,9 @@ public enum StringCombinerModelRegister implements ModbusReference {
 		return classification;
 	}
 
+	@Override
+	public String getName() {
+		return name();
+	}
+
 }

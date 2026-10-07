@@ -95,4 +95,9 @@ public enum MiniMeteorologicalModelRegister implements ModbusReference {
 		return classification;
 	}
 
+	@Override
+	public String getName() {
+		return name();
+	}
+
 }

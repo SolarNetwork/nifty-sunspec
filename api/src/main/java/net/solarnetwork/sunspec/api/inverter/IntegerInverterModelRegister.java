@@ -253,4 +253,10 @@ public enum IntegerInverterModelRegister implements ModbusReference {
 	public @Nullable DataClassification getClassification() {
 		return classification;
 	}
+
+	@Override
+	public String getName() {
+		return name();
+	}
+
 }

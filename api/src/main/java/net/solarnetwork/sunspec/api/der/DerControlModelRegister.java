@@ -110,6 +110,11 @@ public enum DerControlModelRegister implements ModbusReference {
 	}
 
 	@Override
+	public String getName() {
+		return name();
+	}
+
+	@Override
 	public PointAccess getAccess() {
 		return access;
 	}

@@ -169,4 +169,9 @@ public enum DerDcMeasurementModelRegister implements ModbusReference {
 		return classification;
 	}
 
+	@Override
+	public String getName() {
+		return name();
+	}
+
 }

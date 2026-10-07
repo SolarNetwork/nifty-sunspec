@@ -62,6 +62,13 @@ public interface ModbusReference {
 	}
 
 	/**
+	 * Get the name of the SunSpec point this reference is associated with.
+	 * 
+	 * @return the point name
+	 */
+	String getName();
+
+	/**
 	 * Get the access level of this modbus reference.
 	 *
 	 * @return the access level, never {@code null}; this implementation returns

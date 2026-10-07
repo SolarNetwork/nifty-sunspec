@@ -94,4 +94,9 @@ public enum ReferencePointModelRegister implements ModbusReference {
 		return classification;
 	}
 
+	@Override
+	public String getName() {
+		return name();
+	}
+
 }

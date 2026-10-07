@@ -317,4 +317,9 @@ public enum DerAcControlsModelRegister implements ModbusReference {
 		return access;
 	}
 
+	@Override
+	public String getName() {
+		return name();
+	}
+
 }

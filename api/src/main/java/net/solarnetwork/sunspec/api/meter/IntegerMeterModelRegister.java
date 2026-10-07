@@ -341,4 +341,9 @@ public enum IntegerMeterModelRegister implements ModbusReference {
 		return classification;
 	}
 
+	@Override
+	public String getName() {
+		return name();
+	}
+
 }

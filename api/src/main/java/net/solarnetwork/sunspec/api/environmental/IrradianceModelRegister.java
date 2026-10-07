@@ -97,4 +97,9 @@ public enum IrradianceModelRegister implements ModbusReference {
 		return classification;
 	}
 
+	@Override
+	public String getName() {
+		return name();
+	}
+
 }
