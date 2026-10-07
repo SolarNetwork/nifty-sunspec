@@ -1,0 +1,107 @@
+{
+	"comment": "jSerialComm extracts its native library from a resource, and accesses SerialPort from native code. Netty looks up the methods of the Nifty Modbus channel handlers.",
+	"reflection": [
+		{
+			"condition": { "typeReached": "com.fazecast.jSerialComm.SerialPort" },
+			"type": "com.fazecast.jSerialComm.SerialPort",
+			"jniAccessible": true,
+			"methods": [ { "name": "<init>", "parameterTypes": [] } ],
+			"fields": [
+				{ "name": "allowOpenForEnumeration" },
+				{ "name": "autoFlushIOBuffers" },
+				{ "name": "baudRate" },
+				{ "name": "comPort" },
+				{ "name": "dataBits" },
+				{ "name": "disableConfig" },
+				{ "name": "disableExclusiveLock" },
+				{ "name": "eventFlags" },
+				{ "name": "eventListenerRunning" },
+				{ "name": "flowControl" },
+				{ "name": "friendlyName" },
+				{ "name": "isDtrEnabled" },
+				{ "name": "isRtsEnabled" },
+				{ "name": "manufacturer" },
+				{ "name": "parity" },
+				{ "name": "portDescription" },
+				{ "name": "portHandle" },
+				{ "name": "portLocation" },
+				{ "name": "productID" },
+				{ "name": "readTimeout" },
+				{ "name": "receiveDeviceQueueSize" },
+				{ "name": "requestElevatedPermissions" },
+				{ "name": "rs485ActiveHigh" },
+				{ "name": "rs485DelayAfter" },
+				{ "name": "rs485DelayBefore" },
+				{ "name": "rs485EnableTermination" },
+				{ "name": "rs485Mode" },
+				{ "name": "rs485RxDuringTx" },
+				{ "name": "sendDeviceQueueSize" },
+				{ "name": "serialNumber" },
+				{ "name": "stopBits" },
+				{ "name": "timeoutMode" },
+				{ "name": "vendorID" },
+				{ "name": "writeTimeout" },
+				{ "name": "xoffStopChar" },
+				{ "name": "xonStartChar" }
+			]
+		},
+		{
+			"condition": { "typeReached": "com.fazecast.jSerialComm.SerialPort" },
+			"type": "com.fazecast.jSerialComm.SerialPort[]"
+		},
+		{
+			"condition": { "typeReached": "com.fazecast.jSerialComm.SerialPort" },
+			"type": "java.lang.Exception",
+			"jniAccessible": true
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.io.modbus.netty.handler.NettyModbusClient$ModbusChannelHandler" },
+			"type": "net.solarnetwork.io.modbus.netty.handler.NettyModbusClient$ModbusChannelHandler"
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.io.modbus.rtu.netty.RtuModbusExchangeHandler" },
+			"type": "net.solarnetwork.io.modbus.rtu.netty.RtuModbusExchangeHandler"
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.io.modbus.rtu.netty.RtuModbusMessageDecoder" },
+			"type": "net.solarnetwork.io.modbus.rtu.netty.RtuModbusMessageDecoder"
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.io.modbus.rtu.netty.RtuModbusMessageEncoder" },
+			"type": "net.solarnetwork.io.modbus.rtu.netty.RtuModbusMessageEncoder"
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.io.modbus.rtu.netty.RtuNettyModbusClient$HandlerInitializer" },
+			"type": "net.solarnetwork.io.modbus.rtu.netty.RtuNettyModbusClient$HandlerInitializer"
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.io.modbus.tcp.netty.TcpModbusMessageDecoder" },
+			"type": "net.solarnetwork.io.modbus.tcp.netty.TcpModbusMessageDecoder"
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.io.modbus.tcp.netty.TcpModbusMessageEncoder" },
+			"type": "net.solarnetwork.io.modbus.tcp.netty.TcpModbusMessageEncoder"
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.io.modbus.tcp.netty.TcpNettyModbusClient$HandlerInitializer" },
+			"type": "net.solarnetwork.io.modbus.tcp.netty.TcpNettyModbusClient$HandlerInitializer"
+		}
+	],
+	"resources": [
+		{
+			"glob": "net/solarnetwork/sunspec/shell/shell.properties"
+		},
+		{
+			"condition": { "typeReached": "com.fazecast.jSerialComm.SerialPort" },
+			"glob": "Linux/*/libjSerialComm.so"
+		},
+		{
+			"condition": { "typeReached": "com.fazecast.jSerialComm.SerialPort" },
+			"glob": "OSX/*/libjSerialComm.jnilib"
+		},
+		{
+			"condition": { "typeReached": "com.fazecast.jSerialComm.SerialPort" },
+			"glob": "Windows/*/jSerialComm.dll"
+		}
+	]
+}

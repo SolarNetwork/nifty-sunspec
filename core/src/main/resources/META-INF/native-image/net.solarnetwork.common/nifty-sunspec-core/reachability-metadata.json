@@ -1,0 +1,210 @@
+{
+	"comment": "ModelDataFactory loads the model accessors listed in model-accessors-default.properties by name, and creates them with their (ModelData, int, int) constructor.",
+	"reflection": [
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.combiner.StringCombinerAdvancedModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.combiner.StringCombinerModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.der.DerAcControlsModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.der.DerAcMeasurementModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.der.DerCapacityModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.der.DerControlModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.der.DerDcMeasurementModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.der.DerEnterServiceModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.der.DerFrequencyDroopModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.der.DerStorageCapacityModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.der.DerTripHighFrequencyModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.der.DerTripHighVoltageModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.der.DerTripLowFrequencyModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.der.DerTripLowVoltageModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.der.DerVoltVarModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.der.DerVoltWattModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.der.DerWattVarModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.environmental.BomTemperatureModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.environmental.GpsModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.environmental.InclinometerModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.environmental.IrradianceModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.environmental.MeteorologicalModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.environmental.MiniMeteorologicalModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.environmental.ReferencePointModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.inverter.FloatingPointInverterModelAccessor",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.inverter.IntegerInverterModelAccessor",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.inverter.InverterBasicSettingsModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.inverter.InverterBasicStorageControlsModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.inverter.InverterExtendedMeasurementsModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.inverter.InverterImmediateControlsModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.inverter.InverterMpptExtensionModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.inverter.InverterNameplateRatingsModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.inverter.InverterPricingSignalModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.meter.FloatingPointMeterModelAccessor",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.meter.IntegerMeterModelAccessor",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.storage.BatteryBaseModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.storage.LithiumIonBankModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.storage.LithiumIonModuleModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"type": "net.solarnetwork.sunspec.core.storage.LithiumIonStringModelAccessorImpl",
+			"methods": [ { "name": "<init>", "parameterTypes": [ "net.solarnetwork.sunspec.modbus.support.ModelData", "int", "int" ] } ]
+		}
+	],
+	"resources": [
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"glob": "net/solarnetwork/sunspec/core/internal/model-accessors-default.properties"
+		},
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.core.ModelDataFactory" },
+			"glob": "META-INF/sunspec/model-accessors.properties"
+		}
+	]
+}

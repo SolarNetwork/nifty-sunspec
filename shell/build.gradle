@@ -1,0 +1,68 @@
+plugins {
+	id 'application'
+	id 'org.graalvm.buildtools.native'
+}
+
+description = 'Nifty SunSpec: Shell'
+
+dependencies {
+	implementation project(':nifty-sunspec-api')
+	implementation project(':nifty-sunspec-core')
+	implementation "com.github.freva:ascii-table:${rootProject.ext.asciiTableVersion}"
+	implementation "net.solarnetwork.common:nifty-modbus-api:${rootProject.ext.niftyModbusVersion}"
+	implementation "net.solarnetwork.common:nifty-modbus-core:${rootProject.ext.niftyModbusVersion}"
+	implementation "net.solarnetwork.common:nifty-modbus-rtu:${rootProject.ext.niftyModbusVersion}"
+	implementation "net.solarnetwork.common:nifty-modbus-rtu-jsc:${rootProject.ext.niftyModbusVersion}"
+	implementation "net.solarnetwork.common:nifty-modbus-tcp:${rootProject.ext.niftyModbusVersion}"
+	implementation "io.netty:netty-transport:${rootProject.ext.nettyVersion}"
+	implementation "org.jspecify:jspecify:${rootProject.ext.jSpecifyVersion}"
+	implementation "org.slf4j:slf4j-api:${rootProject.ext.slf4jVersion}"
+	runtimeOnly "org.slf4j:slf4j-simple:${rootProject.ext.slf4jVersion}"
+
+	// Testing
+	testImplementation(project(':nifty-sunspec-test')) {
+		// use slf4j-simple, like the application
+		exclude group: 'ch.qos.logback'
+	}
+}
+
+application {
+	mainClass = 'net.solarnetwork.sunspec.shell.SunSpecShell'
+	applicationName = 'sunspec-shell'
+	// jSerialComm loads a native library
+	applicationDefaultJvmArgs = ['--enable-native-access=ALL-UNNAMED']
+}
+
+// to run the shell, run like
+// ../gradlew -q --console=plain run --args='-a 1 192.168.1.10'
+run {
+	standardInput = System.in
+}
+
+// to run a simulated SunSpec device to try the shell with, run like
+// ../gradlew -q --console=plain runSimulator --args='test-data-der-01.txt -p 5020 127.0.0.1'
+tasks.register('runSimulator', JavaExec) {
+	group = 'Execution'
+	description = 'Run a simulated SunSpec device, serving a register dump.'
+	classpath = sourceSets.test.runtimeClasspath
+	mainClass = 'net.solarnetwork.sunspec.shell.test.SunSpecDeviceSimulator'
+	jvmArgs = application.applicationDefaultJvmArgs
+}
+
+processResources {
+	def props = [version: project.version]
+	inputs.properties(props)
+	filesMatching('**/shell.properties') {
+		expand(props)
+	}
+}
+
+// to build a native executable, run like
+// GRAALVM_HOME=/path/to/graalvm ../gradlew nativeCompile
+graalvmNative {
+	binaries.main {
+		imageName = 'sunspec-shell'
+		// jSerialComm loads a native library
+		buildArgs.add('--enable-native-access=ALL-UNNAMED')
+	}
+}

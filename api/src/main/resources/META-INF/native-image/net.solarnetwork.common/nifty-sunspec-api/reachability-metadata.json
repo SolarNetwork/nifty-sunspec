@@ -1,0 +1,9 @@
+{
+	"comment": "PrecipitationType loads its descriptions from a resource bundle.",
+	"resources": [
+		{
+			"condition": { "typeReached": "net.solarnetwork.sunspec.api.environmental.PrecipitationType" },
+			"bundle": "net.solarnetwork.sunspec.api.environmental.PrecipitationType"
+		}
+	]
+}

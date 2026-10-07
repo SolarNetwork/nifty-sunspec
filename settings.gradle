@@ -12,8 +12,10 @@ rootProject.name = 'nifty-sunspec'
 
 include('api')
 include('core')
+include('shell')
 include('test')
 
 project(':api').name = 'nifty-sunspec-api'
 project(':core').name = 'nifty-sunspec-core'
+project(':shell').name = 'nifty-sunspec-shell'
 project(':test').name = 'nifty-sunspec-test'
