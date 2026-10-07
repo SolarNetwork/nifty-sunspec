@@ -20,6 +20,7 @@
 package net.solarnetwork.sunspec.api.storage;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.BitSet;
 import java.util.Set;
@@ -51,7 +52,7 @@ public interface BatteryBaseModelAccessor extends ModelAccessor {
 	 * @return the capacity, in Ah, or {@code null} if not available
 	 */
 	@Nullable
-	Float getChargeCapacityRating();
+	BigDecimal getChargeCapacityRating();
 
 	/**
 	 * Get the nameplate energy capacity.
@@ -59,7 +60,7 @@ public interface BatteryBaseModelAccessor extends ModelAccessor {
 	 * @return the capacity, in Wh, or {@code null} if not available
 	 */
 	@Nullable
-	Long getEnergyCapacityRating();
+	BigDecimal getEnergyCapacityRating();
 
 	/**
 	 * Get the nameplate maximum charge rate.
@@ -67,7 +68,7 @@ public interface BatteryBaseModelAccessor extends ModelAccessor {
 	 * @return the rate, in W, or {@code null} if not available
 	 */
 	@Nullable
-	Integer getChargeRateMaximumRating();
+	BigDecimal getChargeRateMaximumRating();
 
 	/**
 	 * Get the nameplate maximum discharge rate.
@@ -75,7 +76,7 @@ public interface BatteryBaseModelAccessor extends ModelAccessor {
 	 * @return the rate, in W, or {@code null} if not available
 	 */
 	@Nullable
-	Integer getDischargeRateMaximumRating();
+	BigDecimal getDischargeRateMaximumRating();
 
 	/**
 	 * Get the self discharge rate.
@@ -430,7 +431,7 @@ public interface BatteryBaseModelAccessor extends ModelAccessor {
 	 * @return the power, in W, or {@code null} if not available
 	 */
 	@Nullable
-	Integer getDCPower();
+	BigDecimal getDCPower();
 
 	/**
 	 * Get the battery's request to start or stop the inverter.
@@ -450,7 +451,7 @@ public interface BatteryBaseModelAccessor extends ModelAccessor {
 	 * @return the power, in W, or {@code null} if not available
 	 */
 	@Nullable
-	Integer getPowerRequest();
+	BigDecimal getPowerRequest();
 
 	/**
 	 * Get the last operation requested of the battery bank.

@@ -198,36 +198,13 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	}
 
 	/**
-	 * Get a decimal value suitable for multiplication against a data property
-	 * for a scale factor.
+	 * Get a scale factor's power of ten exponent.
 	 *
 	 * <p>
 	 * SunSpec scale factors range from -10 to 10. Any other value, including
 	 * the SunSpec "not implemented" value {@code 0x8000}, means the scale
 	 * factor is not implemented.
 	 * </p>
-	 *
-	 * @param ref
-	 *        the block address relative reference to the scale factor register,
-	 *        which is expected to contain a signed integer from -10..10
-	 * @param offset
-	 *        the address offset to add to {@link ModbusReference#getAddress()}
-	 * @return the decimal multiplier to use, or {@code null} if the scale
-	 *         factor is not available or not implemented
-	 */
-	protected @Nullable BigDecimal getScaleFactor(ModbusReference ref, int offset) {
-		final Integer factor = scaleFactorExponent(ref, offset);
-		if ( factor == null ) {
-			return null;
-		}
-		if ( factor == 0 ) {
-			return BigDecimal.ONE;
-		}
-		return new BigDecimal(BigInteger.ONE, -factor);
-	}
-
-	/**
-	 * Get a scale factor's power of ten exponent.
 	 *
 	 * @param ref
 	 *        the block address relative reference to the scale factor register
@@ -303,8 +280,12 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * Get a scaled data property value.
 	 *
 	 * <p>
-	 * The value is not available if the scale factor is not implemented, as
-	 * described in {@link #getScaleFactor(ModbusReference, int)}.
+	 * The value is not available if the scale factor is not implemented.
+	 * SunSpec scale factors range from -10 to 10, and any other value,
+	 * including the SunSpec "not implemented" value {@code 0x8000}, means the
+	 * scale factor is not implemented. The value is exact for any data type and
+	 * scale factor, and is normalized as described in
+	 * {@link #normalized(BigDecimal)}.
 	 * </p>
 	 *
 	 * @param dataRef
@@ -326,15 +307,31 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 			return null;
 		}
 
-		BigDecimal sf = getScaleFactor(scaleRef, scaleOffset);
+		final Integer sf = scaleFactorExponent(scaleRef, scaleOffset);
 		if ( sf == null ) {
 			return null;
 		}
-		BigDecimal d = new BigDecimal(v.toString());
-		if ( sf.compareTo(BigDecimal.ONE) == 0 || d.compareTo(BigDecimal.ZERO) == 0 ) {
-			return d;
-		}
-		return d.multiply(sf);
+		return normalized(nonnull(bigDecimalForNumber(v), "Decimal value").scaleByPowerOfTen(sf));
+	}
+
+	/**
+	 * Normalize a decimal value.
+	 *
+	 * <p>
+	 * Trailing zeros are removed, and the scale is never negative, so equal
+	 * values are also {@link BigDecimal#equals(Object)} and whole numbers print
+	 * without an exponent: for example {@code 1200} with a scale factor of
+	 * {@literal -2} is {@literal 12}, and {@code 1234} with a scale factor of
+	 * {@literal 2} is {@literal 123400}.
+	 * </p>
+	 *
+	 * @param value
+	 *        the value to normalize
+	 * @return the normalized value
+	 */
+	protected static BigDecimal normalized(BigDecimal value) {
+		final BigDecimal result = value.stripTrailingZeros();
+		return (result.scale() < 0 ? result.setScale(0) : result);
 	}
 
 	/**
@@ -368,8 +365,11 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 
 		// check for NaN
 		if ( DataClassification.Accumulator == classification ) {
-			// only zero means "not accumulated"; all other values are valid
-			return (v.longValue() == 0 ? null : v);
+			// zero means "not accumulated", and an acc64 value outside the positive int64 range is
+			// invalid; all other values are valid
+			final boolean invalid = (v.longValue() == 0
+					|| (v instanceof BigInteger i && i.bitLength() >= Long.SIZE));
+			return (invalid ? null : v);
 		} else if ( DataClassification.Bitfield == classification ) {
 			// for bit fields, if the most significant bit is set, it is NaN
 			if ( dataRef.getWordLength() == 1 && (v.intValue()
@@ -422,6 +422,40 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	}
 
 	/**
+	 * Get a decimal data property value.
+	 *
+	 * @param dataRef
+	 *        the block address relative reference to the data property
+	 * @return the value, or {@code null} if not available
+	 * @see #getDecimalValue(ModbusReference, int)
+	 */
+	public @Nullable BigDecimal getDecimalValue(ModbusReference dataRef) {
+		return getDecimalValue(dataRef, blockAddress);
+	}
+
+	/**
+	 * Get a decimal data property value.
+	 *
+	 * <p>
+	 * Integer values are converted exactly. Floating point values are converted
+	 * from their shortest decimal representation, so a {@code float32} value of
+	 * {@literal 0.1} is returned as {@literal 0.1}. The value is normalized as
+	 * described in {@link #normalized(BigDecimal)}.
+	 * </p>
+	 *
+	 * @param dataRef
+	 *        the block address relative reference to the data property
+	 * @param dataOffset
+	 *        the data address offset to add to
+	 *        {@link ModbusReference#getAddress()}
+	 * @return the value, or {@code null} if not available
+	 */
+	public @Nullable BigDecimal getDecimalValue(ModbusReference dataRef, int dataOffset) {
+		final BigDecimal d = bigDecimalForNumber(getValue(dataRef, dataOffset));
+		return (d != null ? normalized(d) : null);
+	}
+
+	/**
 	 * Get an integer data property value.
 	 *
 	 * <p>
@@ -440,7 +474,9 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * Get an integer data property value.
 	 *
 	 * <p>
-	 * The value will be rounded, if necessary.
+	 * The value will be rounded, if necessary. A value that does not fit in an
+	 * {@code int}, such as a {@code uint32} value larger than
+	 * {@link Integer#MAX_VALUE}, is returned as {@code null}.
 	 * </p>
 	 *
 	 * @param dataRef
@@ -451,8 +487,8 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * @return the value, or {@code null} if not available
 	 */
 	public @Nullable Integer getIntegerValue(ModbusReference dataRef, int dataOffset) {
-		Number n = maximumDecimalScale(getValue(dataRef, dataOffset), 0);
-		return (n != null ? n.intValue() : null);
+		BigInteger n = bigIntegerForNumber(maximumDecimalScale(getValue(dataRef, dataOffset), 0));
+		return (n != null && n.bitLength() < Integer.SIZE ? n.intValue() : null);
 	}
 
 	/**
@@ -1089,7 +1125,7 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * The value is divided by the scale factor and then encoded with
 	 * {@link #encodeValue(ModbusReference, Number)}. The scale factor must have
 	 * been read from the device, and be implemented as described in
-	 * {@link #getScaleFactor(ModbusReference, int)}.
+	 * {@link #getScaledValue(ModbusReference, ModbusReference, int, int)}.
 	 * </p>
 	 *
 	 * @param ref

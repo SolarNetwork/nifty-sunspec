@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.core.inverter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -172,21 +173,19 @@ public class InverterMpptExtensionModelAccessorImpl extends BaseModelAccessor
 		}
 
 		@Override
-		public @Nullable Integer getDCPower() {
-			Number n = getScaledValue(InverterMpptExtensionModelRegister.ModuleDcPower,
+		public @Nullable BigDecimal getDCPower() {
+			return getScaledValue(InverterMpptExtensionModelRegister.ModuleDcPower,
 					InverterMpptExtensionModelRegister.ScaleFactorDcPower,
 					getBlockAddress() + getFixedBlockLength() + index * REPEATING_BLOCK_LENGTH,
 					getBlockAddress());
-			return (n != null ? n.intValue() : null);
 		}
 
 		@Override
-		public @Nullable Long getDCEnergyDelivered() {
-			Number n = getScaledValue(InverterMpptExtensionModelRegister.ModuleLifetimeEnergy,
+		public @Nullable BigDecimal getDCEnergyDelivered() {
+			return getScaledValue(InverterMpptExtensionModelRegister.ModuleLifetimeEnergy,
 					InverterMpptExtensionModelRegister.ScaleFactorDcEnergy,
 					getBlockAddress() + getFixedBlockLength() + index * REPEATING_BLOCK_LENGTH,
 					getBlockAddress());
-			return (n != null ? n.longValue() : null);
 		}
 
 		@Override

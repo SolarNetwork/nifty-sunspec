@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.api.meter;
 
+import java.math.BigDecimal;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.AcPhase;
@@ -79,7 +80,7 @@ public interface MeterModelAccessor extends ModelAccessor {
 	 * @return the active power
 	 */
 	@Nullable
-	Integer getActivePower();
+	BigDecimal getActivePower();
 
 	/**
 	 * Get the apparent power, in VA.
@@ -87,7 +88,7 @@ public interface MeterModelAccessor extends ModelAccessor {
 	 * @return the apparent power
 	 */
 	@Nullable
-	Integer getApparentPower();
+	BigDecimal getApparentPower();
 
 	/**
 	 * Get the reactive power, in VAR.
@@ -95,7 +96,7 @@ public interface MeterModelAccessor extends ModelAccessor {
 	 * @return the reactive power
 	 */
 	@Nullable
-	Integer getReactivePower();
+	BigDecimal getReactivePower();
 
 	/**
 	 * Get the active energy imported (delivered), in Wh.
@@ -103,7 +104,7 @@ public interface MeterModelAccessor extends ModelAccessor {
 	 * @return the imported active energy
 	 */
 	@Nullable
-	Long getActiveEnergyImported();
+	BigDecimal getActiveEnergyImported();
 
 	/**
 	 * Get the active energy exported (received), in Wh.
@@ -111,7 +112,7 @@ public interface MeterModelAccessor extends ModelAccessor {
 	 * @return the exported active energy
 	 */
 	@Nullable
-	Long getActiveEnergyExported();
+	BigDecimal getActiveEnergyExported();
 
 	/**
 	 * Get the reactive energy imported (delivered), in VARh.
@@ -119,7 +120,7 @@ public interface MeterModelAccessor extends ModelAccessor {
 	 * @return the imported reactive energy
 	 */
 	@Nullable
-	Long getReactiveEnergyImported();
+	BigDecimal getReactiveEnergyImported();
 
 	/**
 	 * Get the reactive energy exported (received), in VARh.
@@ -127,7 +128,7 @@ public interface MeterModelAccessor extends ModelAccessor {
 	 * @return the exported reactive energy
 	 */
 	@Nullable
-	Long getReactiveEnergyExported();
+	BigDecimal getReactiveEnergyExported();
 
 	/**
 	 * Get the apparent energy imported (delivered), in VAh.
@@ -135,7 +136,7 @@ public interface MeterModelAccessor extends ModelAccessor {
 	 * @return the imported apparent energy
 	 */
 	@Nullable
-	Long getApparentEnergyImported();
+	BigDecimal getApparentEnergyImported();
 
 	/**
 	 * Get the apparent energy exported (received), in VAh.
@@ -143,7 +144,7 @@ public interface MeterModelAccessor extends ModelAccessor {
 	 * @return the exported apparent energy
 	 */
 	@Nullable
-	Long getApparentEnergyExported();
+	BigDecimal getApparentEnergyExported();
 
 	/**
 	 * Get an accessor for phase-specific measurements.

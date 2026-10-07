@@ -27,6 +27,7 @@ import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.assertj.core.api.BDDAssertions.within;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.BitSet;
 import java.util.Set;
@@ -210,7 +211,7 @@ public class FloatingPointInverterModelAccessorTests {
 			.as("Phase C")
 			.returns(null, from(m -> m.accessorForPhase(PhaseC).getActivePower()))
 			.as("Total")
-			.returns(70, from(InverterModelAccessor::getActivePower))
+			.returns(new BigDecimal("70"), from(InverterModelAccessor::getActivePower))
 			;
 		// @formatter:on
 	}
@@ -244,7 +245,7 @@ public class FloatingPointInverterModelAccessorTests {
 			.as("Phase C")
 			.returns(null, from(m -> m.accessorForPhase(PhaseC).getApparentPower()))
 			.as("Total")
-			.returns(70, from(InverterModelAccessor::getApparentPower))
+			.returns(new BigDecimal("70"), from(InverterModelAccessor::getApparentPower))
 			;
 		// @formatter:on
 	}
@@ -264,7 +265,7 @@ public class FloatingPointInverterModelAccessorTests {
 			.as("Phase C")
 			.returns(null, from(m -> m.accessorForPhase(PhaseC).getReactivePower()))
 			.as("Total")
-			.returns(0, from(InverterModelAccessor::getReactivePower))
+			.returns(BigDecimal.ZERO, from(InverterModelAccessor::getReactivePower))
 			;
 		// @formatter:on
 	}
@@ -304,7 +305,7 @@ public class FloatingPointInverterModelAccessorTests {
 			.as("Phase C")
 			.returns(null, from(m -> m.accessorForPhase(PhaseC).getActiveEnergyExported()))
 			.as("Total")
-			.returns(11937020L, from(InverterModelAccessor::getActiveEnergyExported))
+			.returns(new BigDecimal("11937020"), from(InverterModelAccessor::getActiveEnergyExported))
 			;
 		// @formatter:on
 	}
@@ -331,7 +332,7 @@ public class FloatingPointInverterModelAccessorTests {
 		// @formatter:off
 		then(model.getActiveEnergyExported())
 			.as("Total of 0 is a value")
-			.isEqualTo(0L)
+			.isEqualTo(BigDecimal.ZERO)
 			;
 		// @formatter:on
 	}
@@ -395,7 +396,7 @@ public class FloatingPointInverterModelAccessorTests {
 			.as("Phase C")
 			.returns(null, from(m -> m.accessorForPhase(PhaseC).getDcPower()))
 			.as("Total")
-			.returns(61, from(InverterModelAccessor::getDcPower))
+			.returns(new BigDecimal("61.034996"), from(InverterModelAccessor::getDcPower))
 			;
 		// @formatter:on
 	}

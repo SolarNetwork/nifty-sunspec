@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.core.der;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -146,20 +147,20 @@ public class DerAcMeasurementModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Integer getActivePower() {
-		return getScaledIntegerValue(DerAcMeasurementModelRegister.ActivePowerTotal,
+	public @Nullable BigDecimal getActivePower() {
+		return getScaledValue(DerAcMeasurementModelRegister.ActivePowerTotal,
 				DerAcMeasurementModelRegister.ScaleFactorActivePower);
 	}
 
 	@Override
-	public @Nullable Integer getApparentPower() {
-		return getScaledIntegerValue(DerAcMeasurementModelRegister.ApparentPowerTotal,
+	public @Nullable BigDecimal getApparentPower() {
+		return getScaledValue(DerAcMeasurementModelRegister.ApparentPowerTotal,
 				DerAcMeasurementModelRegister.ScaleFactorApparentPower);
 	}
 
 	@Override
-	public @Nullable Integer getReactivePower() {
-		return getScaledIntegerValue(DerAcMeasurementModelRegister.ReactivePowerTotal,
+	public @Nullable BigDecimal getReactivePower() {
+		return getScaledValue(DerAcMeasurementModelRegister.ReactivePowerTotal,
 				DerAcMeasurementModelRegister.ScaleFactorReactivePower);
 	}
 
@@ -194,26 +195,26 @@ public class DerAcMeasurementModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Long getActiveEnergyExported() {
-		return getScaledLongValue(DerAcMeasurementModelRegister.ActiveEnergyInjectedTotal,
+	public @Nullable BigDecimal getActiveEnergyExported() {
+		return getScaledValue(DerAcMeasurementModelRegister.ActiveEnergyInjectedTotal,
 				DerAcMeasurementModelRegister.ScaleFactorActiveEnergy);
 	}
 
 	@Override
-	public @Nullable Long getActiveEnergyImported() {
-		return getScaledLongValue(DerAcMeasurementModelRegister.ActiveEnergyAbsorbedTotal,
+	public @Nullable BigDecimal getActiveEnergyImported() {
+		return getScaledValue(DerAcMeasurementModelRegister.ActiveEnergyAbsorbedTotal,
 				DerAcMeasurementModelRegister.ScaleFactorActiveEnergy);
 	}
 
 	@Override
-	public @Nullable Long getReactiveEnergyExported() {
-		return getScaledLongValue(DerAcMeasurementModelRegister.ReactiveEnergyInjectedTotal,
+	public @Nullable BigDecimal getReactiveEnergyExported() {
+		return getScaledValue(DerAcMeasurementModelRegister.ReactiveEnergyInjectedTotal,
 				DerAcMeasurementModelRegister.ScaleFactorReactiveEnergy);
 	}
 
 	@Override
-	public @Nullable Long getReactiveEnergyImported() {
-		return getScaledLongValue(DerAcMeasurementModelRegister.ReactiveEnergyAbsorbedTotal,
+	public @Nullable BigDecimal getReactiveEnergyImported() {
+		return getScaledValue(DerAcMeasurementModelRegister.ReactiveEnergyAbsorbedTotal,
 				DerAcMeasurementModelRegister.ScaleFactorReactiveEnergy);
 	}
 
@@ -228,7 +229,7 @@ public class DerAcMeasurementModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Integer getDcPower() {
+	public @Nullable BigDecimal getDcPower() {
 		return null;
 	}
 
@@ -382,21 +383,18 @@ public class DerAcMeasurementModelAccessorImpl extends BaseModelAccessor
 		}
 
 		@Override
-		public @Nullable Integer getActivePower() {
-			return getScaledIntegerValue(activePower,
-					DerAcMeasurementModelRegister.ScaleFactorActivePower);
+		public @Nullable BigDecimal getActivePower() {
+			return getScaledValue(activePower, DerAcMeasurementModelRegister.ScaleFactorActivePower);
 		}
 
 		@Override
-		public @Nullable Integer getApparentPower() {
-			return getScaledIntegerValue(apparentPower,
-					DerAcMeasurementModelRegister.ScaleFactorApparentPower);
+		public @Nullable BigDecimal getApparentPower() {
+			return getScaledValue(apparentPower, DerAcMeasurementModelRegister.ScaleFactorApparentPower);
 		}
 
 		@Override
-		public @Nullable Integer getReactivePower() {
-			return getScaledIntegerValue(reactivePower,
-					DerAcMeasurementModelRegister.ScaleFactorReactivePower);
+		public @Nullable BigDecimal getReactivePower() {
+			return getScaledValue(reactivePower, DerAcMeasurementModelRegister.ScaleFactorReactivePower);
 		}
 
 		@Override
@@ -426,26 +424,26 @@ public class DerAcMeasurementModelAccessorImpl extends BaseModelAccessor
 		}
 
 		@Override
-		public @Nullable Long getActiveEnergyExported() {
-			return getScaledLongValue(activeEnergyInjected,
+		public @Nullable BigDecimal getActiveEnergyExported() {
+			return getScaledValue(activeEnergyInjected,
 					DerAcMeasurementModelRegister.ScaleFactorActiveEnergy);
 		}
 
 		@Override
-		public @Nullable Long getActiveEnergyImported() {
-			return getScaledLongValue(activeEnergyAbsorbed,
+		public @Nullable BigDecimal getActiveEnergyImported() {
+			return getScaledValue(activeEnergyAbsorbed,
 					DerAcMeasurementModelRegister.ScaleFactorActiveEnergy);
 		}
 
 		@Override
-		public @Nullable Long getReactiveEnergyExported() {
-			return getScaledLongValue(reactiveEnergyInjected,
+		public @Nullable BigDecimal getReactiveEnergyExported() {
+			return getScaledValue(reactiveEnergyInjected,
 					DerAcMeasurementModelRegister.ScaleFactorReactiveEnergy);
 		}
 
 		@Override
-		public @Nullable Long getReactiveEnergyImported() {
-			return getScaledLongValue(reactiveEnergyAbsorbed,
+		public @Nullable BigDecimal getReactiveEnergyImported() {
+			return getScaledValue(reactiveEnergyAbsorbed,
 					DerAcMeasurementModelRegister.ScaleFactorReactiveEnergy);
 		}
 
@@ -460,7 +458,7 @@ public class DerAcMeasurementModelAccessorImpl extends BaseModelAccessor
 		}
 
 		@Override
-		public @Nullable Integer getDcPower() {
+		public @Nullable BigDecimal getDcPower() {
 			return null;
 		}
 

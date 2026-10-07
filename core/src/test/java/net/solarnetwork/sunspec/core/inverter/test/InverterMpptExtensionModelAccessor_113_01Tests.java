@@ -23,6 +23,7 @@ import static net.solarnetwork.sunspec.api.inverter.InverterOperatingState.Mppt;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -106,8 +107,8 @@ public class InverterMpptExtensionModelAccessor_113_01Tests {
 	}
 
 	private void assertDcModule(String suffix, DcModule module, Integer id, String name, Long timestamp,
-			Float current, Long energyDelivered, Integer power, Float voltage, Float temperature,
-			OperatingState state, Set<ModelEvent> events) {
+			Float current, BigDecimal energyDelivered, BigDecimal power, Float voltage,
+			Float temperature, OperatingState state, Set<ModelEvent> events) {
 		// @formatter:off
 		then(module)
 			.as("Module ID " + suffix)
@@ -152,8 +153,8 @@ public class InverterMpptExtensionModelAccessor_113_01Tests {
 		// @formatter:on
 
 		Set<ModelEvent> noEvents = Collections.emptySet();
-		assertDcModule("1", modules.get(0), 1, "String 1", 623608619L, 0.15f, 11937020L, 65, 439.7f,
-				null, Mppt, noEvents);
+		assertDcModule("1", modules.get(0), 1, "String 1", 623608619L, 0.15f, new BigDecimal("11937020"),
+				new BigDecimal("65.95"), 439.7f, null, Mppt, noEvents);
 		assertDcModule("2", modules.get(1), 2, "Not supported", null, null, null, null, null, null, null,
 				noEvents);
 	}
@@ -178,7 +179,7 @@ public class InverterMpptExtensionModelAccessor_113_01Tests {
 		// @formatter:off
 		then(module)
 			.as("Module power uses power scale factor")
-			.returns(659, from(DcModule::getDCPower))
+			.returns(new BigDecimal("659.5"), from(DcModule::getDCPower))
 			.as("Module voltage uses voltage scale factor")
 			.returns(439.7f, from(DcModule::getDCVoltage))
 			;

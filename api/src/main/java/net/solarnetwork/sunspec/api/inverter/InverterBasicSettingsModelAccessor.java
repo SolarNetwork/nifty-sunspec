@@ -20,6 +20,7 @@
 package net.solarnetwork.sunspec.api.inverter;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.AcPhase;
 import net.solarnetwork.sunspec.api.ModelAccessor;
@@ -48,7 +49,7 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 * @return the active power maximum
 	 */
 	@Nullable
-	Integer getActivePowerMaximum();
+	BigDecimal getActivePowerMaximum();
 
 	/**
 	 * Set the maximum active power output.
@@ -60,7 +61,7 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setActivePowerMaximum(ModbusConnection conn, int watts) throws IOException;
+	void setActivePowerMaximum(ModbusConnection conn, BigDecimal watts) throws IOException;
 
 	/**
 	 * Get the voltage at the point of common coupling (PCC), in V.
@@ -148,7 +149,7 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 * @return the apparent power maximum
 	 */
 	@Nullable
-	Integer getApparentPowerMaximum();
+	BigDecimal getApparentPowerMaximum();
 
 	/**
 	 * Set the maximum apparent power output.
@@ -160,7 +161,7 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setApparentPowerMaximum(ModbusConnection conn, int voltAmps) throws IOException;
+	void setApparentPowerMaximum(ModbusConnection conn, BigDecimal voltAmps) throws IOException;
 
 	/**
 	 * Get the maximum reactive power for EEI quadrant 1 (lagging, inductive),
@@ -169,7 +170,7 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 * @return the reactive power rating
 	 */
 	@Nullable
-	Integer getReactivePowerQ1Maximum();
+	BigDecimal getReactivePowerQ1Maximum();
 
 	/**
 	 * Set the maximum reactive power for EEI quadrant 1 (lagging, inductive).
@@ -181,7 +182,7 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setReactivePowerQ1Maximum(ModbusConnection conn, int vars) throws IOException;
+	void setReactivePowerQ1Maximum(ModbusConnection conn, BigDecimal vars) throws IOException;
 
 	/**
 	 * Get the maximum reactive power for EEI quadrant 2 (leading, capacitive),
@@ -190,7 +191,7 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 * @return the reactive power rating
 	 */
 	@Nullable
-	Integer getReactivePowerQ2Maximum();
+	BigDecimal getReactivePowerQ2Maximum();
 
 	/**
 	 * Set the maximum reactive power for EEI quadrant 2 (leading, capacitive).
@@ -202,7 +203,7 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setReactivePowerQ2Maximum(ModbusConnection conn, int vars) throws IOException;
+	void setReactivePowerQ2Maximum(ModbusConnection conn, BigDecimal vars) throws IOException;
 
 	/**
 	 * Get the maximum reactive power for EEI quadrant 3 (lagging, inductive),
@@ -211,7 +212,7 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 * @return the reactive power rating
 	 */
 	@Nullable
-	Integer getReactivePowerQ3Maximum();
+	BigDecimal getReactivePowerQ3Maximum();
 
 	/**
 	 * Set the maximum reactive power for EEI quadrant 3 (lagging, inductive).
@@ -223,7 +224,7 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setReactivePowerQ3Maximum(ModbusConnection conn, int vars) throws IOException;
+	void setReactivePowerQ3Maximum(ModbusConnection conn, BigDecimal vars) throws IOException;
 
 	/**
 	 * Get the maximum reactive power for EEI quadrant 4 (leading, capacitive),
@@ -232,7 +233,7 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 * @return the reactive power rating
 	 */
 	@Nullable
-	Integer getReactivePowerQ4Maximum();
+	BigDecimal getReactivePowerQ4Maximum();
 
 	/**
 	 * Set the maximum reactive power for EEI quadrant 4 (leading, capacitive).
@@ -244,7 +245,7 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setReactivePowerQ4Maximum(ModbusConnection conn, int vars) throws IOException;
+	void setReactivePowerQ4Maximum(ModbusConnection conn, BigDecimal vars) throws IOException;
 
 	/**
 	 * Get the ramp rate of change of active power due to commands or internal

@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.core.inverter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -143,14 +144,14 @@ public class InverterExtendedMeasurementsModelAccessorImpl extends BaseModelAcce
 	}
 
 	@Override
-	public @Nullable Integer getReactivePowerAvailable() {
-		return getScaledIntegerValue(InverterExtendedMeasurementsModelRegister.ReactivePowerAvailable,
+	public @Nullable BigDecimal getReactivePowerAvailable() {
+		return getScaledValue(InverterExtendedMeasurementsModelRegister.ReactivePowerAvailable,
 				InverterExtendedMeasurementsModelRegister.ScaleFactorReactivePowerAvailable);
 	}
 
 	@Override
-	public @Nullable Integer getActivePowerAvailable() {
-		return getScaledIntegerValue(InverterExtendedMeasurementsModelRegister.ActivePowerAvailable,
+	public @Nullable BigDecimal getActivePowerAvailable() {
+		return getScaledValue(InverterExtendedMeasurementsModelRegister.ActivePowerAvailable,
 				InverterExtendedMeasurementsModelRegister.ScaleFactorActivePowerAvailable);
 	}
 

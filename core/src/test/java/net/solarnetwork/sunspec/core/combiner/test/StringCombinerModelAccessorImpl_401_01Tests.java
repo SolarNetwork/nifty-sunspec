@@ -22,6 +22,7 @@ package net.solarnetwork.sunspec.core.combiner.test;
 import static net.solarnetwork.sunspec.core.combiner.test.StringCombinerTestUtils.assertDcInput;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -97,7 +98,7 @@ public class StringCombinerModelAccessorImpl_401_01Tests {
 			.as("Current")
 			.returns(24.5f, from(StringCombinerModelAccessor::getDCCurrent))
 			.as("Charge, a uint32 for model 401")
-			.returns(0L, from(StringCombinerModelAccessor::getDCChargeDelivered))
+			.returns(BigDecimal.ZERO, from(StringCombinerModelAccessor::getDCChargeDelivered))
 			.as("Voltage")
 			.returns(600.8f, from(StringCombinerModelAccessor::getDCVoltage))
 			.as("Temperature not implemented")
@@ -138,10 +139,10 @@ public class StringCombinerModelAccessorImpl_401_01Tests {
 		// @formatter:on
 
 		// inputs use the model scale factors, and charge is a uint32 type
-		assertDcInput("Input 1", inputs.get(0), 1, 8.2f, 12340L,
+		assertDcInput("Input 1", inputs.get(0), 1, 8.2f, new BigDecimal("12340"),
 				Set.of(StringCombinerModelEvent.Voltage), Set.of(new GenericModelEvent(0)));
 		assertDcInput("Input 2", inputs.get(1), 2, 8.1f, null, Set.of(), Set.of());
-		assertDcInput("Input 3", inputs.get(2), 3, null, 0L,
+		assertDcInput("Input 3", inputs.get(2), 3, null, BigDecimal.ZERO,
 				Set.of(StringCombinerModelEvent.ArcDetected), Set.of());
 	}
 

@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.core.der;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -124,20 +125,20 @@ public class DerDcMeasurementModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Integer getDCPower() {
-		return getScaledIntegerValue(DerDcMeasurementModelRegister.DcPower,
+	public @Nullable BigDecimal getDCPower() {
+		return getScaledValue(DerDcMeasurementModelRegister.DcPower,
 				DerDcMeasurementModelRegister.ScaleFactorDcPower);
 	}
 
 	@Override
-	public @Nullable Long getDCEnergyInjected() {
-		return getScaledLongValue(DerDcMeasurementModelRegister.DcEnergyInjected,
+	public @Nullable BigDecimal getDCEnergyInjected() {
+		return getScaledValue(DerDcMeasurementModelRegister.DcEnergyInjected,
 				DerDcMeasurementModelRegister.ScaleFactorDcEnergy);
 	}
 
 	@Override
-	public @Nullable Long getDCEnergyAbsorbed() {
-		return getScaledLongValue(DerDcMeasurementModelRegister.DcEnergyAbsorbed,
+	public @Nullable BigDecimal getDCEnergyAbsorbed() {
+		return getScaledValue(DerDcMeasurementModelRegister.DcEnergyAbsorbed,
 				DerDcMeasurementModelRegister.ScaleFactorDcEnergy);
 	}
 
@@ -194,20 +195,20 @@ public class DerDcMeasurementModelAccessorImpl extends BaseModelAccessor
 		}
 
 		@Override
-		public @Nullable Integer getDCPower() {
-			return getScaledIntegerValue(DerDcMeasurementModelRegister.PortDcPower,
+		public @Nullable BigDecimal getDCPower() {
+			return getScaledValue(DerDcMeasurementModelRegister.PortDcPower,
 					DerDcMeasurementModelRegister.ScaleFactorDcPower, portAddress, getBlockAddress());
 		}
 
 		@Override
-		public @Nullable Long getDCEnergyInjected() {
-			return getScaledLongValue(DerDcMeasurementModelRegister.PortDcEnergyInjected,
+		public @Nullable BigDecimal getDCEnergyInjected() {
+			return getScaledValue(DerDcMeasurementModelRegister.PortDcEnergyInjected,
 					DerDcMeasurementModelRegister.ScaleFactorDcEnergy, portAddress, getBlockAddress());
 		}
 
 		@Override
-		public @Nullable Long getDCEnergyAbsorbed() {
-			return getScaledLongValue(DerDcMeasurementModelRegister.PortDcEnergyAbsorbed,
+		public @Nullable BigDecimal getDCEnergyAbsorbed() {
+			return getScaledValue(DerDcMeasurementModelRegister.PortDcEnergyAbsorbed,
 					DerDcMeasurementModelRegister.ScaleFactorDcEnergy, portAddress, getBlockAddress());
 		}
 

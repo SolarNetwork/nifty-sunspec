@@ -47,37 +47,37 @@ public interface InverterNameplateRatingsModelAccessor extends ModelAccessor {
 	String INFO_KEY_DER_TYPE_CODE = "derTypeCode";
 
 	/**
-	 * Key for the active power rating in W, as an Integer.
+	 * Key for the active power rating in W, as a BigDecimal.
 	 *
 	 */
 	String INFO_KEY_ACTIVE_POWER_RATING = "activePowerRating";
 
 	/**
-	 * Key for the apparent power rating in W, as an Integer.
+	 * Key for the apparent power rating in VA, as a BigDecimal.
 	 *
 	 */
 	String INFO_KEY_APPARENT_POWER_RATING = "apparentPowerRating";
 
 	/**
-	 * Key for the reactive power Q1 rating in VAR, as an Integer.
+	 * Key for the reactive power Q1 rating in VAR, as a BigDecimal.
 	 *
 	 */
 	String INFO_KEY_REACTIVE_POWER_Q1_RATING = "reactivePowerQ1Rating";
 
 	/**
-	 * Key for the reactive power Q2 rating in VAR, as an Integer.
+	 * Key for the reactive power Q2 rating in VAR, as a BigDecimal.
 	 *
 	 */
 	String INFO_KEY_REACTIVE_POWER_Q2_RATING = "reactivePowerQ2Rating";
 
 	/**
-	 * Key for the reactive power Q3 rating in VAR, as an Integer.
+	 * Key for the reactive power Q3 rating in VAR, as a BigDecimal.
 	 *
 	 */
 	String INFO_KEY_REACTIVE_POWER_Q3_RATING = "reactivePowerQ3Rating";
 
 	/**
-	 * Key for the reactive power Q4 rating in VAR, as an Integer.
+	 * Key for the reactive power Q4 rating in VAR, as a BigDecimal.
 	 *
 	 */
 	String INFO_KEY_REACTIVE_POWER_Q4_RATING = "reactivePowerQ4Rating";
@@ -113,25 +113,25 @@ public interface InverterNameplateRatingsModelAccessor extends ModelAccessor {
 	String INFO_KEY_POWER_FACTOR_Q4_RATING = "powerFactorQ4Rating";
 
 	/**
-	 * Key for the stored energy inport power rating in Wh, as an Integer.
+	 * Key for the stored energy rating in Wh, as a BigDecimal.
 	 *
 	 */
 	String INFO_KEY_STORED_ENERGY_RATING = "storedEnergyRating";
 
 	/**
-	 * Key for the stored charge capacity rating in Wh, as an Integer.
+	 * Key for the stored charge capacity rating in Ah, as a BigDecimal.
 	 *
 	 */
 	String INFO_KEY_STORED_CHARGE_CAPACITY = "storedChargeCapacity";
 
 	/**
-	 * Key for the stored energy inport power rating in W, as an Integer.
+	 * Key for the stored energy import power rating in W, as a BigDecimal.
 	 *
 	 */
 	String INFO_KEY_STORED_ENERGY_IMPORT_POWER_RATING = "storedEnergyImportPowerRating";
 
 	/**
-	 * Key for the stored energy export power rating in W, as an Integer.
+	 * Key for the stored energy export power rating in W, as a BigDecimal.
 	 *
 	 */
 	String INFO_KEY_STORED_ENERGY_EXPORT_POWER_RATING = "storedEnergyExportPowerRating";
@@ -150,7 +150,7 @@ public interface InverterNameplateRatingsModelAccessor extends ModelAccessor {
 	 * @return the active power rating
 	 */
 	@Nullable
-	Integer getActivePowerRating();
+	BigDecimal getActivePowerRating();
 
 	/**
 	 * Get the continuous apparent power capability, in VA.
@@ -158,7 +158,7 @@ public interface InverterNameplateRatingsModelAccessor extends ModelAccessor {
 	 * @return the apparent power rating
 	 */
 	@Nullable
-	Integer getApparentPowerRating();
+	BigDecimal getApparentPowerRating();
 
 	/**
 	 * Get the continuous reactive power capability for EEI quadrant 1 (lagging,
@@ -167,7 +167,7 @@ public interface InverterNameplateRatingsModelAccessor extends ModelAccessor {
 	 * @return the reactive power rating
 	 */
 	@Nullable
-	Integer getReactivePowerQ1Rating();
+	BigDecimal getReactivePowerQ1Rating();
 
 	/**
 	 * Get the continuous reactive power capability for EEI quadrant 2 (leading,
@@ -176,7 +176,7 @@ public interface InverterNameplateRatingsModelAccessor extends ModelAccessor {
 	 * @return the reactive power rating
 	 */
 	@Nullable
-	Integer getReactivePowerQ2Rating();
+	BigDecimal getReactivePowerQ2Rating();
 
 	/**
 	 * Get the continuous reactive power capability for EEI quadrant 3 (lagging,
@@ -185,7 +185,7 @@ public interface InverterNameplateRatingsModelAccessor extends ModelAccessor {
 	 * @return the reactive power rating
 	 */
 	@Nullable
-	Integer getReactivePowerQ3Rating();
+	BigDecimal getReactivePowerQ3Rating();
 
 	/**
 	 * Get the continuous reactive power capability for EEI quadrant 4 (leading,
@@ -194,7 +194,7 @@ public interface InverterNameplateRatingsModelAccessor extends ModelAccessor {
 	 * @return the reactive power rating
 	 */
 	@Nullable
-	Integer getReactivePowerQ4Rating();
+	BigDecimal getReactivePowerQ4Rating();
 
 	/**
 	 * Get the maximum RMS AC current capability of the inverter, in A.
@@ -246,7 +246,7 @@ public interface InverterNameplateRatingsModelAccessor extends ModelAccessor {
 	 * @return the maximum rated energy of the battery storage
 	 */
 	@Nullable
-	Integer getStoredEnergyRating();
+	BigDecimal getStoredEnergyRating();
 
 	/**
 	 * Get the maximum rated stored charge of the battery storage system, in Ah.
@@ -254,7 +254,7 @@ public interface InverterNameplateRatingsModelAccessor extends ModelAccessor {
 	 * @return the maximum rated charge of the battery storage
 	 */
 	@Nullable
-	Integer getStoredChargeCapacity();
+	BigDecimal getStoredChargeCapacity();
 
 	/**
 	 * Get the maximum rate of charge for the battery storage system, in W.
@@ -262,7 +262,7 @@ public interface InverterNameplateRatingsModelAccessor extends ModelAccessor {
 	 * @return the maximum charge rate power
 	 */
 	@Nullable
-	Integer getStoredEnergyImportPowerRating();
+	BigDecimal getStoredEnergyImportPowerRating();
 
 	/**
 	 * Get the maximum rate of discharge for the battery storage system, in W.
@@ -270,7 +270,7 @@ public interface InverterNameplateRatingsModelAccessor extends ModelAccessor {
 	 * @return the minimum discharge rate power
 	 */
 	@Nullable
-	Integer getStoredEnergyExportPowerRating();
+	BigDecimal getStoredEnergyExportPowerRating();
 
 	/**
 	 * Get an information mapping if the nameplate ratings.

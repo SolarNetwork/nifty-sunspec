@@ -20,6 +20,7 @@
 package net.solarnetwork.sunspec.api.inverter;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelAccessor;
@@ -48,7 +49,7 @@ public interface InverterBasicStorageControlsModelAccessor extends ModelAccessor
 	 * @return the maximum charge rate, in W, or {@code null} if not available
 	 */
 	@Nullable
-	Integer getActivePowerChargeRateMaximum();
+	BigDecimal getActivePowerChargeRateMaximum();
 
 	/**
 	 * Set the maximum charge rate setpoint.
@@ -60,7 +61,7 @@ public interface InverterBasicStorageControlsModelAccessor extends ModelAccessor
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setActivePowerChargeRateMaximum(ModbusConnection conn, int watts) throws IOException;
+	void setActivePowerChargeRateMaximum(ModbusConnection conn, BigDecimal watts) throws IOException;
 
 	/**
 	 * Get the maximum charging ramp rate setpoint.
@@ -133,7 +134,7 @@ public interface InverterBasicStorageControlsModelAccessor extends ModelAccessor
 	 *         available
 	 */
 	@Nullable
-	Integer getApparentPowerChargeRateMaximum();
+	BigDecimal getApparentPowerChargeRateMaximum();
 
 	/**
 	 * Set the maximum charging apparent power setpoint.
@@ -145,7 +146,8 @@ public interface InverterBasicStorageControlsModelAccessor extends ModelAccessor
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setApparentPowerChargeRateMaximum(ModbusConnection conn, int voltAmps) throws IOException;
+	void setApparentPowerChargeRateMaximum(ModbusConnection conn, BigDecimal voltAmps)
+			throws IOException;
 
 	/**
 	 * Get the minimum reserve setpoint.
@@ -184,7 +186,7 @@ public interface InverterBasicStorageControlsModelAccessor extends ModelAccessor
 	 * @return the storage available, in Ah, or {@code null} if not available
 	 */
 	@Nullable
-	Float getStorageAvailable();
+	BigDecimal getStorageAvailable();
 
 	/**
 	 * Get the internal battery voltage.

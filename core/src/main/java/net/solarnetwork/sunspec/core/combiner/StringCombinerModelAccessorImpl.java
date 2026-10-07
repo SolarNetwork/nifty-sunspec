@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.core.combiner;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -122,12 +123,11 @@ public class StringCombinerModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Long getDCChargeDelivered() {
-		Number n = getScaledValue(
+	public @Nullable BigDecimal getDCChargeDelivered() {
+		return getScaledValue(
 				isVersion2() ? StringCombinerModelRegister.DcChargeV2
 						: StringCombinerModelRegister.DcCharge,
 				StringCombinerModelRegister.ScaleFactorDcCharge);
-		return (n != null ? n.longValue() : null);
 	}
 
 	@Override
@@ -198,15 +198,14 @@ public class StringCombinerModelAccessorImpl extends BaseModelAccessor
 		}
 
 		@Override
-		public @Nullable Long getDCChargeDelivered() {
-			Number n = isVersion2()
+		public @Nullable BigDecimal getDCChargeDelivered() {
+			return isVersion2()
 					? getScaledValue(StringCombinerModelRegister.InputDcChargeV2,
 							StringCombinerModelRegister.ScaleFactorInputDcCharge, inputAddress(),
 							getBlockAddress())
 					: getScaledValue(StringCombinerModelRegister.InputDcCharge,
 							StringCombinerModelRegister.ScaleFactorDcCharge, inputAddress(),
 							getBlockAddress());
-			return (n != null ? n.longValue() : null);
 		}
 
 		@Override

@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.api.inverter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
@@ -116,7 +117,7 @@ public interface InverterExtendedMeasurementsModelAccessor extends ModelAccessor
 	 * @return the reactive power, in VAR, or {@code null} if not available
 	 */
 	@Nullable
-	Integer getReactivePowerAvailable();
+	BigDecimal getReactivePowerAvailable();
 
 	/**
 	 * Get the active power available.
@@ -124,7 +125,7 @@ public interface InverterExtendedMeasurementsModelAccessor extends ModelAccessor
 	 * @return the active power, in W, or {@code null} if not available
 	 */
 	@Nullable
-	Integer getActivePowerAvailable();
+	BigDecimal getActivePowerAvailable();
 
 	/**
 	 * Get the setpoint limits that have been reached.

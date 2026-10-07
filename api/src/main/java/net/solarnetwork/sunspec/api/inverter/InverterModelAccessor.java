@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.api.inverter;
 
+import java.math.BigDecimal;
 import java.util.BitSet;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
@@ -65,7 +66,7 @@ public interface InverterModelAccessor extends ModelAccessor {
 	 * @return the active power
 	 */
 	@Nullable
-	Integer getActivePower();
+	BigDecimal getActivePower();
 
 	/**
 	 * Get the AC frequency value, in Hz.
@@ -81,7 +82,7 @@ public interface InverterModelAccessor extends ModelAccessor {
 	 * @return the apparent power
 	 */
 	@Nullable
-	Integer getApparentPower();
+	BigDecimal getApparentPower();
 
 	/**
 	 * Get the reactive power, in VAR.
@@ -89,7 +90,7 @@ public interface InverterModelAccessor extends ModelAccessor {
 	 * @return the reactive power
 	 */
 	@Nullable
-	Integer getReactivePower();
+	BigDecimal getReactivePower();
 
 	/**
 	 * Get the power factor, as a decimal from -1.0 to 1.0.
@@ -105,7 +106,7 @@ public interface InverterModelAccessor extends ModelAccessor {
 	 * @return the exported active energy
 	 */
 	@Nullable
-	Long getActiveEnergyExported();
+	BigDecimal getActiveEnergyExported();
 
 	/**
 	 * Get the active energy imported, in Wh.
@@ -113,7 +114,7 @@ public interface InverterModelAccessor extends ModelAccessor {
 	 * @return the imported active energy
 	 */
 	@Nullable
-	Long getActiveEnergyImported();
+	BigDecimal getActiveEnergyImported();
 
 	/**
 	 * Get the reactive energy exported, in VARh.
@@ -121,7 +122,7 @@ public interface InverterModelAccessor extends ModelAccessor {
 	 * @return the delivered reactive energy
 	 */
 	@Nullable
-	Long getReactiveEnergyExported();
+	BigDecimal getReactiveEnergyExported();
 
 	/**
 	 * Get the reactive energy imported in VARh.
@@ -129,7 +130,7 @@ public interface InverterModelAccessor extends ModelAccessor {
 	 * @return the received reactive energy
 	 */
 	@Nullable
-	Long getReactiveEnergyImported();
+	BigDecimal getReactiveEnergyImported();
 
 	/**
 	 * Get the DC current, in A.
@@ -153,7 +154,7 @@ public interface InverterModelAccessor extends ModelAccessor {
 	 * @return the DC power
 	 */
 	@Nullable
-	Integer getDcPower();
+	BigDecimal getDcPower();
 
 	/**
 	 * Get the cabinet temperature, in degrees Celsius.

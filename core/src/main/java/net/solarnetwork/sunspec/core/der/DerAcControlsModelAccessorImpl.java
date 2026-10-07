@@ -20,6 +20,7 @@
 package net.solarnetwork.sunspec.core.der;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.EnumSet;
 import org.jspecify.annotations.Nullable;
@@ -362,13 +363,13 @@ public class DerAcControlsModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Integer getActivePowerSetpoint() {
-		return getScaledIntegerValue(DerAcControlsModelRegister.ActivePowerSetpoint,
+	public @Nullable BigDecimal getActivePowerSetpoint() {
+		return getScaledValue(DerAcControlsModelRegister.ActivePowerSetpoint,
 				DerAcControlsModelRegister.ScaleFactorActivePowerSetpoint);
 	}
 
 	@Override
-	public void setActivePowerSetpoint(ModbusConnection conn, int watts) throws IOException {
+	public void setActivePowerSetpoint(ModbusConnection conn, BigDecimal watts) throws IOException {
 		writeScaledValue(conn, DerAcControlsModelRegister.ActivePowerSetpoint,
 				DerAcControlsModelRegister.ScaleFactorActivePowerSetpoint, watts);
 	}
@@ -414,13 +415,14 @@ public class DerAcControlsModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Integer getReversionActivePowerSetpoint() {
-		return getScaledIntegerValue(DerAcControlsModelRegister.ReversionActivePowerSetpoint,
+	public @Nullable BigDecimal getReversionActivePowerSetpoint() {
+		return getScaledValue(DerAcControlsModelRegister.ReversionActivePowerSetpoint,
 				DerAcControlsModelRegister.ScaleFactorActivePowerSetpoint);
 	}
 
 	@Override
-	public void setReversionActivePowerSetpoint(ModbusConnection conn, int watts) throws IOException {
+	public void setReversionActivePowerSetpoint(ModbusConnection conn, BigDecimal watts)
+			throws IOException {
 		writeScaledValue(conn, DerAcControlsModelRegister.ReversionActivePowerSetpoint,
 				DerAcControlsModelRegister.ScaleFactorActivePowerSetpoint, watts);
 	}
@@ -474,13 +476,13 @@ public class DerAcControlsModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Integer getReactivePowerSetpoint() {
-		return getScaledIntegerValue(DerAcControlsModelRegister.ReactivePowerSetpoint,
+	public @Nullable BigDecimal getReactivePowerSetpoint() {
+		return getScaledValue(DerAcControlsModelRegister.ReactivePowerSetpoint,
 				DerAcControlsModelRegister.ScaleFactorReactivePowerSetpoint);
 	}
 
 	@Override
-	public void setReactivePowerSetpoint(ModbusConnection conn, int vars) throws IOException {
+	public void setReactivePowerSetpoint(ModbusConnection conn, BigDecimal vars) throws IOException {
 		writeScaledValue(conn, DerAcControlsModelRegister.ReactivePowerSetpoint,
 				DerAcControlsModelRegister.ScaleFactorReactivePowerSetpoint, vars);
 	}
@@ -527,13 +529,14 @@ public class DerAcControlsModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Integer getReversionReactivePowerSetpoint() {
-		return getScaledIntegerValue(DerAcControlsModelRegister.ReversionReactivePowerSetpoint,
+	public @Nullable BigDecimal getReversionReactivePowerSetpoint() {
+		return getScaledValue(DerAcControlsModelRegister.ReversionReactivePowerSetpoint,
 				DerAcControlsModelRegister.ScaleFactorReactivePowerSetpoint);
 	}
 
 	@Override
-	public void setReversionReactivePowerSetpoint(ModbusConnection conn, int vars) throws IOException {
+	public void setReversionReactivePowerSetpoint(ModbusConnection conn, BigDecimal vars)
+			throws IOException {
 		writeScaledValue(conn, DerAcControlsModelRegister.ReversionReactivePowerSetpoint,
 				DerAcControlsModelRegister.ScaleFactorReactivePowerSetpoint, vars);
 	}

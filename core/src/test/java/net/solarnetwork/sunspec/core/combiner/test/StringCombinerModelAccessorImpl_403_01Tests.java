@@ -22,6 +22,7 @@ package net.solarnetwork.sunspec.core.combiner.test;
 import static net.solarnetwork.sunspec.core.combiner.test.StringCombinerTestUtils.assertDcInput;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -97,7 +98,7 @@ public class StringCombinerModelAccessorImpl_403_01Tests {
 			.as("Current")
 			.returns(16.3f, from(StringCombinerModelAccessor::getDCCurrent))
 			.as("Charge 0xFFFFFFFF is a value, an acc32 for model 403")
-			.returns(0xFFFFFFFFL, from(StringCombinerModelAccessor::getDCChargeDelivered))
+			.returns(BigDecimal.valueOf(0xFFFFFFFFL), from(StringCombinerModelAccessor::getDCChargeDelivered))
 			.as("Voltage 0x8000 not implemented, an int16 for model 403")
 			.returns(null, from(StringCombinerModelAccessor::getDCVoltage))
 			.as("Temperature")
@@ -137,7 +138,7 @@ public class StringCombinerModelAccessorImpl_403_01Tests {
 		// @formatter:on
 
 		// inputs use the input scale factors, and charge is an acc32 type
-		assertDcInput("Input 1", inputs.get(0), 1, 8.15f, 43210L,
+		assertDcInput("Input 1", inputs.get(0), 1, 8.15f, new BigDecimal("43210"),
 				Set.of(StringCombinerModelEvent.FuseFault), Set.of(new GenericModelEvent(2)));
 		assertDcInput("Input 2", inputs.get(1), 2, 8.12f, null, Set.of(), Set.of());
 	}

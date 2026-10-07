@@ -22,6 +22,7 @@ package net.solarnetwork.sunspec.core.combiner.test;
 import static net.solarnetwork.sunspec.core.combiner.test.StringCombinerTestUtils.assertAdvancedDcInput;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -224,8 +225,8 @@ public class StringCombinerAdvancedModelAccessorImpl_402_01Tests {
 		// @formatter:on
 		for ( int i = 0; i < 8; i++ ) {
 			// charge uses the DCAhr_SF scale factor, which is not implemented
-			assertAdvancedDcInput("Input " + (i + 1), inputs.get(i), i + 1, null, null, null, null, 0L,
-					null, null, Set.of(), Set.of());
+			assertAdvancedDcInput("Input " + (i + 1), inputs.get(i), i + 1, null, null, null, null,
+					BigDecimal.ZERO, null, null, Set.of(), Set.of());
 		}
 	}
 

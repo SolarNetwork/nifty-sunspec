@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.core.meter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -125,50 +126,50 @@ public class FloatingPointMeterModelAccessor extends BaseModelAccessor implement
 	}
 
 	@Override
-	public @Nullable Integer getActivePower() {
-		return getIntegerValue(FloatingPointMeterModelRegister.ActivePowerTotal);
+	public @Nullable BigDecimal getActivePower() {
+		return getDecimalValue(FloatingPointMeterModelRegister.ActivePowerTotal);
 	}
 
 	@Override
-	public @Nullable Integer getApparentPower() {
-		return getIntegerValue(FloatingPointMeterModelRegister.ApparentPowerTotal);
+	public @Nullable BigDecimal getApparentPower() {
+		return getDecimalValue(FloatingPointMeterModelRegister.ApparentPowerTotal);
 	}
 
 	@Override
-	public @Nullable Integer getReactivePower() {
-		return getIntegerValue(FloatingPointMeterModelRegister.ReactivePowerTotal);
+	public @Nullable BigDecimal getReactivePower() {
+		return getDecimalValue(FloatingPointMeterModelRegister.ReactivePowerTotal);
 	}
 
 	@Override
-	public @Nullable Long getActiveEnergyImported() {
-		return getLongValue(FloatingPointMeterModelRegister.ActiveEnergyImportedTotal);
+	public @Nullable BigDecimal getActiveEnergyImported() {
+		return getDecimalValue(FloatingPointMeterModelRegister.ActiveEnergyImportedTotal);
 	}
 
 	@Override
-	public @Nullable Long getActiveEnergyExported() {
-		return getLongValue(FloatingPointMeterModelRegister.ActiveEnergyExportedTotal);
+	public @Nullable BigDecimal getActiveEnergyExported() {
+		return getDecimalValue(FloatingPointMeterModelRegister.ActiveEnergyExportedTotal);
 	}
 
 	@Override
-	public @Nullable Long getReactiveEnergyImported() {
-		return sum(getLongValue(FloatingPointMeterModelRegister.ReactiveEnergyImportedQ1Total),
-				getLongValue(FloatingPointMeterModelRegister.ReactiveEnergyImportedQ2Total));
+	public @Nullable BigDecimal getReactiveEnergyImported() {
+		return sum(getDecimalValue(FloatingPointMeterModelRegister.ReactiveEnergyImportedQ1Total),
+				getDecimalValue(FloatingPointMeterModelRegister.ReactiveEnergyImportedQ2Total));
 	}
 
 	@Override
-	public @Nullable Long getReactiveEnergyExported() {
-		return sum(getLongValue(FloatingPointMeterModelRegister.ReactiveEnergyExportedQ3Total),
-				getLongValue(FloatingPointMeterModelRegister.ReactiveEnergyExportedQ4Total));
+	public @Nullable BigDecimal getReactiveEnergyExported() {
+		return sum(getDecimalValue(FloatingPointMeterModelRegister.ReactiveEnergyExportedQ3Total),
+				getDecimalValue(FloatingPointMeterModelRegister.ReactiveEnergyExportedQ4Total));
 	}
 
 	@Override
-	public @Nullable Long getApparentEnergyImported() {
-		return getLongValue(FloatingPointMeterModelRegister.ApparentEnergyImportedTotal);
+	public @Nullable BigDecimal getApparentEnergyImported() {
+		return getDecimalValue(FloatingPointMeterModelRegister.ApparentEnergyImportedTotal);
 	}
 
 	@Override
-	public @Nullable Long getApparentEnergyExported() {
-		return getLongValue(FloatingPointMeterModelRegister.ApparentEnergyExportedTotal);
+	public @Nullable BigDecimal getApparentEnergyExported() {
+		return getDecimalValue(FloatingPointMeterModelRegister.ApparentEnergyExportedTotal);
 	}
 
 	@Override
@@ -186,11 +187,11 @@ public class FloatingPointMeterModelAccessor extends BaseModelAccessor implement
 	 *        the second value
 	 * @return the sum, or {@code null} if both values are {@code null}
 	 */
-	private static @Nullable Long sum(@Nullable Long a, @Nullable Long b) {
-		if ( a == null && b == null ) {
-			return null;
+	private static @Nullable BigDecimal sum(@Nullable BigDecimal a, @Nullable BigDecimal b) {
+		if ( a == null ) {
+			return b;
 		}
-		return (a != null ? a.longValue() : 0L) + (b != null ? b.longValue() : 0L);
+		return (b != null ? a.add(b) : a);
 	}
 
 	/**
@@ -326,72 +327,76 @@ public class FloatingPointMeterModelAccessor extends BaseModelAccessor implement
 		}
 
 		@Override
-		public @Nullable Integer getActivePower() {
-			return getIntegerValue(register(FloatingPointMeterModelRegister.ActivePowerPhaseA,
+		public @Nullable BigDecimal getActivePower() {
+			return getDecimalValue(register(FloatingPointMeterModelRegister.ActivePowerPhaseA,
 					FloatingPointMeterModelRegister.ActivePowerPhaseB,
 					FloatingPointMeterModelRegister.ActivePowerPhaseC));
 		}
 
 		@Override
-		public @Nullable Integer getApparentPower() {
-			return getIntegerValue(register(FloatingPointMeterModelRegister.ApparentPowerPhaseA,
+		public @Nullable BigDecimal getApparentPower() {
+			return getDecimalValue(register(FloatingPointMeterModelRegister.ApparentPowerPhaseA,
 					FloatingPointMeterModelRegister.ApparentPowerPhaseB,
 					FloatingPointMeterModelRegister.ApparentPowerPhaseC));
 		}
 
 		@Override
-		public @Nullable Integer getReactivePower() {
-			return getIntegerValue(register(FloatingPointMeterModelRegister.ReactivePowerPhaseA,
+		public @Nullable BigDecimal getReactivePower() {
+			return getDecimalValue(register(FloatingPointMeterModelRegister.ReactivePowerPhaseA,
 					FloatingPointMeterModelRegister.ReactivePowerPhaseB,
 					FloatingPointMeterModelRegister.ReactivePowerPhaseC));
 		}
 
 		@Override
-		public @Nullable Long getActiveEnergyImported() {
-			return getLongValue(register(FloatingPointMeterModelRegister.ActiveEnergyImportedPhaseA,
+		public @Nullable BigDecimal getActiveEnergyImported() {
+			return getDecimalValue(register(FloatingPointMeterModelRegister.ActiveEnergyImportedPhaseA,
 					FloatingPointMeterModelRegister.ActiveEnergyImportedPhaseB,
 					FloatingPointMeterModelRegister.ActiveEnergyImportedPhaseC));
 		}
 
 		@Override
-		public @Nullable Long getActiveEnergyExported() {
-			return getLongValue(register(FloatingPointMeterModelRegister.ActiveEnergyExportedPhaseA,
+		public @Nullable BigDecimal getActiveEnergyExported() {
+			return getDecimalValue(register(FloatingPointMeterModelRegister.ActiveEnergyExportedPhaseA,
 					FloatingPointMeterModelRegister.ActiveEnergyExportedPhaseB,
 					FloatingPointMeterModelRegister.ActiveEnergyExportedPhaseC));
 		}
 
 		@Override
-		public @Nullable Long getReactiveEnergyImported() {
+		public @Nullable BigDecimal getReactiveEnergyImported() {
 			return sum(
-					getLongValue(register(FloatingPointMeterModelRegister.ReactiveEnergyImportedQ1PhaseA,
-							FloatingPointMeterModelRegister.ReactiveEnergyImportedQ1PhaseB,
-							FloatingPointMeterModelRegister.ReactiveEnergyImportedQ1PhaseC)),
-					getLongValue(register(FloatingPointMeterModelRegister.ReactiveEnergyImportedQ2PhaseA,
-							FloatingPointMeterModelRegister.ReactiveEnergyImportedQ2PhaseB,
-							FloatingPointMeterModelRegister.ReactiveEnergyImportedQ2PhaseC)));
+					getDecimalValue(
+							register(FloatingPointMeterModelRegister.ReactiveEnergyImportedQ1PhaseA,
+									FloatingPointMeterModelRegister.ReactiveEnergyImportedQ1PhaseB,
+									FloatingPointMeterModelRegister.ReactiveEnergyImportedQ1PhaseC)),
+					getDecimalValue(
+							register(FloatingPointMeterModelRegister.ReactiveEnergyImportedQ2PhaseA,
+									FloatingPointMeterModelRegister.ReactiveEnergyImportedQ2PhaseB,
+									FloatingPointMeterModelRegister.ReactiveEnergyImportedQ2PhaseC)));
 		}
 
 		@Override
-		public @Nullable Long getReactiveEnergyExported() {
+		public @Nullable BigDecimal getReactiveEnergyExported() {
 			return sum(
-					getLongValue(register(FloatingPointMeterModelRegister.ReactiveEnergyExportedQ3PhaseA,
-							FloatingPointMeterModelRegister.ReactiveEnergyExportedQ3PhaseB,
-							FloatingPointMeterModelRegister.ReactiveEnergyExportedQ3PhaseC)),
-					getLongValue(register(FloatingPointMeterModelRegister.ReactiveEnergyExportedQ4PhaseA,
-							FloatingPointMeterModelRegister.ReactiveEnergyExportedQ4PhaseB,
-							FloatingPointMeterModelRegister.ReactiveEnergyExportedQ4PhaseC)));
+					getDecimalValue(
+							register(FloatingPointMeterModelRegister.ReactiveEnergyExportedQ3PhaseA,
+									FloatingPointMeterModelRegister.ReactiveEnergyExportedQ3PhaseB,
+									FloatingPointMeterModelRegister.ReactiveEnergyExportedQ3PhaseC)),
+					getDecimalValue(
+							register(FloatingPointMeterModelRegister.ReactiveEnergyExportedQ4PhaseA,
+									FloatingPointMeterModelRegister.ReactiveEnergyExportedQ4PhaseB,
+									FloatingPointMeterModelRegister.ReactiveEnergyExportedQ4PhaseC)));
 		}
 
 		@Override
-		public @Nullable Long getApparentEnergyImported() {
-			return getLongValue(register(FloatingPointMeterModelRegister.ApparentEnergyImportedPhaseA,
+		public @Nullable BigDecimal getApparentEnergyImported() {
+			return getDecimalValue(register(FloatingPointMeterModelRegister.ApparentEnergyImportedPhaseA,
 					FloatingPointMeterModelRegister.ApparentEnergyImportedPhaseB,
 					FloatingPointMeterModelRegister.ApparentEnergyImportedPhaseC));
 		}
 
 		@Override
-		public @Nullable Long getApparentEnergyExported() {
-			return getLongValue(register(FloatingPointMeterModelRegister.ApparentEnergyExportedPhaseA,
+		public @Nullable BigDecimal getApparentEnergyExported() {
+			return getDecimalValue(register(FloatingPointMeterModelRegister.ApparentEnergyExportedPhaseA,
 					FloatingPointMeterModelRegister.ApparentEnergyExportedPhaseB,
 					FloatingPointMeterModelRegister.ApparentEnergyExportedPhaseC));
 		}

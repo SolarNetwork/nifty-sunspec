@@ -24,6 +24,7 @@ import static net.solarnetwork.sunspec.api.DataClassification.Bitfield;
 import static net.solarnetwork.sunspec.api.DataClassification.Enumeration;
 import static net.solarnetwork.sunspec.api.DataClassification.ScaleFactor;
 import static net.solarnetwork.sunspec.api.PointAccess.ReadWrite;
+import static net.solarnetwork.sunspec.modbus.ModbusDataType.Float32;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int32;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
@@ -94,6 +95,8 @@ public class BaseModelAccessorTests {
 		Bitfield32Value(25, UInt32, Bitfield),
 
 		Bitfield32Value2(27, UInt32, Bitfield),
+
+		Float32Value(29, Float32, null),
 
 		;
 
@@ -331,7 +334,7 @@ public class BaseModelAccessorTests {
 	@Test
 	public void acc64_maximum() throws IOException {
 		// GIVEN
-		saveRegisters(TestRegister.Acc64Value, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF);
+		saveRegisters(TestRegister.Acc64Value, 0x7FFF, 0xFFFF, 0xFFFF, 0xFFFF);
 
 		// WHEN
 		Number result = accessor.getValue(TestRegister.Acc64Value);
@@ -339,8 +342,25 @@ public class BaseModelAccessorTests {
 		// THEN
 		// @formatter:off
 		then(result)
-			.as("acc64 0xFFFFFFFFFFFFFFFF is a value")
-			.isEqualTo(new BigInteger("FFFFFFFFFFFFFFFF", 16))
+			.as("acc64 0x7FFFFFFFFFFFFFFF is a value")
+			.isEqualTo(BigInteger.valueOf(Long.MAX_VALUE))
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void acc64_outOfRange() throws IOException {
+		// GIVEN
+		saveRegisters(TestRegister.Acc64Value, 0x8000, 0x0000, 0x0000, 0x0000);
+
+		// WHEN
+		Number result = accessor.getValue(TestRegister.Acc64Value);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("acc64 0x8000000000000000 is outside the positive int64 range, so is invalid")
+			.isNull()
 			;
 		// @formatter:on
 	}
@@ -996,6 +1016,34 @@ public class BaseModelAccessorTests {
 	}
 
 	@Test
+	public void scaledValue_normalized() throws IOException {
+		// GIVEN
+		saveRegisters(TestRegister.RwUInt16Value, 1200);
+		saveRegisters(TestRegister.ScaleFactorValue, 0xFFFE); // -2
+
+		// THEN
+		// @formatter:off
+		then(accessor.getScaledValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue))
+			.as("Trailing zeros removed")
+			.isEqualTo(new BigDecimal("12"))
+			;
+		// @formatter:on
+
+		// AND
+		saveRegisters(TestRegister.RwUInt16Value, 1234);
+		saveRegisters(TestRegister.ScaleFactorValue, 2);
+		// @formatter:off
+		then(accessor.getScaledValue(TestRegister.RwUInt16Value, TestRegister.ScaleFactorValue))
+			.as("Positive scale factor gives a whole number")
+			.isEqualTo(new BigDecimal("123400"))
+			.extracting(BigDecimal::toString)
+			.as("Whole number printed without an exponent")
+			.isEqualTo("123400")
+			;
+		// @formatter:on
+	}
+
+	@Test
 	public void bitfieldIndexes() throws IOException {
 		// GIVEN
 		saveRegisters(TestRegister.Bitfield32Value, 0x0000, 0x0105);
@@ -1198,6 +1246,77 @@ public class BaseModelAccessorTests {
 		// @formatter:off
 		then(accessor.getLongValue(TestRegister.UInt64Value))
 			.as("Value larger than a long is not available")
+			.isNull()
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void integerValue_maximum() throws IOException {
+		// GIVEN
+		saveRegisters(TestRegister.UInt32Value, 0x7FFF, 0xFFFF);
+
+		// THEN
+		// @formatter:off
+		then(accessor.getIntegerValue(TestRegister.UInt32Value))
+			.as("Largest integer value")
+			.isEqualTo(Integer.MAX_VALUE)
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void integerValue_outOfRange() throws IOException {
+		// GIVEN
+		saveRegisters(TestRegister.UInt32Value, 0x8000, 0x0000);
+
+		// THEN
+		// @formatter:off
+		then(accessor.getIntegerValue(TestRegister.UInt32Value))
+			.as("Value larger than an integer is not available")
+			.isNull()
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void decimalValue_integer() throws IOException {
+		// GIVEN
+		saveRegisters(TestRegister.UInt64Value, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFE);
+
+		// THEN
+		// @formatter:off
+		then(accessor.getDecimalValue(TestRegister.UInt64Value))
+			.as("Largest uint64 value converted exactly")
+			.isEqualTo(new BigDecimal("18446744073709551614"))
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void decimalValue_float() throws IOException {
+		// GIVEN
+		final int bits = Float.floatToIntBits(0.1f);
+		saveRegisters(TestRegister.Float32Value, bits >>> 16, bits & 0xFFFF);
+
+		// THEN
+		// @formatter:off
+		then(accessor.getDecimalValue(TestRegister.Float32Value))
+			.as("Float converted from its shortest decimal representation")
+			.isEqualTo(new BigDecimal("0.1"))
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void decimalValue_notImplemented() throws IOException {
+		// GIVEN
+		saveRegisters(TestRegister.Float32Value, 0x7FC0, 0x0000);
+
+		// THEN
+		// @formatter:off
+		then(accessor.getDecimalValue(TestRegister.Float32Value))
+			.as("NaN float is not available")
 			.isNull()
 			;
 		// @formatter:on

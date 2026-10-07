@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.core.inverter;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.EnumSet;
 import org.jspecify.annotations.Nullable;
@@ -93,45 +94,39 @@ public class InverterNameplateRatingsModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Integer getActivePowerRating() {
-		Number n = getScaledValue(InverterNameplateRatingsRegister.ActivePowerRating,
+	public @Nullable BigDecimal getActivePowerRating() {
+		return getScaledValue(InverterNameplateRatingsRegister.ActivePowerRating,
 				InverterNameplateRatingsRegister.ScaleFactorActivePowerRating);
-		return (n != null ? n.intValue() : null);
 	}
 
 	@Override
-	public @Nullable Integer getApparentPowerRating() {
-		Number n = getScaledValue(InverterNameplateRatingsRegister.ApparentPowerRating,
+	public @Nullable BigDecimal getApparentPowerRating() {
+		return getScaledValue(InverterNameplateRatingsRegister.ApparentPowerRating,
 				InverterNameplateRatingsRegister.ScaleFactorApparentPowerRating);
-		return (n != null ? n.intValue() : null);
 	}
 
 	@Override
-	public @Nullable Integer getReactivePowerQ1Rating() {
-		Number n = getScaledValue(InverterNameplateRatingsRegister.ReactivePowerQ1Rating,
+	public @Nullable BigDecimal getReactivePowerQ1Rating() {
+		return getScaledValue(InverterNameplateRatingsRegister.ReactivePowerQ1Rating,
 				InverterNameplateRatingsRegister.ScaleFactorReactivePowerRating);
-		return (n != null ? n.intValue() : null);
 	}
 
 	@Override
-	public @Nullable Integer getReactivePowerQ2Rating() {
-		Number n = getScaledValue(InverterNameplateRatingsRegister.ReactivePowerQ2Rating,
+	public @Nullable BigDecimal getReactivePowerQ2Rating() {
+		return getScaledValue(InverterNameplateRatingsRegister.ReactivePowerQ2Rating,
 				InverterNameplateRatingsRegister.ScaleFactorReactivePowerRating);
-		return (n != null ? n.intValue() : null);
 	}
 
 	@Override
-	public @Nullable Integer getReactivePowerQ3Rating() {
-		Number n = getScaledValue(InverterNameplateRatingsRegister.ReactivePowerQ3Rating,
+	public @Nullable BigDecimal getReactivePowerQ3Rating() {
+		return getScaledValue(InverterNameplateRatingsRegister.ReactivePowerQ3Rating,
 				InverterNameplateRatingsRegister.ScaleFactorReactivePowerRating);
-		return (n != null ? n.intValue() : null);
 	}
 
 	@Override
-	public @Nullable Integer getReactivePowerQ4Rating() {
-		Number n = getScaledValue(InverterNameplateRatingsRegister.ReactivePowerQ4Rating,
+	public @Nullable BigDecimal getReactivePowerQ4Rating() {
+		return getScaledValue(InverterNameplateRatingsRegister.ReactivePowerQ4Rating,
 				InverterNameplateRatingsRegister.ScaleFactorReactivePowerRating);
-		return (n != null ? n.intValue() : null);
 	}
 
 	@Override
@@ -170,31 +165,27 @@ public class InverterNameplateRatingsModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Integer getStoredEnergyRating() {
-		Number n = getScaledValue(InverterNameplateRatingsRegister.StoredEnergyRating,
+	public @Nullable BigDecimal getStoredEnergyRating() {
+		return getScaledValue(InverterNameplateRatingsRegister.StoredEnergyRating,
 				InverterNameplateRatingsRegister.ScaleFactorStoredEnergyRating);
-		return (n != null ? n.intValue() : null);
 	}
 
 	@Override
-	public @Nullable Integer getStoredChargeCapacity() {
-		Number n = getScaledValue(InverterNameplateRatingsRegister.StoredChargeCapacity,
+	public @Nullable BigDecimal getStoredChargeCapacity() {
+		return getScaledValue(InverterNameplateRatingsRegister.StoredChargeCapacity,
 				InverterNameplateRatingsRegister.ScaleFactorStoredChargeCapacity);
-		return (n != null ? n.intValue() : null);
 	}
 
 	@Override
-	public @Nullable Integer getStoredEnergyImportPowerRating() {
-		Number n = getScaledValue(InverterNameplateRatingsRegister.StoredEnergyImportPowerRating,
+	public @Nullable BigDecimal getStoredEnergyImportPowerRating() {
+		return getScaledValue(InverterNameplateRatingsRegister.StoredEnergyImportPowerRating,
 				InverterNameplateRatingsRegister.ScaleFactorStoredEnergyImportPowerRating);
-		return (n != null ? n.intValue() : null);
 	}
 
 	@Override
-	public @Nullable Integer getStoredEnergyExportPowerRating() {
-		Number n = getScaledValue(InverterNameplateRatingsRegister.StoredEnergyExportPowerRating,
+	public @Nullable BigDecimal getStoredEnergyExportPowerRating() {
+		return getScaledValue(InverterNameplateRatingsRegister.StoredEnergyExportPowerRating,
 				InverterNameplateRatingsRegister.ScaleFactorStoredEnergyExportPowerRating);
-		return (n != null ? n.intValue() : null);
 	}
 
 }

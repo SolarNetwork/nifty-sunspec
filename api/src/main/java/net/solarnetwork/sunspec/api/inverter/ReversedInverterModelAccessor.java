@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.api.inverter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.BitSet;
 import java.util.List;
@@ -93,20 +94,20 @@ public class ReversedInverterModelAccessor implements InverterModelAccessor {
 	}
 
 	@Override
-	public @Nullable Integer getActivePower() {
-		Integer n = delegate.getActivePower();
-		return (n != null ? n * -1 : null);
+	public @Nullable BigDecimal getActivePower() {
+		BigDecimal n = delegate.getActivePower();
+		return (n != null ? n.negate() : null);
 	}
 
 	@Override
-	public @Nullable Integer getApparentPower() {
+	public @Nullable BigDecimal getApparentPower() {
 		return delegate.getApparentPower();
 	}
 
 	@Override
-	public @Nullable Integer getReactivePower() {
-		Integer n = delegate.getReactivePower();
-		return (n != null ? n * -1 : null);
+	public @Nullable BigDecimal getReactivePower() {
+		BigDecimal n = delegate.getReactivePower();
+		return (n != null ? n.negate() : null);
 	}
 
 	@Override
@@ -145,27 +146,27 @@ public class ReversedInverterModelAccessor implements InverterModelAccessor {
 	}
 
 	@Override
-	public @Nullable Long getActiveEnergyExported() {
-		Long v = delegate.getActiveEnergyExported();
-		return (v != null ? -v : null);
+	public @Nullable BigDecimal getActiveEnergyExported() {
+		BigDecimal v = delegate.getActiveEnergyExported();
+		return (v != null ? v.negate() : null);
 	}
 
 	@Override
-	public @Nullable Long getActiveEnergyImported() {
-		Long v = delegate.getActiveEnergyImported();
-		return (v != null ? -v : null);
+	public @Nullable BigDecimal getActiveEnergyImported() {
+		BigDecimal v = delegate.getActiveEnergyImported();
+		return (v != null ? v.negate() : null);
 	}
 
 	@Override
-	public @Nullable Long getReactiveEnergyExported() {
-		Long v = delegate.getReactiveEnergyExported();
-		return (v != null ? -v : null);
+	public @Nullable BigDecimal getReactiveEnergyExported() {
+		BigDecimal v = delegate.getReactiveEnergyExported();
+		return (v != null ? v.negate() : null);
 	}
 
 	@Override
-	public @Nullable Long getReactiveEnergyImported() {
-		Long v = delegate.getReactiveEnergyImported();
-		return (v != null ? -v : null);
+	public @Nullable BigDecimal getReactiveEnergyImported() {
+		BigDecimal v = delegate.getReactiveEnergyImported();
+		return (v != null ? v.negate() : null);
 	}
 
 	@Override
@@ -185,9 +186,9 @@ public class ReversedInverterModelAccessor implements InverterModelAccessor {
 	}
 
 	@Override
-	public @Nullable Integer getDcPower() {
-		Integer v = delegate.getDcPower();
-		return (v != null ? -v : null);
+	public @Nullable BigDecimal getDcPower() {
+		BigDecimal v = delegate.getDcPower();
+		return (v != null ? v.negate() : null);
 	}
 
 	@Override

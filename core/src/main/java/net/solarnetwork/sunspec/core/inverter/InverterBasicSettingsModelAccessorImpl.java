@@ -20,6 +20,7 @@
 package net.solarnetwork.sunspec.core.inverter;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.EnumSet;
 import org.jspecify.annotations.Nullable;
@@ -93,14 +94,13 @@ public class InverterBasicSettingsModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Integer getActivePowerMaximum() {
-		Number n = getScaledValue(InverterBasicSettingsRegister.ActivePowerMaximum,
+	public @Nullable BigDecimal getActivePowerMaximum() {
+		return getScaledValue(InverterBasicSettingsRegister.ActivePowerMaximum,
 				InverterBasicSettingsRegister.ScaleFactorActivePowerMaximum);
-		return (n != null ? n.intValue() : null);
 	}
 
 	@Override
-	public void setActivePowerMaximum(ModbusConnection conn, int watts) throws IOException {
+	public void setActivePowerMaximum(ModbusConnection conn, BigDecimal watts) throws IOException {
 		writeScaledValue(conn, InverterBasicSettingsRegister.ActivePowerMaximum,
 				InverterBasicSettingsRegister.ScaleFactorActivePowerMaximum, watts);
 	}
@@ -158,66 +158,61 @@ public class InverterBasicSettingsModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Integer getApparentPowerMaximum() {
-		Number n = getScaledValue(InverterBasicSettingsRegister.ApparentPowerMaximum,
+	public @Nullable BigDecimal getApparentPowerMaximum() {
+		return getScaledValue(InverterBasicSettingsRegister.ApparentPowerMaximum,
 				InverterBasicSettingsRegister.ScaleFactorApparentPowerMaximum);
-		return (n != null ? n.intValue() : null);
 	}
 
 	@Override
-	public void setApparentPowerMaximum(ModbusConnection conn, int voltAmps) throws IOException {
+	public void setApparentPowerMaximum(ModbusConnection conn, BigDecimal voltAmps) throws IOException {
 		writeScaledValue(conn, InverterBasicSettingsRegister.ApparentPowerMaximum,
 				InverterBasicSettingsRegister.ScaleFactorApparentPowerMaximum, voltAmps);
 	}
 
 	@Override
-	public @Nullable Integer getReactivePowerQ1Maximum() {
-		Number n = getScaledValue(InverterBasicSettingsRegister.ReactivePowerQ1Maximum,
+	public @Nullable BigDecimal getReactivePowerQ1Maximum() {
+		return getScaledValue(InverterBasicSettingsRegister.ReactivePowerQ1Maximum,
 				InverterBasicSettingsRegister.ScaleFactorReactivePowerMaximum);
-		return (n != null ? n.intValue() : null);
 	}
 
 	@Override
-	public void setReactivePowerQ1Maximum(ModbusConnection conn, int vars) throws IOException {
+	public void setReactivePowerQ1Maximum(ModbusConnection conn, BigDecimal vars) throws IOException {
 		writeScaledValue(conn, InverterBasicSettingsRegister.ReactivePowerQ1Maximum,
 				InverterBasicSettingsRegister.ScaleFactorReactivePowerMaximum, vars);
 	}
 
 	@Override
-	public @Nullable Integer getReactivePowerQ2Maximum() {
-		Number n = getScaledValue(InverterBasicSettingsRegister.ReactivePowerQ2Maximum,
+	public @Nullable BigDecimal getReactivePowerQ2Maximum() {
+		return getScaledValue(InverterBasicSettingsRegister.ReactivePowerQ2Maximum,
 				InverterBasicSettingsRegister.ScaleFactorReactivePowerMaximum);
-		return (n != null ? n.intValue() : null);
 	}
 
 	@Override
-	public void setReactivePowerQ2Maximum(ModbusConnection conn, int vars) throws IOException {
+	public void setReactivePowerQ2Maximum(ModbusConnection conn, BigDecimal vars) throws IOException {
 		writeScaledValue(conn, InverterBasicSettingsRegister.ReactivePowerQ2Maximum,
 				InverterBasicSettingsRegister.ScaleFactorReactivePowerMaximum, vars);
 	}
 
 	@Override
-	public @Nullable Integer getReactivePowerQ3Maximum() {
-		Number n = getScaledValue(InverterBasicSettingsRegister.ReactivePowerQ3Maximum,
+	public @Nullable BigDecimal getReactivePowerQ3Maximum() {
+		return getScaledValue(InverterBasicSettingsRegister.ReactivePowerQ3Maximum,
 				InverterBasicSettingsRegister.ScaleFactorReactivePowerMaximum);
-		return (n != null ? n.intValue() : null);
 	}
 
 	@Override
-	public void setReactivePowerQ3Maximum(ModbusConnection conn, int vars) throws IOException {
+	public void setReactivePowerQ3Maximum(ModbusConnection conn, BigDecimal vars) throws IOException {
 		writeScaledValue(conn, InverterBasicSettingsRegister.ReactivePowerQ3Maximum,
 				InverterBasicSettingsRegister.ScaleFactorReactivePowerMaximum, vars);
 	}
 
 	@Override
-	public @Nullable Integer getReactivePowerQ4Maximum() {
-		Number n = getScaledValue(InverterBasicSettingsRegister.ReactivePowerQ4Maximum,
+	public @Nullable BigDecimal getReactivePowerQ4Maximum() {
+		return getScaledValue(InverterBasicSettingsRegister.ReactivePowerQ4Maximum,
 				InverterBasicSettingsRegister.ScaleFactorReactivePowerMaximum);
-		return (n != null ? n.intValue() : null);
 	}
 
 	@Override
-	public void setReactivePowerQ4Maximum(ModbusConnection conn, int vars) throws IOException {
+	public void setReactivePowerQ4Maximum(ModbusConnection conn, BigDecimal vars) throws IOException {
 		writeScaledValue(conn, InverterBasicSettingsRegister.ReactivePowerQ4Maximum,
 				InverterBasicSettingsRegister.ScaleFactorReactivePowerMaximum, vars);
 	}

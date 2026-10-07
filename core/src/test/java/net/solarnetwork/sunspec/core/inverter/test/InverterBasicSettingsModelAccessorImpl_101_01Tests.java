@@ -23,6 +23,7 @@ import static org.assertj.core.api.BDDAssertions.catchThrowable;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
@@ -192,7 +193,7 @@ public class InverterBasicSettingsModelAccessorImpl_101_01Tests {
 		// @formatter:off
 		then(model.getActivePowerMaximum())
 			.as("Active power max")
-			.isEqualTo(11400)
+			.isEqualTo(new BigDecimal("11400"))
 			;
 		// @formatter:on
 	}
@@ -267,7 +268,7 @@ public class InverterBasicSettingsModelAccessorImpl_101_01Tests {
 		// @formatter:off
 		then(model.getApparentPowerMaximum())
 			.as("VA max")
-			.isEqualTo(11400)
+			.isEqualTo(new BigDecimal("11400"))
 			;
 		// @formatter:on
 	}
@@ -282,7 +283,7 @@ public class InverterBasicSettingsModelAccessorImpl_101_01Tests {
 		// @formatter:off
 		then(model.getReactivePowerQ1Maximum())
 			.as("VAR Q1 max")
-			.isEqualTo(6000)
+			.isEqualTo(new BigDecimal("6000"))
 			;
 		// @formatter:on
 	}
@@ -327,7 +328,7 @@ public class InverterBasicSettingsModelAccessorImpl_101_01Tests {
 		// @formatter:off
 		then(model.getReactivePowerQ4Maximum())
 			.as("VAR Q4 max")
-			.isEqualTo(-6000)
+			.isEqualTo(new BigDecimal("-6000"))
 			;
 		// @formatter:on
 	}
@@ -476,7 +477,7 @@ public class InverterBasicSettingsModelAccessorImpl_101_01Tests {
 		// @formatter:off
 		then(model)
 			.as("Active power max")
-			.returns(11400, from(InverterBasicSettingsModelAccessor::getActivePowerMaximum))
+			.returns(new BigDecimal("11400"), from(InverterBasicSettingsModelAccessor::getActivePowerMaximum))
 			.as("PCC voltage")
 			.returns(240.0f, from(InverterBasicSettingsModelAccessor::getPccVoltage))
 			.as("Negative PCC voltage offset")
@@ -486,15 +487,15 @@ public class InverterBasicSettingsModelAccessorImpl_101_01Tests {
 			.as("Voltage min")
 			.returns(211.2f, from(InverterBasicSettingsModelAccessor::getVoltageMinimum))
 			.as("VA max")
-			.returns(11400, from(InverterBasicSettingsModelAccessor::getApparentPowerMaximum))
+			.returns(new BigDecimal("11400"), from(InverterBasicSettingsModelAccessor::getApparentPowerMaximum))
 			.as("VAR Q1 max")
-			.returns(6000, from(InverterBasicSettingsModelAccessor::getReactivePowerQ1Maximum))
+			.returns(new BigDecimal("6000"), from(InverterBasicSettingsModelAccessor::getReactivePowerQ1Maximum))
 			.as("VAR Q2 max not implemented")
 			.returns(null, from(InverterBasicSettingsModelAccessor::getReactivePowerQ2Maximum))
 			.as("VAR Q3 max")
-			.returns(-3000, from(InverterBasicSettingsModelAccessor::getReactivePowerQ3Maximum))
+			.returns(new BigDecimal("-3000"), from(InverterBasicSettingsModelAccessor::getReactivePowerQ3Maximum))
 			.as("VAR Q4 max")
-			.returns(-6000, from(InverterBasicSettingsModelAccessor::getReactivePowerQ4Maximum))
+			.returns(new BigDecimal("-6000"), from(InverterBasicSettingsModelAccessor::getReactivePowerQ4Maximum))
 			.as("Active power ramp rate")
 			.returns(10.0f, from(InverterBasicSettingsModelAccessor::getActivePowerRampRate))
 			.as("Power factor Q1 minimum")
@@ -563,16 +564,16 @@ public class InverterBasicSettingsModelAccessorImpl_101_01Tests {
 		InverterBasicSettingsModelAccessor model = discoverModel(conn);
 
 		// WHEN
-		model.setActivePowerMaximum(conn, 9000);
+		model.setActivePowerMaximum(conn, new BigDecimal("9000"));
 		model.setPccVoltage(conn, 230.5f);
 		model.setPccVoltageOffset(conn, -1.5f);
 		model.setVoltageMaximum(conn, 253.0f);
 		model.setVoltageMinimum(conn, 207.0f);
-		model.setApparentPowerMaximum(conn, 10000);
-		model.setReactivePowerQ1Maximum(conn, 5000);
-		model.setReactivePowerQ2Maximum(conn, 4000);
-		model.setReactivePowerQ3Maximum(conn, -4000);
-		model.setReactivePowerQ4Maximum(conn, -5000);
+		model.setApparentPowerMaximum(conn, new BigDecimal("10000"));
+		model.setReactivePowerQ1Maximum(conn, new BigDecimal("5000"));
+		model.setReactivePowerQ2Maximum(conn, new BigDecimal("4000"));
+		model.setReactivePowerQ3Maximum(conn, new BigDecimal("-4000"));
+		model.setReactivePowerQ4Maximum(conn, new BigDecimal("-5000"));
 		model.setActivePowerRampRate(conn, 12.5f);
 		model.setPowerFactorQ1Minimum(conn, -0.9f);
 		model.setPowerFactorQ2Minimum(conn, 0.95f);
@@ -597,7 +598,7 @@ public class InverterBasicSettingsModelAccessorImpl_101_01Tests {
 		// @formatter:off
 		then(device)
 			.as("Active power max")
-			.returns(9000, from(InverterBasicSettingsModelAccessor::getActivePowerMaximum))
+			.returns(new BigDecimal("9000"), from(InverterBasicSettingsModelAccessor::getActivePowerMaximum))
 			.as("PCC voltage")
 			.returns(230.5f, from(InverterBasicSettingsModelAccessor::getPccVoltage))
 			.as("PCC voltage offset")
@@ -607,15 +608,15 @@ public class InverterBasicSettingsModelAccessorImpl_101_01Tests {
 			.as("Voltage min")
 			.returns(207.0f, from(InverterBasicSettingsModelAccessor::getVoltageMinimum))
 			.as("VA max")
-			.returns(10000, from(InverterBasicSettingsModelAccessor::getApparentPowerMaximum))
+			.returns(new BigDecimal("10000"), from(InverterBasicSettingsModelAccessor::getApparentPowerMaximum))
 			.as("VAR Q1 max")
-			.returns(5000, from(InverterBasicSettingsModelAccessor::getReactivePowerQ1Maximum))
+			.returns(new BigDecimal("5000"), from(InverterBasicSettingsModelAccessor::getReactivePowerQ1Maximum))
 			.as("VAR Q2 max")
-			.returns(4000, from(InverterBasicSettingsModelAccessor::getReactivePowerQ2Maximum))
+			.returns(new BigDecimal("4000"), from(InverterBasicSettingsModelAccessor::getReactivePowerQ2Maximum))
 			.as("VAR Q3 max")
-			.returns(-4000, from(InverterBasicSettingsModelAccessor::getReactivePowerQ3Maximum))
+			.returns(new BigDecimal("-4000"), from(InverterBasicSettingsModelAccessor::getReactivePowerQ3Maximum))
 			.as("VAR Q4 max")
-			.returns(-5000, from(InverterBasicSettingsModelAccessor::getReactivePowerQ4Maximum))
+			.returns(new BigDecimal("-5000"), from(InverterBasicSettingsModelAccessor::getReactivePowerQ4Maximum))
 			.as("Active power ramp rate")
 			.returns(12.5f, from(InverterBasicSettingsModelAccessor::getActivePowerRampRate))
 			.as("Power factor Q1 minimum")

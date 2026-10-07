@@ -22,6 +22,7 @@ package net.solarnetwork.sunspec.core.storage.test;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.BitSet;
 import java.util.Set;
@@ -109,13 +110,13 @@ public class BatteryBaseModelAccessorImpl_802_01Tests {
 		// @formatter:off
 		then(model)
 			.as("Charge capacity")
-			.returns(100.0f, from(BatteryBaseModelAccessor::getChargeCapacityRating))
+			.returns(new BigDecimal("100"), from(BatteryBaseModelAccessor::getChargeCapacityRating))
 			.as("Energy capacity")
-			.returns(13500L, from(BatteryBaseModelAccessor::getEnergyCapacityRating))
+			.returns(new BigDecimal("13500"), from(BatteryBaseModelAccessor::getEnergyCapacityRating))
 			.as("Maximum charge rate")
-			.returns(5000, from(BatteryBaseModelAccessor::getChargeRateMaximumRating))
+			.returns(new BigDecimal("5000"), from(BatteryBaseModelAccessor::getChargeRateMaximumRating))
 			.as("Maximum discharge rate")
-			.returns(7000, from(BatteryBaseModelAccessor::getDischargeRateMaximumRating))
+			.returns(new BigDecimal("7000"), from(BatteryBaseModelAccessor::getDischargeRateMaximumRating))
 			.as("Self discharge rate")
 			.returns(0.5f, from(BatteryBaseModelAccessor::getSelfDischargeRate))
 			.as("Maximum state of charge")
@@ -267,7 +268,7 @@ public class BatteryBaseModelAccessorImpl_802_01Tests {
 			.as("Maximum discharge current")
 			.returns(150.0f, from(BatteryBaseModelAccessor::getMaximumDischargeCurrent))
 			.as("DC power")
-			.returns(-2335, from(BatteryBaseModelAccessor::getDCPower))
+			.returns(new BigDecimal("-2335"), from(BatteryBaseModelAccessor::getDCPower))
 			;
 		// @formatter:on
 	}
@@ -284,7 +285,7 @@ public class BatteryBaseModelAccessorImpl_802_01Tests {
 			.returns(BatteryInverterStateRequest.NoRequest,
 					from(BatteryBaseModelAccessor::getInverterStateRequest))
 			.as("Power request")
-			.returns(0, from(BatteryBaseModelAccessor::getPowerRequest))
+			.returns(BigDecimal.ZERO, from(BatteryBaseModelAccessor::getPowerRequest))
 			.as("Operation")
 			.returns(BatteryOperation.Connect, from(BatteryBaseModelAccessor::getOperation))
 			.as("Inverter state")

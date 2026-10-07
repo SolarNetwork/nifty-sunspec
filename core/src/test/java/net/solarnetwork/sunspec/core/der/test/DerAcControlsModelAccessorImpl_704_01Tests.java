@@ -23,6 +23,7 @@ import static org.assertj.core.api.BDDAssertions.catchThrowable;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.api.der.DerAcControlsModelAccessor;
@@ -374,8 +375,8 @@ public class DerAcControlsModelAccessorImpl_704_01Tests {
 		model.setActivePowerLimitReversionTime(conn, 900);
 		model.setActivePowerSetpointEnabled(conn, true);
 		model.setActivePowerSetpointMode(conn, DerActivePowerSetpointMode.Watts);
-		model.setActivePowerSetpoint(conn, -2500);
-		model.setReversionActivePowerSetpoint(conn, 0);
+		model.setActivePowerSetpoint(conn, new BigDecimal("-2500"));
+		model.setReversionActivePowerSetpoint(conn, new BigDecimal("0"));
 		model.setActivePowerSetpointPercent(conn, 50.5f);
 		model.setReversionActivePowerSetpointPercent(conn, -25f);
 		model.setActivePowerSetpointReversionEnabled(conn, true);
@@ -426,9 +427,9 @@ public class DerAcControlsModelAccessorImpl_704_01Tests {
 			.returns(DerActivePowerSetpointMode.Watts,
 					from(DerAcControlsModelAccessor::getActivePowerSetpointMode))
 			.as("Active power setpoint")
-			.returns(-2500, from(DerAcControlsModelAccessor::getActivePowerSetpoint))
+			.returns(new BigDecimal("-2500"), from(DerAcControlsModelAccessor::getActivePowerSetpoint))
 			.as("Reversion active power setpoint")
-			.returns(0, from(DerAcControlsModelAccessor::getReversionActivePowerSetpoint))
+			.returns(BigDecimal.ZERO, from(DerAcControlsModelAccessor::getReversionActivePowerSetpoint))
 			.as("Active power setpoint percent")
 			.returns(50.5f, from(DerAcControlsModelAccessor::getActivePowerSetpointPercent))
 			.as("Reversion active power setpoint percent")
@@ -473,7 +474,7 @@ public class DerAcControlsModelAccessorImpl_704_01Tests {
 		DerAcControlsModelAccessor model = discoverModel(conn);
 
 		// WHEN
-		Throwable t = catchThrowable(() -> model.setReactivePowerSetpoint(conn, 1000));
+		Throwable t = catchThrowable(() -> model.setReactivePowerSetpoint(conn, new BigDecimal("1000")));
 
 		// THEN
 		// @formatter:off

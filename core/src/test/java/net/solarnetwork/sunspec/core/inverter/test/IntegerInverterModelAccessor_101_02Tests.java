@@ -25,6 +25,7 @@ import static net.solarnetwork.sunspec.api.AcPhase.PhaseC;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.assertj.core.api.BDDAssertions.within;
+import java.math.BigDecimal;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -225,7 +226,7 @@ public class IntegerInverterModelAccessor_101_02Tests {
 			.as("Phase C")
 			.returns(null, from(m -> m.accessorForPhase(PhaseC).getActivePower()))
 			.as("Total")
-			.returns(798, from(InverterModelAccessor::getActivePower))
+			.returns(new BigDecimal("798"), from(InverterModelAccessor::getActivePower))
 			;
 		// @formatter:on
 	}
@@ -259,7 +260,7 @@ public class IntegerInverterModelAccessor_101_02Tests {
 			.as("Phase C")
 			.returns(null, from(m -> m.accessorForPhase(PhaseC).getApparentPower()))
 			.as("Total")
-			.returns(800, from(InverterModelAccessor::getApparentPower))
+			.returns(new BigDecimal("800"), from(InverterModelAccessor::getApparentPower))
 			;
 		// @formatter:on
 	}
@@ -279,7 +280,7 @@ public class IntegerInverterModelAccessor_101_02Tests {
 			.as("Phase C")
 			.returns(null, from(m -> m.accessorForPhase(PhaseC).getReactivePower()))
 			.as("Total")
-			.returns(56, from(InverterModelAccessor::getReactivePower))
+			.returns(new BigDecimal("56"), from(InverterModelAccessor::getReactivePower))
 			;
 		// @formatter:on
 	}
@@ -319,7 +320,7 @@ public class IntegerInverterModelAccessor_101_02Tests {
 			.as("Phase C")
 			.returns(null, from(m -> m.accessorForPhase(PhaseC).getActiveEnergyExported()))
 			.as("Total")
-			.returns(76517500L, from(InverterModelAccessor::getActiveEnergyExported))
+			.returns(new BigDecimal("76517500"), from(InverterModelAccessor::getActiveEnergyExported))
 			;
 		// @formatter:on
 	}
@@ -381,7 +382,7 @@ public class IntegerInverterModelAccessor_101_02Tests {
 			.as("Phase C")
 			.returns(null, from(m -> m.accessorForPhase(PhaseC).getDcPower()))
 			.as("Total")
-			.returns(810, from(InverterModelAccessor::getDcPower))
+			.returns(new BigDecimal("810.7"), from(InverterModelAccessor::getDcPower))
 			;
 		// @formatter:on
 	}

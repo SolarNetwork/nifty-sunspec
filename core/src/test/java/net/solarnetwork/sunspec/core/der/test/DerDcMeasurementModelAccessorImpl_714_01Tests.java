@@ -21,6 +21,7 @@ package net.solarnetwork.sunspec.core.der.test;
 
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -116,11 +117,11 @@ public class DerDcMeasurementModelAccessorImpl_714_01Tests {
 			.as("DC current")
 			.returns(0.0f, from(DerDcMeasurementModelAccessor::getDCCurrent))
 			.as("DC power")
-			.returns(0, from(DerDcMeasurementModelAccessor::getDCPower))
+			.returns(BigDecimal.ZERO, from(DerDcMeasurementModelAccessor::getDCPower))
 			.as("DC energy injected, from words 08A1 0000 0000 0000")
-			.returns(0x08A1000000000000L, from(DerDcMeasurementModelAccessor::getDCEnergyInjected))
-			.as("DC energy absorbed, from words FF42 FFFF FFFF FFFF, larger than a long")
-			.returns(null, from(DerDcMeasurementModelAccessor::getDCEnergyAbsorbed))
+			.returns(BigDecimal.valueOf(0x08A1000000000000L), from(DerDcMeasurementModelAccessor::getDCEnergyInjected))
+			.as("DC energy absorbed, from words FF42 FFFF FFFF FFFF, a uint64 larger than a long")
+			.returns(new BigDecimal("18393545303111237631"), from(DerDcMeasurementModelAccessor::getDCEnergyAbsorbed))
 			;
 		// @formatter:on
 	}
@@ -152,11 +153,11 @@ public class DerDcMeasurementModelAccessorImpl_714_01Tests {
 			.as("DC voltage")
 			.returns(56.09f, from(DcPort::getDCVoltage))
 			.as("DC power")
-			.returns(0, from(DcPort::getDCPower))
+			.returns(BigDecimal.ZERO, from(DcPort::getDCPower))
 			.as("DC energy injected, from words 08A1 0000 0000 0000")
-			.returns(0x08A1000000000000L, from(DcPort::getDCEnergyInjected))
-			.as("DC energy absorbed, from words FF42 FFFF FFFF FFFF, larger than a long")
-			.returns(null, from(DcPort::getDCEnergyAbsorbed))
+			.returns(BigDecimal.valueOf(0x08A1000000000000L), from(DcPort::getDCEnergyInjected))
+			.as("DC energy absorbed, from words FF42 FFFF FFFF FFFF, a uint64 larger than a long")
+			.returns(new BigDecimal("18393545303111237631"), from(DcPort::getDCEnergyAbsorbed))
 			.as("Temperature, as reported with a 0 scale factor")
 			.returns(199.0f, from(DcPort::getTemperature))
 			.as("Status")

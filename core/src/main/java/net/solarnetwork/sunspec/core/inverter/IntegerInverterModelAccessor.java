@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.core.inverter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.BitSet;
 import java.util.Collection;
@@ -169,9 +170,8 @@ public class IntegerInverterModelAccessor extends BaseModelAccessor implements I
 	 *        the register reference
 	 * @return the register value, interpreted as an active power value
 	 */
-	public @Nullable Integer getActivePowerValue(ModbusReference ref) {
-		Number n = getScaledValue(ref, IntegerInverterModelRegister.ScaleFactorActivePower);
-		return (n != null ? n.intValue() : null);
+	public @Nullable BigDecimal getActivePowerValue(ModbusReference ref) {
+		return getScaledValue(ref, IntegerInverterModelRegister.ScaleFactorActivePower);
 	}
 
 	/**
@@ -181,9 +181,8 @@ public class IntegerInverterModelAccessor extends BaseModelAccessor implements I
 	 *        the register reference
 	 * @return the register value, interpreted as an apparent power value
 	 */
-	public @Nullable Integer getApparentPowerValue(ModbusReference ref) {
-		Number n = getScaledValue(ref, IntegerInverterModelRegister.ScaleFactorApparentPower);
-		return (n != null ? n.intValue() : null);
+	public @Nullable BigDecimal getApparentPowerValue(ModbusReference ref) {
+		return getScaledValue(ref, IntegerInverterModelRegister.ScaleFactorApparentPower);
 	}
 
 	/**
@@ -193,9 +192,8 @@ public class IntegerInverterModelAccessor extends BaseModelAccessor implements I
 	 *        the register reference
 	 * @return the register value, interpreted as an reactive power value
 	 */
-	public @Nullable Integer getReactivePowerValue(ModbusReference ref) {
-		Number n = getScaledValue(ref, IntegerInverterModelRegister.ScaleFactorReactivePower);
-		return (n != null ? n.intValue() : null);
+	public @Nullable BigDecimal getReactivePowerValue(ModbusReference ref) {
+		return getScaledValue(ref, IntegerInverterModelRegister.ScaleFactorReactivePower);
 	}
 
 	/**
@@ -205,9 +203,8 @@ public class IntegerInverterModelAccessor extends BaseModelAccessor implements I
 	 *        the register reference
 	 * @return the register value, interpreted as an active energy value
 	 */
-	public @Nullable Long getActiveEnergyValue(ModbusReference ref) {
-		Number n = getScaledValue(ref, IntegerInverterModelRegister.ScaleFactorActiveEnergy);
-		return (n != null ? n.longValue() : null);
+	public @Nullable BigDecimal getActiveEnergyValue(ModbusReference ref) {
+		return getScaledValue(ref, IntegerInverterModelRegister.ScaleFactorActiveEnergy);
 	}
 
 	/**
@@ -274,37 +271,37 @@ public class IntegerInverterModelAccessor extends BaseModelAccessor implements I
 	}
 
 	@Override
-	public @Nullable Integer getActivePower() {
+	public @Nullable BigDecimal getActivePower() {
 		return getActivePowerValue(IntegerInverterModelRegister.ActivePowerTotal);
 	}
 
 	@Override
-	public @Nullable Integer getApparentPower() {
+	public @Nullable BigDecimal getApparentPower() {
 		return getApparentPowerValue(IntegerInverterModelRegister.ApparentPowerTotal);
 	}
 
 	@Override
-	public @Nullable Integer getReactivePower() {
+	public @Nullable BigDecimal getReactivePower() {
 		return getReactivePowerValue(IntegerInverterModelRegister.ReactivePowerTotal);
 	}
 
 	@Override
-	public @Nullable Long getActiveEnergyExported() {
+	public @Nullable BigDecimal getActiveEnergyExported() {
 		return getActiveEnergyValue(IntegerInverterModelRegister.ActiveEnergyExportedTotal);
 	}
 
 	@Override
-	public @Nullable Long getActiveEnergyImported() {
+	public @Nullable BigDecimal getActiveEnergyImported() {
 		return null;
 	}
 
 	@Override
-	public @Nullable Long getReactiveEnergyExported() {
+	public @Nullable BigDecimal getReactiveEnergyExported() {
 		return null;
 	}
 
 	@Override
-	public @Nullable Long getReactiveEnergyImported() {
+	public @Nullable BigDecimal getReactiveEnergyImported() {
 		return null;
 	}
 
@@ -323,10 +320,9 @@ public class IntegerInverterModelAccessor extends BaseModelAccessor implements I
 	}
 
 	@Override
-	public @Nullable Integer getDcPower() {
-		Number n = getScaledValue(IntegerInverterModelRegister.DcPowerTotal,
+	public @Nullable BigDecimal getDcPower() {
+		return getScaledValue(IntegerInverterModelRegister.DcPowerTotal,
 				IntegerInverterModelRegister.ScaleFactorDcPower);
-		return (n != null ? n.intValue() : null);
 	}
 
 	@Override
@@ -511,7 +507,7 @@ public class IntegerInverterModelAccessor extends BaseModelAccessor implements I
 		}
 
 		@Override
-		public @Nullable Integer getActivePower() {
+		public @Nullable BigDecimal getActivePower() {
 			return switch (phase) {
 				case PhaseA, PhaseB, PhaseC -> null;
 				default -> IntegerInverterModelAccessor.this.getActivePower();
@@ -519,7 +515,7 @@ public class IntegerInverterModelAccessor extends BaseModelAccessor implements I
 		}
 
 		@Override
-		public @Nullable Integer getApparentPower() {
+		public @Nullable BigDecimal getApparentPower() {
 			return switch (phase) {
 				case PhaseA, PhaseB, PhaseC -> null;
 				default -> IntegerInverterModelAccessor.this.getApparentPower();
@@ -527,7 +523,7 @@ public class IntegerInverterModelAccessor extends BaseModelAccessor implements I
 		}
 
 		@Override
-		public @Nullable Integer getReactivePower() {
+		public @Nullable BigDecimal getReactivePower() {
 			return switch (phase) {
 				case PhaseA, PhaseB, PhaseC -> null;
 				default -> IntegerInverterModelAccessor.this.getReactivePower();
@@ -535,7 +531,7 @@ public class IntegerInverterModelAccessor extends BaseModelAccessor implements I
 		}
 
 		@Override
-		public @Nullable Long getActiveEnergyExported() {
+		public @Nullable BigDecimal getActiveEnergyExported() {
 			return switch (phase) {
 				case PhaseA, PhaseB, PhaseC -> null;
 				default -> IntegerInverterModelAccessor.this.getActiveEnergyExported();
@@ -543,7 +539,7 @@ public class IntegerInverterModelAccessor extends BaseModelAccessor implements I
 		}
 
 		@Override
-		public @Nullable Long getActiveEnergyImported() {
+		public @Nullable BigDecimal getActiveEnergyImported() {
 			return switch (phase) {
 				case PhaseA, PhaseB, PhaseC -> null;
 				default -> IntegerInverterModelAccessor.this.getActiveEnergyImported();
@@ -551,7 +547,7 @@ public class IntegerInverterModelAccessor extends BaseModelAccessor implements I
 		}
 
 		@Override
-		public @Nullable Long getReactiveEnergyExported() {
+		public @Nullable BigDecimal getReactiveEnergyExported() {
 			return switch (phase) {
 				case PhaseA, PhaseB, PhaseC -> null;
 				default -> IntegerInverterModelAccessor.this.getReactiveEnergyExported();
@@ -559,7 +555,7 @@ public class IntegerInverterModelAccessor extends BaseModelAccessor implements I
 		}
 
 		@Override
-		public @Nullable Long getReactiveEnergyImported() {
+		public @Nullable BigDecimal getReactiveEnergyImported() {
 			return switch (phase) {
 				case PhaseA, PhaseB, PhaseC -> null;
 				default -> IntegerInverterModelAccessor.this.getReactiveEnergyImported();
@@ -583,7 +579,7 @@ public class IntegerInverterModelAccessor extends BaseModelAccessor implements I
 		}
 
 		@Override
-		public @Nullable Integer getDcPower() {
+		public @Nullable BigDecimal getDcPower() {
 			return switch (phase) {
 				case PhaseA, PhaseB, PhaseC -> null;
 				default -> IntegerInverterModelAccessor.this.getDcPower();

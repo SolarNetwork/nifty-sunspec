@@ -20,6 +20,7 @@
 package net.solarnetwork.sunspec.core.inverter;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
@@ -94,14 +95,14 @@ public class InverterBasicStorageControlsModelAccessorImpl extends BaseModelAcce
 	}
 
 	@Override
-	public @Nullable Integer getActivePowerChargeRateMaximum() {
-		return getScaledIntegerValue(
-				InverterBasicStorageControlsModelRegister.ActivePowerChargeRateMaximum,
+	public @Nullable BigDecimal getActivePowerChargeRateMaximum() {
+		return getScaledValue(InverterBasicStorageControlsModelRegister.ActivePowerChargeRateMaximum,
 				InverterBasicStorageControlsModelRegister.ScaleFactorActivePowerChargeRateMaximum);
 	}
 
 	@Override
-	public void setActivePowerChargeRateMaximum(ModbusConnection conn, int watts) throws IOException {
+	public void setActivePowerChargeRateMaximum(ModbusConnection conn, BigDecimal watts)
+			throws IOException {
 		writeScaledValue(conn, InverterBasicStorageControlsModelRegister.ActivePowerChargeRateMaximum,
 				InverterBasicStorageControlsModelRegister.ScaleFactorActivePowerChargeRateMaximum,
 				watts);
@@ -147,14 +148,13 @@ public class InverterBasicStorageControlsModelAccessorImpl extends BaseModelAcce
 	}
 
 	@Override
-	public @Nullable Integer getApparentPowerChargeRateMaximum() {
-		return getScaledIntegerValue(
-				InverterBasicStorageControlsModelRegister.ApparentPowerChargeRateMaximum,
+	public @Nullable BigDecimal getApparentPowerChargeRateMaximum() {
+		return getScaledValue(InverterBasicStorageControlsModelRegister.ApparentPowerChargeRateMaximum,
 				InverterBasicStorageControlsModelRegister.ScaleFactorApparentPowerChargeRateMaximum);
 	}
 
 	@Override
-	public void setApparentPowerChargeRateMaximum(ModbusConnection conn, int voltAmps)
+	public void setApparentPowerChargeRateMaximum(ModbusConnection conn, BigDecimal voltAmps)
 			throws IOException {
 		writeScaledValue(conn, InverterBasicStorageControlsModelRegister.ApparentPowerChargeRateMaximum,
 				InverterBasicStorageControlsModelRegister.ScaleFactorApparentPowerChargeRateMaximum,
@@ -181,8 +181,8 @@ public class InverterBasicStorageControlsModelAccessorImpl extends BaseModelAcce
 	}
 
 	@Override
-	public @Nullable Float getStorageAvailable() {
-		return getScaledFloatValue(InverterBasicStorageControlsModelRegister.StorageAvailable,
+	public @Nullable BigDecimal getStorageAvailable() {
+		return getScaledValue(InverterBasicStorageControlsModelRegister.StorageAvailable,
 				InverterBasicStorageControlsModelRegister.ScaleFactorStorageAvailable);
 	}
 

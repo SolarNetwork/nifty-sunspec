@@ -20,6 +20,7 @@
 package net.solarnetwork.sunspec.api.der;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelAccessor;
 import net.solarnetwork.sunspec.modbus.ModbusConnection;
@@ -510,7 +511,7 @@ public interface DerAcControlsModelAccessor extends ModelAccessor {
 	 * @return the setpoint, in W, or {@code null} if not available
 	 */
 	@Nullable
-	Integer getActivePowerSetpoint();
+	BigDecimal getActivePowerSetpoint();
 
 	/**
 	 * Set the active power setpoint, used in the
@@ -523,7 +524,7 @@ public interface DerAcControlsModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setActivePowerSetpoint(ModbusConnection conn, int watts) throws IOException;
+	void setActivePowerSetpoint(ModbusConnection conn, BigDecimal watts) throws IOException;
 
 	/**
 	 * Get the active power setpoint, used in the
@@ -605,7 +606,7 @@ public interface DerAcControlsModelAccessor extends ModelAccessor {
 	 * @return the setpoint, in W, or {@code null} if not available
 	 */
 	@Nullable
-	Integer getReversionActivePowerSetpoint();
+	BigDecimal getReversionActivePowerSetpoint();
 
 	/**
 	 * Set the reversion active power setpoint, used in the
@@ -618,7 +619,7 @@ public interface DerAcControlsModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setReversionActivePowerSetpoint(ModbusConnection conn, int watts) throws IOException;
+	void setReversionActivePowerSetpoint(ModbusConnection conn, BigDecimal watts) throws IOException;
 
 	/**
 	 * Get the reversion active power setpoint, used in the
@@ -713,7 +714,7 @@ public interface DerAcControlsModelAccessor extends ModelAccessor {
 	 * @return the setpoint, in var, or {@code null} if not available
 	 */
 	@Nullable
-	Integer getReactivePowerSetpoint();
+	BigDecimal getReactivePowerSetpoint();
 
 	/**
 	 * Set the reactive power setpoint, used in the
@@ -726,7 +727,7 @@ public interface DerAcControlsModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setReactivePowerSetpoint(ModbusConnection conn, int vars) throws IOException;
+	void setReactivePowerSetpoint(ModbusConnection conn, BigDecimal vars) throws IOException;
 
 	/**
 	 * Get the reactive power setpoint, used in the percentage modes.
@@ -806,7 +807,7 @@ public interface DerAcControlsModelAccessor extends ModelAccessor {
 	 * @return the setpoint, in var, or {@code null} if not available
 	 */
 	@Nullable
-	Integer getReversionReactivePowerSetpoint();
+	BigDecimal getReversionReactivePowerSetpoint();
 
 	/**
 	 * Set the reversion reactive power setpoint, used in the
@@ -819,7 +820,7 @@ public interface DerAcControlsModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setReversionReactivePowerSetpoint(ModbusConnection conn, int vars) throws IOException;
+	void setReversionReactivePowerSetpoint(ModbusConnection conn, BigDecimal vars) throws IOException;
 
 	/**
 	 * Get the reversion reactive power setpoint, used in the percentage modes.

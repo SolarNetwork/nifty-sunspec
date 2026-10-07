@@ -20,6 +20,7 @@
 package net.solarnetwork.sunspec.api.der;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelAccessor;
@@ -47,7 +48,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the rating
 	 */
 	@Nullable
-	Integer getActivePowerMaximumRating();
+	BigDecimal getActivePowerMaximumRating();
 
 	/**
 	 * Get the active power rating at the over-excited power factor rating, in
@@ -57,7 +58,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @see #getOverExcitedPowerFactorRating()
 	 */
 	@Nullable
-	Integer getActivePowerOverExcitedRating();
+	BigDecimal getActivePowerOverExcitedRating();
 
 	/**
 	 * Get the over-excited power factor rating.
@@ -75,7 +76,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @see #getUnderExcitedPowerFactorRating()
 	 */
 	@Nullable
-	Integer getActivePowerUnderExcitedRating();
+	BigDecimal getActivePowerUnderExcitedRating();
 
 	/**
 	 * Get the under-excited power factor rating.
@@ -91,7 +92,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the rating
 	 */
 	@Nullable
-	Integer getApparentPowerMaximumRating();
+	BigDecimal getApparentPowerMaximumRating();
 
 	/**
 	 * Get the maximum injected reactive power rating, in VAR.
@@ -99,7 +100,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the rating
 	 */
 	@Nullable
-	Integer getReactivePowerInjectedMaximumRating();
+	BigDecimal getReactivePowerInjectedMaximumRating();
 
 	/**
 	 * Get the maximum absorbed reactive power rating, in VAR.
@@ -107,7 +108,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the rating
 	 */
 	@Nullable
-	Integer getReactivePowerAbsorbedMaximumRating();
+	BigDecimal getReactivePowerAbsorbedMaximumRating();
 
 	/**
 	 * Get the maximum active power charge rate rating, in W.
@@ -115,7 +116,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the rating
 	 */
 	@Nullable
-	Integer getActivePowerChargeRateMaximumRating();
+	BigDecimal getActivePowerChargeRateMaximumRating();
 
 	/**
 	 * Get the maximum active power discharge rate rating, in W.
@@ -123,7 +124,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the rating
 	 */
 	@Nullable
-	Integer getActivePowerDischargeRateMaximumRating();
+	BigDecimal getActivePowerDischargeRateMaximumRating();
 
 	/**
 	 * Get the maximum apparent power charge rate rating, in VA.
@@ -131,7 +132,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the rating
 	 */
 	@Nullable
-	Integer getApparentPowerChargeRateMaximumRating();
+	BigDecimal getApparentPowerChargeRateMaximumRating();
 
 	/**
 	 * Get the maximum apparent power discharge rate rating, in VA.
@@ -139,7 +140,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the rating
 	 */
 	@Nullable
-	Integer getApparentPowerDischargeRateMaximumRating();
+	BigDecimal getApparentPowerDischargeRateMaximumRating();
 
 	/**
 	 * Get the nominal AC voltage rating, in V.
@@ -225,7 +226,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the setting
 	 */
 	@Nullable
-	Integer getActivePowerMaximum();
+	BigDecimal getActivePowerMaximum();
 
 	/**
 	 * Set the maximum active power setting.
@@ -237,7 +238,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setActivePowerMaximum(ModbusConnection conn, int watts) throws IOException;
+	void setActivePowerMaximum(ModbusConnection conn, BigDecimal watts) throws IOException;
 
 	/**
 	 * Get the active power setting at the over-excited power factor, in W.
@@ -245,7 +246,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the setting
 	 */
 	@Nullable
-	Integer getActivePowerOverExcited();
+	BigDecimal getActivePowerOverExcited();
 
 	/**
 	 * Set the active power setting at the over-excited power factor.
@@ -257,7 +258,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setActivePowerOverExcited(ModbusConnection conn, int watts) throws IOException;
+	void setActivePowerOverExcited(ModbusConnection conn, BigDecimal watts) throws IOException;
 
 	/**
 	 * Get the over-excited power factor setting.
@@ -285,7 +286,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the setting
 	 */
 	@Nullable
-	Integer getActivePowerUnderExcited();
+	BigDecimal getActivePowerUnderExcited();
 
 	/**
 	 * Set the active power setting at the under-excited power factor.
@@ -297,7 +298,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setActivePowerUnderExcited(ModbusConnection conn, int watts) throws IOException;
+	void setActivePowerUnderExcited(ModbusConnection conn, BigDecimal watts) throws IOException;
 
 	/**
 	 * Get the under-excited power factor setting.
@@ -325,7 +326,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the setting
 	 */
 	@Nullable
-	Integer getApparentPowerMaximum();
+	BigDecimal getApparentPowerMaximum();
 
 	/**
 	 * Set the maximum apparent power setting.
@@ -337,7 +338,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setApparentPowerMaximum(ModbusConnection conn, int voltAmps) throws IOException;
+	void setApparentPowerMaximum(ModbusConnection conn, BigDecimal voltAmps) throws IOException;
 
 	/**
 	 * Get the maximum injected reactive power setting, in VAR.
@@ -345,7 +346,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the setting
 	 */
 	@Nullable
-	Integer getReactivePowerInjectedMaximum();
+	BigDecimal getReactivePowerInjectedMaximum();
 
 	/**
 	 * Set the maximum injected reactive power setting.
@@ -357,7 +358,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setReactivePowerInjectedMaximum(ModbusConnection conn, int vars) throws IOException;
+	void setReactivePowerInjectedMaximum(ModbusConnection conn, BigDecimal vars) throws IOException;
 
 	/**
 	 * Get the maximum absorbed reactive power setting, in VAR.
@@ -365,7 +366,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the setting
 	 */
 	@Nullable
-	Integer getReactivePowerAbsorbedMaximum();
+	BigDecimal getReactivePowerAbsorbedMaximum();
 
 	/**
 	 * Set the maximum absorbed reactive power setting.
@@ -377,7 +378,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setReactivePowerAbsorbedMaximum(ModbusConnection conn, int vars) throws IOException;
+	void setReactivePowerAbsorbedMaximum(ModbusConnection conn, BigDecimal vars) throws IOException;
 
 	/**
 	 * Get the maximum active power charge rate setting, in W.
@@ -385,7 +386,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the setting
 	 */
 	@Nullable
-	Integer getActivePowerChargeRateMaximum();
+	BigDecimal getActivePowerChargeRateMaximum();
 
 	/**
 	 * Set the maximum active power charge rate setting.
@@ -397,7 +398,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setActivePowerChargeRateMaximum(ModbusConnection conn, int watts) throws IOException;
+	void setActivePowerChargeRateMaximum(ModbusConnection conn, BigDecimal watts) throws IOException;
 
 	/**
 	 * Get the maximum active power discharge rate setting, in W.
@@ -405,7 +406,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the setting
 	 */
 	@Nullable
-	Integer getActivePowerDischargeRateMaximum();
+	BigDecimal getActivePowerDischargeRateMaximum();
 
 	/**
 	 * Set the maximum active power discharge rate setting.
@@ -417,7 +418,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setActivePowerDischargeRateMaximum(ModbusConnection conn, int watts) throws IOException;
+	void setActivePowerDischargeRateMaximum(ModbusConnection conn, BigDecimal watts) throws IOException;
 
 	/**
 	 * Get the maximum apparent power charge rate setting, in VA.
@@ -425,7 +426,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the setting
 	 */
 	@Nullable
-	Integer getApparentPowerChargeRateMaximum();
+	BigDecimal getApparentPowerChargeRateMaximum();
 
 	/**
 	 * Set the maximum apparent power charge rate setting.
@@ -437,7 +438,8 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setApparentPowerChargeRateMaximum(ModbusConnection conn, int voltAmps) throws IOException;
+	void setApparentPowerChargeRateMaximum(ModbusConnection conn, BigDecimal voltAmps)
+			throws IOException;
 
 	/**
 	 * Get the maximum apparent power discharge rate setting, in VA.
@@ -445,7 +447,7 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @return the setting
 	 */
 	@Nullable
-	Integer getApparentPowerDischargeRateMaximum();
+	BigDecimal getApparentPowerDischargeRateMaximum();
 
 	/**
 	 * Set the maximum apparent power discharge rate setting.
@@ -457,7 +459,8 @@ public interface DerCapacityModelAccessor extends ModelAccessor {
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
-	void setApparentPowerDischargeRateMaximum(ModbusConnection conn, int voltAmps) throws IOException;
+	void setApparentPowerDischargeRateMaximum(ModbusConnection conn, BigDecimal voltAmps)
+			throws IOException;
 
 	/**
 	 * Get the nominal AC voltage setting, in V.

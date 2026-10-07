@@ -25,6 +25,7 @@ import static net.solarnetwork.sunspec.api.AcPhase.PhaseC;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.BitSet;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -386,13 +387,13 @@ public class IntegerMeterModelAccessorTests {
 		// @formatter:off
 		then(model)
 			.as("Total")
-			.returns(0, from(MeterModelAccessor::getActivePower))
+			.returns(BigDecimal.ZERO, from(MeterModelAccessor::getActivePower))
 			.as("Phase A")
-			.returns(0, from(m -> m.accessorForPhase(PhaseA).getActivePower()))
+			.returns(BigDecimal.ZERO, from(m -> m.accessorForPhase(PhaseA).getActivePower()))
 			.as("Phase B")
-			.returns(0, from(m -> m.accessorForPhase(PhaseB).getActivePower()))
+			.returns(BigDecimal.ZERO, from(m -> m.accessorForPhase(PhaseB).getActivePower()))
 			.as("Phase C")
-			.returns(0, from(m -> m.accessorForPhase(PhaseC).getActivePower()))
+			.returns(BigDecimal.ZERO, from(m -> m.accessorForPhase(PhaseC).getActivePower()))
 			;
 		// @formatter:on
 	}
@@ -406,13 +407,13 @@ public class IntegerMeterModelAccessorTests {
 		// @formatter:off
 		then(model)
 			.as("Total")
-			.returns(700, from(MeterModelAccessor::getApparentPower))
+			.returns(new BigDecimal("700"), from(MeterModelAccessor::getApparentPower))
 			.as("Phase A")
-			.returns(300, from(m -> m.accessorForPhase(PhaseA).getApparentPower()))
+			.returns(new BigDecimal("300"), from(m -> m.accessorForPhase(PhaseA).getApparentPower()))
 			.as("Phase B")
-			.returns(200, from(m -> m.accessorForPhase(PhaseB).getApparentPower()))
+			.returns(new BigDecimal("200"), from(m -> m.accessorForPhase(PhaseB).getApparentPower()))
 			.as("Phase C")
-			.returns(300, from(m -> m.accessorForPhase(PhaseC).getApparentPower()))
+			.returns(new BigDecimal("300"), from(m -> m.accessorForPhase(PhaseC).getApparentPower()))
 			;
 		// @formatter:on
 	}
@@ -426,13 +427,13 @@ public class IntegerMeterModelAccessorTests {
 		// @formatter:off
 		then(model)
 			.as("Total")
-			.returns(700, from(MeterModelAccessor::getReactivePower))
+			.returns(new BigDecimal("700"), from(MeterModelAccessor::getReactivePower))
 			.as("Phase A")
-			.returns(200, from(m -> m.accessorForPhase(PhaseA).getReactivePower()))
+			.returns(new BigDecimal("200"), from(m -> m.accessorForPhase(PhaseA).getReactivePower()))
 			.as("Phase B")
-			.returns(200, from(m -> m.accessorForPhase(PhaseB).getReactivePower()))
+			.returns(new BigDecimal("200"), from(m -> m.accessorForPhase(PhaseB).getReactivePower()))
 			.as("Phase C")
-			.returns(300, from(m -> m.accessorForPhase(PhaseC).getReactivePower()))
+			.returns(new BigDecimal("300"), from(m -> m.accessorForPhase(PhaseC).getReactivePower()))
 			;
 		// @formatter:on
 	}
@@ -466,13 +467,13 @@ public class IntegerMeterModelAccessorTests {
 		// @formatter:off
 		then(model)
 			.as("Total")
-			.returns(1090000L, from(MeterModelAccessor::getActiveEnergyExported))
+			.returns(new BigDecimal("1090000"), from(MeterModelAccessor::getActiveEnergyExported))
 			.as("Phase A")
-			.returns(1009000L, from(m -> m.accessorForPhase(PhaseA).getActiveEnergyExported()))
+			.returns(new BigDecimal("1009000"), from(m -> m.accessorForPhase(PhaseA).getActiveEnergyExported()))
 			.as("Phase B")
-			.returns(33600L, from(m -> m.accessorForPhase(PhaseB).getActiveEnergyExported()))
+			.returns(new BigDecimal("33600"), from(m -> m.accessorForPhase(PhaseB).getActiveEnergyExported()))
 			.as("Phase C")
-			.returns(47300L, from(m -> m.accessorForPhase(PhaseC).getActiveEnergyExported()))
+			.returns(new BigDecimal("47300"), from(m -> m.accessorForPhase(PhaseC).getActiveEnergyExported()))
 			;
 		// @formatter:on
 	}
@@ -489,13 +490,13 @@ public class IntegerMeterModelAccessorTests {
 		// @formatter:off
 		then(model)
 			.as("Total")
-			.returns(1090000L, from(MeterModelAccessor::getActiveEnergyImported))
+			.returns(new BigDecimal("1090000"), from(MeterModelAccessor::getActiveEnergyImported))
 			.as("Phase A")
-			.returns(1009000L, from(m -> m.accessorForPhase(PhaseA).getActiveEnergyImported()))
+			.returns(new BigDecimal("1009000"), from(m -> m.accessorForPhase(PhaseA).getActiveEnergyImported()))
 			.as("Phase B")
-			.returns(33600L, from(m -> m.accessorForPhase(PhaseB).getActiveEnergyImported()))
+			.returns(new BigDecimal("33600"), from(m -> m.accessorForPhase(PhaseB).getActiveEnergyImported()))
 			.as("Phase C")
-			.returns(47300L, from(m -> m.accessorForPhase(PhaseC).getActiveEnergyImported()))
+			.returns(new BigDecimal("47300"), from(m -> m.accessorForPhase(PhaseC).getActiveEnergyImported()))
 			;
 		// @formatter:on
 	}
@@ -509,13 +510,13 @@ public class IntegerMeterModelAccessorTests {
 		// @formatter:off
 		then(model)
 			.as("Total")
-			.returns(1001509000L, from(MeterModelAccessor::getActiveEnergyImported))
+			.returns(new BigDecimal("1001509000"), from(MeterModelAccessor::getActiveEnergyImported))
 			.as("Phase A")
-			.returns(350516800L, from(m -> m.accessorForPhase(PhaseA).getActiveEnergyImported()))
+			.returns(new BigDecimal("350516800"), from(m -> m.accessorForPhase(PhaseA).getActiveEnergyImported()))
 			.as("Phase B")
-			.returns(273085000L, from(m -> m.accessorForPhase(PhaseB).getActiveEnergyImported()))
+			.returns(new BigDecimal("273085000"), from(m -> m.accessorForPhase(PhaseB).getActiveEnergyImported()))
 			.as("Phase C")
-			.returns(377907200L, from(m -> m.accessorForPhase(PhaseC).getActiveEnergyImported()))
+			.returns(new BigDecimal("377907200"), from(m -> m.accessorForPhase(PhaseC).getActiveEnergyImported()))
 			;
 		// @formatter:on
 	}
@@ -532,13 +533,13 @@ public class IntegerMeterModelAccessorTests {
 		// @formatter:off
 		then(model)
 			.as("Total")
-			.returns(1001509000L, from(MeterModelAccessor::getActiveEnergyExported))
+			.returns(new BigDecimal("1001509000"), from(MeterModelAccessor::getActiveEnergyExported))
 			.as("Phase A")
-			.returns(350516800L, from(m -> m.accessorForPhase(PhaseA).getActiveEnergyExported()))
+			.returns(new BigDecimal("350516800"), from(m -> m.accessorForPhase(PhaseA).getActiveEnergyExported()))
 			.as("Phase B")
-			.returns(273085000L, from(m -> m.accessorForPhase(PhaseB).getActiveEnergyExported()))
+			.returns(new BigDecimal("273085000"), from(m -> m.accessorForPhase(PhaseB).getActiveEnergyExported()))
 			.as("Phase C")
-			.returns(377907200L, from(m -> m.accessorForPhase(PhaseC).getActiveEnergyExported()))
+			.returns(new BigDecimal("377907200"), from(m -> m.accessorForPhase(PhaseC).getActiveEnergyExported()))
 			;
 		// @formatter:on
 	}
@@ -552,13 +553,13 @@ public class IntegerMeterModelAccessorTests {
 		// @formatter:off
 		then(model)
 			.as("Total")
-			.returns(4003900L, from(MeterModelAccessor::getApparentEnergyExported))
+			.returns(new BigDecimal("4003900"), from(MeterModelAccessor::getApparentEnergyExported))
 			.as("Phase A")
-			.returns(7862800L, from(m -> m.accessorForPhase(PhaseA).getApparentEnergyExported()))
+			.returns(new BigDecimal("7862800"), from(m -> m.accessorForPhase(PhaseA).getApparentEnergyExported()))
 			.as("Phase B")
-			.returns(67600L, from(m -> m.accessorForPhase(PhaseB).getApparentEnergyExported()))
+			.returns(new BigDecimal("67600"), from(m -> m.accessorForPhase(PhaseB).getApparentEnergyExported()))
 			.as("Phase C")
-			.returns(78900L, from(m -> m.accessorForPhase(PhaseC).getApparentEnergyExported()))
+			.returns(new BigDecimal("78900"), from(m -> m.accessorForPhase(PhaseC).getApparentEnergyExported()))
 			;
 		// @formatter:on
 	}
@@ -575,13 +576,13 @@ public class IntegerMeterModelAccessorTests {
 		// @formatter:off
 		then(model)
 			.as("Total")
-			.returns(4003900L, from(MeterModelAccessor::getApparentEnergyImported))
+			.returns(new BigDecimal("4003900"), from(MeterModelAccessor::getApparentEnergyImported))
 			.as("Phase A")
-			.returns(7862800L, from(m -> m.accessorForPhase(PhaseA).getApparentEnergyImported()))
+			.returns(new BigDecimal("7862800"), from(m -> m.accessorForPhase(PhaseA).getApparentEnergyImported()))
 			.as("Phase B")
-			.returns(67600L, from(m -> m.accessorForPhase(PhaseB).getApparentEnergyImported()))
+			.returns(new BigDecimal("67600"), from(m -> m.accessorForPhase(PhaseB).getApparentEnergyImported()))
 			.as("Phase C")
-			.returns(78900L, from(m -> m.accessorForPhase(PhaseC).getApparentEnergyImported()))
+			.returns(new BigDecimal("78900"), from(m -> m.accessorForPhase(PhaseC).getApparentEnergyImported()))
 			;
 		// @formatter:on
 	}
@@ -595,13 +596,13 @@ public class IntegerMeterModelAccessorTests {
 		// @formatter:off
 		then(model)
 			.as("Total")
-			.returns(1047825700L, from(MeterModelAccessor::getApparentEnergyImported))
+			.returns(new BigDecimal("1047825700"), from(MeterModelAccessor::getApparentEnergyImported))
 			.as("Phase A")
-			.returns(370640000L, from(m -> m.accessorForPhase(PhaseA).getApparentEnergyImported()))
+			.returns(new BigDecimal("370640000"), from(m -> m.accessorForPhase(PhaseA).getApparentEnergyImported()))
 			.as("Phase B")
-			.returns(285831500L, from(m -> m.accessorForPhase(PhaseB).getApparentEnergyImported()))
+			.returns(new BigDecimal("285831500"), from(m -> m.accessorForPhase(PhaseB).getApparentEnergyImported()))
 			.as("Phase C")
-			.returns(395004400L, from(m -> m.accessorForPhase(PhaseC).getApparentEnergyImported()))
+			.returns(new BigDecimal("395004400"), from(m -> m.accessorForPhase(PhaseC).getApparentEnergyImported()))
 			;
 		// @formatter:on
 	}
@@ -618,13 +619,13 @@ public class IntegerMeterModelAccessorTests {
 		// @formatter:off
 		then(model)
 			.as("Total")
-			.returns(1047825700L, from(MeterModelAccessor::getApparentEnergyExported))
+			.returns(new BigDecimal("1047825700"), from(MeterModelAccessor::getApparentEnergyExported))
 			.as("Phase A")
-			.returns(370640000L, from(m -> m.accessorForPhase(PhaseA).getApparentEnergyExported()))
+			.returns(new BigDecimal("370640000"), from(m -> m.accessorForPhase(PhaseA).getApparentEnergyExported()))
 			.as("Phase B")
-			.returns(285831500L, from(m -> m.accessorForPhase(PhaseB).getApparentEnergyExported()))
+			.returns(new BigDecimal("285831500"), from(m -> m.accessorForPhase(PhaseB).getApparentEnergyExported()))
 			.as("Phase C")
-			.returns(395004400L, from(m -> m.accessorForPhase(PhaseC).getApparentEnergyExported()))
+			.returns(new BigDecimal("395004400"), from(m -> m.accessorForPhase(PhaseC).getApparentEnergyExported()))
 			;
 		// @formatter:on
 	}
@@ -638,15 +639,15 @@ public class IntegerMeterModelAccessorTests {
 		// @formatter:off
 		then(model)
 			.as("Total")
-			.returns((0x18BDFFL + 0x131B4L) * 100L, from(MeterModelAccessor::getReactiveEnergyImported))
+			.returns(BigDecimal.valueOf((0x18BDFFL + 0x131B4L) * 100L), from(MeterModelAccessor::getReactiveEnergyImported))
 			.as("Phase A")
-			.returns((0xE7389L + 0x12EC0L) * 100L,
+			.returns(BigDecimal.valueOf((0xE7389L + 0x12EC0L) * 100L),
 					from(m -> m.accessorForPhase(PhaseA).getReactiveEnergyImported()))
 			.as("Phase B")
-			.returns((0x537F4L + 0x171L) * 100L,
+			.returns(BigDecimal.valueOf((0x537F4L + 0x171L) * 100L),
 					from(m -> m.accessorForPhase(PhaseB).getReactiveEnergyImported()))
 			.as("Phase C")
-			.returns((0x51281L + 0x182) * 100L,
+			.returns(BigDecimal.valueOf((0x51281L + 0x182) * 100L),
 					from(m -> m.accessorForPhase(PhaseC).getReactiveEnergyImported()))
 			;
 		// @formatter:on
@@ -664,15 +665,15 @@ public class IntegerMeterModelAccessorTests {
 		// @formatter:off
 		then(model)
 			.as("Total")
-			.returns((0x18BDFFL + 0x131B4L) * 100L, from(MeterModelAccessor::getReactiveEnergyExported))
+			.returns(BigDecimal.valueOf((0x18BDFFL + 0x131B4L) * 100L), from(MeterModelAccessor::getReactiveEnergyExported))
 			.as("Phase A")
-			.returns((0xE7389L + 0x12EC0L) * 100L,
+			.returns(BigDecimal.valueOf((0xE7389L + 0x12EC0L) * 100L),
 					from(m -> m.accessorForPhase(PhaseA).getReactiveEnergyExported()))
 			.as("Phase B")
-			.returns((0x537F4L + 0x171L) * 100L,
+			.returns(BigDecimal.valueOf((0x537F4L + 0x171L) * 100L),
 					from(m -> m.accessorForPhase(PhaseB).getReactiveEnergyExported()))
 			.as("Phase C")
-			.returns((0x51281L + 0x182) * 100L,
+			.returns(BigDecimal.valueOf((0x51281L + 0x182) * 100L),
 					from(m -> m.accessorForPhase(PhaseC).getReactiveEnergyExported()))
 			;
 		// @formatter:on
@@ -687,15 +688,15 @@ public class IntegerMeterModelAccessorTests {
 		// @formatter:off
 		then(model)
 			.as("Total")
-			.returns((0x51L + 0x6C73FL) * 100L, from(MeterModelAccessor::getReactiveEnergyExported))
+			.returns(BigDecimal.valueOf((0x51L + 0x6C73FL) * 100L), from(MeterModelAccessor::getReactiveEnergyExported))
 			.as("Phase A")
-			.returns((0x50L + 0x0L) * 100L,
+			.returns(BigDecimal.valueOf((0x50L + 0x0L) * 100L),
 					from(m -> m.accessorForPhase(PhaseA).getReactiveEnergyExported()))
 			.as("Phase B")
-			.returns((0x0L + 0x19307L) * 100L,
+			.returns(BigDecimal.valueOf((0x0L + 0x19307L) * 100L),
 					from(m -> m.accessorForPhase(PhaseB).getReactiveEnergyExported()))
 			.as("Phase C")
-			.returns((0x0L + 0x53437L) * 100L,
+			.returns(BigDecimal.valueOf((0x0L + 0x53437L) * 100L),
 					from(m -> m.accessorForPhase(PhaseC).getReactiveEnergyExported()))
 			;
 		// @formatter:on
@@ -713,15 +714,15 @@ public class IntegerMeterModelAccessorTests {
 		// @formatter:off
 		then(model)
 			.as("Total")
-			.returns((0x51L + 0x6C73FL) * 100L, from(MeterModelAccessor::getReactiveEnergyImported))
+			.returns(BigDecimal.valueOf((0x51L + 0x6C73FL) * 100L), from(MeterModelAccessor::getReactiveEnergyImported))
 			.as("Phase A")
-			.returns((0x50L + 0x0L) * 100L,
+			.returns(BigDecimal.valueOf((0x50L + 0x0L) * 100L),
 					from(m -> m.accessorForPhase(PhaseA).getReactiveEnergyImported()))
 			.as("Phase B")
-			.returns((0x0L + 0x19307L) * 100L,
+			.returns(BigDecimal.valueOf((0x0L + 0x19307L) * 100L),
 					from(m -> m.accessorForPhase(PhaseB).getReactiveEnergyImported()))
 			.as("Phase C")
-			.returns((0x0L + 0x53437L) * 100L,
+			.returns(BigDecimal.valueOf((0x0L + 0x53437L) * 100L),
 					from(m -> m.accessorForPhase(PhaseC).getReactiveEnergyImported()))
 			;
 		// @formatter:on

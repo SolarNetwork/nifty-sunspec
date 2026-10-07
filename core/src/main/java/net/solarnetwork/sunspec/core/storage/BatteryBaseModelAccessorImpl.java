@@ -20,6 +20,7 @@
 package net.solarnetwork.sunspec.core.storage;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.BitSet;
 import java.util.Collection;
@@ -102,26 +103,26 @@ public class BatteryBaseModelAccessorImpl extends BaseModelAccessor implements B
 	}
 
 	@Override
-	public @Nullable Float getChargeCapacityRating() {
-		return getScaledFloatValue(BatteryBaseModelRegister.ChargeCapacityRating,
+	public @Nullable BigDecimal getChargeCapacityRating() {
+		return getScaledValue(BatteryBaseModelRegister.ChargeCapacityRating,
 				BatteryBaseModelRegister.ScaleFactorChargeCapacity);
 	}
 
 	@Override
-	public @Nullable Long getEnergyCapacityRating() {
-		return getScaledLongValue(BatteryBaseModelRegister.EnergyCapacityRating,
+	public @Nullable BigDecimal getEnergyCapacityRating() {
+		return getScaledValue(BatteryBaseModelRegister.EnergyCapacityRating,
 				BatteryBaseModelRegister.ScaleFactorEnergyCapacity);
 	}
 
 	@Override
-	public @Nullable Integer getChargeRateMaximumRating() {
-		return getScaledIntegerValue(BatteryBaseModelRegister.ChargeRateMaximumRating,
+	public @Nullable BigDecimal getChargeRateMaximumRating() {
+		return getScaledValue(BatteryBaseModelRegister.ChargeRateMaximumRating,
 				BatteryBaseModelRegister.ScaleFactorChargeDischargeRate);
 	}
 
 	@Override
-	public @Nullable Integer getDischargeRateMaximumRating() {
-		return getScaledIntegerValue(BatteryBaseModelRegister.DischargeRateMaximumRating,
+	public @Nullable BigDecimal getDischargeRateMaximumRating() {
+		return getScaledValue(BatteryBaseModelRegister.DischargeRateMaximumRating,
 				BatteryBaseModelRegister.ScaleFactorChargeDischargeRate);
 	}
 
@@ -333,8 +334,8 @@ public class BatteryBaseModelAccessorImpl extends BaseModelAccessor implements B
 	}
 
 	@Override
-	public @Nullable Integer getDCPower() {
-		return getScaledIntegerValue(BatteryBaseModelRegister.DcPower,
+	public @Nullable BigDecimal getDCPower() {
+		return getScaledValue(BatteryBaseModelRegister.DcPower,
 				BatteryBaseModelRegister.ScaleFactorPower);
 	}
 
@@ -345,8 +346,8 @@ public class BatteryBaseModelAccessorImpl extends BaseModelAccessor implements B
 	}
 
 	@Override
-	public @Nullable Integer getPowerRequest() {
-		return getScaledIntegerValue(BatteryBaseModelRegister.PowerRequest,
+	public @Nullable BigDecimal getPowerRequest() {
+		return getScaledValue(BatteryBaseModelRegister.PowerRequest,
 				BatteryBaseModelRegister.ScaleFactorPower);
 	}
 

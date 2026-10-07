@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.core.der;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.EnumSet;
 import org.jspecify.annotations.Nullable;
@@ -87,14 +88,14 @@ public class DerStorageCapacityModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Long getEnergyRating() {
-		return getScaledLongValue(DerStorageCapacityModelRegister.EnergyRating,
+	public @Nullable BigDecimal getEnergyRating() {
+		return getScaledValue(DerStorageCapacityModelRegister.EnergyRating,
 				DerStorageCapacityModelRegister.ScaleFactorEnergy);
 	}
 
 	@Override
-	public @Nullable Long getEnergyAvailable() {
-		return getScaledLongValue(DerStorageCapacityModelRegister.EnergyAvailable,
+	public @Nullable BigDecimal getEnergyAvailable() {
+		return getScaledValue(DerStorageCapacityModelRegister.EnergyAvailable,
 				DerStorageCapacityModelRegister.ScaleFactorEnergy);
 	}
 

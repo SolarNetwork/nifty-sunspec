@@ -22,6 +22,7 @@ package net.solarnetwork.sunspec.core.combiner.test;
 import static net.solarnetwork.sunspec.core.combiner.test.StringCombinerTestUtils.assertAdvancedDcInput;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -103,9 +104,9 @@ public class StringCombinerAdvancedModelAccessorImpl_404_01Tests {
 			.as("Temperature")
 			.returns(-5.0f, from(StringCombinerAdvancedModelAccessor::getTemperature))
 			.as("Power")
-			.returns(9960, from(StringCombinerAdvancedModelAccessor::getDCPower))
+			.returns(new BigDecimal("9960"), from(StringCombinerAdvancedModelAccessor::getDCPower))
 			.as("Energy")
-			.returns(987650L, from(StringCombinerAdvancedModelAccessor::getDCEnergy))
+			.returns(new BigDecimal("987650"), from(StringCombinerAdvancedModelAccessor::getDCEnergy))
 			.as("Performance ratio 0x8000 not implemented, an int16 for model 404")
 			.returns(null, from(StringCombinerAdvancedModelAccessor::getDCPerformanceRatio))
 			;
@@ -143,11 +144,11 @@ public class StringCombinerAdvancedModelAccessorImpl_404_01Tests {
 		// @formatter:on
 
 		// inputs use the input scale factors, and charge and energy are acc32 types
-		assertAdvancedDcInput("Input 1", inputs.get(0), 1, 8.31f, 0xFFFFFFFFL, 602.1f, 4980, 493800L,
-				0.97f, 14, Set.of(StringCombinerModelEvent.LowVoltage),
-				Set.of(new GenericModelEvent(1)));
-		assertAdvancedDcInput("Input 2", inputs.get(1), 2, null, null, null, -12, null, null, 14,
-				Set.of(), Set.of());
+		assertAdvancedDcInput("Input 1", inputs.get(0), 1, 8.31f, BigDecimal.valueOf(0xFFFFFFFFL),
+				602.1f, new BigDecimal("4980"), new BigDecimal("493800"), 0.97f, 14,
+				Set.of(StringCombinerModelEvent.LowVoltage), Set.of(new GenericModelEvent(1)));
+		assertAdvancedDcInput("Input 2", inputs.get(1), 2, null, null, null, new BigDecimal("-12"), null,
+				null, 14, Set.of(), Set.of());
 	}
 
 }

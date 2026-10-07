@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.api.combiner;
 
+import java.math.BigDecimal;
 import java.util.List;
 import org.jspecify.annotations.Nullable;
 
@@ -49,7 +50,7 @@ public interface StringCombinerAdvancedModelAccessor extends StringCombinerModel
 		 * @return the DC power
 		 */
 		@Nullable
-		Integer getDCPower();
+		BigDecimal getDCPower();
 
 		/**
 		 * Get the DC energy delivered (imported), in watt-hours.
@@ -57,7 +58,7 @@ public interface StringCombinerAdvancedModelAccessor extends StringCombinerModel
 		 * @return the delivered energy
 		 */
 		@Nullable
-		Long getDCEnergy();
+		BigDecimal getDCEnergy();
 
 		/**
 		 * Get the DC performance ratio, as a percentage 0-1.
@@ -83,7 +84,7 @@ public interface StringCombinerAdvancedModelAccessor extends StringCombinerModel
 	 * @return the DC power
 	 */
 	@Nullable
-	Integer getDCPower();
+	BigDecimal getDCPower();
 
 	/**
 	 * Get the DC energy delivered (imported), in watt-hours.
@@ -91,7 +92,7 @@ public interface StringCombinerAdvancedModelAccessor extends StringCombinerModel
 	 * @return the delivered energy
 	 */
 	@Nullable
-	Long getDCEnergy();
+	BigDecimal getDCEnergy();
 
 	/**
 	 * Get the DC performance ratio, as a percentage 0-1.

@@ -35,6 +35,7 @@ import static org.mockito.Mockito.times;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -109,24 +110,24 @@ public class ModelDataFactoryTests {
 		final MeterModelAccessor model = data.getTypedModel();
 		and.then(model)
 			.as("Energy export Total")
-			.returns(1090000L, from(MeterModelAccessor::getActiveEnergyExported))
+			.returns(new BigDecimal("1090000"), from(MeterModelAccessor::getActiveEnergyExported))
 			.as("Energy export Phase A")
-			.returns(1009000L, from(m -> m.accessorForPhase(PhaseA).getActiveEnergyExported()))
+			.returns(new BigDecimal("1009000"), from(m -> m.accessorForPhase(PhaseA).getActiveEnergyExported()))
 			.as("Energy export Phase B")
-			.returns(33600L, from(m -> m.accessorForPhase(PhaseB).getActiveEnergyExported()))
+			.returns(new BigDecimal("33600"), from(m -> m.accessorForPhase(PhaseB).getActiveEnergyExported()))
 			.as("Energy export Phase C")
-			.returns(47300L, from(m -> m.accessorForPhase(PhaseC).getActiveEnergyExported()))
+			.returns(new BigDecimal("47300"), from(m -> m.accessorForPhase(PhaseC).getActiveEnergyExported()))
 			;
 
 		and.then(model)
 			.as("Energy import Total")
-			.returns(1001509000L, from(MeterModelAccessor::getActiveEnergyImported))
+			.returns(new BigDecimal("1001509000"), from(MeterModelAccessor::getActiveEnergyImported))
 			.as("Energy import Phase A")
-			.returns(350516800L, from(m -> m.accessorForPhase(PhaseA).getActiveEnergyImported()))
+			.returns(new BigDecimal("350516800"), from(m -> m.accessorForPhase(PhaseA).getActiveEnergyImported()))
 			.as("Energy import Phase B")
-			.returns(273085000L, from(m -> m.accessorForPhase(PhaseB).getActiveEnergyImported()))
+			.returns(new BigDecimal("273085000"), from(m -> m.accessorForPhase(PhaseB).getActiveEnergyImported()))
 			.as("Energy import Phase C")
-			.returns(377907200L, from(m -> m.accessorForPhase(PhaseC).getActiveEnergyImported()))
+			.returns(new BigDecimal("377907200"), from(m -> m.accessorForPhase(PhaseC).getActiveEnergyImported()))
 			;
 		// @formatter:on
 	}

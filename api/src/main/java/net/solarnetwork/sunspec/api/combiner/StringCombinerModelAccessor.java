@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.api.combiner;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
@@ -60,7 +61,7 @@ public interface StringCombinerModelAccessor extends ModelAccessor {
 		 * @return the delivered charge
 		 */
 		@Nullable
-		Long getDCChargeDelivered();
+		BigDecimal getDCChargeDelivered();
 
 		/**
 		 * Get the active events for the module.
@@ -93,7 +94,7 @@ public interface StringCombinerModelAccessor extends ModelAccessor {
 	 * @return the delivered charge
 	 */
 	@Nullable
-	Long getDCChargeDelivered();
+	BigDecimal getDCChargeDelivered();
 
 	/**
 	 * Get the DC voltage, in volts.

@@ -20,6 +20,7 @@
 package net.solarnetwork.sunspec.core.der;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
@@ -93,14 +94,14 @@ public class DerCapacityModelAccessorImpl extends BaseModelAccessor implements D
 	}
 
 	@Override
-	public @Nullable Integer getActivePowerMaximumRating() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ActivePowerMaximumRating,
+	public @Nullable BigDecimal getActivePowerMaximumRating() {
+		return getScaledValue(DerCapacityModelRegister.ActivePowerMaximumRating,
 				DerCapacityModelRegister.ScaleFactorActivePower);
 	}
 
 	@Override
-	public @Nullable Integer getActivePowerOverExcitedRating() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ActivePowerOverExcitedRating,
+	public @Nullable BigDecimal getActivePowerOverExcitedRating() {
+		return getScaledValue(DerCapacityModelRegister.ActivePowerOverExcitedRating,
 				DerCapacityModelRegister.ScaleFactorActivePower);
 	}
 
@@ -111,8 +112,8 @@ public class DerCapacityModelAccessorImpl extends BaseModelAccessor implements D
 	}
 
 	@Override
-	public @Nullable Integer getActivePowerUnderExcitedRating() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ActivePowerUnderExcitedRating,
+	public @Nullable BigDecimal getActivePowerUnderExcitedRating() {
+		return getScaledValue(DerCapacityModelRegister.ActivePowerUnderExcitedRating,
 				DerCapacityModelRegister.ScaleFactorActivePower);
 	}
 
@@ -123,44 +124,44 @@ public class DerCapacityModelAccessorImpl extends BaseModelAccessor implements D
 	}
 
 	@Override
-	public @Nullable Integer getApparentPowerMaximumRating() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ApparentPowerMaximumRating,
+	public @Nullable BigDecimal getApparentPowerMaximumRating() {
+		return getScaledValue(DerCapacityModelRegister.ApparentPowerMaximumRating,
 				DerCapacityModelRegister.ScaleFactorApparentPower);
 	}
 
 	@Override
-	public @Nullable Integer getReactivePowerInjectedMaximumRating() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ReactivePowerInjectedMaximumRating,
+	public @Nullable BigDecimal getReactivePowerInjectedMaximumRating() {
+		return getScaledValue(DerCapacityModelRegister.ReactivePowerInjectedMaximumRating,
 				DerCapacityModelRegister.ScaleFactorReactivePower);
 	}
 
 	@Override
-	public @Nullable Integer getReactivePowerAbsorbedMaximumRating() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ReactivePowerAbsorbedMaximumRating,
+	public @Nullable BigDecimal getReactivePowerAbsorbedMaximumRating() {
+		return getScaledValue(DerCapacityModelRegister.ReactivePowerAbsorbedMaximumRating,
 				DerCapacityModelRegister.ScaleFactorReactivePower);
 	}
 
 	@Override
-	public @Nullable Integer getActivePowerChargeRateMaximumRating() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ActivePowerChargeRateMaximumRating,
+	public @Nullable BigDecimal getActivePowerChargeRateMaximumRating() {
+		return getScaledValue(DerCapacityModelRegister.ActivePowerChargeRateMaximumRating,
 				DerCapacityModelRegister.ScaleFactorActivePower);
 	}
 
 	@Override
-	public @Nullable Integer getActivePowerDischargeRateMaximumRating() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ActivePowerDischargeRateMaximumRating,
+	public @Nullable BigDecimal getActivePowerDischargeRateMaximumRating() {
+		return getScaledValue(DerCapacityModelRegister.ActivePowerDischargeRateMaximumRating,
 				DerCapacityModelRegister.ScaleFactorActivePower);
 	}
 
 	@Override
-	public @Nullable Integer getApparentPowerChargeRateMaximumRating() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ApparentPowerChargeRateMaximumRating,
+	public @Nullable BigDecimal getApparentPowerChargeRateMaximumRating() {
+		return getScaledValue(DerCapacityModelRegister.ApparentPowerChargeRateMaximumRating,
 				DerCapacityModelRegister.ScaleFactorApparentPower);
 	}
 
 	@Override
-	public @Nullable Integer getApparentPowerDischargeRateMaximumRating() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ApparentPowerDischargeRateMaximumRating,
+	public @Nullable BigDecimal getApparentPowerDischargeRateMaximumRating() {
+		return getScaledValue(DerCapacityModelRegister.ApparentPowerDischargeRateMaximumRating,
 				DerCapacityModelRegister.ScaleFactorApparentPower);
 	}
 
@@ -218,25 +219,25 @@ public class DerCapacityModelAccessorImpl extends BaseModelAccessor implements D
 	}
 
 	@Override
-	public @Nullable Integer getActivePowerMaximum() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ActivePowerMaximum,
+	public @Nullable BigDecimal getActivePowerMaximum() {
+		return getScaledValue(DerCapacityModelRegister.ActivePowerMaximum,
 				DerCapacityModelRegister.ScaleFactorActivePower);
 	}
 
 	@Override
-	public void setActivePowerMaximum(ModbusConnection conn, int watts) throws IOException {
+	public void setActivePowerMaximum(ModbusConnection conn, BigDecimal watts) throws IOException {
 		writeScaledValue(conn, DerCapacityModelRegister.ActivePowerMaximum,
 				DerCapacityModelRegister.ScaleFactorActivePower, watts);
 	}
 
 	@Override
-	public @Nullable Integer getActivePowerOverExcited() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ActivePowerOverExcited,
+	public @Nullable BigDecimal getActivePowerOverExcited() {
+		return getScaledValue(DerCapacityModelRegister.ActivePowerOverExcited,
 				DerCapacityModelRegister.ScaleFactorActivePower);
 	}
 
 	@Override
-	public void setActivePowerOverExcited(ModbusConnection conn, int watts) throws IOException {
+	public void setActivePowerOverExcited(ModbusConnection conn, BigDecimal watts) throws IOException {
 		writeScaledValue(conn, DerCapacityModelRegister.ActivePowerOverExcited,
 				DerCapacityModelRegister.ScaleFactorActivePower, watts);
 	}
@@ -254,13 +255,13 @@ public class DerCapacityModelAccessorImpl extends BaseModelAccessor implements D
 	}
 
 	@Override
-	public @Nullable Integer getActivePowerUnderExcited() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ActivePowerUnderExcited,
+	public @Nullable BigDecimal getActivePowerUnderExcited() {
+		return getScaledValue(DerCapacityModelRegister.ActivePowerUnderExcited,
 				DerCapacityModelRegister.ScaleFactorActivePower);
 	}
 
 	@Override
-	public void setActivePowerUnderExcited(ModbusConnection conn, int watts) throws IOException {
+	public void setActivePowerUnderExcited(ModbusConnection conn, BigDecimal watts) throws IOException {
 		writeScaledValue(conn, DerCapacityModelRegister.ActivePowerUnderExcited,
 				DerCapacityModelRegister.ScaleFactorActivePower, watts);
 	}
@@ -278,86 +279,90 @@ public class DerCapacityModelAccessorImpl extends BaseModelAccessor implements D
 	}
 
 	@Override
-	public @Nullable Integer getApparentPowerMaximum() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ApparentPowerMaximum,
+	public @Nullable BigDecimal getApparentPowerMaximum() {
+		return getScaledValue(DerCapacityModelRegister.ApparentPowerMaximum,
 				DerCapacityModelRegister.ScaleFactorApparentPower);
 	}
 
 	@Override
-	public void setApparentPowerMaximum(ModbusConnection conn, int voltAmps) throws IOException {
+	public void setApparentPowerMaximum(ModbusConnection conn, BigDecimal voltAmps) throws IOException {
 		writeScaledValue(conn, DerCapacityModelRegister.ApparentPowerMaximum,
 				DerCapacityModelRegister.ScaleFactorApparentPower, voltAmps);
 	}
 
 	@Override
-	public @Nullable Integer getReactivePowerInjectedMaximum() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ReactivePowerInjectedMaximum,
+	public @Nullable BigDecimal getReactivePowerInjectedMaximum() {
+		return getScaledValue(DerCapacityModelRegister.ReactivePowerInjectedMaximum,
 				DerCapacityModelRegister.ScaleFactorReactivePower);
 	}
 
 	@Override
-	public void setReactivePowerInjectedMaximum(ModbusConnection conn, int vars) throws IOException {
+	public void setReactivePowerInjectedMaximum(ModbusConnection conn, BigDecimal vars)
+			throws IOException {
 		writeScaledValue(conn, DerCapacityModelRegister.ReactivePowerInjectedMaximum,
 				DerCapacityModelRegister.ScaleFactorReactivePower, vars);
 	}
 
 	@Override
-	public @Nullable Integer getReactivePowerAbsorbedMaximum() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ReactivePowerAbsorbedMaximum,
+	public @Nullable BigDecimal getReactivePowerAbsorbedMaximum() {
+		return getScaledValue(DerCapacityModelRegister.ReactivePowerAbsorbedMaximum,
 				DerCapacityModelRegister.ScaleFactorReactivePower);
 	}
 
 	@Override
-	public void setReactivePowerAbsorbedMaximum(ModbusConnection conn, int vars) throws IOException {
+	public void setReactivePowerAbsorbedMaximum(ModbusConnection conn, BigDecimal vars)
+			throws IOException {
 		writeScaledValue(conn, DerCapacityModelRegister.ReactivePowerAbsorbedMaximum,
 				DerCapacityModelRegister.ScaleFactorReactivePower, vars);
 	}
 
 	@Override
-	public @Nullable Integer getActivePowerChargeRateMaximum() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ActivePowerChargeRateMaximum,
+	public @Nullable BigDecimal getActivePowerChargeRateMaximum() {
+		return getScaledValue(DerCapacityModelRegister.ActivePowerChargeRateMaximum,
 				DerCapacityModelRegister.ScaleFactorActivePower);
 	}
 
 	@Override
-	public void setActivePowerChargeRateMaximum(ModbusConnection conn, int watts) throws IOException {
+	public void setActivePowerChargeRateMaximum(ModbusConnection conn, BigDecimal watts)
+			throws IOException {
 		writeScaledValue(conn, DerCapacityModelRegister.ActivePowerChargeRateMaximum,
 				DerCapacityModelRegister.ScaleFactorActivePower, watts);
 	}
 
 	@Override
-	public @Nullable Integer getActivePowerDischargeRateMaximum() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ActivePowerDischargeRateMaximum,
+	public @Nullable BigDecimal getActivePowerDischargeRateMaximum() {
+		return getScaledValue(DerCapacityModelRegister.ActivePowerDischargeRateMaximum,
 				DerCapacityModelRegister.ScaleFactorActivePower);
 	}
 
 	@Override
-	public void setActivePowerDischargeRateMaximum(ModbusConnection conn, int watts) throws IOException {
+	public void setActivePowerDischargeRateMaximum(ModbusConnection conn, BigDecimal watts)
+			throws IOException {
 		writeScaledValue(conn, DerCapacityModelRegister.ActivePowerDischargeRateMaximum,
 				DerCapacityModelRegister.ScaleFactorActivePower, watts);
 	}
 
 	@Override
-	public @Nullable Integer getApparentPowerChargeRateMaximum() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ApparentPowerChargeRateMaximum,
+	public @Nullable BigDecimal getApparentPowerChargeRateMaximum() {
+		return getScaledValue(DerCapacityModelRegister.ApparentPowerChargeRateMaximum,
 				DerCapacityModelRegister.ScaleFactorApparentPower);
 	}
 
 	@Override
-	public void setApparentPowerChargeRateMaximum(ModbusConnection conn, int voltAmps)
+	public void setApparentPowerChargeRateMaximum(ModbusConnection conn, BigDecimal voltAmps)
 			throws IOException {
 		writeScaledValue(conn, DerCapacityModelRegister.ApparentPowerChargeRateMaximum,
 				DerCapacityModelRegister.ScaleFactorApparentPower, voltAmps);
 	}
 
 	@Override
-	public @Nullable Integer getApparentPowerDischargeRateMaximum() {
-		return getScaledIntegerValue(DerCapacityModelRegister.ApparentPowerDischargeRateMaximum,
+	public @Nullable BigDecimal getApparentPowerDischargeRateMaximum() {
+		return getScaledValue(DerCapacityModelRegister.ApparentPowerDischargeRateMaximum,
 				DerCapacityModelRegister.ScaleFactorApparentPower);
 	}
 
 	@Override
-	public void setApparentPowerDischargeRateMaximum(ModbusConnection conn, int voltAmps)
+	public void setApparentPowerDischargeRateMaximum(ModbusConnection conn, BigDecimal voltAmps)
 			throws IOException {
 		writeScaledValue(conn, DerCapacityModelRegister.ApparentPowerDischargeRateMaximum,
 				DerCapacityModelRegister.ScaleFactorApparentPower, voltAmps);

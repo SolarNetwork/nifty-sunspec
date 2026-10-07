@@ -21,6 +21,7 @@ package net.solarnetwork.sunspec.core.combiner.test;
 
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
+import java.math.BigDecimal;
 import java.util.Set;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.combiner.StringCombinerAdvancedModelAccessor.AdvancedDcInput;
@@ -57,7 +58,7 @@ public final class StringCombinerTestUtils {
 	 *        the expected vendor events
 	 */
 	public static void assertDcInput(String prefix, DcInput input, Integer id, Float current,
-			Long charge, Set<ModelEvent> events, Set<ModelEvent> vendorEvents) {
+			BigDecimal charge, Set<ModelEvent> events, Set<ModelEvent> vendorEvents) {
 		// @formatter:off
 		then(input)
 			.as(prefix + " ID")
@@ -103,7 +104,7 @@ public final class StringCombinerTestUtils {
 	 *        the expected vendor events
 	 */
 	public static void assertAdvancedDcInput(String prefix, AdvancedDcInput input, Integer id,
-			Float current, Long charge, Float voltage, Integer power, Long energy,
+			Float current, BigDecimal charge, Float voltage, BigDecimal power, BigDecimal energy,
 			Float performanceRatio, Integer moduleCount, Set<ModelEvent> events,
 			Set<ModelEvent> vendorEvents) {
 		// @formatter:off

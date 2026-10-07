@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.core.meter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -141,9 +142,8 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 	 *        the register reference to read
 	 * @return the register value, interpreted as an active power value
 	 */
-	public @Nullable Integer getActivePowerValue(ModbusReference ref) {
-		Number n = getScaledValue(ref, IntegerMeterModelRegister.ScaleFactorActivePower);
-		return (n != null ? n.intValue() : null);
+	public @Nullable BigDecimal getActivePowerValue(ModbusReference ref) {
+		return getScaledValue(ref, IntegerMeterModelRegister.ScaleFactorActivePower);
 	}
 
 	/**
@@ -153,9 +153,8 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 	 *        the register reference to read
 	 * @return the register value, interpreted as an apparent power value
 	 */
-	public @Nullable Integer getApparentPowerValue(ModbusReference ref) {
-		Number n = getScaledValue(ref, IntegerMeterModelRegister.ScaleFactorApparentPower);
-		return (n != null ? n.intValue() : null);
+	public @Nullable BigDecimal getApparentPowerValue(ModbusReference ref) {
+		return getScaledValue(ref, IntegerMeterModelRegister.ScaleFactorApparentPower);
 	}
 
 	/**
@@ -165,9 +164,8 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 	 *        the register reference to read
 	 * @return the register value, interpreted as an reactive power value
 	 */
-	public @Nullable Integer getReactivePowerValue(ModbusReference ref) {
-		Number n = getScaledValue(ref, IntegerMeterModelRegister.ScaleFactorReactivePower);
-		return (n != null ? n.intValue() : null);
+	public @Nullable BigDecimal getReactivePowerValue(ModbusReference ref) {
+		return getScaledValue(ref, IntegerMeterModelRegister.ScaleFactorReactivePower);
 	}
 
 	/**
@@ -177,9 +175,8 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 	 *        the register reference to read
 	 * @return the register value, interpreted as an active energy value
 	 */
-	public @Nullable Long getActiveEnergyValue(ModbusReference ref) {
-		Number n = getScaledValue(ref, IntegerMeterModelRegister.ScaleFactorActiveEnergy);
-		return (n != null ? n.longValue() : null);
+	public @Nullable BigDecimal getActiveEnergyValue(ModbusReference ref) {
+		return getScaledValue(ref, IntegerMeterModelRegister.ScaleFactorActiveEnergy);
 	}
 
 	/**
@@ -189,9 +186,8 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 	 *        the register reference to read
 	 * @return the register value, interpreted as an apparent energy value
 	 */
-	public @Nullable Long getApparentEnergyValue(ModbusReference ref) {
-		Number n = getScaledValue(ref, IntegerMeterModelRegister.ScaleFactorApparentEnergy);
-		return (n != null ? n.longValue() : null);
+	public @Nullable BigDecimal getApparentEnergyValue(ModbusReference ref) {
+		return getScaledValue(ref, IntegerMeterModelRegister.ScaleFactorApparentEnergy);
 	}
 
 	/**
@@ -201,9 +197,8 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 	 *        the register reference to read
 	 * @return the register value, interpreted as an reactive energy value
 	 */
-	public @Nullable Long getReactiveEnergyValue(ModbusReference ref) {
-		Number n = getScaledValue(ref, IntegerMeterModelRegister.ScaleFactorReactiveEnergy);
-		return (n != null ? n.longValue() : null);
+	public @Nullable BigDecimal getReactiveEnergyValue(ModbusReference ref) {
+		return getScaledValue(ref, IntegerMeterModelRegister.ScaleFactorReactiveEnergy);
 	}
 
 	@Override
@@ -240,51 +235,68 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 	}
 
 	@Override
-	public @Nullable Integer getActivePower() {
+	public @Nullable BigDecimal getActivePower() {
 		return getActivePowerValue(IntegerMeterModelRegister.ActivePowerTotal);
 	}
 
 	@Override
-	public @Nullable Integer getApparentPower() {
+	public @Nullable BigDecimal getApparentPower() {
 		return getApparentPowerValue(IntegerMeterModelRegister.ApparentPowerTotal);
 	}
 
 	@Override
-	public @Nullable Integer getReactivePower() {
+	public @Nullable BigDecimal getReactivePower() {
 		return getReactivePowerValue(IntegerMeterModelRegister.ReactivePowerTotal);
 	}
 
 	@Override
-	public @Nullable Long getActiveEnergyImported() {
+	public @Nullable BigDecimal getActiveEnergyImported() {
 		return getActiveEnergyValue(IntegerMeterModelRegister.ActiveEnergyImportedTotal);
 	}
 
 	@Override
-	public @Nullable Long getActiveEnergyExported() {
+	public @Nullable BigDecimal getActiveEnergyExported() {
 		return getActiveEnergyValue(IntegerMeterModelRegister.ActiveEnergyExportedTotal);
 	}
 
 	@Override
-	public @Nullable Long getReactiveEnergyImported() {
-		Long q1 = getReactiveEnergyValue(IntegerMeterModelRegister.ReactiveEnergyImportedQ1Total);
-		Long q2 = getReactiveEnergyValue(IntegerMeterModelRegister.ReactiveEnergyImportedQ2Total);
-		return (q1 != null ? q1.longValue() : 0) + (q2 != null ? q2.longValue() : 0);
+	public @Nullable BigDecimal getReactiveEnergyImported() {
+		return reactiveEnergySum(IntegerMeterModelRegister.ReactiveEnergyImportedQ1Total,
+				IntegerMeterModelRegister.ReactiveEnergyImportedQ2Total);
 	}
 
 	@Override
-	public @Nullable Long getReactiveEnergyExported() {
-		Long q3 = getReactiveEnergyValue(IntegerMeterModelRegister.ReactiveEnergyExportedQ3Total);
-		Long q4 = getReactiveEnergyValue(IntegerMeterModelRegister.ReactiveEnergyExportedQ4Total);
-		return (q3 != null ? q3.longValue() : 0) + (q4 != null ? q4.longValue() : 0);
+	public @Nullable BigDecimal getReactiveEnergyExported() {
+		return reactiveEnergySum(IntegerMeterModelRegister.ReactiveEnergyExportedQ3Total,
+				IntegerMeterModelRegister.ReactiveEnergyExportedQ4Total);
+	}
+
+	/**
+	 * Add two reactive energy quadrant values.
+	 *
+	 * @param aRef
+	 *        the first quadrant register
+	 * @param bRef
+	 *        the second quadrant register
+	 * @return the sum, or {@code null} if neither quadrant value is available
+	 */
+	private @Nullable BigDecimal reactiveEnergySum(IntegerMeterModelRegister aRef,
+			IntegerMeterModelRegister bRef) {
+		final BigDecimal a = getReactiveEnergyValue(aRef);
+		final BigDecimal b = getReactiveEnergyValue(bRef);
+		if ( a == null ) {
+			return b;
+		}
+		return (b != null ? a.add(b) : a);
 	}
 
 	@Override
-	public @Nullable Long getApparentEnergyImported() {
+	public @Nullable BigDecimal getApparentEnergyImported() {
 		return getApparentEnergyValue(IntegerMeterModelRegister.ApparentEnergyImportedTotal);
 	}
 
 	@Override
-	public @Nullable Long getApparentEnergyExported() {
+	public @Nullable BigDecimal getApparentEnergyExported() {
 		return getApparentEnergyValue(IntegerMeterModelRegister.ApparentEnergyExportedTotal);
 	}
 
@@ -409,7 +421,7 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 		}
 
 		@Override
-		public @Nullable Integer getActivePower() {
+		public @Nullable BigDecimal getActivePower() {
 			return switch (phase) {
 				case PhaseA -> getActivePowerValue(IntegerMeterModelRegister.ActivePowerPhaseA);
 				case PhaseB -> getActivePowerValue(IntegerMeterModelRegister.ActivePowerPhaseB);
@@ -419,7 +431,7 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 		}
 
 		@Override
-		public @Nullable Integer getApparentPower() {
+		public @Nullable BigDecimal getApparentPower() {
 			return switch (phase) {
 				case PhaseA -> getApparentPowerValue(IntegerMeterModelRegister.ApparentPowerPhaseA);
 				case PhaseB -> getApparentPowerValue(IntegerMeterModelRegister.ApparentPowerPhaseB);
@@ -429,7 +441,7 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 		}
 
 		@Override
-		public @Nullable Integer getReactivePower() {
+		public @Nullable BigDecimal getReactivePower() {
 			return switch (phase) {
 				case PhaseA -> getReactivePowerValue(IntegerMeterModelRegister.ReactivePowerPhaseA);
 				case PhaseB -> getReactivePowerValue(IntegerMeterModelRegister.ReactivePowerPhaseB);
@@ -439,7 +451,7 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 		}
 
 		@Override
-		public @Nullable Long getActiveEnergyImported() {
+		public @Nullable BigDecimal getActiveEnergyImported() {
 			return switch (phase) {
 				case PhaseA -> getActiveEnergyValue(
 						IntegerMeterModelRegister.ActiveEnergyImportedPhaseA);
@@ -452,7 +464,7 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 		}
 
 		@Override
-		public @Nullable Long getActiveEnergyExported() {
+		public @Nullable BigDecimal getActiveEnergyExported() {
 			return switch (phase) {
 				case PhaseA -> getActiveEnergyValue(
 						IntegerMeterModelRegister.ActiveEnergyExportedPhaseA);
@@ -465,7 +477,7 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 		}
 
 		@Override
-		public @Nullable Long getReactiveEnergyImported() {
+		public @Nullable BigDecimal getReactiveEnergyImported() {
 			return switch (phase) {
 				case PhaseA -> reactiveEnergySum(
 						IntegerMeterModelRegister.ReactiveEnergyImportedQ1PhaseA,
@@ -481,7 +493,7 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 		}
 
 		@Override
-		public @Nullable Long getReactiveEnergyExported() {
+		public @Nullable BigDecimal getReactiveEnergyExported() {
 			return switch (phase) {
 				case PhaseA -> reactiveEnergySum(
 						IntegerMeterModelRegister.ReactiveEnergyExportedQ3PhaseA,
@@ -496,16 +508,8 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 			};
 		}
 
-		private @Nullable Long reactiveEnergySum(IntegerMeterModelRegister q1Reg,
-				IntegerMeterModelRegister q2Reg) {
-			final Long q1 = getReactiveEnergyValue(q1Reg);
-			final Long q2 = getReactiveEnergyValue(q2Reg);
-			return (q1 == null && q2 == null ? null
-					: (q1 != null ? q1.longValue() : 0) + (q2 != null ? q2.longValue() : 0));
-		}
-
 		@Override
-		public @Nullable Long getApparentEnergyImported() {
+		public @Nullable BigDecimal getApparentEnergyImported() {
 			return switch (phase) {
 				case PhaseA -> getApparentEnergyValue(
 						IntegerMeterModelRegister.ApparentEnergyImportedPhaseA);
@@ -518,7 +522,7 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 		}
 
 		@Override
-		public @Nullable Long getApparentEnergyExported() {
+		public @Nullable BigDecimal getApparentEnergyExported() {
 			return switch (phase) {
 				case PhaseA -> getApparentEnergyValue(
 						IntegerMeterModelRegister.ApparentEnergyExportedPhaseA);

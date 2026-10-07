@@ -21,6 +21,7 @@ package net.solarnetwork.sunspec.core.der.test;
 
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
+import java.math.BigDecimal;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.api.AcPhase;
@@ -197,11 +198,11 @@ public class DerAcMeasurementModelAccessorImpl_701_01Tests {
 		// @formatter:off
 		then(model)
 			.as("Active power")
-			.returns(0, from(DerAcMeasurementModelAccessor::getActivePower))
+			.returns(BigDecimal.ZERO, from(DerAcMeasurementModelAccessor::getActivePower))
 			.as("Apparent power")
-			.returns(0, from(DerAcMeasurementModelAccessor::getApparentPower))
+			.returns(BigDecimal.ZERO, from(DerAcMeasurementModelAccessor::getApparentPower))
 			.as("Reactive power")
-			.returns(0, from(DerAcMeasurementModelAccessor::getReactivePower))
+			.returns(BigDecimal.ZERO, from(DerAcMeasurementModelAccessor::getReactivePower))
 			.as("Power factor")
 			.returns(0.0f, from(DerAcMeasurementModelAccessor::getPowerFactor))
 			.as("Current")
@@ -225,13 +226,13 @@ public class DerAcMeasurementModelAccessorImpl_701_01Tests {
 		// @formatter:off
 		then(model)
 			.as("Active energy exported is injected")
-			.returns(0L, from(DerAcMeasurementModelAccessor::getActiveEnergyExported))
+			.returns(BigDecimal.ZERO, from(DerAcMeasurementModelAccessor::getActiveEnergyExported))
 			.as("Active energy imported is absorbed")
-			.returns(0L, from(DerAcMeasurementModelAccessor::getActiveEnergyImported))
+			.returns(BigDecimal.ZERO, from(DerAcMeasurementModelAccessor::getActiveEnergyImported))
 			.as("Reactive energy exported is injected")
-			.returns(0L, from(DerAcMeasurementModelAccessor::getReactiveEnergyExported))
+			.returns(BigDecimal.ZERO, from(DerAcMeasurementModelAccessor::getReactiveEnergyExported))
 			.as("Reactive energy imported is absorbed")
-			.returns(0L, from(DerAcMeasurementModelAccessor::getReactiveEnergyImported))
+			.returns(BigDecimal.ZERO, from(DerAcMeasurementModelAccessor::getReactiveEnergyImported))
 			;
 		// @formatter:on
 	}

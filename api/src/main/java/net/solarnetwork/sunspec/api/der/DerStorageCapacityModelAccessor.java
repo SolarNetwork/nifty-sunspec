@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.api.der;
 
+import java.math.BigDecimal;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelAccessor;
 
@@ -40,7 +41,7 @@ public interface DerStorageCapacityModelAccessor extends ModelAccessor {
 	 * @return the energy rating, in Wh, or {@code null} if not available
 	 */
 	@Nullable
-	Long getEnergyRating();
+	BigDecimal getEnergyRating();
 
 	/**
 	 * Get the energy available in the storage.
@@ -53,7 +54,7 @@ public interface DerStorageCapacityModelAccessor extends ModelAccessor {
 	 * @return the energy available, in Wh, or {@code null} if not available
 	 */
 	@Nullable
-	Long getEnergyAvailable();
+	BigDecimal getEnergyAvailable();
 
 	/**
 	 * Get the state of charge.

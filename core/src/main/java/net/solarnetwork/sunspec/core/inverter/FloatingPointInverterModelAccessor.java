@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.core.inverter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.BitSet;
 import java.util.Collection;
@@ -179,37 +180,37 @@ public class FloatingPointInverterModelAccessor extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Integer getActivePower() {
-		return getIntegerValue(FloatingPointInverterModelRegister.ActivePowerTotal);
+	public @Nullable BigDecimal getActivePower() {
+		return getDecimalValue(FloatingPointInverterModelRegister.ActivePowerTotal);
 	}
 
 	@Override
-	public @Nullable Integer getApparentPower() {
-		return getIntegerValue(FloatingPointInverterModelRegister.ApparentPowerTotal);
+	public @Nullable BigDecimal getApparentPower() {
+		return getDecimalValue(FloatingPointInverterModelRegister.ApparentPowerTotal);
 	}
 
 	@Override
-	public @Nullable Integer getReactivePower() {
-		return getIntegerValue(FloatingPointInverterModelRegister.ReactivePowerTotal);
+	public @Nullable BigDecimal getReactivePower() {
+		return getDecimalValue(FloatingPointInverterModelRegister.ReactivePowerTotal);
 	}
 
 	@Override
-	public @Nullable Long getActiveEnergyExported() {
-		return getLongValue(FloatingPointInverterModelRegister.ActiveEnergyExportedTotal);
+	public @Nullable BigDecimal getActiveEnergyExported() {
+		return getDecimalValue(FloatingPointInverterModelRegister.ActiveEnergyExportedTotal);
 	}
 
 	@Override
-	public @Nullable Long getActiveEnergyImported() {
+	public @Nullable BigDecimal getActiveEnergyImported() {
 		return null;
 	}
 
 	@Override
-	public @Nullable Long getReactiveEnergyExported() {
+	public @Nullable BigDecimal getReactiveEnergyExported() {
 		return null;
 	}
 
 	@Override
-	public @Nullable Long getReactiveEnergyImported() {
+	public @Nullable BigDecimal getReactiveEnergyImported() {
 		return null;
 	}
 
@@ -224,8 +225,8 @@ public class FloatingPointInverterModelAccessor extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Integer getDcPower() {
-		return getIntegerValue(FloatingPointInverterModelRegister.DcPowerTotal);
+	public @Nullable BigDecimal getDcPower() {
+		return getDecimalValue(FloatingPointInverterModelRegister.DcPowerTotal);
 	}
 
 	@Override
@@ -411,7 +412,7 @@ public class FloatingPointInverterModelAccessor extends BaseModelAccessor
 		}
 
 		@Override
-		public @Nullable Integer getActivePower() {
+		public @Nullable BigDecimal getActivePower() {
 			return switch (phase) {
 				case PhaseA, PhaseB, PhaseC -> null;
 				default -> FloatingPointInverterModelAccessor.this.getActivePower();
@@ -419,7 +420,7 @@ public class FloatingPointInverterModelAccessor extends BaseModelAccessor
 		}
 
 		@Override
-		public @Nullable Integer getApparentPower() {
+		public @Nullable BigDecimal getApparentPower() {
 			return switch (phase) {
 				case PhaseA, PhaseB, PhaseC -> null;
 				default -> FloatingPointInverterModelAccessor.this.getApparentPower();
@@ -427,7 +428,7 @@ public class FloatingPointInverterModelAccessor extends BaseModelAccessor
 		}
 
 		@Override
-		public @Nullable Integer getReactivePower() {
+		public @Nullable BigDecimal getReactivePower() {
 			return switch (phase) {
 				case PhaseA, PhaseB, PhaseC -> null;
 				default -> FloatingPointInverterModelAccessor.this.getReactivePower();
@@ -435,7 +436,7 @@ public class FloatingPointInverterModelAccessor extends BaseModelAccessor
 		}
 
 		@Override
-		public @Nullable Long getActiveEnergyExported() {
+		public @Nullable BigDecimal getActiveEnergyExported() {
 			return switch (phase) {
 				case PhaseA, PhaseB, PhaseC -> null;
 				default -> FloatingPointInverterModelAccessor.this.getActiveEnergyExported();
@@ -443,7 +444,7 @@ public class FloatingPointInverterModelAccessor extends BaseModelAccessor
 		}
 
 		@Override
-		public @Nullable Long getActiveEnergyImported() {
+		public @Nullable BigDecimal getActiveEnergyImported() {
 			return switch (phase) {
 				case PhaseA, PhaseB, PhaseC -> null;
 				default -> FloatingPointInverterModelAccessor.this.getActiveEnergyImported();
@@ -451,7 +452,7 @@ public class FloatingPointInverterModelAccessor extends BaseModelAccessor
 		}
 
 		@Override
-		public @Nullable Long getReactiveEnergyExported() {
+		public @Nullable BigDecimal getReactiveEnergyExported() {
 			return switch (phase) {
 				case PhaseA, PhaseB, PhaseC -> null;
 				default -> FloatingPointInverterModelAccessor.this.getReactiveEnergyExported();
@@ -459,7 +460,7 @@ public class FloatingPointInverterModelAccessor extends BaseModelAccessor
 		}
 
 		@Override
-		public @Nullable Long getReactiveEnergyImported() {
+		public @Nullable BigDecimal getReactiveEnergyImported() {
 			return switch (phase) {
 				case PhaseA, PhaseB, PhaseC -> null;
 				default -> FloatingPointInverterModelAccessor.this.getReactiveEnergyImported();
@@ -483,7 +484,7 @@ public class FloatingPointInverterModelAccessor extends BaseModelAccessor
 		}
 
 		@Override
-		public @Nullable Integer getDcPower() {
+		public @Nullable BigDecimal getDcPower() {
 			return switch (phase) {
 				case PhaseA, PhaseB, PhaseC -> null;
 				default -> FloatingPointInverterModelAccessor.this.getDcPower();

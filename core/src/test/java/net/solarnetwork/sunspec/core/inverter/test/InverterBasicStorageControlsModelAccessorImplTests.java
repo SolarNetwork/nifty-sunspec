@@ -23,6 +23,7 @@ import static org.assertj.core.api.BDDAssertions.catchThrowable;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -187,7 +188,7 @@ public class InverterBasicStorageControlsModelAccessorImplTests {
 		// @formatter:off
 		then(model)
 			.as("Maximum charge rate")
-			.returns(5000,
+			.returns(new BigDecimal("5000"),
 					from(InverterBasicStorageControlsModelAccessor::getActivePowerChargeRateMaximum))
 			.as("Charge ramp rate")
 			.returns(10.0f, from(InverterBasicStorageControlsModelAccessor::getChargeRampRate))
@@ -197,7 +198,7 @@ public class InverterBasicStorageControlsModelAccessorImplTests {
 			.returns(EnumSet.of(InverterStorageControlMode.Charge, InverterStorageControlMode.Discharge),
 					from(InverterBasicStorageControlsModelAccessor::getStorageControlModes))
 			.as("Maximum charge apparent power")
-			.returns(5500,
+			.returns(new BigDecimal("5500"),
 					from(InverterBasicStorageControlsModelAccessor::getApparentPowerChargeRateMaximum))
 			.as("Minimum reserve")
 			.returns(15.0f,
@@ -205,7 +206,7 @@ public class InverterBasicStorageControlsModelAccessorImplTests {
 			.as("State of charge")
 			.returns(85.3f, from(InverterBasicStorageControlsModelAccessor::getStateOfCharge))
 			.as("Storage available")
-			.returns(123.4f, from(InverterBasicStorageControlsModelAccessor::getStorageAvailable))
+			.returns(new BigDecimal("123.4"), from(InverterBasicStorageControlsModelAccessor::getStorageAvailable))
 			.as("Battery voltage")
 			.returns(51.2f, from(InverterBasicStorageControlsModelAccessor::getBatteryVoltage))
 			.as("Charge status")
@@ -238,11 +239,11 @@ public class InverterBasicStorageControlsModelAccessorImplTests {
 		InverterBasicStorageControlsModelAccessor model = discoverModel(conn);
 
 		// WHEN
-		model.setActivePowerChargeRateMaximum(conn, 4000);
+		model.setActivePowerChargeRateMaximum(conn, new BigDecimal("4000"));
 		model.setChargeRampRate(conn, 12.5f);
 		model.setDischargeRampRate(conn, 7.25f);
 		model.setStorageControlModes(conn, EnumSet.of(InverterStorageControlMode.Discharge));
-		model.setApparentPowerChargeRateMaximum(conn, 4400);
+		model.setApparentPowerChargeRateMaximum(conn, new BigDecimal("4400"));
 		model.setStateOfChargeReserveMinimum(conn, 20.5f);
 		model.setDischargeRatePercent(conn, 33.3f);
 		model.setChargeRatePercent(conn, -12.5f);
@@ -265,7 +266,7 @@ public class InverterBasicStorageControlsModelAccessorImplTests {
 		// @formatter:off
 		then(device)
 			.as("Maximum charge rate")
-			.returns(4000,
+			.returns(new BigDecimal("4000"),
 					from(InverterBasicStorageControlsModelAccessor::getActivePowerChargeRateMaximum))
 			.as("Charge ramp rate")
 			.returns(12.5f, from(InverterBasicStorageControlsModelAccessor::getChargeRampRate))
@@ -275,7 +276,7 @@ public class InverterBasicStorageControlsModelAccessorImplTests {
 			.returns(EnumSet.of(InverterStorageControlMode.Discharge),
 					from(InverterBasicStorageControlsModelAccessor::getStorageControlModes))
 			.as("Maximum charge apparent power")
-			.returns(4400,
+			.returns(new BigDecimal("4400"),
 					from(InverterBasicStorageControlsModelAccessor::getApparentPowerChargeRateMaximum))
 			.as("Minimum reserve")
 			.returns(20.5f,
@@ -329,7 +330,7 @@ public class InverterBasicStorageControlsModelAccessorImplTests {
 
 		// WHEN
 		Throwable t = catchThrowable(() -> model.setChargeRampRate(conn, 10.0f));
-		model.setActivePowerChargeRateMaximum(conn, 4000);
+		model.setActivePowerChargeRateMaximum(conn, new BigDecimal("4000"));
 
 		// THEN
 		// @formatter:off
@@ -343,7 +344,7 @@ public class InverterBasicStorageControlsModelAccessorImplTests {
 			;
 		then(discoverModel(conn).getActivePowerChargeRateMaximum())
 			.as("Maximum charge rate")
-			.isEqualTo(4000)
+			.isEqualTo(new BigDecimal("4000"))
 			;
 		// @formatter:on
 	}

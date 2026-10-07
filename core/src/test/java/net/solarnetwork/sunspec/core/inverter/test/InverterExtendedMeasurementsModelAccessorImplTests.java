@@ -21,6 +21,7 @@ package net.solarnetwork.sunspec.core.inverter.test;
 
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.EnumSet;
 import java.util.Set;
@@ -249,9 +250,9 @@ public class InverterExtendedMeasurementsModelAccessorImplTests {
 			.as("Reactive energy Q4")
 			.returns(4L, from(InverterExtendedMeasurementsModelAccessor::getReactiveEnergyQ4))
 			.as("Reactive power available")
-			.returns(-1250, from(InverterExtendedMeasurementsModelAccessor::getReactivePowerAvailable))
+			.returns(new BigDecimal("-1250"), from(InverterExtendedMeasurementsModelAccessor::getReactivePowerAvailable))
 			.as("Active power available")
-			.returns(3450, from(InverterExtendedMeasurementsModelAccessor::getActivePowerAvailable))
+			.returns(new BigDecimal("3450"), from(InverterExtendedMeasurementsModelAccessor::getActivePowerAvailable))
 			.as("Setpoint limits")
 			.returns(EnumSet.of(InverterSetpointLimit.MaximumActivePower,
 					InverterSetpointLimit.MinimumPowerFactorQ1,

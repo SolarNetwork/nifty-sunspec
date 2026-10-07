@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.core.combiner;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -140,12 +141,11 @@ public class StringCombinerAdvancedModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Long getDCChargeDelivered() {
-		Number n = getScaledValue(
+	public @Nullable BigDecimal getDCChargeDelivered() {
+		return getScaledValue(
 				isVersion2() ? StringCombinerAdvancedModelRegister.DcChargeV2
 						: StringCombinerAdvancedModelRegister.DcCharge,
 				StringCombinerAdvancedModelRegister.ScaleFactorDcCharge);
-		return (n != null ? n.longValue() : null);
 	}
 
 	@Override
@@ -163,19 +163,17 @@ public class StringCombinerAdvancedModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
-	public @Nullable Integer getDCPower() {
-		Number n = getScaledValue(StringCombinerAdvancedModelRegister.DcPower,
+	public @Nullable BigDecimal getDCPower() {
+		return getScaledValue(StringCombinerAdvancedModelRegister.DcPower,
 				StringCombinerAdvancedModelRegister.ScaleFactorDcPower);
-		return (n != null ? n.intValue() : null);
 	}
 
 	@Override
-	public @Nullable Long getDCEnergy() {
-		Number n = getScaledValue(
+	public @Nullable BigDecimal getDCEnergy() {
+		return getScaledValue(
 				isVersion2() ? StringCombinerAdvancedModelRegister.DcEnergyV2
 						: StringCombinerAdvancedModelRegister.DcEnergy,
 				StringCombinerAdvancedModelRegister.ScaleFactorDcEnergy);
-		return (n != null ? n.longValue() : null);
 	}
 
 	@Override
@@ -245,15 +243,14 @@ public class StringCombinerAdvancedModelAccessorImpl extends BaseModelAccessor
 		}
 
 		@Override
-		public @Nullable Long getDCChargeDelivered() {
-			Number n = isVersion2()
+		public @Nullable BigDecimal getDCChargeDelivered() {
+			return isVersion2()
 					? getScaledValue(StringCombinerAdvancedModelRegister.InputDcChargeV2,
 							StringCombinerAdvancedModelRegister.ScaleFactorInputDcCharge, inputAddress(),
 							getBlockAddress())
 					: getScaledValue(StringCombinerAdvancedModelRegister.InputDcCharge,
 							StringCombinerAdvancedModelRegister.ScaleFactorDcCharge, inputAddress(),
 							getBlockAddress());
-			return (n != null ? n.longValue() : null);
 		}
 
 		@Override
@@ -283,25 +280,24 @@ public class StringCombinerAdvancedModelAccessorImpl extends BaseModelAccessor
 		}
 
 		@Override
-		public @Nullable Integer getDCPower() {
+		public @Nullable BigDecimal getDCPower() {
 			// model 402 defines the input power scale factor as DCWh_SF
-			Number n = getScaledValue(StringCombinerAdvancedModelRegister.InputDcPower,
+			return getScaledValue(StringCombinerAdvancedModelRegister.InputDcPower,
 					isVersion2() ? StringCombinerAdvancedModelRegister.ScaleFactorInputDcPower
 							: StringCombinerAdvancedModelRegister.ScaleFactorDcEnergy,
 					inputAddress(), getBlockAddress());
-			return (n != null ? n.intValue() : null);
 		}
 
 		@Override
-		public @Nullable Long getDCEnergy() {
+		public @Nullable BigDecimal getDCEnergy() {
 			if ( !isVersion2() ) {
 				// model 402 does not define an input energy scale factor
-				return getLongValue(StringCombinerAdvancedModelRegister.InputDcEnergy, inputAddress());
+				return getDecimalValue(StringCombinerAdvancedModelRegister.InputDcEnergy,
+						inputAddress());
 			}
-			Number n = getScaledValue(StringCombinerAdvancedModelRegister.InputDcEnergyV2,
+			return getScaledValue(StringCombinerAdvancedModelRegister.InputDcEnergyV2,
 					StringCombinerAdvancedModelRegister.ScaleFactorInputDcEnergy, inputAddress(),
 					getBlockAddress());
-			return (n != null ? n.longValue() : null);
 		}
 
 		@Override

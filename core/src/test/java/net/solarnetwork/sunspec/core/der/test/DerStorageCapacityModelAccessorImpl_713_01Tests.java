@@ -21,6 +21,7 @@ package net.solarnetwork.sunspec.core.der.test;
 
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.api.der.DerModelId;
 import net.solarnetwork.sunspec.api.der.DerStorageCapacityModelAccessor;
@@ -110,9 +111,9 @@ public class DerStorageCapacityModelAccessorImpl_713_01Tests {
 		// @formatter:off
 		then(model)
 			.as("Energy rating")
-			.returns(13500L, from(DerStorageCapacityModelAccessor::getEnergyRating))
+			.returns(new BigDecimal("13500"), from(DerStorageCapacityModelAccessor::getEnergyRating))
 			.as("Energy available")
-			.returns(12150L, from(DerStorageCapacityModelAccessor::getEnergyAvailable))
+			.returns(new BigDecimal("12150"), from(DerStorageCapacityModelAccessor::getEnergyAvailable))
 			.as("State of charge")
 			.returns(90.0f, from(DerStorageCapacityModelAccessor::getStateOfCharge))
 			.as("State of health")

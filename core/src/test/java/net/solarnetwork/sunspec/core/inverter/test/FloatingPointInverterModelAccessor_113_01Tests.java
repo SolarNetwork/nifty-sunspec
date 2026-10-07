@@ -21,6 +21,7 @@ package net.solarnetwork.sunspec.core.inverter.test;
 
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +91,7 @@ public class FloatingPointInverterModelAccessor_113_01Tests {
 		// @formatter:off
 		then(model.getActivePowerMaximum())
 			.as("Active power max")
-			.isEqualTo(3000)
+			.isEqualTo(new BigDecimal("3000"))
 			;
 		// @formatter:on
 	}
@@ -165,7 +166,7 @@ public class FloatingPointInverterModelAccessor_113_01Tests {
 		// @formatter:off
 		then(model.getApparentPowerMaximum())
 			.as("VA max")
-			.isEqualTo(3000)
+			.isEqualTo(new BigDecimal("3000"))
 			;
 		// @formatter:on
 	}
@@ -180,7 +181,7 @@ public class FloatingPointInverterModelAccessor_113_01Tests {
 		// @formatter:off
 		then(model.getReactivePowerQ1Maximum())
 			.as("VAR Q1 max")
-			.isEqualTo(2140)
+			.isEqualTo(new BigDecimal("2140"))
 			;
 		// @formatter:on
 	}
@@ -225,7 +226,7 @@ public class FloatingPointInverterModelAccessor_113_01Tests {
 		// @formatter:off
 		then(model.getReactivePowerQ4Maximum())
 			.as("VAR Q4 max")
-			.isEqualTo(-2140)
+			.isEqualTo(new BigDecimal("-2140"))
 			;
 		// @formatter:on
 	}

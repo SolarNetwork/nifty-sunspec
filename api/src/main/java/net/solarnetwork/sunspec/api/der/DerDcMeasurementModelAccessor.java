@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.api.der;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
@@ -88,7 +89,7 @@ public interface DerDcMeasurementModelAccessor extends ModelAccessor {
 		 * @return the power, in W, or {@code null} if not available
 		 */
 		@Nullable
-		Integer getDCPower();
+		BigDecimal getDCPower();
 
 		/**
 		 * Get the total DC energy injected.
@@ -96,7 +97,7 @@ public interface DerDcMeasurementModelAccessor extends ModelAccessor {
 		 * @return the energy, in Wh, or {@code null} if not available
 		 */
 		@Nullable
-		Long getDCEnergyInjected();
+		BigDecimal getDCEnergyInjected();
 
 		/**
 		 * Get the total DC energy absorbed.
@@ -104,7 +105,7 @@ public interface DerDcMeasurementModelAccessor extends ModelAccessor {
 		 * @return the energy, in Wh, or {@code null} if not available
 		 */
 		@Nullable
-		Long getDCEnergyAbsorbed();
+		BigDecimal getDCEnergyAbsorbed();
 
 		/**
 		 * Get the port temperature.
@@ -163,7 +164,7 @@ public interface DerDcMeasurementModelAccessor extends ModelAccessor {
 	 * @return the power, in W, or {@code null} if not available
 	 */
 	@Nullable
-	Integer getDCPower();
+	BigDecimal getDCPower();
 
 	/**
 	 * Get the total DC energy injected for all ports.
@@ -171,7 +172,7 @@ public interface DerDcMeasurementModelAccessor extends ModelAccessor {
 	 * @return the energy, in Wh, or {@code null} if not available
 	 */
 	@Nullable
-	Long getDCEnergyInjected();
+	BigDecimal getDCEnergyInjected();
 
 	/**
 	 * Get the total DC energy absorbed for all ports.
@@ -179,7 +180,7 @@ public interface DerDcMeasurementModelAccessor extends ModelAccessor {
 	 * @return the energy, in Wh, or {@code null} if not available
 	 */
 	@Nullable
-	Long getDCEnergyAbsorbed();
+	BigDecimal getDCEnergyAbsorbed();
 
 	/**
 	 * Get the DC ports.

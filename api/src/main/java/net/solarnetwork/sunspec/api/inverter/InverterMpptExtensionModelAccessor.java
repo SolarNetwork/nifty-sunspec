@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.api.inverter;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
@@ -77,7 +78,7 @@ public interface InverterMpptExtensionModelAccessor extends ModelAccessor {
 		 * @return the DC power
 		 */
 		@Nullable
-		Integer getDCPower();
+		BigDecimal getDCPower();
 
 		/**
 		 * Get the DC energy delivered (imported), in Wh.
@@ -85,7 +86,7 @@ public interface InverterMpptExtensionModelAccessor extends ModelAccessor {
 		 * @return the delivered active energy
 		 */
 		@Nullable
-		Long getDCEnergyDelivered();
+		BigDecimal getDCEnergyDelivered();
 
 		/**
 		 * Gets the time stamp of the data, in seconds since the epoch.

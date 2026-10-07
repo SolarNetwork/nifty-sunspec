@@ -21,6 +21,7 @@ package net.solarnetwork.sunspec.core.inverter.test;
 
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
+import java.math.BigDecimal;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -134,7 +135,7 @@ public class InverterNameplateRatingsModelAccessorImpl_120_01Tests {
 		// @formatter:off
 		then(model.getActivePowerRating())
 			.as("Active power rating")
-			.isEqualTo(11400)
+			.isEqualTo(new BigDecimal("11400"))
 			;
 		// @formatter:on
 	}
@@ -149,7 +150,7 @@ public class InverterNameplateRatingsModelAccessorImpl_120_01Tests {
 		// @formatter:off
 		then(model.getApparentPowerRating())
 			.as("Apparent power rating")
-			.isEqualTo(11400)
+			.isEqualTo(new BigDecimal("11400"))
 			;
 		// @formatter:on
 	}
@@ -164,7 +165,7 @@ public class InverterNameplateRatingsModelAccessorImpl_120_01Tests {
 		// @formatter:off
 		then(model.getReactivePowerQ1Rating())
 			.as("Reactive power Q1 rating")
-			.isEqualTo(6000)
+			.isEqualTo(new BigDecimal("6000"))
 			;
 		// @formatter:on
 	}
@@ -209,7 +210,7 @@ public class InverterNameplateRatingsModelAccessorImpl_120_01Tests {
 		// @formatter:off
 		then(model.getReactivePowerQ4Rating())
 			.as("Reactive power Q4 rating")
-			.isEqualTo(-6000)
+			.isEqualTo(new BigDecimal("-6000"))
 			;
 		// @formatter:on
 	}
@@ -359,7 +360,7 @@ public class InverterNameplateRatingsModelAccessorImpl_120_01Tests {
 		// @formatter:off
 		then(model.getStoredEnergyExportPowerRating())
 			.as("Stored energy export power rating")
-			.isEqualTo(5000)
+			.isEqualTo(new BigDecimal("5000"))
 			;
 		// @formatter:on
 	}
@@ -414,10 +415,10 @@ public class InverterNameplateRatingsModelAccessorImpl_120_01Tests {
 			.containsExactly(
 				InverterDerType.PV.toString(),
 				InverterDerType.PV.getCode(),
-				11400,
-				11400,
-				6000,
-				-6000,
+				new BigDecimal("11400"),
+				new BigDecimal("11400"),
+				new BigDecimal("6000"),
+				new BigDecimal("-6000"),
 				47.50f,
 				-0.850f,
 				0.850f

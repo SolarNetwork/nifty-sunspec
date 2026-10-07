@@ -23,6 +23,7 @@ import static org.assertj.core.api.BDDAssertions.catchThrowable;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.api.der.DerAbnormalOperatingCategory;
@@ -96,29 +97,29 @@ public class DerCapacityModelAccessorImpl_702_01Tests {
 		// @formatter:off
 		then(model)
 			.as("Active power")
-			.returns(7680, from(DerCapacityModelAccessor::getActivePowerMaximumRating))
+			.returns(new BigDecimal("7680"), from(DerCapacityModelAccessor::getActivePowerMaximumRating))
 			.as("Active power over-excited")
-			.returns(3072, from(DerCapacityModelAccessor::getActivePowerOverExcitedRating))
+			.returns(new BigDecimal("3072"), from(DerCapacityModelAccessor::getActivePowerOverExcitedRating))
 			.as("Over-excited power factor")
 			.returns(0.4f, from(DerCapacityModelAccessor::getOverExcitedPowerFactorRating))
 			.as("Active power under-excited")
-			.returns(3072, from(DerCapacityModelAccessor::getActivePowerUnderExcitedRating))
+			.returns(new BigDecimal("3072"), from(DerCapacityModelAccessor::getActivePowerUnderExcitedRating))
 			.as("Under-excited power factor")
 			.returns(0.4f, from(DerCapacityModelAccessor::getUnderExcitedPowerFactorRating))
 			.as("Apparent power")
-			.returns(7680, from(DerCapacityModelAccessor::getApparentPowerMaximumRating))
+			.returns(new BigDecimal("7680"), from(DerCapacityModelAccessor::getApparentPowerMaximumRating))
 			.as("Reactive power injected")
-			.returns(4070, from(DerCapacityModelAccessor::getReactivePowerInjectedMaximumRating))
+			.returns(new BigDecimal("4070"), from(DerCapacityModelAccessor::getReactivePowerInjectedMaximumRating))
 			.as("Reactive power absorbed")
-			.returns(4070, from(DerCapacityModelAccessor::getReactivePowerAbsorbedMaximumRating))
+			.returns(new BigDecimal("4070"), from(DerCapacityModelAccessor::getReactivePowerAbsorbedMaximumRating))
 			.as("Active power charge rate")
-			.returns(7680, from(DerCapacityModelAccessor::getActivePowerChargeRateMaximumRating))
+			.returns(new BigDecimal("7680"), from(DerCapacityModelAccessor::getActivePowerChargeRateMaximumRating))
 			.as("Active power discharge rate")
-			.returns(7680, from(DerCapacityModelAccessor::getActivePowerDischargeRateMaximumRating))
+			.returns(new BigDecimal("7680"), from(DerCapacityModelAccessor::getActivePowerDischargeRateMaximumRating))
 			.as("Apparent power charge rate")
-			.returns(7680, from(DerCapacityModelAccessor::getApparentPowerChargeRateMaximumRating))
+			.returns(new BigDecimal("7680"), from(DerCapacityModelAccessor::getApparentPowerChargeRateMaximumRating))
 			.as("Apparent power discharge rate")
-			.returns(7680, from(DerCapacityModelAccessor::getApparentPowerDischargeRateMaximumRating))
+			.returns(new BigDecimal("7680"), from(DerCapacityModelAccessor::getApparentPowerDischargeRateMaximumRating))
 			;
 		// @formatter:on
 	}
@@ -195,18 +196,18 @@ public class DerCapacityModelAccessorImpl_702_01Tests {
 		DerCapacityModelAccessor model = discoverModel(conn);
 
 		// WHEN
-		model.setActivePowerMaximum(conn, 7000);
-		model.setActivePowerOverExcited(conn, 3000);
+		model.setActivePowerMaximum(conn, new BigDecimal("7000"));
+		model.setActivePowerOverExcited(conn, new BigDecimal("3000"));
 		model.setOverExcitedPowerFactor(conn, 0.9f);
-		model.setActivePowerUnderExcited(conn, 2900);
+		model.setActivePowerUnderExcited(conn, new BigDecimal("2900"));
 		model.setUnderExcitedPowerFactor(conn, 0.85f);
-		model.setApparentPowerMaximum(conn, 7500);
-		model.setReactivePowerInjectedMaximum(conn, 4000);
-		model.setReactivePowerAbsorbedMaximum(conn, 3900);
-		model.setActivePowerChargeRateMaximum(conn, 6000);
-		model.setActivePowerDischargeRateMaximum(conn, 6500);
-		model.setApparentPowerChargeRateMaximum(conn, 6100);
-		model.setApparentPowerDischargeRateMaximum(conn, 6600);
+		model.setApparentPowerMaximum(conn, new BigDecimal("7500"));
+		model.setReactivePowerInjectedMaximum(conn, new BigDecimal("4000"));
+		model.setReactivePowerAbsorbedMaximum(conn, new BigDecimal("3900"));
+		model.setActivePowerChargeRateMaximum(conn, new BigDecimal("6000"));
+		model.setActivePowerDischargeRateMaximum(conn, new BigDecimal("6500"));
+		model.setApparentPowerChargeRateMaximum(conn, new BigDecimal("6100"));
+		model.setApparentPowerDischargeRateMaximum(conn, new BigDecimal("6600"));
 		model.setVoltageNominal(conn, 240f);
 		model.setVoltageMaximum(conn, 260f);
 		model.setVoltageMinimum(conn, 210f);
@@ -219,7 +220,7 @@ public class DerCapacityModelAccessorImpl_702_01Tests {
 		// @formatter:off
 		then(model.getActivePowerMaximum())
 			.as("Model data updated")
-			.isEqualTo(7000)
+			.isEqualTo(new BigDecimal("7000"))
 			;
 		// @formatter:on
 
@@ -227,29 +228,29 @@ public class DerCapacityModelAccessorImpl_702_01Tests {
 		// @formatter:off
 		then(device)
 			.as("Active power")
-			.returns(7000, from(DerCapacityModelAccessor::getActivePowerMaximum))
+			.returns(new BigDecimal("7000"), from(DerCapacityModelAccessor::getActivePowerMaximum))
 			.as("Active power over-excited")
-			.returns(3000, from(DerCapacityModelAccessor::getActivePowerOverExcited))
+			.returns(new BigDecimal("3000"), from(DerCapacityModelAccessor::getActivePowerOverExcited))
 			.as("Over-excited power factor")
 			.returns(0.9f, from(DerCapacityModelAccessor::getOverExcitedPowerFactor))
 			.as("Active power under-excited")
-			.returns(2900, from(DerCapacityModelAccessor::getActivePowerUnderExcited))
+			.returns(new BigDecimal("2900"), from(DerCapacityModelAccessor::getActivePowerUnderExcited))
 			.as("Under-excited power factor")
 			.returns(0.85f, from(DerCapacityModelAccessor::getUnderExcitedPowerFactor))
 			.as("Apparent power")
-			.returns(7500, from(DerCapacityModelAccessor::getApparentPowerMaximum))
+			.returns(new BigDecimal("7500"), from(DerCapacityModelAccessor::getApparentPowerMaximum))
 			.as("Reactive power injected")
-			.returns(4000, from(DerCapacityModelAccessor::getReactivePowerInjectedMaximum))
+			.returns(new BigDecimal("4000"), from(DerCapacityModelAccessor::getReactivePowerInjectedMaximum))
 			.as("Reactive power absorbed")
-			.returns(3900, from(DerCapacityModelAccessor::getReactivePowerAbsorbedMaximum))
+			.returns(new BigDecimal("3900"), from(DerCapacityModelAccessor::getReactivePowerAbsorbedMaximum))
 			.as("Active power charge rate")
-			.returns(6000, from(DerCapacityModelAccessor::getActivePowerChargeRateMaximum))
+			.returns(new BigDecimal("6000"), from(DerCapacityModelAccessor::getActivePowerChargeRateMaximum))
 			.as("Active power discharge rate")
-			.returns(6500, from(DerCapacityModelAccessor::getActivePowerDischargeRateMaximum))
+			.returns(new BigDecimal("6500"), from(DerCapacityModelAccessor::getActivePowerDischargeRateMaximum))
 			.as("Apparent power charge rate")
-			.returns(6100, from(DerCapacityModelAccessor::getApparentPowerChargeRateMaximum))
+			.returns(new BigDecimal("6100"), from(DerCapacityModelAccessor::getApparentPowerChargeRateMaximum))
 			.as("Apparent power discharge rate")
-			.returns(6600, from(DerCapacityModelAccessor::getApparentPowerDischargeRateMaximum))
+			.returns(new BigDecimal("6600"), from(DerCapacityModelAccessor::getApparentPowerDischargeRateMaximum))
 			.as("Voltage nominal")
 			.returns(240.0f, from(DerCapacityModelAccessor::getVoltageNominal))
 			.as("Voltage maximum")
@@ -274,7 +275,7 @@ public class DerCapacityModelAccessorImpl_702_01Tests {
 		DerCapacityModelAccessor model = discoverModel(conn);
 
 		// WHEN
-		Throwable t = catchThrowable(() -> model.setActivePowerMaximum(conn, 70000));
+		Throwable t = catchThrowable(() -> model.setActivePowerMaximum(conn, new BigDecimal("70000")));
 
 		// THEN
 		// @formatter:off

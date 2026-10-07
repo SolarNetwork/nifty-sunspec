@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.api.meter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Set;
@@ -90,20 +91,20 @@ public class ReversedMeterModelAccessor implements MeterModelAccessor {
 	}
 
 	@Override
-	public @Nullable Integer getActivePower() {
-		Integer n = delegate.getActivePower();
-		return (n != null ? n * -1 : null);
+	public @Nullable BigDecimal getActivePower() {
+		BigDecimal n = delegate.getActivePower();
+		return (n != null ? n.negate() : null);
 	}
 
 	@Override
-	public @Nullable Integer getApparentPower() {
+	public @Nullable BigDecimal getApparentPower() {
 		return delegate.getApparentPower();
 	}
 
 	@Override
-	public @Nullable Integer getReactivePower() {
-		Integer n = delegate.getReactivePower();
-		return (n != null ? n * -1 : null);
+	public @Nullable BigDecimal getReactivePower() {
+		BigDecimal n = delegate.getReactivePower();
+		return (n != null ? n.negate() : null);
 	}
 
 	@Override
@@ -117,7 +118,7 @@ public class ReversedMeterModelAccessor implements MeterModelAccessor {
 	}
 
 	@Override
-	public @Nullable Long getActiveEnergyImported() {
+	public @Nullable BigDecimal getActiveEnergyImported() {
 		return delegate.getActiveEnergyExported();
 	}
 
@@ -147,12 +148,12 @@ public class ReversedMeterModelAccessor implements MeterModelAccessor {
 	}
 
 	@Override
-	public @Nullable Long getActiveEnergyExported() {
+	public @Nullable BigDecimal getActiveEnergyExported() {
 		return delegate.getActiveEnergyImported();
 	}
 
 	@Override
-	public @Nullable Long getReactiveEnergyImported() {
+	public @Nullable BigDecimal getReactiveEnergyImported() {
 		return delegate.getReactiveEnergyExported();
 	}
 
@@ -162,17 +163,17 @@ public class ReversedMeterModelAccessor implements MeterModelAccessor {
 	}
 
 	@Override
-	public @Nullable Long getReactiveEnergyExported() {
+	public @Nullable BigDecimal getReactiveEnergyExported() {
 		return delegate.getReactiveEnergyImported();
 	}
 
 	@Override
-	public @Nullable Long getApparentEnergyImported() {
+	public @Nullable BigDecimal getApparentEnergyImported() {
 		return delegate.getApparentEnergyExported();
 	}
 
 	@Override
-	public @Nullable Long getApparentEnergyExported() {
+	public @Nullable BigDecimal getApparentEnergyExported() {
 		return delegate.getApparentEnergyImported();
 	}
 
