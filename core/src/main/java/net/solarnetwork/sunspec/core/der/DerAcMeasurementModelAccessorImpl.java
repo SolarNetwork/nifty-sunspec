@@ -19,6 +19,9 @@
 
 package net.solarnetwork.sunspec.core.der;
 
+import static net.solarnetwork.sunspec.api.AcPhase.PhaseA;
+import static net.solarnetwork.sunspec.api.AcPhase.PhaseB;
+import static net.solarnetwork.sunspec.api.AcPhase.PhaseC;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Collection;
@@ -288,6 +291,85 @@ public class DerAcMeasurementModelAccessorImpl extends BaseModelAccessor
 	/**
 	 * Phase-specific accessor.
 	 */
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof DerAcMeasurementModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case AcWiringType -> getAcWiringType();
+			case OperatingState -> getDerOperatingState();
+			case InverterState -> getInverterState();
+			case GridConnectionState -> getGridConnectionState();
+			case AlarmsBitmask -> getEvents();
+			case OperationalCharacteristicsBitmask -> getOperationalCharacteristics();
+			case ActivePowerTotal -> getActivePower();
+			case ApparentPowerTotal -> getApparentPower();
+			case ReactivePowerTotal -> getReactivePower();
+			case PowerFactorTotal -> getPowerFactor();
+			case CurrentTotal -> getCurrent();
+			case VoltageLineLineAverage -> getLineVoltage();
+			case VoltageLineNeutralAverage -> getVoltage();
+			case Frequency -> getFrequency();
+			case ActiveEnergyInjectedTotal -> getActiveEnergyExported();
+			case ActiveEnergyAbsorbedTotal -> getActiveEnergyImported();
+			case ReactiveEnergyInjectedTotal -> getReactiveEnergyExported();
+			case ReactiveEnergyAbsorbedTotal -> getReactiveEnergyImported();
+			case TemperatureAmbient -> getAmbientTemperature();
+			case TemperatureCabinet -> getCabinetTemperature();
+			case TemperatureHeatSink -> getHeatSinkTemperature();
+			case TemperatureTransformer -> getTransformerTemperature();
+			case TemperatureSwitch -> getSwitchTemperature();
+			case TemperatureOther -> getOtherTemperature();
+			case ActivePowerPhaseA -> accessorForPhase(PhaseA).getActivePower();
+			case ApparentPowerPhaseA -> accessorForPhase(PhaseA).getApparentPower();
+			case ReactivePowerPhaseA -> accessorForPhase(PhaseA).getReactivePower();
+			case PowerFactorPhaseA -> accessorForPhase(PhaseA).getPowerFactor();
+			case CurrentPhaseA -> accessorForPhase(PhaseA).getCurrent();
+			case VoltagePhaseAPhaseB -> accessorForPhase(PhaseA).getLineVoltage();
+			case VoltagePhaseANeutral -> accessorForPhase(PhaseA).getVoltage();
+			case ActiveEnergyInjectedPhaseA -> accessorForPhase(PhaseA).getActiveEnergyExported();
+			case ActiveEnergyAbsorbedPhaseA -> accessorForPhase(PhaseA).getActiveEnergyImported();
+			case ReactiveEnergyInjectedPhaseA -> accessorForPhase(PhaseA).getReactiveEnergyExported();
+			case ReactiveEnergyAbsorbedPhaseA -> accessorForPhase(PhaseA).getReactiveEnergyImported();
+			case ActivePowerPhaseB -> accessorForPhase(PhaseB).getActivePower();
+			case ApparentPowerPhaseB -> accessorForPhase(PhaseB).getApparentPower();
+			case ReactivePowerPhaseB -> accessorForPhase(PhaseB).getReactivePower();
+			case PowerFactorPhaseB -> accessorForPhase(PhaseB).getPowerFactor();
+			case CurrentPhaseB -> accessorForPhase(PhaseB).getCurrent();
+			case VoltagePhaseBPhaseC -> accessorForPhase(PhaseB).getLineVoltage();
+			case VoltagePhaseBNeutral -> accessorForPhase(PhaseB).getVoltage();
+			case ActiveEnergyInjectedPhaseB -> accessorForPhase(PhaseB).getActiveEnergyExported();
+			case ActiveEnergyAbsorbedPhaseB -> accessorForPhase(PhaseB).getActiveEnergyImported();
+			case ReactiveEnergyInjectedPhaseB -> accessorForPhase(PhaseB).getReactiveEnergyExported();
+			case ReactiveEnergyAbsorbedPhaseB -> accessorForPhase(PhaseB).getReactiveEnergyImported();
+			case ActivePowerPhaseC -> accessorForPhase(PhaseC).getActivePower();
+			case ApparentPowerPhaseC -> accessorForPhase(PhaseC).getApparentPower();
+			case ReactivePowerPhaseC -> accessorForPhase(PhaseC).getReactivePower();
+			case PowerFactorPhaseC -> accessorForPhase(PhaseC).getPowerFactor();
+			case CurrentPhaseC -> accessorForPhase(PhaseC).getCurrent();
+			case VoltagePhaseCPhaseA -> accessorForPhase(PhaseC).getLineVoltage();
+			case VoltagePhaseCNeutral -> accessorForPhase(PhaseC).getVoltage();
+			case ActiveEnergyInjectedPhaseC -> accessorForPhase(PhaseC).getActiveEnergyExported();
+			case ActiveEnergyAbsorbedPhaseC -> accessorForPhase(PhaseC).getActiveEnergyImported();
+			case ReactiveEnergyInjectedPhaseC -> accessorForPhase(PhaseC).getReactiveEnergyExported();
+			case ReactiveEnergyAbsorbedPhaseC -> accessorForPhase(PhaseC).getReactiveEnergyImported();
+			case ThrottlePercent -> getThrottlePercent();
+			case ThrottleSourcesBitmask -> getThrottleSources();
+			case ScaleFactorCurrent -> null;
+			case ScaleFactorVoltage -> null;
+			case ScaleFactorFrequency -> null;
+			case ScaleFactorActivePower -> null;
+			case ScaleFactorPowerFactor -> null;
+			case ScaleFactorApparentPower -> null;
+			case ScaleFactorReactivePower -> null;
+			case ScaleFactorActiveEnergy -> null;
+			case ScaleFactorReactiveEnergy -> null;
+			case ScaleFactorTemperature -> null;
+			case ManufacturerAlarmInfo -> getManufacturerAlarmInfo();
+		};
+	}
+
 	private class PhaseAccessor implements InverterModelAccessor {
 
 		private final DerAcMeasurementModelRegister activePower;
@@ -490,6 +572,16 @@ public class DerAcMeasurementModelAccessorImpl extends BaseModelAccessor
 		@Override
 		public Set<? extends ModelEvent> getEvents() {
 			return DerAcMeasurementModelAccessorImpl.this.getEvents();
+		}
+
+		@Override
+		public Collection<? extends ModbusReference> getPointReferences() {
+			return DerAcMeasurementModelAccessorImpl.this.getPointReferences();
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			return DerAcMeasurementModelAccessorImpl.this.getPointValue(point);
 		}
 
 	}

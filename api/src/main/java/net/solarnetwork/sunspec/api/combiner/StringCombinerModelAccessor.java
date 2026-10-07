@@ -105,6 +105,22 @@ public interface StringCombinerModelAccessor extends ModelAccessor {
 	Float getDCVoltage();
 
 	/**
+	 * Get the maximum DC current rating, in A.
+	 *
+	 * @return the maximum DC current rating
+	 */
+	@Nullable
+	Float getDCCurrentMaxRating();
+
+	/**
+	 * Get the number of DC inputs.
+	 *
+	 * @return the input count
+	 */
+	@Nullable
+	Integer getInputCount();
+
+	/**
 	 * Get the temperature of the combiner, in degrees Celsius.
 	 *
 	 * @return the temperature

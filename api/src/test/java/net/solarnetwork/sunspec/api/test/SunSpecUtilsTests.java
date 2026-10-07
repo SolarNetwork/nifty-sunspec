@@ -149,4 +149,106 @@ public class SunSpecUtilsTests {
 		// @formatter:on
 	}
 
+	@Test
+	public void lowerCamelCase() {
+		// @formatter:off
+		then(SunSpecUtils.lowerCamelCase("ActivePower"))
+			.as("Leading word lower case")
+			.isEqualTo("activePower")
+			;
+		then(SunSpecUtils.lowerCamelCase("GHI"))
+			.as("Acronym lower case")
+			.isEqualTo("ghi")
+			;
+		then(SunSpecUtils.lowerCamelCase("DCVoltage"))
+			.as("Leading acronym lower case, keeping start of next word")
+			.isEqualTo("dcVoltage")
+			;
+		then(SunSpecUtils.lowerCamelCase("PV1Voltage"))
+			.as("Leading acronym followed by digit lower case")
+			.isEqualTo("pv1Voltage")
+			;
+		then(SunSpecUtils.lowerCamelCase("A"))
+			.as("Single letter lower case")
+			.isEqualTo("a")
+			;
+		then(SunSpecUtils.lowerCamelCase("voltage"))
+			.as("Lower case unchanged")
+			.isEqualTo("voltage")
+			;
+		then(SunSpecUtils.lowerCamelCase(""))
+			.as("Empty unchanged")
+			.isEmpty()
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void phaseSuffix() {
+		// @formatter:off
+		then(SunSpecUtils.phaseSuffix("CurrentPhaseA"))
+			.as("Phase suffix")
+			.isEqualTo("Current_a")
+			;
+		then(SunSpecUtils.phaseSuffix("VoltagePhaseBNeutral"))
+			.as("Phase to neutral suffix")
+			.isEqualTo("Voltage_b")
+			;
+		then(SunSpecUtils.phaseSuffix("VoltagePhaseAPhaseB"))
+			.as("Phase A to B line suffix")
+			.isEqualTo("Voltage_ab")
+			;
+		then(SunSpecUtils.phaseSuffix("VoltagePhaseBPhaseC"))
+			.as("Phase B to C line suffix")
+			.isEqualTo("Voltage_bc")
+			;
+		then(SunSpecUtils.phaseSuffix("VoltagePhaseCPhaseA"))
+			.as("Phase C to A line suffix")
+			.isEqualTo("Voltage_ca")
+			;
+		then(SunSpecUtils.phaseSuffix("VoltagePhaseBPhaseA"))
+			.as("Line phases without a key unchanged")
+			.isEqualTo("VoltagePhaseBPhaseA")
+			;
+		then(SunSpecUtils.phaseSuffix("ConnectedPhase"))
+			.as("Phase without a letter unchanged")
+			.isEqualTo("ConnectedPhase")
+			;
+		then(SunSpecUtils.phaseSuffix("PhaseAngle"))
+			.as("Phase not at end unchanged")
+			.isEqualTo("PhaseAngle")
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void pointKey() {
+		// @formatter:off
+		then(SunSpecUtils.pointKey("Current"))
+			.as("Total")
+			.isEqualTo("current")
+			;
+		then(SunSpecUtils.pointKey("LineVoltage"))
+			.as("Line voltage average")
+			.isEqualTo("lineVoltage")
+			;
+		then(SunSpecUtils.pointKey("VoltagePhaseANeutral"))
+			.as("Phase to neutral")
+			.isEqualTo("voltage_a")
+			;
+		then(SunSpecUtils.pointKey("VoltagePhaseAPhaseB"))
+			.as("Line phase")
+			.isEqualTo("voltage_ab")
+			;
+		then(SunSpecUtils.pointKey("ReactiveEnergyImportedQ1PhaseA"))
+			.as("Quadrant phase")
+			.isEqualTo("reactiveEnergyImportedQ1_a")
+			;
+		then(SunSpecUtils.pointKey("GHI"))
+			.as("Acronym")
+			.isEqualTo("ghi")
+			;
+		// @formatter:on
+	}
+
 }

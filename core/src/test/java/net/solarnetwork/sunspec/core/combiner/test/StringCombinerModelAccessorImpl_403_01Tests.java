@@ -19,19 +19,21 @@
 
 package net.solarnetwork.sunspec.core.combiner.test;
 
-import static net.solarnetwork.sunspec.core.combiner.test.StringCombinerTestUtils.assertDcInput;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
+import static net.solarnetwork.sunspec.core.combiner.test.StringCombinerTestUtils.assertDcInput;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.api.GenericModelEvent;
 import net.solarnetwork.sunspec.api.ModelEvent;
+import net.solarnetwork.sunspec.api.PointMapMode;
+import net.solarnetwork.sunspec.api.combiner.StringCombinerModelAccessor.DcInput;
 import net.solarnetwork.sunspec.api.combiner.StringCombinerModelAccessor;
 import net.solarnetwork.sunspec.api.combiner.StringCombinerModelEvent;
 import net.solarnetwork.sunspec.api.combiner.StringCombinerModelId;
-import net.solarnetwork.sunspec.api.combiner.StringCombinerModelAccessor.DcInput;
 import net.solarnetwork.sunspec.core.combiner.StringCombinerModelAccessorImpl;
 import net.solarnetwork.sunspec.core.test.ModelDataUtils;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
@@ -141,6 +143,35 @@ public class StringCombinerModelAccessorImpl_403_01Tests {
 		assertDcInput("Input 1", inputs.get(0), 1, 8.15f, new BigDecimal("43210"),
 				Set.of(StringCombinerModelEvent.FuseFault), Set.of(new GenericModelEvent(2)));
 		assertDcInput("Input 2", inputs.get(1), 2, 8.12f, null, Set.of(), Set.of());
+	}
+
+	@Test
+	public void pointMap() {
+		// GIVEN
+		StringCombinerModelAccessor model = getTestModel();
+
+		// WHEN
+		Map<String, Object> result = model.toPointMap(PointMapMode.Flat);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("Version 2 points named like version 1")
+			.containsEntry("dcCharge", model.getDCChargeDelivered())
+			.as("No version 2 suffix")
+			.doesNotContainKeys("dcChargeV2", "inputDcChargeV2")
+			.as("Maximum current rating")
+			.containsEntry("dcCurrentMaxRating", model.getDCCurrentMaxRating())
+			.as("Input count")
+			.containsEntry("inputCount", model.getInputCount())
+			.as("Events")
+			.containsEntry("events", model.getEvents())
+			.as("Input 1 charge")
+			.containsEntry("inputDcCharge_1", model.getDcInputs().get(0).getDCChargeDelivered())
+			.as("Input 2 current")
+			.containsEntry("inputDcCurrent_2", model.getDcInputs().get(1).getDCCurrent())
+			;
+		// @formatter:on
 	}
 
 }

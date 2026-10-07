@@ -28,21 +28,23 @@ package net.solarnetwork.sunspec.api;
 public enum AcPhase {
 
 	/** The first phase. */
-	PhaseA(1),
+	PhaseA(1, 'a'),
 
 	/** The second phase. */
-	PhaseB(2),
+	PhaseB(2, 'b'),
 
 	/** The third phase. */
-	PhaseC(3),
+	PhaseC(3, 'c'),
 
 	/** An aggregate of all phases. */
-	Total(0);
+	Total(0, 't');
 
 	private final int number;
+	private final char key;
 
-	private AcPhase(int n) {
+	private AcPhase(int n, char key) {
 		this.number = n;
+		this.key = key;
 	}
 
 	/**
@@ -58,6 +60,90 @@ public enum AcPhase {
 	 */
 	public int getNumber() {
 		return number;
+	}
+
+	/**
+	 * Get the key value of the phase.
+	 *
+	 * <p>
+	 * The keys are {@literal a}, {@literal b}, {@literal c}, and {@literal t}.
+	 * </p>
+	 *
+	 * @return the key value
+	 */
+	public char getKey() {
+		return key;
+	}
+
+	/**
+	 * Get a string with a key suffix added.
+	 *
+	 * <p>
+	 * This will take {@code value} and append <i>_P</i>, where {@literal P} is
+	 * the key.
+	 * </p>
+	 *
+	 * @param value
+	 *        the value to append the key to
+	 * @return the value with a key suffix added
+	 */
+	public String withKey(String value) {
+		return value + '_' + key;
+	}
+
+	/**
+	 * Get a key value for a line phase, with this phase as the leading phase.
+	 *
+	 * <p>
+	 * The keys are {@literal ab}, {@literal bc}, {@literal ca}, and
+	 * {@literal t}.
+	 * </p>
+	 *
+	 * @return the line key
+	 */
+	public String getLineKey() {
+		return switch (this) {
+			case PhaseA -> "ab";
+			case PhaseB -> "bc";
+			case PhaseC -> "ca";
+			case Total -> "t";
+		};
+	}
+
+	/**
+	 * Get a string with a line key suffix added.
+	 *
+	 * <p>
+	 * This will take {@code value} and append <i>_P</i>, where {@literal P} is
+	 * the line key.
+	 * </p>
+	 *
+	 * @param value
+	 *        the value to append the line key to
+	 * @return the value with a line key suffix added
+	 */
+	public String withLineKey(String value) {
+		return value + '_' + getLineKey();
+	}
+
+	/**
+	 * Get an AcPhase for a given key.
+	 *
+	 * @param key
+	 *        the key
+	 * @return the AcPhase
+	 * @see #getKey()
+	 * @throws IllegalArgumentException
+	 *         if the key is not a valid phase value
+	 */
+	public static AcPhase forKey(final char key) {
+		return switch (key) {
+			case 't' -> Total;
+			case 'a' -> PhaseA;
+			case 'b' -> PhaseB;
+			case 'c' -> PhaseC;
+			default -> throw new IllegalArgumentException("Key " + key + " is not a valid AcPhase");
+		};
 	}
 
 }

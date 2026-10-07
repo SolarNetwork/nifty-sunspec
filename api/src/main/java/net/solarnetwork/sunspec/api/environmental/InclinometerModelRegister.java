@@ -43,7 +43,7 @@ public enum InclinometerModelRegister implements ModbusReference {
 	InclineX(0, Int32),
 
 	/** Y-Axis inclination, in degrees. */
-	IncineY(2, Int32),
+	InclineY(2, Int32),
 
 	/** Z-Axis inclination, in degrees. */
 	InclineZ(4, Int32),

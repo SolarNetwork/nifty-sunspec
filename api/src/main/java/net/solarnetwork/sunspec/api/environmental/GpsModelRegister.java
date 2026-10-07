@@ -100,9 +100,21 @@ public enum GpsModelRegister implements ModbusReference {
 		return classification;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This is the enumeration constant name, except for {@code Time}, which is
+	 * named {@code Timestamp} as its point value is the full timestamp from
+	 * both the {@code Time} and {@code Date} points.
+	 * </p>
+	 */
 	@Override
 	public String getName() {
-		return name();
+		return switch (this) {
+			case Time -> "Timestamp";
+			default -> name();
+		};
 	}
 
 }

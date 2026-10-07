@@ -158,6 +158,18 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This implementation returns {@link #getFixedBlockRegisters()}.
+	 * </p>
+	 */
+	@Override
+	public Collection<? extends ModbusReference> getPointReferences() {
+		return getFixedBlockRegisters();
+	}
+
+	/**
 	 * Get the registers of the model fixed block.
 	 *
 	 * <p>

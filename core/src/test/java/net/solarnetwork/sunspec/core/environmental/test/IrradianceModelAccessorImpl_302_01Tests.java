@@ -20,11 +20,15 @@
 package net.solarnetwork.sunspec.core.environmental.test;
 
 import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.entry;
 import static org.assertj.core.api.BDDAssertions.then;
+import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import net.solarnetwork.sunspec.api.PointMapMode;
 import net.solarnetwork.sunspec.api.environmental.EnvironmentalModelId;
 import net.solarnetwork.sunspec.api.environmental.IrradianceModelAccessor;
 import net.solarnetwork.sunspec.api.environmental.IrradianceModelAccessor.Irradiance;
@@ -180,6 +184,67 @@ public class IrradianceModelAccessorImpl_302_01Tests {
 		then(model.getIrradiance())
 			.as("No first irradiance without repeating block instances")
 			.isNull()
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void pointMap_flat() {
+		// WHEN
+		Map<String, Object> result = getTestModel().toPointMap(PointMapMode.Flat);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("Points of each irradiance mapped with instance suffix, without unavailable values")
+			.containsExactly(
+					entry("ghi_1", 950),
+					entry("poai_1", 1020),
+					entry("dfi_1", 110),
+					entry("dni_1", 870),
+					entry("ghi_2", 945),
+					entry("poai_2", 985),
+					entry("dfi_2", 105),
+					entry("dni_2", 865),
+					entry("oti_2", 125))
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void pointMap_nested() {
+		// WHEN
+		Map<String, Object> result = getTestModel().toPointMap(PointMapMode.Nested);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("Irradiances mapped as list")
+			.containsOnlyKeys("irradiances")
+			.extractingByKey("irradiances", LIST)
+			.as("Map for each irradiance")
+			.containsExactly(
+					Map.of("ghi", 950, "poai", 1020, "dfi", 110, "dni", 870),
+					Map.of("ghi", 945, "poai", 985, "dfi", 105, "dni", 865, "oti", 125))
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void pointMap_none() {
+		// GIVEN
+		// a model with no repeating block instances, followed by the end marker
+		IrradianceModelAccessor model = getTestModel(BASE_ADDRESS, 0x012E, 0x0000, 0xFFFF, 0x0000);
+
+		// THEN
+		// @formatter:off
+		then(model.toPointMap(PointMapMode.Flat))
+			.as("No points without repeating block instances")
+			.isEmpty()
+			;
+		then(model.toPointMap(PointMapMode.Nested))
+			.as("No irradiances list without repeating block instances")
+			.isEmpty()
 			;
 		// @formatter:on
 	}

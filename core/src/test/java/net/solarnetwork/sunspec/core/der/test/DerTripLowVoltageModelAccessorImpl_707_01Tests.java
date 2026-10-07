@@ -23,11 +23,15 @@ import static org.assertj.core.api.BDDAssertions.catchThrowable;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.assertj.core.api.BDDAssertions.thenThrownBy;
+import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
+import static org.assertj.core.api.InstanceOfAssertFactories.MAP;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
+import net.solarnetwork.sunspec.api.PointMapMode;
 import net.solarnetwork.sunspec.api.der.DerAdoptResult;
 import net.solarnetwork.sunspec.api.der.DerCurve;
 import net.solarnetwork.sunspec.api.der.DerCurvePoint;
@@ -370,6 +374,62 @@ public class DerTripLowVoltageModelAccessorImpl_707_01Tests {
 			.returns(2, from(DerTripLowVoltageModelAccessor::getAdoptCurveRequest))
 			.as("Enabled")
 			.returns(false, from(DerTripLowVoltageModelAccessor::isEnabled))
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void pointMap_flat() {
+		// WHEN
+		Map<String, Object> result = getTestModel().toPointMap(PointMapMode.Flat);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("Scale factors left out")
+			.doesNotContainKeys("scaleFactorVoltage", "scaleFactorTime")
+			.as("Curve set count")
+			.containsEntry("numberOfCurveSets", 2)
+			.as("Curve set 1 read-only")
+			.containsEntry("curveSetReadOnly_1", true)
+			.as("Curve set 1 must trip active point count")
+			.containsEntry("curveActivePointCount_1_mustTrip", 5)
+			.as("Curve set 1 must trip point 2 voltage")
+			.containsEntry("pointVoltage_1_mustTrip_2", 45.0f)
+			.as("Curve set 1 must trip point 2 time")
+			.containsEntry("pointVoltageTime_1_mustTrip_2", 0.16f)
+			.as("Curve set 2 momentary cessation point 2 voltage")
+			.containsEntry("pointVoltage_2_momentaryCessation_2", 50.0f)
+			.as("May trip curve not implemented")
+			.doesNotContainKey("curveActivePointCount_1_mayTrip")
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void pointMap_nested() {
+		// WHEN
+		Map<String, Object> result = getTestModel().toPointMap(PointMapMode.Nested);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.extractingByKey("curveSets", LIST)
+			.as("Map for each curve set")
+			.hasSize(2)
+			.element(0, MAP)
+			.as("Curve set 1 read-only")
+			.containsEntry("curveSetReadOnly", true)
+			.as("Curve set 1 without the unavailable may trip curve")
+			.containsOnlyKeys("curveSetReadOnly", "mustTrip", "momentaryCessation")
+			.extractingByKey("momentaryCessation", MAP)
+			.as("Momentary cessation curve")
+			.containsEntry("curveActivePointCount", 2)
+			.extractingByKey("points", LIST)
+			.as("Momentary cessation points")
+			.containsExactly(
+					Map.of("pointVoltage", 0.0f, "pointVoltageTime", 0.08f),
+					Map.of("pointVoltage", 50.0f, "pointVoltageTime", 0.08f))
 			;
 		// @formatter:on
 	}

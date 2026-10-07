@@ -429,4 +429,58 @@ public class DerCapacityModelAccessorImpl extends BaseModelAccessor implements D
 				Bitmaskable.bitmaskValue(categories));
 	}
 
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof DerCapacityModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case ActivePowerMaximumRating -> getActivePowerMaximumRating();
+			case ActivePowerOverExcitedRating -> getActivePowerOverExcitedRating();
+			case OverExcitedPowerFactorRating -> getOverExcitedPowerFactorRating();
+			case ActivePowerUnderExcitedRating -> getActivePowerUnderExcitedRating();
+			case UnderExcitedPowerFactorRating -> getUnderExcitedPowerFactorRating();
+			case ApparentPowerMaximumRating -> getApparentPowerMaximumRating();
+			case ReactivePowerInjectedMaximumRating -> getReactivePowerInjectedMaximumRating();
+			case ReactivePowerAbsorbedMaximumRating -> getReactivePowerAbsorbedMaximumRating();
+			case ActivePowerChargeRateMaximumRating -> getActivePowerChargeRateMaximumRating();
+			case ActivePowerDischargeRateMaximumRating -> getActivePowerDischargeRateMaximumRating();
+			case ApparentPowerChargeRateMaximumRating -> getApparentPowerChargeRateMaximumRating();
+			case ApparentPowerDischargeRateMaximumRating -> getApparentPowerDischargeRateMaximumRating();
+			case VoltageNominalRating -> getVoltageNominalRating();
+			case VoltageMaximumRating -> getVoltageMaximumRating();
+			case VoltageMinimumRating -> getVoltageMinimumRating();
+			case CurrentMaximumRating -> getCurrentMaximumRating();
+			case ReactiveSusceptanceRating -> getReactiveSusceptanceRating();
+			case NormalOperatingCategoryRating -> getNormalOperatingCategory();
+			case AbnormalOperatingCategoryRating -> getAbnormalOperatingCategory();
+			case ControlModesBitmask -> getSupportedControlModes();
+			case IntentionalIslandCategoriesRatingBitmask -> getIntentionalIslandCategoriesRating();
+			case ActivePowerMaximum -> getActivePowerMaximum();
+			case ActivePowerOverExcited -> getActivePowerOverExcited();
+			case OverExcitedPowerFactor -> getOverExcitedPowerFactor();
+			case ActivePowerUnderExcited -> getActivePowerUnderExcited();
+			case UnderExcitedPowerFactor -> getUnderExcitedPowerFactor();
+			case ApparentPowerMaximum -> getApparentPowerMaximum();
+			case ReactivePowerInjectedMaximum -> getReactivePowerInjectedMaximum();
+			case ReactivePowerAbsorbedMaximum -> getReactivePowerAbsorbedMaximum();
+			case ActivePowerChargeRateMaximum -> getActivePowerChargeRateMaximum();
+			case ActivePowerDischargeRateMaximum -> getActivePowerDischargeRateMaximum();
+			case ApparentPowerChargeRateMaximum -> getApparentPowerChargeRateMaximum();
+			case ApparentPowerDischargeRateMaximum -> getApparentPowerDischargeRateMaximum();
+			case VoltageNominal -> getVoltageNominal();
+			case VoltageMaximum -> getVoltageMaximum();
+			case VoltageMinimum -> getVoltageMinimum();
+			case CurrentMaximum -> getCurrentMaximum();
+			case IntentionalIslandCategoriesBitmask -> getIntentionalIslandCategories();
+			case ScaleFactorActivePower -> null;
+			case ScaleFactorPowerFactor -> null;
+			case ScaleFactorApparentPower -> null;
+			case ScaleFactorReactivePower -> null;
+			case ScaleFactorVoltage -> null;
+			case ScaleFactorCurrent -> null;
+			case ScaleFactorSusceptance -> null;
+		};
+	}
+
 }

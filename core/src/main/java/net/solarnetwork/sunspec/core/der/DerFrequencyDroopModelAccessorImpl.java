@@ -26,6 +26,8 @@ import java.util.EnumSet;
 import java.util.List;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelId;
+import net.solarnetwork.sunspec.api.PointGroup;
+import net.solarnetwork.sunspec.api.PointGroupList;
 import net.solarnetwork.sunspec.api.der.DerAdoptResult;
 import net.solarnetwork.sunspec.api.der.DerFrequencyDroopModelAccessor;
 import net.solarnetwork.sunspec.api.der.DerFrequencyDroopModelRegister;
@@ -187,7 +189,33 @@ public class DerFrequencyDroopModelAccessorImpl extends BaseModelAccessor
 		return result;
 	}
 
-	private final class FrequencyDroopControlImpl implements FrequencyDroopControl {
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof DerFrequencyDroopModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case Enabled -> isEnabled();
+			case AdoptControlRequest -> getAdoptControlRequest();
+			case AdoptControlResult -> getAdoptControlResult();
+			case NumberOfControls -> getControlCount();
+			case ReversionTime -> getReversionTime();
+			case ReversionTimeRemaining -> getReversionTimeRemaining();
+			case ReversionControl -> getReversionControl();
+			case ScaleFactorDeadband, ScaleFactorChangeRatio, ScaleFactorResponseTime -> null;
+			case ControlOverFrequencyDeadband, ControlUnderFrequencyDeadband -> null;
+			case ControlOverFrequencyChangeRatio, ControlUnderFrequencyChangeRatio -> null;
+			case ControlOpenLoopResponseTime, ControlMinimumActivePower, ControlReadOnly -> null;
+		};
+	}
+
+	@Override
+	public List<PointGroupList> getPointGroups() {
+		return List.of(PointGroupList.repeating("Controls",
+				getControls().stream().map(PointGroup.class::cast).toList()));
+	}
+
+	private final class FrequencyDroopControlImpl implements FrequencyDroopControl, PointGroup {
 
 		private final int index;
 		private final int controlAddress;
@@ -307,6 +335,30 @@ public class DerFrequencyDroopModelAccessorImpl extends BaseModelAccessor
 			requireWritable();
 			writeValue(conn, DerFrequencyDroopModelRegister.ControlMinimumActivePower, controlAddress,
 					percent);
+		}
+
+		@Override
+		public Collection<? extends ModbusReference> getPointReferences() {
+			return getRepeatingBlockRegisters();
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			if ( !(point instanceof DerFrequencyDroopModelRegister r) ) {
+				return null;
+			}
+			return switch (r) {
+				case ControlOverFrequencyDeadband -> getOverFrequencyDeadband();
+				case ControlUnderFrequencyDeadband -> getUnderFrequencyDeadband();
+				case ControlOverFrequencyChangeRatio -> getOverFrequencyChangeRatio();
+				case ControlUnderFrequencyChangeRatio -> getUnderFrequencyChangeRatio();
+				case ControlOpenLoopResponseTime -> getOpenLoopResponseTime();
+				case ControlMinimumActivePower -> getMinimumActivePower();
+				case ControlReadOnly -> isReadOnly();
+				case Enabled, AdoptControlRequest, AdoptControlResult, NumberOfControls -> null;
+				case ReversionTime, ReversionTimeRemaining, ReversionControl -> null;
+				case ScaleFactorDeadband, ScaleFactorChangeRatio, ScaleFactorResponseTime -> null;
+			};
 		}
 
 	}

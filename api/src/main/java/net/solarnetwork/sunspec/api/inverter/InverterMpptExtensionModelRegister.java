@@ -146,9 +146,21 @@ public enum InverterMpptExtensionModelRegister implements ModbusReference {
 		return classification;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This is the enumeration constant name, without the {@code Bitmask} suffix
+	 * of bitfield points.
+	 * </p>
+	 */
 	@Override
 	public String getName() {
-		return name();
+		return switch (this) {
+			case EventsBitmask -> "Events";
+			case ModuleEventsBitmask -> "ModuleEvents";
+			default -> name();
+		};
 	}
 
 }

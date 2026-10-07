@@ -107,4 +107,17 @@ public class MiniMeteorologicalModelAccessorImpl extends BaseModelAccessor
 		return getIntegerValue(MiniMeteorologicalModelRegister.WindSpeed);
 	}
 
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof MiniMeteorologicalModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case IrradianceGH -> getGlobalHorizontalIrradiance();
+			case TemperatureBOM -> getBackOfModuleTemperature();
+			case TemperatureAmbient -> getAmbientTemperature();
+			case WindSpeed -> getWindSpeed();
+		};
+	}
+
 }

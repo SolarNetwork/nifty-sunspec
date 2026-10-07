@@ -171,9 +171,27 @@ public enum StringCombinerModelRegister implements ModbusReference {
 		return classification;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This is the enumeration constant name, without the {@code Bitmask} suffix
+	 * of bitfield points, and without the {@code V2} suffix of the points of
+	 * version 2 of the model, so both versions have the same point names.
+	 * </p>
+	 */
 	@Override
 	public String getName() {
-		return name();
+		return switch (this) {
+			case EventsBitmask -> "Events";
+			case VendorEventsBitmask -> "VendorEvents";
+			case DcChargeV2 -> "DcCharge";
+			case DcVoltageV2 -> "DcVoltage";
+			case InputEventsBitmask -> "InputEvents";
+			case InputVendorEventsBitmask -> "InputVendorEvents";
+			case InputDcChargeV2 -> "InputDcCharge";
+			default -> name();
+		};
 	}
 
 }

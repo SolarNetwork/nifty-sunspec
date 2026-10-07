@@ -28,10 +28,16 @@ import org.jspecify.annotations.Nullable;
 /**
  * API for accessing model data.
  *
+ * <p>
+ * A model is the root {@link PointGroup} of its points, so
+ * {@link #toPointMap(PointMapMode)} returns all the available model point
+ * values.
+ * </p>
+ *
  * @author matt
  * @version 1.0
  */
-public interface ModelAccessor {
+public interface ModelAccessor extends PointGroup {
 
 	/**
 	 * Gets the time stamp of the data.

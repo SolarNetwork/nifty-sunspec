@@ -25,11 +25,14 @@ import java.util.EnumSet;
 import java.util.List;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelId;
+import net.solarnetwork.sunspec.api.PointGroup;
+import net.solarnetwork.sunspec.api.PointGroupList;
 import net.solarnetwork.sunspec.api.environmental.EnvironmentalModelId;
 import net.solarnetwork.sunspec.api.environmental.Incline;
 import net.solarnetwork.sunspec.api.environmental.InclinometerModelAccessor;
 import net.solarnetwork.sunspec.api.environmental.InclinometerModelRegister;
 import net.solarnetwork.sunspec.core.BaseModelAccessor;
+import net.solarnetwork.sunspec.core.support.SimplePointGroup;
 import net.solarnetwork.sunspec.modbus.ModbusReference;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
 
@@ -109,6 +112,41 @@ public class InclinometerModelAccessorImpl extends BaseModelAccessor
 			inclines.add(new Incline(data));
 		}
 		return inclines;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This model has no fixed block points, so this implementation returns
+	 * {@code null}.
+	 * </p>
+	 */
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		return null;
+	}
+
+	@Override
+	public List<PointGroupList> getPointGroups() {
+		final List<Incline> inclines = getInclines();
+		final List<PointGroup> groups = new ArrayList<>(inclines.size());
+		for ( Incline incline : inclines ) {
+			groups.add(
+					new SimplePointGroup(getRepeatingBlockRegisters(), p -> inclineValue(incline, p)));
+		}
+		return List.of(PointGroupList.repeating("Inclines", groups));
+	}
+
+	private static @Nullable Object inclineValue(Incline incline, ModbusReference point) {
+		if ( !(point instanceof InclinometerModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case InclineX -> incline.getInclineX();
+			case InclineY -> incline.getInclineY();
+			case InclineZ -> incline.getInclineZ();
+		};
 	}
 
 }

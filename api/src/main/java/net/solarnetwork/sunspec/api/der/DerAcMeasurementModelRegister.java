@@ -333,9 +333,36 @@ public enum DerAcMeasurementModelRegister implements ModbusReference {
 		return classification;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This is the enumeration constant name, without the {@code Total} or
+	 * {@code Average} suffix of the points for all phases, without the
+	 * {@code Bitmask} suffix of bitfield points, and with the line-to-neutral
+	 * and line-to-line average voltages named {@code Voltage} and
+	 * {@code LineVoltage}.
+	 * </p>
+	 */
 	@Override
 	public String getName() {
-		return name();
+		return switch (this) {
+			case ActivePowerTotal -> "ActivePower";
+			case ApparentPowerTotal -> "ApparentPower";
+			case ReactivePowerTotal -> "ReactivePower";
+			case PowerFactorTotal -> "PowerFactor";
+			case CurrentTotal -> "Current";
+			case VoltageLineLineAverage -> "LineVoltage";
+			case VoltageLineNeutralAverage -> "Voltage";
+			case ActiveEnergyInjectedTotal -> "ActiveEnergyInjected";
+			case ActiveEnergyAbsorbedTotal -> "ActiveEnergyAbsorbed";
+			case ReactiveEnergyInjectedTotal -> "ReactiveEnergyInjected";
+			case ReactiveEnergyAbsorbedTotal -> "ReactiveEnergyAbsorbed";
+			case AlarmsBitmask -> "Alarms";
+			case OperationalCharacteristicsBitmask -> "OperationalCharacteristics";
+			case ThrottleSourcesBitmask -> "ThrottleSources";
+			default -> name();
+		};
 	}
 
 }

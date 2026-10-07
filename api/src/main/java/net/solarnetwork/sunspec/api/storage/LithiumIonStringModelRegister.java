@@ -254,9 +254,23 @@ public enum LithiumIonStringModelRegister implements ModbusReference {
 		return classification;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This is the enumeration constant name, without the {@code Bitmask} suffix
+	 * of bitfield points.
+	 * </p>
+	 */
 	@Override
 	public String getName() {
-		return name();
+		return switch (this) {
+			case EventsBitmask -> "Events";
+			case Events2Bitmask -> "Events2";
+			case VendorEventsBitmask -> "VendorEvents";
+			case VendorEvents2Bitmask -> "VendorEvents2";
+			default -> name();
+		};
 	}
 
 	@Override

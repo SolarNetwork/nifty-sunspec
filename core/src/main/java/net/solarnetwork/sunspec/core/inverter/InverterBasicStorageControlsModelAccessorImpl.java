@@ -269,4 +269,37 @@ public class InverterBasicStorageControlsModelAccessorImpl extends BaseModelAcce
 		writeValue(conn, InverterBasicStorageControlsModelRegister.ChargeSource, source.getCode());
 	}
 
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof InverterBasicStorageControlsModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case ActivePowerChargeRateMaximum -> getActivePowerChargeRateMaximum();
+			case ChargeRampRate -> getChargeRampRate();
+			case DischargeRampRate -> getDischargeRampRate();
+			case StorageControlModes -> getStorageControlModes();
+			case ApparentPowerChargeRateMaximum -> getApparentPowerChargeRateMaximum();
+			case StateOfChargeReserveMinimum -> getStateOfChargeReserveMinimum();
+			case StateOfCharge -> getStateOfCharge();
+			case StorageAvailable -> getStorageAvailable();
+			case BatteryVoltage -> getBatteryVoltage();
+			case ChargeStatus -> getChargeStatus();
+			case DischargeRatePercent -> getDischargeRatePercent();
+			case ChargeRatePercent -> getChargeRatePercent();
+			case ChargeDischargeRateTimeWindow -> getChargeDischargeRateTimeWindow();
+			case ChargeDischargeRateReversionTime -> getChargeDischargeRateReversionTime();
+			case ChargeDischargeRateRampTime -> getChargeDischargeRateRampTime();
+			case ChargeSource -> getChargeSource();
+			case ScaleFactorActivePowerChargeRateMaximum -> null;
+			case ScaleFactorChargeDischargeRampRate -> null;
+			case ScaleFactorApparentPowerChargeRateMaximum -> null;
+			case ScaleFactorStateOfChargeReserveMinimum -> null;
+			case ScaleFactorStateOfCharge -> null;
+			case ScaleFactorStorageAvailable -> null;
+			case ScaleFactorBatteryVoltage -> null;
+			case ScaleFactorChargeDischargeRatePercent -> null;
+		};
+	}
+
 }

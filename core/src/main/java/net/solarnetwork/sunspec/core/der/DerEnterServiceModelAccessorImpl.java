@@ -180,4 +180,24 @@ public class DerEnterServiceModelAccessorImpl extends BaseModelAccessor
 		return getLongValue(DerEnterServiceModelRegister.DelayRemaining);
 	}
 
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof DerEnterServiceModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case Permitted -> isEnterServicePermitted();
+			case VoltageHigh -> getVoltageHigh();
+			case VoltageLow -> getVoltageLow();
+			case FrequencyHigh -> getFrequencyHigh();
+			case FrequencyLow -> getFrequencyLow();
+			case Delay -> getDelay();
+			case RandomDelay -> getRandomDelay();
+			case RampTime -> getRampTime();
+			case DelayRemaining -> getDelayRemaining();
+			case ScaleFactorVoltage -> null;
+			case ScaleFactorFrequency -> null;
+		};
+	}
+
 }

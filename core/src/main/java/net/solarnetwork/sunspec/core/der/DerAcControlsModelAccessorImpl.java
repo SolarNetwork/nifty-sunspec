@@ -597,4 +597,64 @@ public class DerAcControlsModelAccessorImpl extends BaseModelAccessor
 		writeValue(conn, DerAcControlsModelRegister.AntiIslandingEnabled, enabled ? 1 : 0);
 	}
 
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof DerAcControlsModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case PowerFactorWhenInjectingEnabled -> isPowerFactorWhenInjectingEnabled();
+			case PowerFactorWhenInjectingReversionEnabled -> isPowerFactorWhenInjectingReversionEnabled();
+			case PowerFactorWhenInjectingReversionTime -> getPowerFactorWhenInjectingReversionTime();
+			case PowerFactorWhenInjectingReversionTimeRemaining -> getPowerFactorWhenInjectingReversionTimeRemaining();
+			case PowerFactorWhenAbsorbingEnabled -> isPowerFactorWhenAbsorbingEnabled();
+			case PowerFactorWhenAbsorbingReversionEnabled -> isPowerFactorWhenAbsorbingReversionEnabled();
+			case PowerFactorWhenAbsorbingReversionTime -> getPowerFactorWhenAbsorbingReversionTime();
+			case PowerFactorWhenAbsorbingReversionTimeRemaining -> getPowerFactorWhenAbsorbingReversionTimeRemaining();
+			case ActivePowerLimitEnabled -> isActivePowerLimitEnabled();
+			case ActivePowerLimitPercent -> getActivePowerLimitPercent();
+			case ReversionActivePowerLimitPercent -> getReversionActivePowerLimitPercent();
+			case ActivePowerLimitReversionEnabled -> isActivePowerLimitReversionEnabled();
+			case ActivePowerLimitReversionTime -> getActivePowerLimitReversionTime();
+			case ActivePowerLimitReversionTimeRemaining -> getActivePowerLimitReversionTimeRemaining();
+			case ActivePowerSetpointEnabled -> isActivePowerSetpointEnabled();
+			case ActivePowerSetpointMode -> getActivePowerSetpointMode();
+			case ActivePowerSetpoint -> getActivePowerSetpoint();
+			case ReversionActivePowerSetpoint -> getReversionActivePowerSetpoint();
+			case ActivePowerSetpointPercent -> getActivePowerSetpointPercent();
+			case ReversionActivePowerSetpointPercent -> getReversionActivePowerSetpointPercent();
+			case ActivePowerSetpointReversionEnabled -> isActivePowerSetpointReversionEnabled();
+			case ActivePowerSetpointReversionTime -> getActivePowerSetpointReversionTime();
+			case ActivePowerSetpointReversionTimeRemaining -> getActivePowerSetpointReversionTimeRemaining();
+			case ReactivePowerSetpointEnabled -> isReactivePowerSetpointEnabled();
+			case ReactivePowerSetpointMode -> getReactivePowerSetpointMode();
+			case ReactivePowerPriority -> getReactivePowerPriority();
+			case ReactivePowerSetpoint -> getReactivePowerSetpoint();
+			case ReversionReactivePowerSetpoint -> getReversionReactivePowerSetpoint();
+			case ReactivePowerSetpointPercent -> getReactivePowerSetpointPercent();
+			case ReversionReactivePowerSetpointPercent -> getReversionReactivePowerSetpointPercent();
+			case ReactivePowerSetpointReversionEnabled -> isReactivePowerSetpointReversionEnabled();
+			case ReactivePowerSetpointReversionTime -> getReactivePowerSetpointReversionTime();
+			case ReactivePowerSetpointReversionTimeRemaining -> getReactivePowerSetpointReversionTimeRemaining();
+			case ActivePowerRampRate -> getActivePowerRampRate();
+			case ActivePowerRampRateReference -> getActivePowerRampRateReference();
+			case ReactivePowerRampRate -> getReactivePowerRampRate();
+			case AntiIslandingEnabled -> isAntiIslandingEnabled();
+			case ScaleFactorPowerFactor -> null;
+			case ScaleFactorActivePowerLimitPercent -> null;
+			case ScaleFactorActivePowerSetpoint -> null;
+			case ScaleFactorActivePowerSetpointPercent -> null;
+			case ScaleFactorReactivePowerSetpoint -> null;
+			case ScaleFactorReactivePowerSetpointPercent -> null;
+			case PowerFactorWhenInjecting -> getPowerFactorWhenInjecting();
+			case PowerFactorExcitationWhenInjecting -> getPowerFactorExcitationWhenInjecting();
+			case ReversionPowerFactorWhenInjecting -> getReversionPowerFactorWhenInjecting();
+			case ReversionPowerFactorExcitationWhenInjecting -> getReversionPowerFactorExcitationWhenInjecting();
+			case PowerFactorWhenAbsorbing -> getPowerFactorWhenAbsorbing();
+			case PowerFactorExcitationWhenAbsorbing -> getPowerFactorExcitationWhenAbsorbing();
+			case ReversionPowerFactorWhenAbsorbing -> getReversionPowerFactorWhenAbsorbing();
+			case ReversionPowerFactorExcitationWhenAbsorbing -> getReversionPowerFactorExcitationWhenAbsorbing();
+		};
+	}
+
 }

@@ -256,9 +256,22 @@ public enum DerCapacityModelRegister implements ModbusReference {
 		return classification;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This is the enumeration constant name, without the {@code Bitmask} suffix
+	 * of bitfield points.
+	 * </p>
+	 */
 	@Override
 	public String getName() {
-		return name();
+		return switch (this) {
+			case ControlModesBitmask -> "ControlModes";
+			case IntentionalIslandCategoriesRatingBitmask -> "IntentionalIslandCategoriesRating";
+			case IntentionalIslandCategoriesBitmask -> "IntentionalIslandCategories";
+			default -> name();
+		};
 	}
 
 	@Override

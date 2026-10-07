@@ -261,29 +261,44 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 
 	@Override
 	public @Nullable BigDecimal getReactiveEnergyImported() {
-		return reactiveEnergySum(IntegerMeterModelRegister.ReactiveEnergyImportedQ1Total,
-				IntegerMeterModelRegister.ReactiveEnergyImportedQ2Total);
+		return sum(getReactiveEnergyImportedQ1(), getReactiveEnergyImportedQ2());
 	}
 
 	@Override
 	public @Nullable BigDecimal getReactiveEnergyExported() {
-		return reactiveEnergySum(IntegerMeterModelRegister.ReactiveEnergyExportedQ3Total,
-				IntegerMeterModelRegister.ReactiveEnergyExportedQ4Total);
+		return sum(getReactiveEnergyExportedQ3(), getReactiveEnergyExportedQ4());
+	}
+
+	@Override
+	public @Nullable BigDecimal getReactiveEnergyImportedQ1() {
+		return getReactiveEnergyValue(IntegerMeterModelRegister.ReactiveEnergyImportedQ1Total);
+	}
+
+	@Override
+	public @Nullable BigDecimal getReactiveEnergyImportedQ2() {
+		return getReactiveEnergyValue(IntegerMeterModelRegister.ReactiveEnergyImportedQ2Total);
+	}
+
+	@Override
+	public @Nullable BigDecimal getReactiveEnergyExportedQ3() {
+		return getReactiveEnergyValue(IntegerMeterModelRegister.ReactiveEnergyExportedQ3Total);
+	}
+
+	@Override
+	public @Nullable BigDecimal getReactiveEnergyExportedQ4() {
+		return getReactiveEnergyValue(IntegerMeterModelRegister.ReactiveEnergyExportedQ4Total);
 	}
 
 	/**
 	 * Add two reactive energy quadrant values.
 	 *
-	 * @param aRef
-	 *        the first quadrant register
-	 * @param bRef
-	 *        the second quadrant register
+	 * @param a
+	 *        the first quadrant value
+	 * @param b
+	 *        the second quadrant value
 	 * @return the sum, or {@code null} if neither quadrant value is available
 	 */
-	private @Nullable BigDecimal reactiveEnergySum(IntegerMeterModelRegister aRef,
-			IntegerMeterModelRegister bRef) {
-		final BigDecimal a = getReactiveEnergyValue(aRef);
-		final BigDecimal b = getReactiveEnergyValue(bRef);
+	private static @Nullable BigDecimal sum(@Nullable BigDecimal a, @Nullable BigDecimal b) {
 		if ( a == null ) {
 			return b;
 		}
@@ -478,33 +493,63 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 
 		@Override
 		public @Nullable BigDecimal getReactiveEnergyImported() {
-			return switch (phase) {
-				case PhaseA -> reactiveEnergySum(
-						IntegerMeterModelRegister.ReactiveEnergyImportedQ1PhaseA,
-						IntegerMeterModelRegister.ReactiveEnergyImportedQ2PhaseA);
-				case PhaseB -> reactiveEnergySum(
-						IntegerMeterModelRegister.ReactiveEnergyImportedQ1PhaseB,
-						IntegerMeterModelRegister.ReactiveEnergyImportedQ2PhaseB);
-				case PhaseC -> reactiveEnergySum(
-						IntegerMeterModelRegister.ReactiveEnergyImportedQ1PhaseC,
-						IntegerMeterModelRegister.ReactiveEnergyImportedQ2PhaseC);
-				default -> IntegerMeterModelAccessor.this.getReactiveEnergyImported();
-			};
+			return sum(getReactiveEnergyImportedQ1(), getReactiveEnergyImportedQ2());
 		}
 
 		@Override
 		public @Nullable BigDecimal getReactiveEnergyExported() {
+			return sum(getReactiveEnergyExportedQ3(), getReactiveEnergyExportedQ4());
+		}
+
+		@Override
+		public @Nullable BigDecimal getReactiveEnergyImportedQ1() {
 			return switch (phase) {
-				case PhaseA -> reactiveEnergySum(
-						IntegerMeterModelRegister.ReactiveEnergyExportedQ3PhaseA,
+				case PhaseA -> getReactiveEnergyValue(
+						IntegerMeterModelRegister.ReactiveEnergyImportedQ1PhaseA);
+				case PhaseB -> getReactiveEnergyValue(
+						IntegerMeterModelRegister.ReactiveEnergyImportedQ1PhaseB);
+				case PhaseC -> getReactiveEnergyValue(
+						IntegerMeterModelRegister.ReactiveEnergyImportedQ1PhaseC);
+				default -> IntegerMeterModelAccessor.this.getReactiveEnergyImportedQ1();
+			};
+		}
+
+		@Override
+		public @Nullable BigDecimal getReactiveEnergyImportedQ2() {
+			return switch (phase) {
+				case PhaseA -> getReactiveEnergyValue(
+						IntegerMeterModelRegister.ReactiveEnergyImportedQ2PhaseA);
+				case PhaseB -> getReactiveEnergyValue(
+						IntegerMeterModelRegister.ReactiveEnergyImportedQ2PhaseB);
+				case PhaseC -> getReactiveEnergyValue(
+						IntegerMeterModelRegister.ReactiveEnergyImportedQ2PhaseC);
+				default -> IntegerMeterModelAccessor.this.getReactiveEnergyImportedQ2();
+			};
+		}
+
+		@Override
+		public @Nullable BigDecimal getReactiveEnergyExportedQ3() {
+			return switch (phase) {
+				case PhaseA -> getReactiveEnergyValue(
+						IntegerMeterModelRegister.ReactiveEnergyExportedQ3PhaseA);
+				case PhaseB -> getReactiveEnergyValue(
+						IntegerMeterModelRegister.ReactiveEnergyExportedQ3PhaseB);
+				case PhaseC -> getReactiveEnergyValue(
+						IntegerMeterModelRegister.ReactiveEnergyExportedQ3PhaseC);
+				default -> IntegerMeterModelAccessor.this.getReactiveEnergyExportedQ3();
+			};
+		}
+
+		@Override
+		public @Nullable BigDecimal getReactiveEnergyExportedQ4() {
+			return switch (phase) {
+				case PhaseA -> getReactiveEnergyValue(
 						IntegerMeterModelRegister.ReactiveEnergyExportedQ4PhaseA);
-				case PhaseB -> reactiveEnergySum(
-						IntegerMeterModelRegister.ReactiveEnergyExportedQ3PhaseB,
+				case PhaseB -> getReactiveEnergyValue(
 						IntegerMeterModelRegister.ReactiveEnergyExportedQ4PhaseB);
-				case PhaseC -> reactiveEnergySum(
-						IntegerMeterModelRegister.ReactiveEnergyExportedQ3PhaseC,
+				case PhaseC -> getReactiveEnergyValue(
 						IntegerMeterModelRegister.ReactiveEnergyExportedQ4PhaseC);
-				default -> IntegerMeterModelAccessor.this.getReactiveEnergyExported();
+				default -> IntegerMeterModelAccessor.this.getReactiveEnergyExportedQ4();
 			};
 		}
 
@@ -537,6 +582,16 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 		@Override
 		public Set<? extends ModelEvent> getEvents() {
 			return IntegerMeterModelAccessor.this.getEvents();
+		}
+
+		@Override
+		public Collection<? extends ModbusReference> getPointReferences() {
+			return IntegerMeterModelAccessor.this.getPointReferences();
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			return IntegerMeterModelAccessor.this.getPointValue(point);
 		}
 
 	}

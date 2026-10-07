@@ -19,8 +19,10 @@
 
 package net.solarnetwork.sunspec.core;
 
+import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelAccessor;
 import net.solarnetwork.sunspec.api.ModelId;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
 
 /**
@@ -49,6 +51,19 @@ public class GenericModelAccessor extends BaseModelAccessor implements ModelAcce
 	@Override
 	public int getFixedBlockLength() {
 		return 0;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * The points of this model are not known, so this implementation returns
+	 * {@code null}.
+	 * </p>
+	 */
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		return null;
 	}
 
 }

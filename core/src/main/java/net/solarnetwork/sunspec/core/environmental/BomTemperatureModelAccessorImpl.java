@@ -23,11 +23,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
+import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelId;
+import net.solarnetwork.sunspec.api.PointGroup;
+import net.solarnetwork.sunspec.api.PointGroupList;
 import net.solarnetwork.sunspec.api.environmental.BomTemperatureModelAccessor;
 import net.solarnetwork.sunspec.api.environmental.BomTemperatureModelRegister;
 import net.solarnetwork.sunspec.api.environmental.EnvironmentalModelId;
 import net.solarnetwork.sunspec.core.BaseModelAccessor;
+import net.solarnetwork.sunspec.core.support.SimplePointGroup;
 import net.solarnetwork.sunspec.modbus.ModbusReference;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
 
@@ -102,6 +106,30 @@ public class BomTemperatureModelAccessorImpl extends BaseModelAccessor
 			}
 		}
 		return temps;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This model has no fixed block points, so this implementation returns
+	 * {@code null}.
+	 * </p>
+	 */
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		return null;
+	}
+
+	@SuppressWarnings("unused")
+	@Override
+	public List<PointGroupList> getPointGroups() {
+		final List<Float> temps = getBackOfModuleTemperatures();
+		final List<PointGroup> groups = new ArrayList<>(temps.size());
+		for ( Float temp : temps ) {
+			groups.add(new SimplePointGroup(getRepeatingBlockRegisters(), p -> temp));
+		}
+		return List.of(PointGroupList.repeating("BackOfModuleTemperatures", groups));
 	}
 
 }

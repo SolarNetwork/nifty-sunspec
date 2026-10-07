@@ -19,16 +19,17 @@
 
 package net.solarnetwork.sunspec.core.inverter.test;
 
+import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.then;
+import static org.assertj.core.api.BDDAssertions.within;
 import static net.solarnetwork.sunspec.api.AcPhase.PhaseA;
 import static net.solarnetwork.sunspec.api.AcPhase.PhaseB;
 import static net.solarnetwork.sunspec.api.AcPhase.PhaseC;
 import static net.solarnetwork.sunspec.test.DataUtils.bitSetForBigInteger;
-import static org.assertj.core.api.BDDAssertions.from;
-import static org.assertj.core.api.BDDAssertions.then;
-import static org.assertj.core.api.BDDAssertions.within;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.BitSet;
+import java.util.Map;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -36,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import net.solarnetwork.sunspec.api.CommonModelAccessor;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.OperatingState;
+import net.solarnetwork.sunspec.api.PointMapMode;
 import net.solarnetwork.sunspec.api.inverter.IntegerInverterModelRegister;
 import net.solarnetwork.sunspec.api.inverter.InverterModelAccessor;
 import net.solarnetwork.sunspec.api.inverter.InverterModelId;
@@ -530,6 +532,68 @@ public class IntegerInverterModelAccessor_101_01Tests {
 		then(model.getVendorEvents())
 			.as("Second vendor event field not implemented")
 			.isEqualTo(bitSetForBigInteger(expected))
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void pointMap() {
+		// GIVEN
+		InverterModelAccessor model = getTestDataInstance().getTypedModel();
+
+		// WHEN
+		Map<String, Object> result = model.toPointMap(PointMapMode.Flat);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("Scale factors left out")
+			.doesNotContainKeys("scaleFactorCurrent", "scaleFactorActivePower")
+			.as("Reserved and combined event points left out")
+			.doesNotContainKeys("events2", "vendorEvents2", "vendorEvents3", "vendorEvents4")
+			.as("Total current")
+			.containsEntry("current", model.getCurrent())
+			.as("Phase current")
+			.containsEntry("current_a", model.accessorForPhase(PhaseA).getCurrent())
+			.as("Phase to neutral voltage")
+			.containsEntry("voltage_a", model.accessorForPhase(PhaseA).getVoltage())
+			.as("Active power")
+			.containsEntry("activePower", new BigDecimal("45"))
+			.as("Active energy exported")
+			.containsEntry("activeEnergyExported", new BigDecimal("76476022"))
+			.as("DC power")
+			.containsEntry("dcPower", model.getDcPower())
+			.as("Operating state")
+			.containsEntry("operatingState", model.getOperatingState())
+			.as("Events")
+			.containsEntry("events", model.getEvents())
+			.as("Vendor events from all vendor event points")
+			.containsEntry("vendorEvents", model.getVendorEvents())
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void pointMap_reversed() {
+		// GIVEN
+		InverterModelAccessor model = getTestDataInstance().getTypedModel();
+
+		// WHEN
+		Map<String, Object> result = model.reversed().toPointMap(PointMapMode.Flat);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("Current unchanged")
+			.containsEntry("current", model.getCurrent())
+			.as("Active power negated")
+			.containsEntry("activePower", new BigDecimal("-45"))
+			.as("Active energy negated")
+			.containsEntry("activeEnergyExported", new BigDecimal("-76476022"))
+			.as("DC power negated")
+			.containsEntry("dcPower", model.reversed().getDcPower())
+			.as("Apparent power unchanged")
+			.containsEntry("apparentPower", model.getApparentPower())
 			;
 		// @formatter:on
 	}

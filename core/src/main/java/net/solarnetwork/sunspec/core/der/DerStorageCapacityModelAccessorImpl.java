@@ -116,4 +116,20 @@ public class DerStorageCapacityModelAccessorImpl extends BaseModelAccessor
 		return getCodedValue(DerStorageCapacityModelRegister.Status, DerStorageStatus.class);
 	}
 
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof DerStorageCapacityModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case EnergyRating -> getEnergyRating();
+			case EnergyAvailable -> getEnergyAvailable();
+			case StateOfCharge -> getStateOfCharge();
+			case StateOfHealth -> getStateOfHealth();
+			case Status -> getStorageStatus();
+			case ScaleFactorEnergy -> null;
+			case ScaleFactorPercent -> null;
+		};
+	}
+
 }

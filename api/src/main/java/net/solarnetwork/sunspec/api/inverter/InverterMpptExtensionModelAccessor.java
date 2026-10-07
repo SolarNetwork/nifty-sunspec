@@ -136,6 +136,14 @@ public interface InverterMpptExtensionModelAccessor extends ModelAccessor {
 	Set<? extends ModelEvent> getEvents();
 
 	/**
+	 * Get the number of DC modules.
+	 *
+	 * @return the module count
+	 */
+	@Nullable
+	Integer getModuleCount();
+
+	/**
 	 * Get the timestamp period.
 	 *
 	 * @return the period

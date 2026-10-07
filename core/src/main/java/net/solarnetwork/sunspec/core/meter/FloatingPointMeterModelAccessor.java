@@ -152,14 +152,32 @@ public class FloatingPointMeterModelAccessor extends BaseModelAccessor implement
 
 	@Override
 	public @Nullable BigDecimal getReactiveEnergyImported() {
-		return sum(getDecimalValue(FloatingPointMeterModelRegister.ReactiveEnergyImportedQ1Total),
-				getDecimalValue(FloatingPointMeterModelRegister.ReactiveEnergyImportedQ2Total));
+		return sum(getReactiveEnergyImportedQ1(), getReactiveEnergyImportedQ2());
 	}
 
 	@Override
 	public @Nullable BigDecimal getReactiveEnergyExported() {
-		return sum(getDecimalValue(FloatingPointMeterModelRegister.ReactiveEnergyExportedQ3Total),
-				getDecimalValue(FloatingPointMeterModelRegister.ReactiveEnergyExportedQ4Total));
+		return sum(getReactiveEnergyExportedQ3(), getReactiveEnergyExportedQ4());
+	}
+
+	@Override
+	public @Nullable BigDecimal getReactiveEnergyImportedQ1() {
+		return getDecimalValue(FloatingPointMeterModelRegister.ReactiveEnergyImportedQ1Total);
+	}
+
+	@Override
+	public @Nullable BigDecimal getReactiveEnergyImportedQ2() {
+		return getDecimalValue(FloatingPointMeterModelRegister.ReactiveEnergyImportedQ2Total);
+	}
+
+	@Override
+	public @Nullable BigDecimal getReactiveEnergyExportedQ3() {
+		return getDecimalValue(FloatingPointMeterModelRegister.ReactiveEnergyExportedQ3Total);
+	}
+
+	@Override
+	public @Nullable BigDecimal getReactiveEnergyExportedQ4() {
+		return getDecimalValue(FloatingPointMeterModelRegister.ReactiveEnergyExportedQ4Total);
 	}
 
 	@Override
@@ -363,28 +381,44 @@ public class FloatingPointMeterModelAccessor extends BaseModelAccessor implement
 
 		@Override
 		public @Nullable BigDecimal getReactiveEnergyImported() {
-			return sum(
-					getDecimalValue(
-							register(FloatingPointMeterModelRegister.ReactiveEnergyImportedQ1PhaseA,
-									FloatingPointMeterModelRegister.ReactiveEnergyImportedQ1PhaseB,
-									FloatingPointMeterModelRegister.ReactiveEnergyImportedQ1PhaseC)),
-					getDecimalValue(
-							register(FloatingPointMeterModelRegister.ReactiveEnergyImportedQ2PhaseA,
-									FloatingPointMeterModelRegister.ReactiveEnergyImportedQ2PhaseB,
-									FloatingPointMeterModelRegister.ReactiveEnergyImportedQ2PhaseC)));
+			return sum(getReactiveEnergyImportedQ1(), getReactiveEnergyImportedQ2());
 		}
 
 		@Override
 		public @Nullable BigDecimal getReactiveEnergyExported() {
-			return sum(
-					getDecimalValue(
-							register(FloatingPointMeterModelRegister.ReactiveEnergyExportedQ3PhaseA,
-									FloatingPointMeterModelRegister.ReactiveEnergyExportedQ3PhaseB,
-									FloatingPointMeterModelRegister.ReactiveEnergyExportedQ3PhaseC)),
-					getDecimalValue(
-							register(FloatingPointMeterModelRegister.ReactiveEnergyExportedQ4PhaseA,
-									FloatingPointMeterModelRegister.ReactiveEnergyExportedQ4PhaseB,
-									FloatingPointMeterModelRegister.ReactiveEnergyExportedQ4PhaseC)));
+			return sum(getReactiveEnergyExportedQ3(), getReactiveEnergyExportedQ4());
+		}
+
+		@Override
+		public @Nullable BigDecimal getReactiveEnergyImportedQ1() {
+			return getDecimalValue(
+					register(FloatingPointMeterModelRegister.ReactiveEnergyImportedQ1PhaseA,
+							FloatingPointMeterModelRegister.ReactiveEnergyImportedQ1PhaseB,
+							FloatingPointMeterModelRegister.ReactiveEnergyImportedQ1PhaseC));
+		}
+
+		@Override
+		public @Nullable BigDecimal getReactiveEnergyImportedQ2() {
+			return getDecimalValue(
+					register(FloatingPointMeterModelRegister.ReactiveEnergyImportedQ2PhaseA,
+							FloatingPointMeterModelRegister.ReactiveEnergyImportedQ2PhaseB,
+							FloatingPointMeterModelRegister.ReactiveEnergyImportedQ2PhaseC));
+		}
+
+		@Override
+		public @Nullable BigDecimal getReactiveEnergyExportedQ3() {
+			return getDecimalValue(
+					register(FloatingPointMeterModelRegister.ReactiveEnergyExportedQ3PhaseA,
+							FloatingPointMeterModelRegister.ReactiveEnergyExportedQ3PhaseB,
+							FloatingPointMeterModelRegister.ReactiveEnergyExportedQ3PhaseC));
+		}
+
+		@Override
+		public @Nullable BigDecimal getReactiveEnergyExportedQ4() {
+			return getDecimalValue(
+					register(FloatingPointMeterModelRegister.ReactiveEnergyExportedQ4PhaseA,
+							FloatingPointMeterModelRegister.ReactiveEnergyExportedQ4PhaseB,
+							FloatingPointMeterModelRegister.ReactiveEnergyExportedQ4PhaseC));
 		}
 
 		@Override
@@ -404,6 +438,16 @@ public class FloatingPointMeterModelAccessor extends BaseModelAccessor implement
 		@Override
 		public Set<? extends ModelEvent> getEvents() {
 			return FloatingPointMeterModelAccessor.this.getEvents();
+		}
+
+		@Override
+		public Collection<? extends ModbusReference> getPointReferences() {
+			return FloatingPointMeterModelAccessor.this.getPointReferences();
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			return FloatingPointMeterModelAccessor.this.getPointValue(point);
 		}
 
 	}

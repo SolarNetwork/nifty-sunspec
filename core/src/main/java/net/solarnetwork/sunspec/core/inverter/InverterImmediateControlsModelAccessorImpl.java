@@ -330,4 +330,37 @@ public class InverterImmediateControlsModelAccessorImpl extends BaseModelAccesso
 				enabled ? 1 : 0);
 	}
 
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof InverterImmediateControlsModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case ConnectionTimeWindow -> getConnectionTimeWindow();
+			case ConnectionReversionTime -> getConnectionReversionTime();
+			case ConnectionControl -> getConnectionControl();
+			case ActivePowerLimitPercent -> getActivePowerLimitPercent();
+			case ActivePowerLimitTimeWindow -> getActivePowerLimitTimeWindow();
+			case ActivePowerLimitReversionTime -> getActivePowerLimitReversionTime();
+			case ActivePowerLimitRampTime -> getActivePowerLimitRampTime();
+			case ActivePowerLimitEnabled -> isActivePowerLimitEnabled();
+			case FixedPowerFactor -> getFixedPowerFactor();
+			case FixedPowerFactorTimeWindow -> getFixedPowerFactorTimeWindow();
+			case FixedPowerFactorReversionTime -> getFixedPowerFactorReversionTime();
+			case FixedPowerFactorRampTime -> getFixedPowerFactorRampTime();
+			case FixedPowerFactorEnabled -> isFixedPowerFactorEnabled();
+			case ReactivePowerPercentOfMaximumActivePower -> getReactivePowerPercentOfMaximumActivePower();
+			case ReactivePowerPercentOfMaximumReactivePower -> getReactivePowerPercentOfMaximumReactivePower();
+			case ReactivePowerPercentOfAvailableReactivePower -> getReactivePowerPercentOfAvailableReactivePower();
+			case ReactivePowerPercentTimeWindow -> getReactivePowerPercentTimeWindow();
+			case ReactivePowerPercentReversionTime -> getReactivePowerPercentReversionTime();
+			case ReactivePowerPercentRampTime -> getReactivePowerPercentRampTime();
+			case ReactivePowerPercentMode -> getReactivePowerPercentMode();
+			case ReactivePowerPercentEnabled -> isReactivePowerPercentEnabled();
+			case ScaleFactorActivePowerLimitPercent -> null;
+			case ScaleFactorFixedPowerFactor -> null;
+			case ScaleFactorReactivePowerPercent -> null;
+		};
+	}
+
 }

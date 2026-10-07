@@ -371,4 +371,63 @@ public class BatteryBaseModelAccessorImpl extends BaseModelAccessor implements B
 		writeValue(conn, BatteryBaseModelRegister.InverterState, state.getCode());
 	}
 
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof BatteryBaseModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case ChargeCapacityRating -> getChargeCapacityRating();
+			case EnergyCapacityRating -> getEnergyCapacityRating();
+			case ChargeRateMaximumRating -> getChargeRateMaximumRating();
+			case DischargeRateMaximumRating -> getDischargeRateMaximumRating();
+			case SelfDischargeRate -> getSelfDischargeRate();
+			case StateOfChargeMaximumRating -> getStateOfChargeMaximumRating();
+			case StateOfChargeMinimumRating -> getStateOfChargeMinimumRating();
+			case StateOfChargeReserveMaximum -> getStateOfChargeReserveMaximum();
+			case StateOfChargeReserveMinimum -> getStateOfChargeReserveMinimum();
+			case StateOfCharge -> getStateOfCharge();
+			case DepthOfDischarge -> getDepthOfDischarge();
+			case StateOfHealth -> getStateOfHealth();
+			case CycleCount -> getCycleCount();
+			case ChargeStatus -> getChargeStatus();
+			case LocalRemoteControl -> getLocalRemoteControl();
+			case BatteryHeartbeat -> getBatteryHeartbeat();
+			case ControllerHeartbeat -> getControllerHeartbeat();
+			case AlarmReset -> isAlarmResetInProgress();
+			case BatteryType -> getBatteryType();
+			case BatteryState -> getBatteryState();
+			case VendorBatteryState -> getVendorBatteryState();
+			case WarrantyDate -> getWarrantyDate();
+			case EventsBitmask -> getEvents();
+			case Events2Bitmask -> null; // reserved by SunSpec
+			case VendorEventsBitmask -> getVendorEvents();
+			case VendorEvents2Bitmask -> null; // included in the vendor events
+			case DcVoltage -> getDCVoltage();
+			case MaximumVoltage -> getMaximumVoltage();
+			case MinimumVoltage -> getMinimumVoltage();
+			case MaximumCellVoltage -> getMaximumCellVoltage();
+			case MaximumCellVoltageStringIndex -> getMaximumCellVoltageStringIndex();
+			case MaximumCellVoltageModuleIndex -> getMaximumCellVoltageModuleIndex();
+			case MinimumCellVoltage -> getMinimumCellVoltage();
+			case MinimumCellVoltageStringIndex -> getMinimumCellVoltageStringIndex();
+			case MinimumCellVoltageModuleIndex -> getMinimumCellVoltageModuleIndex();
+			case AverageCellVoltage -> getAverageCellVoltage();
+			case DcCurrent -> getDCCurrent();
+			case MaximumChargeCurrent -> getMaximumChargeCurrent();
+			case MaximumDischargeCurrent -> getMaximumDischargeCurrent();
+			case DcPower -> getDCPower();
+			case InverterStateRequest -> getInverterStateRequest();
+			case PowerRequest -> getPowerRequest();
+			case Operation -> getOperation();
+			case InverterState -> getInverterState();
+			case ScaleFactorChargeCapacity, ScaleFactorEnergyCapacity -> null;
+			case ScaleFactorChargeDischargeRate, ScaleFactorSelfDischargeRate -> null;
+			case ScaleFactorStateOfCharge, ScaleFactorDepthOfDischarge, ScaleFactorStateOfHealth -> null;
+			case ScaleFactorVoltage -> null;
+			case ScaleFactorCellVoltage, ScaleFactorCurrent, ScaleFactorCurrentMaximum -> null;
+			case ScaleFactorPower -> null;
+		};
+	}
+
 }

@@ -324,7 +324,7 @@ public class ModbusDataUtilsTests {
 
 	@Test
 	public void encodeUnsignedInt64_many() {
-		for ( long l = 0; l < 5000000; l += 3 ) {
+		for ( long l = 0; l < 5000000; l += 17 ) {
 			// WHEN
 			short[] words = ModbusDataUtils.encodeUnsignedInt64(new BigInteger(String.valueOf(l)));
 

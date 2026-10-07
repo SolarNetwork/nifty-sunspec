@@ -190,4 +190,33 @@ public class InverterExtendedMeasurementsModelAccessorImpl extends BaseModelAcce
 				InverterExtendedMeasurementsModelRegister.ScaleFactorIsolationResistance);
 	}
 
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof InverterExtendedMeasurementsModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case PvConnectionStatus -> getPvConnectionStatus();
+			case StorageConnectionStatus -> getStorageConnectionStatus();
+			case EcpConnectionStatus -> isEcpConnected();
+			case ActiveEnergyExported -> getActiveEnergyExported();
+			case ApparentEnergyExported -> getApparentEnergyExported();
+			case ReactiveEnergyQ1 -> getReactiveEnergyQ1();
+			case ReactiveEnergyQ2 -> getReactiveEnergyQ2();
+			case ReactiveEnergyQ3 -> getReactiveEnergyQ3();
+			case ReactiveEnergyQ4 -> getReactiveEnergyQ4();
+			case ReactivePowerAvailable -> getReactivePowerAvailable();
+			case ScaleFactorReactivePowerAvailable -> null;
+			case ActivePowerAvailable -> getActivePowerAvailable();
+			case ScaleFactorActivePowerAvailable -> null;
+			case SetpointLimitsReached -> getSetpointLimitsReached();
+			case ActiveControls -> getActiveControls();
+			case TimeSource -> getTimeSource();
+			case DeviceTime -> getDeviceTime();
+			case ActiveRideThroughs -> getActiveRideThroughs();
+			case IsolationResistance -> getIsolationResistance();
+			case ScaleFactorIsolationResistance -> null;
+		};
+	}
+
 }

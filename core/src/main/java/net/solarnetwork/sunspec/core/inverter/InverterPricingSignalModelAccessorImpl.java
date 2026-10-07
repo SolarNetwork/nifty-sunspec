@@ -152,4 +152,20 @@ public class InverterPricingSignalModelAccessorImpl extends BaseModelAccessor
 		writeValue(conn, InverterPricingSignalModelRegister.PricingRampTime, seconds);
 	}
 
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof InverterPricingSignalModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case PricingEnabled -> isPricingEnabled();
+			case PricingSignalType -> getPricingSignalType();
+			case PricingSignal -> getPricingSignal();
+			case PricingTimeWindow -> getPricingTimeWindow();
+			case PricingReversionTime -> getPricingReversionTime();
+			case PricingRampTime -> getPricingRampTime();
+			case ScaleFactorPricingSignal -> null;
+		};
+	}
+
 }

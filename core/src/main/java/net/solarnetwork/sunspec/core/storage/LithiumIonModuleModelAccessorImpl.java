@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelId;
+import net.solarnetwork.sunspec.api.PointGroup;
+import net.solarnetwork.sunspec.api.PointGroupList;
 import net.solarnetwork.sunspec.api.storage.LithiumIonCellStatus;
 import net.solarnetwork.sunspec.api.storage.LithiumIonModuleModelAccessor;
 import net.solarnetwork.sunspec.api.storage.LithiumIonModuleModelRegister;
@@ -227,7 +229,46 @@ public class LithiumIonModuleModelAccessorImpl extends BaseModelAccessor
 		return result;
 	}
 
-	private final class BatteryCellImpl implements BatteryCell {
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof LithiumIonModuleModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case StringIndex -> getStringIndex();
+			case ModuleIndex -> getModuleIndex();
+			case NumberOfCells -> getCellCount();
+			case StateOfCharge -> getStateOfCharge();
+			case DepthOfDischarge -> getDepthOfDischarge();
+			case StateOfHealth -> getStateOfHealth();
+			case CycleCount -> getCycleCount();
+			case DcVoltage -> getDCVoltage();
+			case MaximumCellVoltage -> getMaximumCellVoltage();
+			case MaximumCellVoltageCellIndex -> getMaximumCellVoltageCellIndex();
+			case MinimumCellVoltage -> getMinimumCellVoltage();
+			case MinimumCellVoltageCellIndex -> getMinimumCellVoltageCellIndex();
+			case AverageCellVoltage -> getAverageCellVoltage();
+			case MaximumCellTemperature -> getMaximumCellTemperature();
+			case MaximumCellTemperatureCellIndex -> getMaximumCellTemperatureCellIndex();
+			case MinimumCellTemperature -> getMinimumCellTemperature();
+			case MinimumCellTemperatureCellIndex -> getMinimumCellTemperatureCellIndex();
+			case AverageCellTemperature -> getAverageCellTemperature();
+			case BalancingCellCount -> getBalancingCellCount();
+			case SerialNumber -> getSerialNumber();
+			case ScaleFactorStateOfCharge, ScaleFactorStateOfHealth, ScaleFactorDepthOfDischarge -> null;
+			case ScaleFactorVoltage -> null;
+			case ScaleFactorCellVoltage, ScaleFactorTemperature, CellVoltage, CellTemperature -> null;
+			case CellStatus -> null;
+		};
+	}
+
+	@Override
+	public List<PointGroupList> getPointGroups() {
+		return List.of(PointGroupList.repeating("Cells",
+				getCells().stream().map(PointGroup.class::cast).toList()));
+	}
+
+	private final class BatteryCellImpl implements BatteryCell, PointGroup {
 
 		private final int index;
 		private final int groupAddress;
@@ -262,6 +303,34 @@ public class LithiumIonModuleModelAccessorImpl extends BaseModelAccessor
 		public Set<LithiumIonCellStatus> getStatus() {
 			return getBitmaskableValues(LithiumIonModuleModelRegister.CellStatus, groupAddress,
 					LithiumIonCellStatus.class);
+		}
+
+		@Override
+		public Collection<? extends ModbusReference> getPointReferences() {
+			return getRepeatingBlockRegisters();
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			if ( !(point instanceof LithiumIonModuleModelRegister r) ) {
+				return null;
+			}
+			return switch (r) {
+				case CellVoltage -> getVoltage();
+				case CellTemperature -> getTemperature();
+				case CellStatus -> getStatus();
+				case StringIndex, ModuleIndex, NumberOfCells, StateOfCharge -> null;
+				case DepthOfDischarge, StateOfHealth, CycleCount, DcVoltage -> null;
+				case MaximumCellVoltage, MaximumCellVoltageCellIndex, MinimumCellVoltage -> null;
+				case MinimumCellVoltageCellIndex -> null;
+				case AverageCellVoltage, MaximumCellTemperature, MaximumCellTemperatureCellIndex -> null;
+				case MinimumCellTemperature -> null;
+				case MinimumCellTemperatureCellIndex, AverageCellTemperature, BalancingCellCount -> null;
+				case SerialNumber -> null;
+				case ScaleFactorStateOfCharge, ScaleFactorStateOfHealth -> null;
+				case ScaleFactorDepthOfDischarge, ScaleFactorVoltage -> null;
+				case ScaleFactorCellVoltage, ScaleFactorTemperature -> null;
+			};
 		}
 
 	}

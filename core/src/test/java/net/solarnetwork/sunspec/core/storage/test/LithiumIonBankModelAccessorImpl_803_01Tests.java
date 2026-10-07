@@ -21,20 +21,24 @@ package net.solarnetwork.sunspec.core.storage.test;
 
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
+import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
+import static org.assertj.core.api.InstanceOfAssertFactories.MAP;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
+import net.solarnetwork.sunspec.api.PointMapMode;
 import net.solarnetwork.sunspec.api.storage.BatteryConnectionFailure;
 import net.solarnetwork.sunspec.api.storage.BatteryConnectionStatus;
 import net.solarnetwork.sunspec.api.storage.BatteryDisabledReason;
 import net.solarnetwork.sunspec.api.storage.BatteryEnableOperation;
 import net.solarnetwork.sunspec.api.storage.BatteryOperation;
+import net.solarnetwork.sunspec.api.storage.LithiumIonBankModelAccessor.BatteryString;
 import net.solarnetwork.sunspec.api.storage.LithiumIonBankModelAccessor;
 import net.solarnetwork.sunspec.api.storage.LithiumIonStringEvent;
 import net.solarnetwork.sunspec.api.storage.StorageModelId;
-import net.solarnetwork.sunspec.api.storage.LithiumIonBankModelAccessor.BatteryString;
 import net.solarnetwork.sunspec.core.storage.LithiumIonBankModelAccessorImpl;
 import net.solarnetwork.sunspec.core.test.ModelDataUtils;
 import net.solarnetwork.sunspec.core.test.RecordingModbusConnection;
@@ -292,6 +296,34 @@ public class LithiumIonBankModelAccessorImpl_803_01Tests {
 			.returns(BatteryEnableOperation.Enable, from(BatteryString::getEnableOperation))
 			.as("Connect operation")
 			.returns(BatteryOperation.Connect, from(BatteryString::getConnectOperation))
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void pointMap_nested() {
+		// GIVEN
+		LithiumIonBankModelAccessor model = getTestModel();
+		List<BatteryString> strings = model.getStrings();
+
+		// WHEN
+		Map<String, Object> result = model.toPointMap(PointMapMode.Nested);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("String count")
+			.containsEntry("numberOfStrings", model.getStringCount())
+			.extractingByKey("strings", LIST)
+			.as("Map for each string")
+			.hasSize(strings.size())
+			.element(0, MAP)
+			.as("String 1 state of charge")
+			.containsEntry("stringStateOfCharge", strings.get(0).getStateOfCharge())
+			.as("String 1 events")
+			.containsEntry("stringEvents", strings.get(0).getEvents())
+			.as("String 1 combined vendor events")
+			.doesNotContainKey("stringVendorEvents2")
 			;
 		// @formatter:on
 	}

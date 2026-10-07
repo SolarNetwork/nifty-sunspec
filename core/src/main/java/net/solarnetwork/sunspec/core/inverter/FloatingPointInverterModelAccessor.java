@@ -541,6 +541,16 @@ public class FloatingPointInverterModelAccessor extends BaseModelAccessor
 			};
 		}
 
+		@Override
+		public Collection<? extends ModbusReference> getPointReferences() {
+			return FloatingPointInverterModelAccessor.this.getPointReferences();
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			return FloatingPointInverterModelAccessor.this.getPointValue(point);
+		}
+
 	}
 
 	@Override

@@ -27,6 +27,8 @@ import java.util.List;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.IntRange;
 import net.solarnetwork.sunspec.api.ModelId;
+import net.solarnetwork.sunspec.api.PointGroup;
+import net.solarnetwork.sunspec.api.PointGroupList;
 import net.solarnetwork.sunspec.api.der.DerAdoptResult;
 import net.solarnetwork.sunspec.api.der.DerCurve;
 import net.solarnetwork.sunspec.api.der.DerCurvePoint;
@@ -34,6 +36,7 @@ import net.solarnetwork.sunspec.api.der.DerTripCurveSet;
 import net.solarnetwork.sunspec.api.der.DerTripModelAccessor;
 import net.solarnetwork.sunspec.api.der.DerTripModelRegister;
 import net.solarnetwork.sunspec.core.BaseModelAccessor;
+import net.solarnetwork.sunspec.core.support.SimplePointGroup;
 import net.solarnetwork.sunspec.modbus.ModbusConnection;
 import net.solarnetwork.sunspec.modbus.ModbusReference;
 import net.solarnetwork.sunspec.modbus.support.ModbusUtils;
@@ -209,7 +212,48 @@ public abstract class BaseDerTripModelAccessor extends BaseModelAccessor
 		return result;
 	}
 
-	private final class TripCurveSet implements DerTripCurveSet {
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This implementation returns the fixed block points, with the point x
+	 * scale factor of the model.
+	 * </p>
+	 */
+	@Override
+	public Collection<? extends ModbusReference> getPointReferences() {
+		final List<ModbusReference> result = new ArrayList<>(8);
+		result.addAll(
+				EnumSet.range(DerTripModelRegister.Enabled, DerTripModelRegister.NumberOfCurveSets));
+		result.add(pointXScaleFactorRegister);
+		result.add(DerTripModelRegister.ScaleFactorTime);
+		return result;
+	}
+
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof DerTripModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case Enabled -> isEnabled();
+			case AdoptCurveRequest -> getAdoptCurveRequest();
+			case AdoptCurveResult -> getAdoptCurveResult();
+			case NumberOfPoints -> getCurvePointCount();
+			case NumberOfCurveSets -> getCurveSetCount();
+			case ScaleFactorVoltage, ScaleFactorFrequency, ScaleFactorTime -> null;
+			case CurveSetReadOnly, CurveActivePointCount, PointVoltage, PointVoltageTime -> null;
+			case PointFrequency, PointFrequencyTime -> null;
+		};
+	}
+
+	@Override
+	public List<PointGroupList> getPointGroups() {
+		return List.of(PointGroupList.repeating("CurveSets",
+				getCurveSets().stream().map(PointGroup.class::cast).toList()));
+	}
+
+	private final class TripCurveSet implements DerTripCurveSet, PointGroup {
 
 		private final int index;
 		private final int setAddress;
@@ -246,9 +290,26 @@ public abstract class BaseDerTripModelAccessor extends BaseModelAccessor
 			return new TripCurve(this, 2);
 		}
 
+		@Override
+		public Collection<? extends ModbusReference> getPointReferences() {
+			return List.of(DerTripModelRegister.CurveSetReadOnly);
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			return (DerTripModelRegister.CurveSetReadOnly.equals(point) ? isReadOnly() : null);
+		}
+
+		@Override
+		public List<PointGroupList> getPointGroups() {
+			return List.of(PointGroupList.single("MustTrip", new TripCurve(this, 0)),
+					PointGroupList.single("MayTrip", new TripCurve(this, 1)),
+					PointGroupList.single("MomentaryCessation", new TripCurve(this, 2)));
+		}
+
 	}
 
-	private final class TripCurve implements DerCurve {
+	private final class TripCurve implements DerCurve, PointGroup {
 
 		private final TripCurveSet set;
 		private final int curveAddress;
@@ -342,6 +403,40 @@ public abstract class BaseDerTripModelAccessor extends BaseModelAccessor
 				writeWords(conn, curveAddress + 1, words);
 			}
 			writeValue(conn, DerTripModelRegister.CurveActivePointCount, curveAddress, points.size());
+		}
+
+		@Override
+		public Collection<? extends ModbusReference> getPointReferences() {
+			return List.of(DerTripModelRegister.CurveActivePointCount);
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			return (DerTripModelRegister.CurveActivePointCount.equals(point) ? getActivePointCount()
+					: null);
+		}
+
+		@Override
+		public List<PointGroupList> getPointGroups() {
+			final List<DerCurvePoint> points = getPoints();
+			final List<PointGroup> groups = new ArrayList<>(points.size());
+			for ( DerCurvePoint p : points ) {
+				groups.add(new SimplePointGroup(List.of(pointXRegister, pointTimeRegister),
+						ref -> curvePointValue(p, ref)));
+			}
+			return List.of(PointGroupList.repeating("Points", groups));
+		}
+
+		private @Nullable Float curvePointValue(DerCurvePoint p, ModbusReference ref) {
+			final float value;
+			if ( ref.equals(pointXRegister) ) {
+				value = p.x();
+			} else if ( ref.equals(pointTimeRegister) ) {
+				value = p.y();
+			} else {
+				return null;
+			}
+			return (Float.isNaN(value) ? null : value);
 		}
 
 	}

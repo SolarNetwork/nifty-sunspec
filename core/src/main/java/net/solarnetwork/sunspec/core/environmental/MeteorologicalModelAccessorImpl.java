@@ -147,4 +147,24 @@ public class MeteorologicalModelAccessorImpl extends BaseModelAccessor
 		return getIntegerValue(MeteorologicalModelRegister.SoilMoisture);
 	}
 
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof MeteorologicalModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case TemperatureAmbient -> getAmbientTemperature();
+			case RelativeHumidity -> getRelativeHumidity();
+			case BarometricPressure -> getAtmosphericPressure();
+			case WindSpeed -> getWindSpeed();
+			case WindDirection -> getWindDirection();
+			case Rain -> getRainAccumulation();
+			case Snow -> getSnowAccumulation();
+			case PrecipitationType -> getPrecipitationType();
+			case ElectricField -> getElectricField();
+			case SurfaceWetness -> getSurfaceWetness();
+			case SoilMoisture -> getSoilMoisture();
+		};
+	}
+
 }

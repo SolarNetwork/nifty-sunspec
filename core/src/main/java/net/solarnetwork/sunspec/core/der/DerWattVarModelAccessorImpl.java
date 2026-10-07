@@ -134,6 +134,11 @@ public class DerWattVarModelAccessorImpl extends BaseDerCurveModelAccessor
 		return curves(WattVarCurveImpl::new);
 	}
 
+	@Override
+	protected BaseDerCurve createCurve(int index) {
+		return new WattVarCurveImpl(index);
+	}
+
 	private final class WattVarCurveImpl extends BaseDerCurve implements WattVarCurve {
 
 		private WattVarCurveImpl(int index) {
@@ -170,6 +175,20 @@ public class DerWattVarModelAccessorImpl extends BaseDerCurveModelAccessor
 			requireWritable();
 			writeValue(conn, DerWattVarModelRegister.CurvePowerPriority, curveAddress,
 					priority.getCode());
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			if ( !(point instanceof DerWattVarModelRegister r) ) {
+				return super.getPointValue(point);
+			}
+			return switch (r) {
+				case CurveDependentReference -> getDependentReference();
+				case CurvePowerPriority -> getPowerPriority();
+				case CurveReadOnly -> isReadOnly();
+				case ScaleFactorActivePower, ScaleFactorReactivePower, PointActivePower -> null;
+				case PointReactivePower -> null;
+			};
 		}
 
 	}

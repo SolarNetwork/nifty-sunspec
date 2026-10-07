@@ -22,6 +22,8 @@ package net.solarnetwork.sunspec.modbus;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
 import net.solarnetwork.sunspec.api.PointAccess;
+import net.solarnetwork.sunspec.api.PointGroup;
+import net.solarnetwork.sunspec.api.PointMapMode;
 
 /**
  * A reference to a Modbus register (or registers).
@@ -62,8 +64,19 @@ public interface ModbusReference {
 	}
 
 	/**
-	 * Get the name of the SunSpec point this reference is associated with.
-	 * 
+	 * Get the name of the point this reference is associated with.
+	 *
+	 * <p>
+	 * The name is unique within the points of a model, and is used to derive
+	 * the keys of {@link PointGroup#toPointMap(PointMapMode)}. Names are upper
+	 * camel case, and are usually the register enumeration constant name.
+	 * Points of a single AC phase end with the phase, such as
+	 * {@code CurrentPhaseA} or {@code VoltagePhaseANeutral}, and points between
+	 * two phases end with both, such as {@code VoltagePhaseAPhaseB}. Points for
+	 * all phases, such as totals and averages, have no suffix, such as
+	 * {@code Current} or {@code LineVoltage}.
+	 * </p>
+	 *
 	 * @return the point name
 	 */
 	String getName();

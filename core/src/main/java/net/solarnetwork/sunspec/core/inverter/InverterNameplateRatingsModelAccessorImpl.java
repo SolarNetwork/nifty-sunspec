@@ -188,4 +188,38 @@ public class InverterNameplateRatingsModelAccessorImpl extends BaseModelAccessor
 				InverterNameplateRatingsRegister.ScaleFactorStoredEnergyExportPowerRating);
 	}
 
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof InverterNameplateRatingsRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case DerType -> getDerType();
+			case ActivePowerRating -> getActivePowerRating();
+			case ScaleFactorActivePowerRating -> null;
+			case ApparentPowerRating -> getApparentPowerRating();
+			case ScaleFactorApparentPowerRating -> null;
+			case ReactivePowerQ1Rating -> getReactivePowerQ1Rating();
+			case ReactivePowerQ2Rating -> getReactivePowerQ2Rating();
+			case ReactivePowerQ3Rating -> getReactivePowerQ3Rating();
+			case ReactivePowerQ4Rating -> getReactivePowerQ4Rating();
+			case ScaleFactorReactivePowerRating -> null;
+			case CurrentRating -> getCurrentRating();
+			case ScaleFactorCurrentRating -> null;
+			case PowerFactorQ1Rating -> getPowerFactorQ1Rating();
+			case PowerFactorQ2Rating -> getPowerFactorQ2Rating();
+			case PowerFactorQ3Rating -> getPowerFactorQ3Rating();
+			case PowerFactorQ4Rating -> getPowerFactorQ4Rating();
+			case ScaleFactorPowerFactorRating -> null;
+			case StoredEnergyRating -> getStoredEnergyRating();
+			case ScaleFactorStoredEnergyRating -> null;
+			case StoredChargeCapacity -> getStoredChargeCapacity();
+			case ScaleFactorStoredChargeCapacity -> null;
+			case StoredEnergyImportPowerRating -> getStoredEnergyImportPowerRating();
+			case ScaleFactorStoredEnergyImportPowerRating -> null;
+			case StoredEnergyExportPowerRating -> getStoredEnergyExportPowerRating();
+			case ScaleFactorStoredEnergyExportPowerRating -> null;
+		};
+	}
+
 }

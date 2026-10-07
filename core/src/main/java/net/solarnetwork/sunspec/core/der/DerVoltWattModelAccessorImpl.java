@@ -133,6 +133,11 @@ public class DerVoltWattModelAccessorImpl extends BaseDerCurveModelAccessor
 		return curves(VoltWattCurveImpl::new);
 	}
 
+	@Override
+	protected BaseDerCurve createCurve(int index) {
+		return new VoltWattCurveImpl(index);
+	}
+
 	private final class VoltWattCurveImpl extends BaseDerCurve implements VoltWattCurve {
 
 		private VoltWattCurveImpl(int index) {
@@ -165,6 +170,20 @@ public class DerVoltWattModelAccessorImpl extends BaseDerCurveModelAccessor
 			writeScaledValue(conn, DerVoltWattModelRegister.CurveOpenLoopResponseTime,
 					DerVoltWattModelRegister.ScaleFactorResponseTime, curveAddress, getBlockAddress(),
 					seconds);
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			if ( !(point instanceof DerVoltWattModelRegister r) ) {
+				return super.getPointValue(point);
+			}
+			return switch (r) {
+				case CurveDependentReference -> getDependentReference();
+				case CurveOpenLoopResponseTime -> getOpenLoopResponseTime();
+				case CurveReadOnly -> isReadOnly();
+				case ScaleFactorVoltage, ScaleFactorActivePower, ScaleFactorResponseTime -> null;
+				case PointVoltage, PointActivePower -> null;
+			};
 		}
 
 	}

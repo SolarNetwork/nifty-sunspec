@@ -28,6 +28,8 @@ import java.util.Set;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.ModelId;
+import net.solarnetwork.sunspec.api.PointGroup;
+import net.solarnetwork.sunspec.api.PointGroupList;
 import net.solarnetwork.sunspec.api.der.DerDcMeasurementModelAccessor;
 import net.solarnetwork.sunspec.api.der.DerDcMeasurementModelRegister;
 import net.solarnetwork.sunspec.api.der.DerDcPortAlarm;
@@ -157,7 +159,32 @@ public class DerDcMeasurementModelAccessorImpl extends BaseModelAccessor
 		return result;
 	}
 
-	private final class DerDcPort implements DcPort {
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof DerDcMeasurementModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case AlarmedPortsBitmask -> getAlarmedPortIndexes();
+			case NumberOfPorts -> getPortCount();
+			case DcCurrent -> getDCCurrent();
+			case DcPower -> getDCPower();
+			case DcEnergyInjected -> getDCEnergyInjected();
+			case DcEnergyAbsorbed -> getDCEnergyAbsorbed();
+			case ScaleFactorDcCurrent, ScaleFactorDcVoltage, ScaleFactorDcPower -> null;
+			case ScaleFactorDcEnergy, ScaleFactorTemperature, PortType, PortId, PortName -> null;
+			case PortDcCurrent, PortDcVoltage, PortDcPower, PortDcEnergyInjected -> null;
+			case PortDcEnergyAbsorbed, PortTemperature, PortStatus, PortAlarmsBitmask -> null;
+		};
+	}
+
+	@Override
+	public List<PointGroupList> getPointGroups() {
+		return List.of(PointGroupList.repeating("DcPorts",
+				getDcPorts().stream().map(PointGroup.class::cast).toList()));
+	}
+
+	private final class DerDcPort implements DcPort, PointGroup {
 
 		private final int portAddress;
 
@@ -229,6 +256,34 @@ public class DerDcMeasurementModelAccessorImpl extends BaseModelAccessor
 		public Set<? extends ModelEvent> getEvents() {
 			Number n = getBitfield(DerDcMeasurementModelRegister.PortAlarmsBitmask, portAddress);
 			return DerDcPortAlarm.forBitmask(n != null ? n.longValue() : 0L);
+		}
+
+		@Override
+		public Collection<? extends ModbusReference> getPointReferences() {
+			return getRepeatingBlockRegisters();
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			if ( !(point instanceof DerDcMeasurementModelRegister r) ) {
+				return null;
+			}
+			return switch (r) {
+				case PortType -> getPortType();
+				case PortId -> getPortId();
+				case PortName -> getPortName();
+				case PortDcCurrent -> getDCCurrent();
+				case PortDcVoltage -> getDCVoltage();
+				case PortDcPower -> getDCPower();
+				case PortDcEnergyInjected -> getDCEnergyInjected();
+				case PortDcEnergyAbsorbed -> getDCEnergyAbsorbed();
+				case PortTemperature -> getTemperature();
+				case PortStatus -> getPortStatus();
+				case PortAlarmsBitmask -> getEvents();
+				case AlarmedPortsBitmask, NumberOfPorts, DcCurrent, DcPower, DcEnergyInjected -> null;
+				case DcEnergyAbsorbed, ScaleFactorDcCurrent, ScaleFactorDcVoltage -> null;
+				case ScaleFactorDcPower, ScaleFactorDcEnergy, ScaleFactorTemperature -> null;
+			};
 		}
 
 	}

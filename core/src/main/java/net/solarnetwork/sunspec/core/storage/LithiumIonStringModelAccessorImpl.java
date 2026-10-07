@@ -29,6 +29,8 @@ import java.util.Set;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.ModelId;
+import net.solarnetwork.sunspec.api.PointGroup;
+import net.solarnetwork.sunspec.api.PointGroupList;
 import net.solarnetwork.sunspec.api.storage.BatteryConnectionFailure;
 import net.solarnetwork.sunspec.api.storage.BatteryConnectionStatus;
 import net.solarnetwork.sunspec.api.storage.BatteryEnableOperation;
@@ -284,7 +286,60 @@ public class LithiumIonStringModelAccessorImpl extends BaseModelAccessor
 		return result;
 	}
 
-	private final class BatteryModuleImpl implements BatteryModule {
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof LithiumIonStringModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case StringIndex -> getStringIndex();
+			case NumberOfModules -> getModuleCount();
+			case Status -> getStatus();
+			case ConnectionFailure -> getConnectionFailure();
+			case BalancingCellCount -> getBalancingCellCount();
+			case StateOfCharge -> getStateOfCharge();
+			case DepthOfDischarge -> getDepthOfDischarge();
+			case CycleCount -> getCycleCount();
+			case StateOfHealth -> getStateOfHealth();
+			case DcCurrent -> getDCCurrent();
+			case DcVoltage -> getDCVoltage();
+			case MaximumCellVoltage -> getMaximumCellVoltage();
+			case MaximumCellVoltageModuleIndex -> getMaximumCellVoltageModuleIndex();
+			case MinimumCellVoltage -> getMinimumCellVoltage();
+			case MinimumCellVoltageModuleIndex -> getMinimumCellVoltageModuleIndex();
+			case AverageCellVoltage -> getAverageCellVoltage();
+			case MaximumModuleTemperature -> getMaximumModuleTemperature();
+			case MaximumModuleTemperatureModuleIndex -> getMaximumModuleTemperatureModuleIndex();
+			case MinimumModuleTemperature -> getMinimumModuleTemperature();
+			case MinimumModuleTemperatureModuleIndex -> getMinimumModuleTemperatureModuleIndex();
+			case AverageModuleTemperature -> getAverageModuleTemperature();
+			case ContactorStatus -> getClosedContactors();
+			case EventsBitmask -> getEvents();
+			case Events2Bitmask -> null; // SunSpec defines no events
+			case VendorEventsBitmask -> getVendorEvents();
+			case VendorEvents2Bitmask -> null; // included in the vendor events
+			case EnableOperation -> getEnableOperation();
+			case ConnectOperation -> getConnectOperation();
+			case ScaleFactorStateOfCharge, ScaleFactorStateOfHealth, ScaleFactorDepthOfDischarge -> null;
+			case ScaleFactorCurrent -> null;
+			case ScaleFactorVoltage, ScaleFactorCellVoltage, ScaleFactorModuleTemperature -> null;
+			case ModuleCellCount -> null;
+			case ModuleStateOfCharge, ModuleStateOfHealth, ModuleMaximumCellVoltage -> null;
+			case ModuleMaximumCellVoltageCellIndex -> null;
+			case ModuleMinimumCellVoltage, ModuleMinimumCellVoltageCellIndex -> null;
+			case ModuleAverageCellVoltage, ModuleMaximumCellTemperature -> null;
+			case ModuleMaximumCellTemperatureCellIndex, ModuleMinimumCellTemperature -> null;
+			case ModuleMinimumCellTemperatureCellIndex, ModuleAverageCellTemperature -> null;
+		};
+	}
+
+	@Override
+	public List<PointGroupList> getPointGroups() {
+		return List.of(PointGroupList.repeating("Modules",
+				getModules().stream().map(PointGroup.class::cast).toList()));
+	}
+
+	private final class BatteryModuleImpl implements BatteryModule, PointGroup {
 
 		private final int index;
 		private final int groupAddress;
@@ -384,6 +439,46 @@ public class LithiumIonStringModelAccessorImpl extends BaseModelAccessor
 			return getScaledFloatValue(LithiumIonStringModelRegister.ModuleAverageCellTemperature,
 					LithiumIonStringModelRegister.ScaleFactorModuleTemperature, groupAddress,
 					getBlockAddress());
+		}
+
+		@Override
+		public Collection<? extends ModbusReference> getPointReferences() {
+			return getRepeatingBlockRegisters();
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			if ( !(point instanceof LithiumIonStringModelRegister r) ) {
+				return null;
+			}
+			return switch (r) {
+				case ModuleCellCount -> getCellCount();
+				case ModuleStateOfCharge -> getStateOfCharge();
+				case ModuleStateOfHealth -> getStateOfHealth();
+				case ModuleMaximumCellVoltage -> getMaximumCellVoltage();
+				case ModuleMaximumCellVoltageCellIndex -> getMaximumCellVoltageCellIndex();
+				case ModuleMinimumCellVoltage -> getMinimumCellVoltage();
+				case ModuleMinimumCellVoltageCellIndex -> getMinimumCellVoltageCellIndex();
+				case ModuleAverageCellVoltage -> getAverageCellVoltage();
+				case ModuleMaximumCellTemperature -> getMaximumCellTemperature();
+				case ModuleMaximumCellTemperatureCellIndex -> getMaximumCellTemperatureCellIndex();
+				case ModuleMinimumCellTemperature -> getMinimumCellTemperature();
+				case ModuleMinimumCellTemperatureCellIndex -> getMinimumCellTemperatureCellIndex();
+				case ModuleAverageCellTemperature -> getAverageCellTemperature();
+				case StringIndex, NumberOfModules, Status, ConnectionFailure -> null;
+				case BalancingCellCount, StateOfCharge, DepthOfDischarge, CycleCount -> null;
+				case StateOfHealth, DcCurrent, DcVoltage, MaximumCellVoltage -> null;
+				case MaximumCellVoltageModuleIndex, MinimumCellVoltage -> null;
+				case MinimumCellVoltageModuleIndex, AverageCellVoltage -> null;
+				case MaximumModuleTemperature, MaximumModuleTemperatureModuleIndex -> null;
+				case MinimumModuleTemperature, MinimumModuleTemperatureModuleIndex -> null;
+				case AverageModuleTemperature, ContactorStatus, EventsBitmask, Events2Bitmask -> null;
+				case VendorEventsBitmask, VendorEvents2Bitmask, EnableOperation -> null;
+				case ConnectOperation -> null;
+				case ScaleFactorStateOfCharge, ScaleFactorStateOfHealth -> null;
+				case ScaleFactorDepthOfDischarge, ScaleFactorCurrent -> null;
+				case ScaleFactorVoltage, ScaleFactorCellVoltage, ScaleFactorModuleTemperature -> null;
+			};
 		}
 
 	}

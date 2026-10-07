@@ -29,6 +29,8 @@ import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.ModelId;
 import net.solarnetwork.sunspec.api.OperatingState;
+import net.solarnetwork.sunspec.api.PointGroup;
+import net.solarnetwork.sunspec.api.PointGroupList;
 import net.solarnetwork.sunspec.api.inverter.InverterModelId;
 import net.solarnetwork.sunspec.api.inverter.InverterMpptExtensionModelAccessor;
 import net.solarnetwork.sunspec.api.inverter.InverterMpptExtensionModelEvent;
@@ -129,11 +131,39 @@ public class InverterMpptExtensionModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
+	public @Nullable Integer getModuleCount() {
+		return getIntegerValue(InverterMpptExtensionModelRegister.ModuleCount);
+	}
+
+	@Override
 	public @Nullable Integer getTimestampPeriod() {
 		return getIntegerValue(InverterMpptExtensionModelRegister.TimestampPeriod);
 	}
 
-	private class InverterMpptExtensionDcModule implements DcModule {
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof InverterMpptExtensionModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case EventsBitmask -> getEvents();
+			case ModuleCount -> getModuleCount();
+			case TimestampPeriod -> getTimestampPeriod();
+			case ScaleFactorDcCurrent, ScaleFactorDcVoltage, ScaleFactorDcPower -> null;
+			case ScaleFactorDcEnergy -> null;
+			case ModuleInputId, ModuleName, ModuleDcCurrent, ModuleDcVoltage -> null;
+			case ModuleDcPower, ModuleLifetimeEnergy, ModuleTimestamp, ModuleTemperature -> null;
+			case ModuleOperatingState, ModuleEventsBitmask -> null;
+		};
+	}
+
+	@Override
+	public List<PointGroupList> getPointGroups() {
+		return List.of(PointGroupList.repeating("DcModules",
+				getDcModules().stream().map(PointGroup.class::cast).toList()));
+	}
+
+	private class InverterMpptExtensionDcModule implements DcModule, PointGroup {
 
 		private final int index;
 
@@ -215,6 +245,32 @@ public class InverterMpptExtensionModelAccessorImpl extends BaseModelAccessor
 			Number n = getBitfield(InverterMpptExtensionModelRegister.ModuleEventsBitmask,
 					getBlockAddress() + getFixedBlockLength() + index * REPEATING_BLOCK_LENGTH);
 			return InverterMpptExtensionModelEvent.forBitmask(n != null ? n.longValue() : 0L);
+		}
+
+		@Override
+		public Collection<? extends ModbusReference> getPointReferences() {
+			return getRepeatingBlockRegisters();
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			if ( !(point instanceof InverterMpptExtensionModelRegister r) ) {
+				return null;
+			}
+			return switch (r) {
+				case ModuleInputId -> getInputId();
+				case ModuleName -> getInputName();
+				case ModuleDcCurrent -> getDCCurrent();
+				case ModuleDcVoltage -> getDCVoltage();
+				case ModuleDcPower -> getDCPower();
+				case ModuleLifetimeEnergy -> getDCEnergyDelivered();
+				case ModuleTimestamp -> getDataTimestamp();
+				case ModuleTemperature -> getTemperature();
+				case ModuleOperatingState -> getOperatingState();
+				case ModuleEventsBitmask -> getEvents();
+				case ScaleFactorDcCurrent, ScaleFactorDcVoltage, ScaleFactorDcPower -> null;
+				case ScaleFactorDcEnergy, EventsBitmask, ModuleCount, TimestampPeriod -> null;
+			};
 		}
 
 	}

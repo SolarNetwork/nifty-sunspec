@@ -23,9 +23,13 @@ import static org.assertj.core.api.BDDAssertions.catchThrowable;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.assertj.core.api.BDDAssertions.thenThrownBy;
+import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
+import static org.assertj.core.api.InstanceOfAssertFactories.MAP;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
+import net.solarnetwork.sunspec.api.PointMapMode;
 import net.solarnetwork.sunspec.api.der.DerAdoptResult;
 import net.solarnetwork.sunspec.api.der.DerCurvePoint;
 import net.solarnetwork.sunspec.api.der.DerModelId;
@@ -476,6 +480,74 @@ public class DerVoltVarModelAccessorImpl_705_01Tests {
 		then(conn.getWrites())
 			.as("Nothing written")
 			.isEmpty()
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void pointMap_flat() {
+		// WHEN
+		Map<String, Object> result = getTestModel().toPointMap(PointMapMode.Flat);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("Scale factors left out")
+			.doesNotContainKeys("scaleFactorVoltage", "scaleFactorReactivePower",
+					"scaleFactorResponseTime")
+			.as("Fixed block enabled")
+			.containsEntry("enabled", false)
+			.as("Fixed block adopt result")
+			.containsEntry("adoptCurveResult", DerAdoptResult.InProgress)
+			.as("Fixed block curve count")
+			.containsEntry("numberOfCurves", 3)
+			.as("Curve 1 active point count")
+			.containsEntry("curveActivePointCount_1", 4)
+			.as("Curve 1 dependent reference")
+			.containsEntry("curveDependentReference_1",
+					DerReactivePowerReference.MaximumActivePowerPercent)
+			.as("Curve 1 read-only")
+			.containsEntry("curveReadOnly_1", true)
+			.as("Curve 1 response time")
+			.containsEntry("curveOpenLoopResponseTime_1", 10.0f)
+			.as("Curve 1 point 1 voltage")
+			.containsEntry("pointVoltage_1_1", 90.0f)
+			.as("Curve 1 point 4 reactive power")
+			.containsEntry("pointReactivePower_1_4", -25.0f)
+			.as("Curve 3 read-only")
+			.containsEntry("curveReadOnly_3", false)
+			.as("Curve 3 point 4 voltage")
+			.containsEntry("pointVoltage_3_4", 0.0f)
+			.as("No fourth curve")
+			.doesNotContainKey("curveReadOnly_4")
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void pointMap_nested() {
+		// WHEN
+		Map<String, Object> result = getTestModel().toPointMap(PointMapMode.Nested);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("Fixed block points and curves list")
+			.containsOnlyKeys("enabled", "adoptCurveRequest", "adoptCurveResult", "numberOfPoints",
+					"numberOfCurves", "curves")
+			.extractingByKey("curves", LIST)
+			.as("Map for each curve")
+			.hasSize(3)
+			.element(0, MAP)
+			.as("Curve 1 read-only")
+			.containsEntry("curveReadOnly", true)
+			.extractingByKey("points", LIST)
+			.as("Map for each curve point")
+			.containsExactly(
+					Map.of("pointVoltage", 90.0f, "pointReactivePower", 25.0f),
+					Map.of("pointVoltage", 100.0f, "pointReactivePower", 0.0f),
+					Map.of("pointVoltage", 100.0f, "pointReactivePower", 0.0f),
+					Map.of("pointVoltage", 110.0f, "pointReactivePower", -25.0f))
 			;
 		// @formatter:on
 	}

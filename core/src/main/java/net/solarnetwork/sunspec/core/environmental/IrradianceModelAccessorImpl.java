@@ -25,6 +25,8 @@ import java.util.EnumSet;
 import java.util.List;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelId;
+import net.solarnetwork.sunspec.api.PointGroup;
+import net.solarnetwork.sunspec.api.PointGroupList;
 import net.solarnetwork.sunspec.api.environmental.EnvironmentalModelId;
 import net.solarnetwork.sunspec.api.environmental.IrradianceModelAccessor;
 import net.solarnetwork.sunspec.api.environmental.IrradianceModelRegister;
@@ -93,18 +95,45 @@ public class IrradianceModelAccessorImpl extends BaseModelAccessor implements Ir
 
 	@Override
 	public List<Irradiance> getIrradiances() {
+		return new ArrayList<>(irradiances());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This model has no fixed block points, so this implementation returns
+	 * {@code null}.
+	 * </p>
+	 */
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		return null;
+	}
+
+	@Override
+	public List<PointGroupList> getPointGroups() {
+		return List.of(PointGroupList.repeating("Irradiances", irradiances()));
+	}
+
+	/**
+	 * Create the list of irradiances.
+	 *
+	 * @return the irradiances, one for each repeating block instance
+	 */
+	private List<IrradianceImpl> irradiances() {
 		final int count = getRepeatingBlockInstanceCount();
 		if ( count < 1 ) {
 			return List.of();
 		}
-		final List<Irradiance> result = new ArrayList<>(count);
+		final List<IrradianceImpl> result = new ArrayList<>(count);
 		for ( int i = 0; i < count; i++ ) {
 			result.add(new IrradianceImpl(i));
 		}
 		return result;
 	}
 
-	private final class IrradianceImpl implements Irradiance {
+	private final class IrradianceImpl implements Irradiance, PointGroup {
 
 		private final int groupAddress;
 
@@ -136,6 +165,25 @@ public class IrradianceModelAccessorImpl extends BaseModelAccessor implements Ir
 		@Override
 		public @Nullable Integer getOtherIrradiance() {
 			return getIntegerValue(IrradianceModelRegister.OTI, groupAddress);
+		}
+
+		@Override
+		public Collection<? extends ModbusReference> getPointReferences() {
+			return getRepeatingBlockRegisters();
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			if ( !(point instanceof IrradianceModelRegister r) ) {
+				return null;
+			}
+			return switch (r) {
+				case GHI -> getGlobalHorizontalIrradiance();
+				case POAI -> getPlaneOfArrayIrradiance();
+				case DFI -> getDiffuseIrradiance();
+				case DNI -> getDirectNormalIrradiance();
+				case OTI -> getOtherIrradiance();
+			};
 		}
 
 	}

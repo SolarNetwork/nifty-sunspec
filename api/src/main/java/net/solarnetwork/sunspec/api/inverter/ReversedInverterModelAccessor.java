@@ -22,6 +22,7 @@ package net.solarnetwork.sunspec.api.inverter;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
@@ -30,6 +31,7 @@ import net.solarnetwork.sunspec.api.IntRange;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.ModelId;
 import net.solarnetwork.sunspec.api.OperatingState;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * * A "reversed" inverter model accessor that swaps import/export values.
@@ -229,6 +231,37 @@ public class ReversedInverterModelAccessor implements InverterModelAccessor {
 	@Override
 	public @Nullable BitSet getVendorEvents() {
 		return delegate.getVendorEvents();
+	}
+
+	@Override
+	public Collection<? extends ModbusReference> getPointReferences() {
+		return delegate.getPointReferences();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This implementation returns the delegate point value, negated for the
+	 * points that this accessor negates: the active, reactive, and DC power
+	 * points, and the active and reactive energy points, with names that start
+	 * with {@code ActivePower}, {@code ReactivePower}, {@code DcPower},
+	 * {@code ActiveEnergy}, or {@code ReactiveEnergy}.
+	 * </p>
+	 */
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		final Object value = delegate.getPointValue(point);
+		if ( value instanceof BigDecimal n && isNegatedPoint(point.getName()) ) {
+			return n.negate();
+		}
+		return value;
+	}
+
+	private static boolean isNegatedPoint(String name) {
+		return name.startsWith("ActivePower") || name.startsWith("ReactivePower")
+				|| name.startsWith("DcPower") || name.startsWith("ActiveEnergy")
+				|| name.startsWith("ReactiveEnergy");
 	}
 
 }

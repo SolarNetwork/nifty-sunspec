@@ -19,7 +19,10 @@
 
 package net.solarnetwork.sunspec.api;
 
+import java.util.Collection;
+import java.util.EnumSet;
 import org.jspecify.annotations.Nullable;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * API for accessing common model data.
@@ -32,6 +35,40 @@ public interface CommonModelAccessor extends ModelAccessor {
 	@Override
 	default int getFixedBlockLength() {
 		return getModelLength();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This implementation returns all the {@link CommonModelRegister} points.
+	 * </p>
+	 */
+	@Override
+	default Collection<? extends ModbusReference> getPointReferences() {
+		return EnumSet.allOf(CommonModelRegister.class);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This implementation supports the {@link CommonModelRegister} points.
+	 * </p>
+	 */
+	@Override
+	default @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof CommonModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case Manufacturer -> getManufacturer();
+			case Model -> getModelName();
+			case Options -> getOptions();
+			case Version -> getVersion();
+			case SerialNumber -> getSerialNumber();
+			case DeviceAddress -> getDeviceAddress();
+		};
 	}
 
 	/**

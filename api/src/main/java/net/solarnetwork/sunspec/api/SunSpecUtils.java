@@ -20,7 +20,10 @@
 package net.solarnetwork.sunspec.api;
 
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -31,8 +34,97 @@ import org.jspecify.annotations.Nullable;
  */
 public final class SunSpecUtils {
 
+	/**
+	 * A pattern for a name that ends with a phase, such as {@code PhaseA},
+	 * {@code PhaseANeutral}, or {@code PhaseAPhaseB}.
+	 */
+	private static final Pattern PHASE_SUFFIX = Pattern.compile("Phase([ABC])(Neutral|Phase([ABC]))?$");
+
 	private SunSpecUtils() {
 		// not available
+	}
+
+	/**
+	 * Convert a point name to lower camel case.
+	 *
+	 * <p>
+	 * The leading upper case letters of {@code name} are changed to lower case,
+	 * except for the last one when it starts a word, so {@code ActivePower}
+	 * becomes {@code activePower}, {@code GHI} becomes {@code ghi}, and
+	 * {@code DCVoltage} becomes {@code dcVoltage}.
+	 * </p>
+	 *
+	 * @param name
+	 *        the name to convert
+	 * @return the name in lower camel case
+	 */
+	public static String lowerCamelCase(String name) {
+		final int len = name.length();
+		int upper = 0;
+		while ( upper < len && Character.isUpperCase(name.charAt(upper)) ) {
+			upper++;
+		}
+		if ( upper == 0 ) {
+			return name;
+		}
+		if ( upper > 1 && upper < len && Character.isLowerCase(name.charAt(upper)) ) {
+			// keep the start of the next word
+			upper--;
+		}
+		return name.substring(0, upper).toLowerCase(Locale.ROOT) + name.substring(upper);
+	}
+
+	/**
+	 * Replace a phase at the end of a point name with an {@link AcPhase} key
+	 * suffix.
+	 *
+	 * <p>
+	 * A name that ends with {@code PhaseA} or {@code PhaseANeutral} gets the
+	 * {@link AcPhase#withKey(String)} suffix, so {@code CurrentPhaseA} becomes
+	 * {@code Current_a}. A name that ends with a line phase, such as
+	 * {@code PhaseAPhaseB}, gets the {@link AcPhase#withLineKey(String)}
+	 * suffix, so {@code VoltagePhaseAPhaseB} becomes {@code Voltage_ab}. Other
+	 * names are returned unchanged.
+	 * </p>
+	 *
+	 * @param name
+	 *        the name to convert
+	 * @return the name with any phase replaced by a key suffix
+	 */
+	public static String phaseSuffix(String name) {
+		final Matcher m = PHASE_SUFFIX.matcher(name);
+		if ( !m.find() ) {
+			return name;
+		}
+		final AcPhase phase = AcPhase.forKey(Character.toLowerCase(m.group(1).charAt(0)));
+		final String prefix = name.substring(0, m.start());
+		final String linePhase = m.group(3);
+		if ( linePhase == null ) {
+			return phase.withKey(prefix);
+		}
+		final String lineKey = phase.getLineKey();
+		if ( lineKey.charAt(1) != Character.toLowerCase(linePhase.charAt(0)) ) {
+			// not a line phase pair with a key
+			return name;
+		}
+		return phase.withLineKey(prefix);
+	}
+
+	/**
+	 * Get the default point map key for a point name.
+	 *
+	 * <p>
+	 * This applies {@link #lowerCamelCase(String)} and then
+	 * {@link #phaseSuffix(String)}, so {@code VoltagePhaseAPhaseB} becomes
+	 * {@code voltage_ab}.
+	 * </p>
+	 *
+	 * @param name
+	 *        the point name
+	 * @return the key
+	 */
+	public static String pointKey(String name) {
+		return phaseSuffix(lowerCamelCase(name));
 	}
 
 	/**

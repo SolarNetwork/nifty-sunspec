@@ -19,6 +19,9 @@
 
 package net.solarnetwork.sunspec.api.inverter;
 
+import static net.solarnetwork.sunspec.api.AcPhase.PhaseA;
+import static net.solarnetwork.sunspec.api.AcPhase.PhaseB;
+import static net.solarnetwork.sunspec.api.AcPhase.PhaseC;
 import java.math.BigDecimal;
 import java.util.BitSet;
 import java.util.Set;
@@ -27,6 +30,7 @@ import net.solarnetwork.sunspec.api.AcPhase;
 import net.solarnetwork.sunspec.api.ModelAccessor;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.OperatingState;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * API for accessing inverter model data.
@@ -230,6 +234,67 @@ public interface InverterModelAccessor extends ModelAccessor {
 	 */
 	default @Nullable BitSet getVendorEvents() {
 		return null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This implementation supports the {@link IntegerInverterModelRegister} and
+	 * {@link FloatingPointInverterModelRegister} points, and returns the value
+	 * of the corresponding accessor method, from
+	 * {@link #accessorForPhase(AcPhase)} for phase points.
+	 * </p>
+	 */
+	@Override
+	default @Nullable Object getPointValue(ModbusReference point) {
+		final IntegerInverterModelRegister r;
+		if ( point instanceof IntegerInverterModelRegister i ) {
+			r = i;
+		} else if ( point instanceof FloatingPointInverterModelRegister f ) {
+			// the floating point registers are named like the integer ones, without scale factors
+			r = IntegerInverterModelRegister.valueOf(f.name());
+		} else {
+			return null;
+		}
+		return switch (r) {
+			case CurrentTotal -> getCurrent();
+			case CurrentPhaseA -> accessorForPhase(PhaseA).getCurrent();
+			case CurrentPhaseB -> accessorForPhase(PhaseB).getCurrent();
+			case CurrentPhaseC -> accessorForPhase(PhaseC).getCurrent();
+			case VoltagePhaseAPhaseB -> accessorForPhase(PhaseA).getLineVoltage();
+			case VoltagePhaseBPhaseC -> accessorForPhase(PhaseB).getLineVoltage();
+			case VoltagePhaseCPhaseA -> accessorForPhase(PhaseC).getLineVoltage();
+			case VoltagePhaseANeutral -> accessorForPhase(PhaseA).getVoltage();
+			case VoltagePhaseBNeutral -> accessorForPhase(PhaseB).getVoltage();
+			case VoltagePhaseCNeutral -> accessorForPhase(PhaseC).getVoltage();
+			case ActivePowerTotal -> getActivePower();
+			case Frequency -> getFrequency();
+			case ApparentPowerTotal -> getApparentPower();
+			case ReactivePowerTotal -> getReactivePower();
+			case PowerFactorAverage -> getPowerFactor();
+			case ActiveEnergyExportedTotal -> getActiveEnergyExported();
+			case DcCurrentTotal -> getDcCurrent();
+			case DcVoltageTotal -> getDcVoltage();
+			case DcPowerTotal -> getDcPower();
+			case TemperatureCabinet -> getCabinetTemperature();
+			case TemperatureHeatSink -> getHeatSinkTemperature();
+			case TemperatureTransformer -> getTransformerTemperature();
+			case TemperatureOther -> getOtherTemperature();
+			case OperatingState -> getOperatingState();
+			case OperatingStateVendor -> getVendorOperatingState();
+			case EventsBitmask -> getEvents();
+			case Events2Bitmask -> null; // reserved for future use
+			case EventsVendorBitmask -> getVendorEvents();
+			case Events2VendorBitmask, Events3VendorBitmask -> null; // included in the vendor events
+			case Events4VendorBitmask -> null; // included in the vendor events
+			case ScaleFactorCurrent, ScaleFactorVoltage, ScaleFactorActivePower -> null;
+			case ScaleFactorFrequency -> null;
+			case ScaleFactorApparentPower, ScaleFactorReactivePower, ScaleFactorPowerFactor -> null;
+			case ScaleFactorActiveEnergy, ScaleFactorDcCurrent, ScaleFactorDcVoltage -> null;
+			case ScaleFactorDcPower -> null;
+			case ScaleFactorTemperature -> null;
+		};
 	}
 
 	/**

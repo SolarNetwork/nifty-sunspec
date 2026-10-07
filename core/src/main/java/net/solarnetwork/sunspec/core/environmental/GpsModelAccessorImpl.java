@@ -133,4 +133,19 @@ public class GpsModelAccessorImpl extends BaseModelAccessor implements GpsModelA
 		return getIntegerValue(GpsModelRegister.Altitude);
 	}
 
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof GpsModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case Time -> getGpsTimestamp();
+			case Date -> null; // included in the Timestamp point
+			case Location -> getLocationName();
+			case Latitude -> getLatitude();
+			case Longitude -> getLongitude();
+			case Altitude -> getAltitude();
+		};
+	}
+
 }

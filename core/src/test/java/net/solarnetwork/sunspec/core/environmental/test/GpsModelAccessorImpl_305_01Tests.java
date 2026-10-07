@@ -24,9 +24,11 @@ import static org.assertj.core.api.BDDAssertions.then;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import net.solarnetwork.sunspec.api.PointMapMode;
 import net.solarnetwork.sunspec.api.environmental.EnvironmentalModelId;
 import net.solarnetwork.sunspec.api.environmental.GpsModelAccessor;
 import net.solarnetwork.sunspec.core.environmental.GpsModelAccessorImpl;
@@ -114,6 +116,28 @@ public class GpsModelAccessorImpl_305_01Tests {
 			.returns(new BigDecimal("-37.1133611"), from(GpsModelAccessor::getLatitude))
 			.as("Latitude")
 			.returns(new BigDecimal("175.8884328"), from(GpsModelAccessor::getLongitude))
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void pointMap() {
+		// GIVEN
+		GpsModelAccessor model = getTestDataInstance().findTypedModel(GpsModelAccessor.class);
+
+		// WHEN
+		Map<String, Object> result = model.toPointMap(PointMapMode.Flat);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("Time and date points mapped as one timestamp")
+			.containsEntry("timestamp",
+					DateTimeFormatter.ISO_INSTANT.parse("2023-07-09T19:28:34.123Z", Instant::from))
+			.as("No separate time or date points")
+			.doesNotContainKeys("time", "date")
+			.as("Location")
+			.containsEntry("location", "Home sweet home")
 			;
 		// @formatter:on
 	}

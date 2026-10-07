@@ -29,6 +29,8 @@ import java.util.Set;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.ModelId;
+import net.solarnetwork.sunspec.api.PointGroup;
+import net.solarnetwork.sunspec.api.PointGroupList;
 import net.solarnetwork.sunspec.api.storage.BatteryConnectionFailure;
 import net.solarnetwork.sunspec.api.storage.BatteryConnectionStatus;
 import net.solarnetwork.sunspec.api.storage.BatteryDisabledReason;
@@ -237,7 +239,56 @@ public class LithiumIonBankModelAccessorImpl extends BaseModelAccessor
 		return result;
 	}
 
-	private final class BatteryStringImpl implements BatteryString {
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof LithiumIonBankModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case NumberOfStrings -> getStringCount();
+			case NumberOfConnectedStrings -> getConnectedStringCount();
+			case MaximumModuleTemperature -> getMaximumModuleTemperature();
+			case MaximumModuleTemperatureStringIndex -> getMaximumModuleTemperatureStringIndex();
+			case MaximumModuleTemperatureModuleIndex -> getMaximumModuleTemperatureModuleIndex();
+			case MinimumModuleTemperature -> getMinimumModuleTemperature();
+			case MinimumModuleTemperatureStringIndex -> getMinimumModuleTemperatureStringIndex();
+			case MinimumModuleTemperatureModuleIndex -> getMinimumModuleTemperatureModuleIndex();
+			case AverageModuleTemperature -> getAverageModuleTemperature();
+			case MaximumStringVoltage -> getMaximumStringVoltage();
+			case MaximumStringVoltageStringIndex -> getMaximumStringVoltageStringIndex();
+			case MinimumStringVoltage -> getMinimumStringVoltage();
+			case MinimumStringVoltageStringIndex -> getMinimumStringVoltageStringIndex();
+			case AverageStringVoltage -> getAverageStringVoltage();
+			case MaximumStringCurrent -> getMaximumStringCurrent();
+			case MaximumStringCurrentStringIndex -> getMaximumStringCurrentStringIndex();
+			case MinimumStringCurrent -> getMinimumStringCurrent();
+			case MinimumStringCurrentStringIndex -> getMinimumStringCurrentStringIndex();
+			case AverageStringCurrent -> getAverageStringCurrent();
+			case BalancingCellCount -> getBalancingCellCount();
+			case ScaleFactorCellVoltage, ScaleFactorModuleTemperature, ScaleFactorCurrent -> null;
+			case ScaleFactorStateOfHealth -> null;
+			case ScaleFactorStateOfCharge, ScaleFactorVoltage, StringModuleCount, StringStatus -> null;
+			case StringConnectionFailure, StringStateOfCharge, StringStateOfHealth -> null;
+			case StringDcCurrent -> null;
+			case StringMaximumCellVoltage, StringMaximumCellVoltageModuleIndex -> null;
+			case StringMinimumCellVoltage, StringMinimumCellVoltageModuleIndex -> null;
+			case StringAverageCellVoltage, StringMaximumModuleTemperature -> null;
+			case StringMaximumModuleTemperatureModuleIndex, StringMinimumModuleTemperature -> null;
+			case StringMinimumModuleTemperatureModuleIndex, StringAverageModuleTemperature -> null;
+			case StringDisabledReason, StringContactorStatus -> null;
+			case StringEventsBitmask, StringEvents2Bitmask, StringVendorEventsBitmask -> null;
+			case StringVendorEvents2Bitmask -> null;
+			case StringEnableOperation, StringConnectOperation -> null;
+		};
+	}
+
+	@Override
+	public List<PointGroupList> getPointGroups() {
+		return List.of(PointGroupList.repeating("Strings",
+				getStrings().stream().map(PointGroup.class::cast).toList()));
+	}
+
+	private final class BatteryStringImpl implements BatteryString, PointGroup {
 
 		private final int index;
 		private final int groupAddress;
@@ -401,6 +452,57 @@ public class LithiumIonBankModelAccessorImpl extends BaseModelAccessor
 				throws IOException {
 			writeValue(conn, LithiumIonBankModelRegister.StringConnectOperation, groupAddress,
 					operation.getCode());
+		}
+
+		@Override
+		public Collection<? extends ModbusReference> getPointReferences() {
+			return getRepeatingBlockRegisters();
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			if ( !(point instanceof LithiumIonBankModelRegister r) ) {
+				return null;
+			}
+			return switch (r) {
+				case StringModuleCount -> getModuleCount();
+				case StringStatus -> getStatus();
+				case StringConnectionFailure -> getConnectionFailure();
+				case StringStateOfCharge -> getStateOfCharge();
+				case StringStateOfHealth -> getStateOfHealth();
+				case StringDcCurrent -> getDCCurrent();
+				case StringMaximumCellVoltage -> getMaximumCellVoltage();
+				case StringMaximumCellVoltageModuleIndex -> getMaximumCellVoltageModuleIndex();
+				case StringMinimumCellVoltage -> getMinimumCellVoltage();
+				case StringMinimumCellVoltageModuleIndex -> getMinimumCellVoltageModuleIndex();
+				case StringAverageCellVoltage -> getAverageCellVoltage();
+				case StringMaximumModuleTemperature -> getMaximumModuleTemperature();
+				case StringMaximumModuleTemperatureModuleIndex -> getMaximumModuleTemperatureModuleIndex();
+				case StringMinimumModuleTemperature -> getMinimumModuleTemperature();
+				case StringMinimumModuleTemperatureModuleIndex -> getMinimumModuleTemperatureModuleIndex();
+				case StringAverageModuleTemperature -> getAverageModuleTemperature();
+				case StringDisabledReason -> getDisabledReason();
+				case StringContactorStatus -> getClosedContactors();
+				case StringEventsBitmask -> getEvents();
+				case StringEvents2Bitmask -> null; // SunSpec defines no events
+				case StringVendorEventsBitmask -> getVendorEvents();
+				case StringVendorEvents2Bitmask -> null; // included in the vendor events
+				case StringEnableOperation -> getEnableOperation();
+				case StringConnectOperation -> getConnectOperation();
+				case NumberOfStrings, NumberOfConnectedStrings, MaximumModuleTemperature -> null;
+				case MaximumModuleTemperatureStringIndex -> null;
+				case MaximumModuleTemperatureModuleIndex, MinimumModuleTemperature -> null;
+				case MinimumModuleTemperatureStringIndex, MinimumModuleTemperatureModuleIndex -> null;
+				case AverageModuleTemperature, MaximumStringVoltage -> null;
+				case MaximumStringVoltageStringIndex, MinimumStringVoltage -> null;
+				case MinimumStringVoltageStringIndex, AverageStringVoltage, MaximumStringCurrent -> null;
+				case MaximumStringCurrentStringIndex -> null;
+				case MinimumStringCurrent, MinimumStringCurrentStringIndex, AverageStringCurrent -> null;
+				case BalancingCellCount -> null;
+				case ScaleFactorCellVoltage, ScaleFactorModuleTemperature, ScaleFactorCurrent -> null;
+				case ScaleFactorStateOfHealth -> null;
+				case ScaleFactorStateOfCharge, ScaleFactorVoltage -> null;
+			};
 		}
 
 	}

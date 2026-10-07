@@ -28,6 +28,8 @@ import java.util.function.IntFunction;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.IntRange;
 import net.solarnetwork.sunspec.api.ModelId;
+import net.solarnetwork.sunspec.api.PointGroup;
+import net.solarnetwork.sunspec.api.PointGroupList;
 import net.solarnetwork.sunspec.api.der.DerAdoptResult;
 import net.solarnetwork.sunspec.api.der.DerCurve;
 import net.solarnetwork.sunspec.api.der.DerCurveModelAccessor;
@@ -119,6 +121,15 @@ public abstract class BaseDerCurveModelAccessor extends BaseModelAccessor
 	protected abstract ModbusReference getPointYScaleFactorRegister();
 
 	/**
+	 * Create a curve.
+	 *
+	 * @param index
+	 *        the curve index, starting from {@literal 1}
+	 * @return the curve
+	 */
+	protected abstract BaseDerCurve createCurve(int index);
+
+	/**
 	 * Get the length of a point.
 	 *
 	 * @return the number of registers in each point
@@ -172,6 +183,54 @@ public abstract class BaseDerCurveModelAccessor extends BaseModelAccessor
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This implementation returns the {@link DerCurveModelRegister} fixed block
+	 * points, followed by the {@link #getFixedBlockRegisters()}.
+	 * </p>
+	 */
+	@Override
+	public Collection<? extends ModbusReference> getPointReferences() {
+		final List<ModbusReference> result = new ArrayList<>(16);
+		result.addAll(
+				EnumSet.range(DerCurveModelRegister.Enabled, DerCurveModelRegister.ReversionCurve));
+		result.addAll(getFixedBlockRegisters());
+		return result;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This implementation supports the {@link DerCurveModelRegister} fixed
+	 * block points.
+	 * </p>
+	 */
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof DerCurveModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case Enabled -> isEnabled();
+			case AdoptCurveRequest -> getAdoptCurveRequest();
+			case AdoptCurveResult -> getAdoptCurveResult();
+			case NumberOfPoints -> getCurvePointCount();
+			case NumberOfCurves -> getCurveCount();
+			case ReversionTime -> getReversionTime();
+			case ReversionTimeRemaining -> getReversionTimeRemaining();
+			case ReversionCurve -> getReversionCurve();
+			case CurveActivePointCount -> null;
+		};
+	}
+
+	@Override
+	public List<PointGroupList> getPointGroups() {
+		return List.of(PointGroupList.repeating("Curves", curves(this::createCurve)));
 	}
 
 	@Override
@@ -272,7 +331,7 @@ public abstract class BaseDerCurveModelAccessor extends BaseModelAccessor
 	/**
 	 * Base implementation of {@link DerCurve}.
 	 */
-	protected class BaseDerCurve implements DerCurve {
+	protected class BaseDerCurve implements DerCurve, PointGroup {
 
 		private final int index;
 
@@ -390,6 +449,84 @@ public abstract class BaseDerCurveModelAccessor extends BaseModelAccessor
 			}
 			writeWords(conn, curveAddress + getCurveSettingsLength(), words);
 			writeValue(conn, DerCurveModelRegister.CurveActivePointCount, curveAddress, points.size());
+		}
+
+		/**
+		 * {@inheritDoc}
+		 *
+		 * <p>
+		 * This implementation returns the
+		 * {@link DerCurveModelRegister#CurveActivePointCount} point, followed
+		 * by the {@link #getCurveSettingsRegisters()}.
+		 * </p>
+		 */
+		@Override
+		public Collection<? extends ModbusReference> getPointReferences() {
+			final List<ModbusReference> result = new ArrayList<>(8);
+			result.add(DerCurveModelRegister.CurveActivePointCount);
+			result.addAll(getCurveSettingsRegisters());
+			return result;
+		}
+
+		/**
+		 * {@inheritDoc}
+		 *
+		 * <p>
+		 * This implementation supports the
+		 * {@link DerCurveModelRegister#CurveActivePointCount} and
+		 * {@link #getCurveReadOnlyRegister()} points.
+		 * </p>
+		 */
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			if ( point == DerCurveModelRegister.CurveActivePointCount ) {
+				return getActivePointCount();
+			} else if ( point.equals(getCurveReadOnlyRegister()) ) {
+				return isReadOnly();
+			}
+			return null;
+		}
+
+		@Override
+		public List<PointGroupList> getPointGroups() {
+			final List<DerCurvePoint> points = getPoints();
+			final List<CurvePointGroup> groups = new ArrayList<>(points.size());
+			for ( DerCurvePoint point : points ) {
+				groups.add(new CurvePointGroup(point));
+			}
+			return List.of(PointGroupList.repeating("Points", groups));
+		}
+
+	}
+
+	/**
+	 * A point group for a curve point.
+	 */
+	private final class CurvePointGroup implements PointGroup {
+
+		private final DerCurvePoint point;
+
+		private CurvePointGroup(DerCurvePoint point) {
+			super();
+			this.point = point;
+		}
+
+		@Override
+		public Collection<? extends ModbusReference> getPointReferences() {
+			return List.of(getPointXRegister(), getPointYRegister());
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference ref) {
+			final float value;
+			if ( ref.equals(getPointXRegister()) ) {
+				value = point.x();
+			} else if ( ref.equals(getPointYRegister()) ) {
+				value = point.y();
+			} else {
+				return null;
+			}
+			return (Float.isNaN(value) ? null : value);
 		}
 
 	}

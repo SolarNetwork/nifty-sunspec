@@ -124,4 +124,18 @@ public class DerControlModelAccessorImpl extends BaseModelAccessor implements De
 		writeValue(conn, DerControlModelRegister.OperationCommand, command.getCode());
 	}
 
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof DerControlModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case LocalRemoteControl -> getLocalRemoteControl();
+			case DerHeartbeat -> getDerHeartbeat();
+			case ControllerHeartbeat -> getControllerHeartbeat();
+			case AlarmReset -> null; // a write-only command, see resetAlarms()
+			case OperationCommand -> getOperationCommand();
+		};
+	}
+
 }

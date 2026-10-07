@@ -216,9 +216,35 @@ public enum FloatingPointInverterModelRegister implements ModbusReference {
 		return classification;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This is the enumeration constant name, without the {@code Total} or
+	 * {@code Average} suffix of the points for all phases, and without the
+	 * {@code Bitmask} suffix of bitfield points.
+	 * </p>
+	 */
 	@Override
 	public String getName() {
-		return name();
+		return switch (this) {
+			case CurrentTotal -> "Current";
+			case ActivePowerTotal -> "ActivePower";
+			case ApparentPowerTotal -> "ApparentPower";
+			case ReactivePowerTotal -> "ReactivePower";
+			case PowerFactorAverage -> "PowerFactor";
+			case ActiveEnergyExportedTotal -> "ActiveEnergyExported";
+			case DcCurrentTotal -> "DcCurrent";
+			case DcVoltageTotal -> "DcVoltage";
+			case DcPowerTotal -> "DcPower";
+			case EventsBitmask -> "Events";
+			case Events2Bitmask -> "Events2";
+			case EventsVendorBitmask -> "VendorEvents";
+			case Events2VendorBitmask -> "VendorEvents2";
+			case Events3VendorBitmask -> "VendorEvents3";
+			case Events4VendorBitmask -> "VendorEvents4";
+			default -> name();
+		};
 	}
 
 }

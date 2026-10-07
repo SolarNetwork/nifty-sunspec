@@ -359,4 +359,43 @@ public class InverterBasicSettingsModelAccessorImpl extends BaseModelAccessor
 		}
 	}
 
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof InverterBasicSettingsRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case ActivePowerMaximum -> getActivePowerMaximum();
+			case ScaleFactorActivePowerMaximum -> null;
+			case VoltagePcc -> getPccVoltage();
+			case ScaleFactorVoltagePcc -> null;
+			case VoltagePccOffset -> getPccVoltageOffset();
+			case ScaleFactorVoltagePccOffset -> null;
+			case VoltageMaximum -> getVoltageMaximum();
+			case VoltageMinimum -> getVoltageMinimum();
+			case ScaleFactorVoltageMinimumMaximum -> null;
+			case ApparentPowerMaximum -> getApparentPowerMaximum();
+			case ScaleFactorApparentPowerMaximum -> null;
+			case ReactivePowerQ1Maximum -> getReactivePowerQ1Maximum();
+			case ReactivePowerQ2Maximum -> getReactivePowerQ2Maximum();
+			case ReactivePowerQ3Maximum -> getReactivePowerQ3Maximum();
+			case ReactivePowerQ4Maximum -> getReactivePowerQ4Maximum();
+			case ScaleFactorReactivePowerMaximum -> null;
+			case ActivePowerRampRate -> getActivePowerRampRate();
+			case ScaleFactorActivePowerRampRate -> null;
+			case ActivePowerRampRateMaximum -> getActivePowerRampRateMaximum();
+			case ScaleFactorActivePowerRampRateMaximum -> null;
+			case PowerFactorQ1Minimum -> getPowerFactorQ1Minimum();
+			case PowerFactorQ2Minimum -> getPowerFactorQ2Minimum();
+			case PowerFactorQ3Minimum -> getPowerFactorQ3Minimum();
+			case PowerFactorQ4Minimum -> getPowerFactorQ4Minimum();
+			case ScaleFactorPowerFactorMinimum -> null;
+			case ImportExportChangeReactivePowerAction -> getImportExportChangeReactivePowerAction();
+			case ApparentPowerCalculationMethod -> getApparentPowerCalculationMethod();
+			case EcpNominalFrequency -> getEcpFrequency();
+			case ScaleFactorEcpNominalFrequency -> null;
+			case ConnectedPhase -> getConnectedPhase();
+		};
+	}
+
 }

@@ -105,4 +105,17 @@ public class ReferencePointModelAccessorImpl extends BaseModelAccessor
 		return getIntegerValue(ReferencePointModelRegister.Temperature);
 	}
 
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof ReferencePointModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case GHI -> getGlobalHorizontalIrradiance();
+			case Amps -> getCurrent();
+			case Voltage -> getVoltage();
+			case Temperature -> getTemperature();
+		};
+	}
+
 }

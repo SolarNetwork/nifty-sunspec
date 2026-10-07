@@ -40,6 +40,7 @@ import net.solarnetwork.sunspec.api.IntRange;
 import net.solarnetwork.sunspec.api.ModelAccessor;
 import net.solarnetwork.sunspec.api.ModelId;
 import net.solarnetwork.sunspec.core.ModelDataFactory;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
 
 /**
@@ -163,6 +164,16 @@ public class ModelAddressRangeTests {
 			@Override
 			public List<IntRange> getUnsplittableAddressRanges() {
 				return List.of(unsplittable);
+			}
+
+			@Override
+			public Collection<? extends ModbusReference> getPointReferences() {
+				return List.of();
+			}
+
+			@Override
+			public @Nullable Object getPointValue(ModbusReference point) {
+				return null;
 			}
 
 		};

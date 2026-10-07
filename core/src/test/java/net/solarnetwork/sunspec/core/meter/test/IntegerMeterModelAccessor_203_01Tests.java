@@ -23,15 +23,18 @@ import static net.solarnetwork.sunspec.api.AcPhase.PhaseA;
 import static net.solarnetwork.sunspec.api.AcPhase.PhaseB;
 import static net.solarnetwork.sunspec.api.AcPhase.PhaseC;
 import static org.assertj.core.api.BDDAssertions.from;
+import static org.assertj.core.api.BDDAssertions.entry;
 import static org.assertj.core.api.BDDAssertions.then;
 import java.math.BigDecimal;
 import java.util.BitSet;
+import java.util.Map;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.solarnetwork.sunspec.api.CommonModelAccessor;
 import net.solarnetwork.sunspec.api.ModelEvent;
+import net.solarnetwork.sunspec.api.PointMapMode;
 import net.solarnetwork.sunspec.api.meter.IntegerMeterModelRegister;
 import net.solarnetwork.sunspec.api.meter.MeterModelAccessor;
 import net.solarnetwork.sunspec.api.meter.MeterModelId;
@@ -447,6 +450,152 @@ public class IntegerMeterModelAccessor_203_01Tests {
 					from(m -> m.accessorForPhase(PhaseB).getReactiveEnergyExported()))
 			.as("Phase C")
 			.returns(null, from(m -> m.accessorForPhase(PhaseC).getReactiveEnergyExported()))
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void reactiveEnergyQuadrants() {
+		// GIVEN
+		MeterModelAccessor model = getTestDataInstance().getTypedModel();
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Total Q1")
+			.returns(BigDecimal.valueOf(0x36D2L * 10L),
+					from(MeterModelAccessor::getReactiveEnergyImportedQ1))
+			.as("Total Q2")
+			.returns(BigDecimal.valueOf(0x28L * 10L),
+					from(MeterModelAccessor::getReactiveEnergyImportedQ2))
+			.as("Total Q3 zero accumulator not available")
+			.returns(null, from(MeterModelAccessor::getReactiveEnergyExportedQ3))
+			.as("Total Q4")
+			.returns(BigDecimal.valueOf(0x1D63L * 10L),
+					from(MeterModelAccessor::getReactiveEnergyExportedQ4))
+			.as("Phase A Q1")
+			.returns(BigDecimal.valueOf(0x1BDDL * 10L),
+					from(m -> m.accessorForPhase(PhaseA).getReactiveEnergyImportedQ1()))
+			.as("Phase A Q2")
+			.returns(BigDecimal.valueOf(0x18L * 10L),
+					from(m -> m.accessorForPhase(PhaseA).getReactiveEnergyImportedQ2()))
+			.as("Phase A Q3 zero accumulator not available")
+			.returns(null, from(m -> m.accessorForPhase(PhaseA).getReactiveEnergyExportedQ3()))
+			.as("Phase A Q4")
+			.returns(BigDecimal.valueOf(0x0E49L * 10L),
+					from(m -> m.accessorForPhase(PhaseA).getReactiveEnergyExportedQ4()))
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void commonModelPointMap() {
+		// GIVEN
+		CommonModelAccessor data = getTestDataInstance();
+
+		// WHEN
+		Map<String, Object> result = data.toPointMap(PointMapMode.Flat);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("Common model points mapped")
+			.containsExactly(
+					entry("manufacturer", "Veris Industries"),
+					entry("model", "E51C2"),
+					entry("options", "None"),
+					entry("version", "2.115"),
+					entry("serialNumber", "4E4C3699"),
+					entry("deviceAddress", 7))
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void pointMap() {
+		// GIVEN
+		MeterModelAccessor model = getTestDataInstance().getTypedModel();
+
+		// WHEN
+		Map<String, Object> result = model.toPointMap(PointMapMode.Flat);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("Available points mapped, without scale factors")
+			.containsOnlyKeys(
+					"current", "current_a", "current_b", "current_c",
+					"voltage", "voltage_a", "voltage_b", "voltage_c",
+					"lineVoltage", "voltage_ab", "voltage_bc", "voltage_ca",
+					"frequency",
+					"activePower", "activePower_a", "activePower_b", "activePower_c",
+					"apparentPower", "apparentPower_a", "apparentPower_b", "apparentPower_c",
+					"reactivePower", "reactivePower_a", "reactivePower_b", "reactivePower_c",
+					"powerFactor", "powerFactor_a", "powerFactor_b", "powerFactor_c",
+					"activeEnergyImported", "activeEnergyImported_a", "activeEnergyImported_b",
+					"apparentEnergyExported", "apparentEnergyExported_a", "apparentEnergyExported_b",
+					"apparentEnergyImported", "apparentEnergyImported_a", "apparentEnergyImported_b",
+					"reactiveEnergyImportedQ1", "reactiveEnergyImportedQ1_a",
+					"reactiveEnergyImportedQ1_b",
+					"reactiveEnergyImportedQ2", "reactiveEnergyImportedQ2_a",
+					"reactiveEnergyImportedQ2_b",
+					"reactiveEnergyExportedQ4", "reactiveEnergyExportedQ4_a",
+					"reactiveEnergyExportedQ4_b",
+					"events")
+			.as("Total current")
+			.containsEntry("current", model.getCurrent())
+			.as("Phase current")
+			.containsEntry("current_a", model.accessorForPhase(PhaseA).getCurrent())
+			.as("Line-to-neutral average voltage")
+			.containsEntry("voltage", model.getVoltage())
+			.as("Phase to neutral voltage")
+			.containsEntry("voltage_b", model.accessorForPhase(PhaseB).getVoltage())
+			.as("Line-to-line average voltage")
+			.containsEntry("lineVoltage", model.getLineVoltage())
+			.as("Phase C to A voltage")
+			.containsEntry("voltage_ca", model.accessorForPhase(PhaseC).getLineVoltage())
+			.as("Total active power")
+			.containsEntry("activePower", new BigDecimal("6540"))
+			.as("Phase reactive energy quadrant")
+			.containsEntry("reactiveEnergyImportedQ1_a",
+					model.accessorForPhase(PhaseA).getReactiveEnergyImportedQ1())
+			.as("Events")
+			.containsEntry("events", model.getEvents())
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void pointMap_reversed() {
+		// GIVEN
+		MeterModelAccessor model = getTestDataInstance().getTypedModel();
+
+		// WHEN
+		Map<String, Object> result = model.reversed().toPointMap(PointMapMode.Flat);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("Current unchanged")
+			.containsEntry("current", model.getCurrent())
+			.as("Active power negated")
+			.containsEntry("activePower", new BigDecimal("-6540"))
+			.as("Phase active power negated")
+			.containsEntry("activePower_a", new BigDecimal("-3280"))
+			.as("Apparent power unchanged")
+			.containsEntry("apparentPower", new BigDecimal("6590"))
+			.as("Active energy exported from imported")
+			.containsEntry("activeEnergyExported", model.getActiveEnergyImported())
+			.as("Active energy imported from exported, which is not available")
+			.doesNotContainKey("activeEnergyImported")
+			.as("Reactive energy Q3 from Q1")
+			.containsEntry("reactiveEnergyExportedQ3", model.getReactiveEnergyImportedQ1())
+			.as("Reactive energy Q4 from Q2")
+			.containsEntry("reactiveEnergyExportedQ4", model.getReactiveEnergyImportedQ2())
+			.as("Reactive energy Q2 from Q4")
+			.containsEntry("reactiveEnergyImportedQ2", model.getReactiveEnergyExportedQ4())
+			.as("Reactive energy Q1 from Q3, which is not available")
+			.doesNotContainKey("reactiveEnergyImportedQ1")
 			;
 		// @formatter:on
 	}

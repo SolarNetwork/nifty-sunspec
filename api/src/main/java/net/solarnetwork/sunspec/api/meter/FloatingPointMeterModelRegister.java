@@ -295,9 +295,38 @@ public enum FloatingPointMeterModelRegister implements ModbusReference {
 		return classification;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This is the enumeration constant name, without the {@code Total} or
+	 * {@code Average} suffix of the points for all phases, without the
+	 * {@code Bitmask} suffix of bitfield points, and with the line-to-neutral
+	 * and line-to-line average voltages named {@code Voltage} and
+	 * {@code LineVoltage}.
+	 * </p>
+	 */
 	@Override
 	public String getName() {
-		return name();
+		return switch (this) {
+			case CurrentTotal -> "Current";
+			case VoltageLineNeutralAverage -> "Voltage";
+			case VoltageLineLineAverage -> "LineVoltage";
+			case ActivePowerTotal -> "ActivePower";
+			case ApparentPowerTotal -> "ApparentPower";
+			case ReactivePowerTotal -> "ReactivePower";
+			case PowerFactorAverage -> "PowerFactor";
+			case ActiveEnergyExportedTotal -> "ActiveEnergyExported";
+			case ActiveEnergyImportedTotal -> "ActiveEnergyImported";
+			case ApparentEnergyExportedTotal -> "ApparentEnergyExported";
+			case ApparentEnergyImportedTotal -> "ApparentEnergyImported";
+			case ReactiveEnergyImportedQ1Total -> "ReactiveEnergyImportedQ1";
+			case ReactiveEnergyImportedQ2Total -> "ReactiveEnergyImportedQ2";
+			case ReactiveEnergyExportedQ3Total -> "ReactiveEnergyExportedQ3";
+			case ReactiveEnergyExportedQ4Total -> "ReactiveEnergyExportedQ4";
+			case EventsBitmask -> "Events";
+			default -> name();
+		};
 	}
 
 }

@@ -636,6 +636,16 @@ public class IntegerInverterModelAccessor extends BaseModelAccessor implements I
 			};
 		}
 
+		@Override
+		public Collection<? extends ModbusReference> getPointReferences() {
+			return IntegerInverterModelAccessor.this.getPointReferences();
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			return IntegerInverterModelAccessor.this.getPointValue(point);
+		}
+
 	}
 
 	@Override

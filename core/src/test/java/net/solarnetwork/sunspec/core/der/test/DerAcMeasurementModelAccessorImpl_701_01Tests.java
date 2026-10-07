@@ -22,10 +22,12 @@ package net.solarnetwork.sunspec.core.der.test;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.api.AcPhase;
 import net.solarnetwork.sunspec.api.ModelEvent;
+import net.solarnetwork.sunspec.api.PointMapMode;
 import net.solarnetwork.sunspec.api.der.DerAcMeasurementModelAccessor;
 import net.solarnetwork.sunspec.api.der.DerAcWiringType;
 import net.solarnetwork.sunspec.api.der.DerAlarm;
@@ -375,6 +377,60 @@ public class DerAcMeasurementModelAccessorImpl_701_01Tests {
 			.returns(null, from(InverterModelAccessor::getVoltage))
 			.as("Active energy exported")
 			.returns(null, from(InverterModelAccessor::getActiveEnergyExported))
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void pointMap() {
+		// GIVEN
+		DerAcMeasurementModelAccessor model = getTestModel();
+
+		// WHEN
+		Map<String, Object> result = model.toPointMap(PointMapMode.Flat);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("AC wiring type")
+			.containsEntry("acWiringType", model.getAcWiringType())
+			.as("Operating state")
+			.containsEntry("operatingState", model.getDerOperatingState())
+			.as("Alarms")
+			.containsEntry("alarms", model.getEvents())
+			.as("Total active power")
+			.containsEntry("activePower", model.getActivePower())
+			.as("Line-to-line average voltage")
+			.containsEntry("lineVoltage", model.getLineVoltage())
+			.as("Active energy injected")
+			.containsEntry("activeEnergyInjected", model.getActiveEnergyExported())
+			.as("Phase current")
+			.containsEntry("current_a", model.accessorForPhase(AcPhase.PhaseA).getCurrent())
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void pointMap_reversed() {
+		// GIVEN
+		DerAcMeasurementModelAccessor model = getTestModel();
+
+		// WHEN
+		Map<String, Object> result = model.reversed().toPointMap(PointMapMode.Flat);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("DER points kept")
+			.containsEntry("acWiringType", model.getAcWiringType())
+			.as("Alarms kept")
+			.containsEntry("alarms", model.getEvents())
+			.as("Active power negated")
+			.containsEntry("activePower", model.reversed().getActivePower())
+			.as("Active energy injected negated")
+			.containsEntry("activeEnergyInjected", model.reversed().getActiveEnergyExported())
+			.as("Current unchanged")
+			.containsEntry("current", model.getCurrent())
 			;
 		// @formatter:on
 	}

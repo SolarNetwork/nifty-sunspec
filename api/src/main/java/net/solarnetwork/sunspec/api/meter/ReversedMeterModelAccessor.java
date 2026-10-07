@@ -21,6 +21,7 @@ package net.solarnetwork.sunspec.api.meter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
@@ -28,9 +29,17 @@ import net.solarnetwork.sunspec.api.AcPhase;
 import net.solarnetwork.sunspec.api.IntRange;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.ModelId;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * A "reversed" meter model accessor that swaps import/export values.
+ *
+ * <p>
+ * Active and reactive power values are negated, and imported and exported
+ * energy values are swapped, with reactive energy quadrants 1 and 3, and 2 and
+ * 4, swapped. The point values of {@link #getPointValue(ModbusReference)} are
+ * reversed in the same way.
+ * </p>
  *
  * @author matt
  * @version 1.0
@@ -168,6 +177,26 @@ public class ReversedMeterModelAccessor implements MeterModelAccessor {
 	}
 
 	@Override
+	public @Nullable BigDecimal getReactiveEnergyImportedQ1() {
+		return delegate.getReactiveEnergyExportedQ3();
+	}
+
+	@Override
+	public @Nullable BigDecimal getReactiveEnergyImportedQ2() {
+		return delegate.getReactiveEnergyExportedQ4();
+	}
+
+	@Override
+	public @Nullable BigDecimal getReactiveEnergyExportedQ3() {
+		return delegate.getReactiveEnergyImportedQ1();
+	}
+
+	@Override
+	public @Nullable BigDecimal getReactiveEnergyExportedQ4() {
+		return delegate.getReactiveEnergyImportedQ2();
+	}
+
+	@Override
 	public @Nullable BigDecimal getApparentEnergyImported() {
 		return delegate.getApparentEnergyExported();
 	}
@@ -180,6 +209,11 @@ public class ReversedMeterModelAccessor implements MeterModelAccessor {
 	@Override
 	public Set<? extends ModelEvent> getEvents() {
 		return delegate.getEvents();
+	}
+
+	@Override
+	public Collection<? extends ModbusReference> getPointReferences() {
+		return delegate.getPointReferences();
 	}
 
 }

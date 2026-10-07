@@ -30,6 +30,8 @@ import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.GenericModelEvent;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.ModelId;
+import net.solarnetwork.sunspec.api.PointGroup;
+import net.solarnetwork.sunspec.api.PointGroupList;
 import net.solarnetwork.sunspec.api.combiner.StringCombinerAdvancedModelAccessor;
 import net.solarnetwork.sunspec.api.combiner.StringCombinerAdvancedModelRegister;
 import net.solarnetwork.sunspec.api.combiner.StringCombinerModelEvent;
@@ -158,6 +160,18 @@ public class StringCombinerAdvancedModelAccessorImpl extends BaseModelAccessor
 	}
 
 	@Override
+	public @Nullable Float getDCCurrentMaxRating() {
+		Number n = getScaledValue(StringCombinerAdvancedModelRegister.DcCurrentMaxRating,
+				StringCombinerAdvancedModelRegister.ScaleFactorDcCurrent);
+		return (n != null ? n.floatValue() : null);
+	}
+
+	@Override
+	public @Nullable Integer getInputCount() {
+		return getIntegerValue(StringCombinerAdvancedModelRegister.InputCount);
+	}
+
+	@Override
 	public @Nullable Float getTemperature() {
 		return getFloatValue(StringCombinerAdvancedModelRegister.Temperature);
 	}
@@ -215,7 +229,71 @@ public class StringCombinerAdvancedModelAccessorImpl extends BaseModelAccessor
 		return result;
 	}
 
-	private class StringCombinerAdvancedDcInput implements AdvancedDcInput {
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This implementation returns the fixed block points of the model version.
+	 * </p>
+	 */
+	@Override
+	public Collection<? extends ModbusReference> getPointReferences() {
+		final Set<StringCombinerAdvancedModelRegister> result = EnumSet.range(
+				StringCombinerAdvancedModelRegister.ScaleFactorDcCurrent,
+				StringCombinerAdvancedModelRegister.ScaleFactorInputDcEnergy);
+		if ( isVersion2() ) {
+			result.removeAll(EnumSet.of(StringCombinerAdvancedModelRegister.DcCharge,
+					StringCombinerAdvancedModelRegister.DcVoltage,
+					StringCombinerAdvancedModelRegister.DcPerformanceRatio,
+					StringCombinerAdvancedModelRegister.DcEnergy));
+		} else {
+			result.removeAll(EnumSet.of(StringCombinerAdvancedModelRegister.DcChargeV2,
+					StringCombinerAdvancedModelRegister.DcVoltageV2,
+					StringCombinerAdvancedModelRegister.DcPerformanceRatioV2,
+					StringCombinerAdvancedModelRegister.DcEnergyV2,
+					StringCombinerAdvancedModelRegister.ScaleFactorInputDcCurrent,
+					StringCombinerAdvancedModelRegister.ScaleFactorInputDcCharge,
+					StringCombinerAdvancedModelRegister.ScaleFactorInputDcVoltage,
+					StringCombinerAdvancedModelRegister.ScaleFactorInputDcPower,
+					StringCombinerAdvancedModelRegister.ScaleFactorInputDcEnergy));
+		}
+		return result;
+	}
+
+	@Override
+	public @Nullable Object getPointValue(ModbusReference point) {
+		if ( !(point instanceof StringCombinerAdvancedModelRegister r) ) {
+			return null;
+		}
+		return switch (r) {
+			case ScaleFactorDcCurrent, ScaleFactorDcCharge, ScaleFactorDcVoltage -> null;
+			case ScaleFactorDcPower, ScaleFactorDcEnergy, ScaleFactorInputDcCurrent -> null;
+			case ScaleFactorInputDcCharge, ScaleFactorInputDcVoltage, ScaleFactorInputDcPower -> null;
+			case ScaleFactorInputDcEnergy -> null;
+			case DcCurrentMaxRating -> getDCCurrentMaxRating();
+			case InputCount -> getInputCount();
+			case EventsBitmask -> getEvents();
+			case VendorEventsBitmask -> getVendorEvents();
+			case DcCurrent -> getDCCurrent();
+			case DcCharge, DcChargeV2 -> getDCChargeDelivered();
+			case DcVoltage, DcVoltageV2 -> getDCVoltage();
+			case Temperature -> getTemperature();
+			case DcPower -> getDCPower();
+			case DcPerformanceRatio, DcPerformanceRatioV2 -> getDCPerformanceRatio();
+			case DcEnergy, DcEnergyV2 -> getDCEnergy();
+			case InputId, InputEventsBitmask, InputVendorEventsBitmask, InputDcCurrent -> null;
+			case InputDcCharge, InputDcChargeV2, InputDcVoltage, InputDcVoltageV2, InputDcPower -> null;
+			case InputDcEnergy, InputDcEnergyV2, InputDcPerformanceRatio, InputModuleCount -> null;
+		};
+	}
+
+	@Override
+	public List<PointGroupList> getPointGroups() {
+		return List.of(PointGroupList.repeating("DcInputs",
+				getAdvancedDcInputs().stream().map(PointGroup.class::cast).toList()));
+	}
+
+	private class StringCombinerAdvancedDcInput implements AdvancedDcInput, PointGroup {
 
 		private final int index;
 
@@ -315,5 +393,47 @@ public class StringCombinerAdvancedModelAccessorImpl extends BaseModelAccessor
 			return getIntegerValue(StringCombinerAdvancedModelRegister.InputModuleCount, inputAddress());
 		}
 
+		@Override
+		public Collection<? extends ModbusReference> getPointReferences() {
+			final Set<StringCombinerAdvancedModelRegister> result = EnumSet.range(
+					StringCombinerAdvancedModelRegister.InputId,
+					StringCombinerAdvancedModelRegister.InputModuleCount);
+			result.removeAll(isVersion2()
+					? EnumSet.of(StringCombinerAdvancedModelRegister.InputDcCharge,
+							StringCombinerAdvancedModelRegister.InputDcVoltage,
+							StringCombinerAdvancedModelRegister.InputDcEnergy)
+					: EnumSet.of(StringCombinerAdvancedModelRegister.InputDcChargeV2,
+							StringCombinerAdvancedModelRegister.InputDcVoltageV2,
+							StringCombinerAdvancedModelRegister.InputDcEnergyV2));
+			return result;
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			if ( !(point instanceof StringCombinerAdvancedModelRegister r) ) {
+				return null;
+			}
+			return switch (r) {
+				case ScaleFactorDcCurrent, ScaleFactorDcCharge, ScaleFactorDcVoltage -> null;
+				case ScaleFactorDcPower, ScaleFactorDcEnergy, DcCurrentMaxRating, InputCount -> null;
+				case EventsBitmask, VendorEventsBitmask, DcCurrent, DcCharge, DcChargeV2 -> null;
+				case DcVoltage, DcVoltageV2, Temperature, DcPower, DcPerformanceRatio -> null;
+				case DcPerformanceRatioV2, DcEnergy, DcEnergyV2, ScaleFactorInputDcCurrent -> null;
+				case ScaleFactorInputDcCharge, ScaleFactorInputDcVoltage -> null;
+				case ScaleFactorInputDcPower, ScaleFactorInputDcEnergy -> null;
+				case InputId -> getInputId();
+				case InputEventsBitmask -> getEvents();
+				case InputVendorEventsBitmask -> getVendorEvents();
+				case InputDcCurrent -> getDCCurrent();
+				case InputDcCharge, InputDcChargeV2 -> getDCChargeDelivered();
+				case InputDcVoltage, InputDcVoltageV2 -> getDCVoltage();
+				case InputDcPower -> getDCPower();
+				case InputDcEnergy, InputDcEnergyV2 -> getDCEnergy();
+				case InputDcPerformanceRatio -> getDCPerformanceRatio();
+				case InputModuleCount -> getModuleCount();
+			};
+		}
+
 	}
+
 }

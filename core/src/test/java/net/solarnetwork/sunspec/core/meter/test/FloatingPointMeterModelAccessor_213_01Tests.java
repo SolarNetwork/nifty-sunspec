@@ -25,9 +25,11 @@ import static net.solarnetwork.sunspec.api.AcPhase.PhaseC;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.api.ModelEvent;
+import net.solarnetwork.sunspec.api.PointMapMode;
 import net.solarnetwork.sunspec.api.meter.MeterModelAccessor;
 import net.solarnetwork.sunspec.api.meter.MeterModelEvent;
 import net.solarnetwork.sunspec.api.meter.MeterModelId;
@@ -256,6 +258,71 @@ public class FloatingPointMeterModelAccessor_213_01Tests {
 		then(model.getActivePower())
 			.as("Infinite value not available")
 			.isNull()
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void reactiveEnergyQuadrants() {
+		// GIVEN
+		MeterModelAccessor model = getTestModel();
+
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("Total Q1")
+			.returns(new BigDecimal("1000"), from(MeterModelAccessor::getReactiveEnergyImportedQ1))
+			.as("Total Q2")
+			.returns(new BigDecimal("200"), from(MeterModelAccessor::getReactiveEnergyImportedQ2))
+			.as("Total Q3")
+			.returns(new BigDecimal("300"), from(MeterModelAccessor::getReactiveEnergyExportedQ3))
+			.as("Total Q4")
+			.returns(new BigDecimal("400"), from(MeterModelAccessor::getReactiveEnergyExportedQ4))
+			.as("Phase A Q1")
+			.returns(new BigDecimal("333"),
+					from(m -> m.accessorForPhase(PhaseA).getReactiveEnergyImportedQ1()))
+			.as("Phase B Q2")
+			.returns(new BigDecimal("67"),
+					from(m -> m.accessorForPhase(PhaseB).getReactiveEnergyImportedQ2()))
+			.as("Phase C Q3")
+			.returns(new BigDecimal("100"),
+					from(m -> m.accessorForPhase(PhaseC).getReactiveEnergyExportedQ3()))
+			.as("Phase A Q4 not available")
+			.returns(null, from(m -> m.accessorForPhase(PhaseA).getReactiveEnergyExportedQ4()))
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void pointMap() {
+		// GIVEN
+		MeterModelAccessor model = getTestModel();
+
+		// WHEN
+		Map<String, Object> result = model.toPointMap(PointMapMode.Flat);
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("Unavailable points left out")
+			.doesNotContainKeys("powerFactor_c", "reactiveEnergyExportedQ4_a")
+			.as("Total current")
+			.containsEntry("current", 30.5f)
+			.as("Phase current")
+			.containsEntry("current_b", 10.2f)
+			.as("Line-to-line average voltage")
+			.containsEntry("lineVoltage", 399.0f)
+			.as("Phase A to B voltage")
+			.containsEntry("voltage_ab", 398.6f)
+			.as("Phase active power")
+			.containsEntry("activePower_a", new BigDecimal("2300.25"))
+			.as("Reactive energy quadrant")
+			.containsEntry("reactiveEnergyExportedQ3", new BigDecimal("300"))
+			.as("Phase reactive energy quadrant")
+			.containsEntry("reactiveEnergyImportedQ1_c", new BigDecimal("333.5"))
+			.as("Events")
+			.containsEntry("events",
+					Set.<ModelEvent> of(MeterModelEvent.PowerFailure, MeterModelEvent.LowPowerFactor))
 			;
 		// @formatter:on
 	}

@@ -134,6 +134,11 @@ public class DerVoltVarModelAccessorImpl extends BaseDerCurveModelAccessor
 		return curves(VoltVarCurveImpl::new);
 	}
 
+	@Override
+	protected BaseDerCurve createCurve(int index) {
+		return new VoltVarCurveImpl(index);
+	}
+
 	private final class VoltVarCurveImpl extends BaseDerCurve implements VoltVarCurve {
 
 		private VoltVarCurveImpl(int index) {
@@ -228,6 +233,25 @@ public class DerVoltVarModelAccessorImpl extends BaseDerCurveModelAccessor
 			writeScaledValue(conn, DerVoltVarModelRegister.CurveOpenLoopResponseTime,
 					DerVoltVarModelRegister.ScaleFactorResponseTime, curveAddress, getBlockAddress(),
 					seconds);
+		}
+
+		@Override
+		public @Nullable Object getPointValue(ModbusReference point) {
+			if ( !(point instanceof DerVoltVarModelRegister r) ) {
+				return super.getPointValue(point);
+			}
+			return switch (r) {
+				case CurveDependentReference -> getDependentReference();
+				case CurvePowerPriority -> getPowerPriority();
+				case CurveVoltageReference -> getVoltageReference();
+				case CurveAutonomousVoltageReference -> getAutonomousVoltageReference();
+				case CurveAutonomousVoltageReferenceEnabled -> isAutonomousVoltageReferenceEnabled();
+				case CurveAutonomousVoltageReferenceTimeConstant -> getAutonomousVoltageReferenceTimeConstant();
+				case CurveOpenLoopResponseTime -> getOpenLoopResponseTime();
+				case CurveReadOnly -> isReadOnly();
+				case ScaleFactorVoltage, ScaleFactorReactivePower, ScaleFactorResponseTime -> null;
+				case PointVoltage, PointReactivePower -> null;
+			};
 		}
 
 	}
