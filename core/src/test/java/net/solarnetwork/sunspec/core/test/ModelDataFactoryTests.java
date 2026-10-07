@@ -19,9 +19,9 @@
 
 package net.solarnetwork.sunspec.core.test;
 
-import static net.solarnetwork.domain.AcPhase.PhaseA;
-import static net.solarnetwork.domain.AcPhase.PhaseB;
-import static net.solarnetwork.domain.AcPhase.PhaseC;
+import static net.solarnetwork.sunspec.api.AcPhase.PhaseA;
+import static net.solarnetwork.sunspec.api.AcPhase.PhaseB;
+import static net.solarnetwork.sunspec.api.AcPhase.PhaseC;
 import static net.solarnetwork.sunspec.modbus.ModbusReadFunction.ReadHoldingRegister;
 import static org.assertj.core.api.BDDAssertions.and;
 import static org.assertj.core.api.BDDAssertions.catchThrowable;
@@ -35,6 +35,7 @@ import static org.mockito.Mockito.times;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,18 +45,17 @@ import net.solarnetwork.sunspec.api.ModelRegister;
 import net.solarnetwork.sunspec.api.meter.MeterModelAccessor;
 import net.solarnetwork.sunspec.core.ModelDataFactory;
 import net.solarnetwork.sunspec.core.meter.test.IntegerMeterModelAccessorTests;
+import net.solarnetwork.sunspec.core.support.IntShortMap;
 import net.solarnetwork.sunspec.modbus.ModbusConnection;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
 import net.solarnetwork.sunspec.modbus.support.StaticDataMapReadonlyModbusConnection;
 import net.solarnetwork.sunspec.test.DataUtils;
-import net.solarnetwork.util.ByteUtils;
-import net.solarnetwork.util.IntShortMap;
 
 /**
  * Test cases for the {@link ModelDataFactory} class.
  *
  * @author matt
- * @version 1.1
+ * @version 1.0
  */
 @SuppressWarnings("static-access")
 @ExtendWith(MockitoExtension.class)
@@ -70,7 +70,7 @@ public class ModelDataFactoryTests {
 	public void createIntegerMeterModel() throws IOException {
 		// GIVEN
 		// find base address
-		given(conn.readString(ReadHoldingRegister, 40000, 2, true, ByteUtils.ASCII))
+		given(conn.readString(ReadHoldingRegister, 40000, 2, true, StandardCharsets.US_ASCII))
 				.willReturn(ModelRegister.BASE_ADDRESS_MAGIC_STRING);
 
 		// common model

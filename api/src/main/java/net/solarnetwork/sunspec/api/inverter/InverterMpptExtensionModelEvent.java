@@ -27,8 +27,7 @@ import net.solarnetwork.sunspec.api.SunSpecUtils;
  * MPPT extension events.
  *
  * @author matt
- * @version 1.1
- * @since 1.4
+ * @version 1.0
  */
 public enum InverterMpptExtensionModelEvent implements ModelEvent {
 

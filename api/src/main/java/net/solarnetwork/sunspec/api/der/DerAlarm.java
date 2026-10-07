@@ -28,7 +28,6 @@ import net.solarnetwork.sunspec.api.SunSpecUtils;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public enum DerAlarm implements ModelEvent {
 

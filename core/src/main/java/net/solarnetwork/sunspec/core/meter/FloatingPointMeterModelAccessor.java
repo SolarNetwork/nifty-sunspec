@@ -25,7 +25,8 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
-import net.solarnetwork.domain.AcPhase;
+import net.solarnetwork.sunspec.api.AcPhase;
+import net.solarnetwork.sunspec.api.IntRange;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.ModelId;
 import net.solarnetwork.sunspec.api.meter.FloatingPointMeterModelRegister;
@@ -35,14 +36,12 @@ import net.solarnetwork.sunspec.api.meter.MeterModelId;
 import net.solarnetwork.sunspec.core.BaseModelAccessor;
 import net.solarnetwork.sunspec.modbus.ModbusReference;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
-import net.solarnetwork.util.IntRange;
 
 /**
  * Data object for a floating point meter model.
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public class FloatingPointMeterModelAccessor extends BaseModelAccessor implements MeterModelAccessor {
 

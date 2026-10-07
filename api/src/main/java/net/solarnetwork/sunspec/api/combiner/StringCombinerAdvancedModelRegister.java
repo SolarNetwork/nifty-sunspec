@@ -28,8 +28,7 @@ import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt32;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * Enumeration of Modbus register mappings for the SunSpec compliant advanced
@@ -48,10 +47,9 @@ import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
  * </p>
  *
  * @author matt
- * @version 1.1
- * @since 1.4
+ * @version 1.0
  */
-public enum StringCombinerAdvancedModelRegister implements SunspecModbusReference {
+public enum StringCombinerAdvancedModelRegister implements ModbusReference {
 
 	/** Current scale factor, as *10^X. */
 	ScaleFactorDcCurrent(0, Int16, ScaleFactor),
@@ -89,7 +87,6 @@ public enum StringCombinerAdvancedModelRegister implements SunspecModbusReferenc
 	/**
 	 * Total metered charge, in amp-hours (model 404).
 	 *
-	 * @since 1.1
 	 */
 	DcChargeV2(12, UInt32, Accumulator),
 
@@ -99,7 +96,6 @@ public enum StringCombinerAdvancedModelRegister implements SunspecModbusReferenc
 	/**
 	 * Output voltage, in volts (model 404).
 	 *
-	 * @since 1.1
 	 */
 	DcVoltageV2(14, Int16),
 
@@ -115,7 +111,6 @@ public enum StringCombinerAdvancedModelRegister implements SunspecModbusReferenc
 	/**
 	 * Performance ratio, as a percentage (model 404).
 	 *
-	 * @since 1.1
 	 */
 	DcPerformanceRatioV2(17, Int16),
 
@@ -125,7 +120,6 @@ public enum StringCombinerAdvancedModelRegister implements SunspecModbusReferenc
 	/**
 	 * Output energy, in watt-hours (model 404).
 	 *
-	 * @since 1.1
 	 */
 	DcEnergyV2(18, UInt32, Accumulator),
 
@@ -162,7 +156,6 @@ public enum StringCombinerAdvancedModelRegister implements SunspecModbusReferenc
 	/**
 	 * Total metered charge, in amp-hours (model 404).
 	 *
-	 * @since 1.1
 	 */
 	InputDcChargeV2(6, UInt32, Accumulator),
 
@@ -172,7 +165,6 @@ public enum StringCombinerAdvancedModelRegister implements SunspecModbusReferenc
 	/**
 	 * String input voltage, in volts (model 404).
 	 *
-	 * @since 1.1
 	 */
 	InputDcVoltageV2(8, Int16),
 
@@ -185,7 +177,6 @@ public enum StringCombinerAdvancedModelRegister implements SunspecModbusReferenc
 	/**
 	 * String input energy, in watt-hours (model 404).
 	 *
-	 * @since 1.1
 	 */
 	InputDcEnergyV2(10, UInt32, Accumulator),
 
@@ -229,11 +220,6 @@ public enum StringCombinerAdvancedModelRegister implements SunspecModbusReferenc
 	@Override
 	public ModbusDataType getDataType() {
 		return dataType;
-	}
-
-	@Override
-	public ModbusReadFunction getFunction() {
-		return ModbusReadFunction.ReadHoldingRegister;
 	}
 
 	@Override

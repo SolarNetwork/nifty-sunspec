@@ -26,6 +26,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.function.IntFunction;
 import org.jspecify.annotations.Nullable;
+import net.solarnetwork.sunspec.api.IntRange;
 import net.solarnetwork.sunspec.api.ModelId;
 import net.solarnetwork.sunspec.api.der.DerAdoptResult;
 import net.solarnetwork.sunspec.api.der.DerCurve;
@@ -35,10 +36,8 @@ import net.solarnetwork.sunspec.api.der.DerCurvePoint;
 import net.solarnetwork.sunspec.core.BaseModelAccessor;
 import net.solarnetwork.sunspec.modbus.ModbusConnection;
 import net.solarnetwork.sunspec.modbus.ModbusReference;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
 import net.solarnetwork.sunspec.modbus.support.ModbusUtils;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
-import net.solarnetwork.util.IntRange;
 
 /**
  * Base implementation of {@link DerCurveModelAccessor}.
@@ -51,7 +50,6 @@ import net.solarnetwork.util.IntRange;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public abstract class BaseDerCurveModelAccessor extends BaseModelAccessor
 		implements DerCurveModelAccessor {
@@ -90,14 +88,14 @@ public abstract class BaseDerCurveModelAccessor extends BaseModelAccessor
 	 *
 	 * @return the register, relative to the start of a curve
 	 */
-	protected abstract SunspecModbusReference getCurveReadOnlyRegister();
+	protected abstract ModbusReference getCurveReadOnlyRegister();
 
 	/**
 	 * Get the point x register.
 	 *
 	 * @return the register, relative to the start of a point
 	 */
-	protected abstract SunspecModbusReference getPointXRegister();
+	protected abstract ModbusReference getPointXRegister();
 
 	/**
 	 * Get the point x scale factor register.
@@ -111,7 +109,7 @@ public abstract class BaseDerCurveModelAccessor extends BaseModelAccessor
 	 *
 	 * @return the register, relative to the start of a point
 	 */
-	protected abstract SunspecModbusReference getPointYRegister();
+	protected abstract ModbusReference getPointYRegister();
 
 	/**
 	 * Get the point y scale factor register.
@@ -376,8 +374,8 @@ public abstract class BaseDerCurveModelAccessor extends BaseModelAccessor
 		public void setPoints(ModbusConnection conn, List<DerCurvePoint> points) throws IOException {
 			requireWritable();
 			requireValidPointCount(points.size());
-			final SunspecModbusReference xRef = getPointXRegister();
-			final SunspecModbusReference yRef = getPointYRegister();
+			final ModbusReference xRef = getPointXRegister();
+			final ModbusReference yRef = getPointYRegister();
 			final short[] words = new short[points.size() * pointLength()];
 			int offset = 0;
 			for ( DerCurvePoint point : points ) {

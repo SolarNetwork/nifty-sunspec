@@ -22,6 +22,7 @@ package net.solarnetwork.sunspec.modbus.support.test;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ import net.solarnetwork.sunspec.test.DataUtils;
  * Test cases for the {@link ModelData} class.
  *
  * @author matt
- * @version 1.2
+ * @version 1.0
  */
 public class ModelDataTests {
 
@@ -143,10 +144,12 @@ public class ModelDataTests {
 
 	private static ModelData stringData(byte[] bytes) {
 		final CommonModelRegister ref = CommonModelRegister.Options;
+		final short[] words = new short[ref.getWordLength()];
+		ByteBuffer.wrap(Arrays.copyOf(bytes, words.length * 2)).asShortBuffer().get(words);
 		ModelData data = new ModelData(0);
 		try {
 			data.performUpdates(m -> {
-				m.saveBytes(Arrays.copyOf(bytes, ref.getWordLength() * 2), ref.getAddress());
+				m.saveDataArray(words, ref.getAddress());
 				return true;
 			});
 		} catch ( IOException e ) {

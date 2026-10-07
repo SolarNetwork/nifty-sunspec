@@ -23,7 +23,7 @@ package net.solarnetwork.sunspec.api;
  * API for a reactive energy action.
  * 
  * @author matt
- * @version 1.2
+ * @version 1.0
  */
 public interface ReactivePowerAction {
 

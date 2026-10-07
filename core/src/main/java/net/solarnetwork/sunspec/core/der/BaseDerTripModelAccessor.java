@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 import org.jspecify.annotations.Nullable;
+import net.solarnetwork.sunspec.api.IntRange;
 import net.solarnetwork.sunspec.api.ModelId;
 import net.solarnetwork.sunspec.api.der.DerAdoptResult;
 import net.solarnetwork.sunspec.api.der.DerCurve;
@@ -35,10 +36,8 @@ import net.solarnetwork.sunspec.api.der.DerTripModelRegister;
 import net.solarnetwork.sunspec.core.BaseModelAccessor;
 import net.solarnetwork.sunspec.modbus.ModbusConnection;
 import net.solarnetwork.sunspec.modbus.ModbusReference;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
 import net.solarnetwork.sunspec.modbus.support.ModbusUtils;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
-import net.solarnetwork.util.IntRange;
 
 /**
  * Base implementation of {@link DerTripModelAccessor}.
@@ -52,7 +51,6 @@ import net.solarnetwork.util.IntRange;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public abstract class BaseDerTripModelAccessor extends BaseModelAccessor
 		implements DerTripModelAccessor {
@@ -60,9 +58,9 @@ public abstract class BaseDerTripModelAccessor extends BaseModelAccessor
 	/** The DER trip model fixed block length. */
 	public static final int FIXED_BLOCK_LENGTH = 7;
 
-	private final SunspecModbusReference pointXRegister;
+	private final ModbusReference pointXRegister;
 	private final ModbusReference pointXScaleFactorRegister;
-	private final SunspecModbusReference pointTimeRegister;
+	private final ModbusReference pointTimeRegister;
 
 	/**
 	 * Constructor.
@@ -81,8 +79,8 @@ public abstract class BaseDerTripModelAccessor extends BaseModelAccessor
 	 *        the point time register, relative to the start of a point
 	 */
 	public BaseDerTripModelAccessor(ModelData data, int baseAddress, ModelId modelId,
-			SunspecModbusReference pointXRegister, ModbusReference pointXScaleFactorRegister,
-			SunspecModbusReference pointTimeRegister) {
+			ModbusReference pointXRegister, ModbusReference pointXScaleFactorRegister,
+			ModbusReference pointTimeRegister) {
 		super(data, baseAddress, modelId);
 		this.pointXRegister = pointXRegister;
 		this.pointXScaleFactorRegister = pointXScaleFactorRegister;

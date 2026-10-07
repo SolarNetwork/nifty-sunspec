@@ -41,8 +41,7 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
  * Data access object for an string combiner model.
  *
  * @author matt
- * @version 1.1
- * @since 1.4
+ * @version 1.0
  */
 public class StringCombinerModelAccessorImpl extends BaseModelAccessor
 		implements StringCombinerModelAccessor {

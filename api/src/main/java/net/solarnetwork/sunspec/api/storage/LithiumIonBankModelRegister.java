@@ -30,8 +30,7 @@ import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
 import net.solarnetwork.sunspec.api.PointAccess;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * Enumeration of Modbus register mappings for the SunSpec lithium-ion battery
@@ -49,9 +48,8 @@ import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
-public enum LithiumIonBankModelRegister implements SunspecModbusReference {
+public enum LithiumIonBankModelRegister implements ModbusReference {
 
 	/** The number of strings in the bank. */
 	NumberOfStrings(0, UInt16),
@@ -256,11 +254,6 @@ public enum LithiumIonBankModelRegister implements SunspecModbusReference {
 	@Override
 	public ModbusDataType getDataType() {
 		return dataType;
-	}
-
-	@Override
-	public ModbusReadFunction getFunction() {
-		return ModbusReadFunction.ReadHoldingRegister;
 	}
 
 	@Override

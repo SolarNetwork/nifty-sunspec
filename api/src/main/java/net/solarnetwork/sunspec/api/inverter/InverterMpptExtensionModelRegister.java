@@ -29,8 +29,7 @@ import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt32;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * Enumeration of Modbus register mappings for the SunSpec compliant MPPT
@@ -46,10 +45,9 @@ import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
  * </p>
  *
  * @author matt
- * @version 1.1
- * @since 1.4
+ * @version 1.0
  */
-public enum InverterMpptExtensionModelRegister implements SunspecModbusReference {
+public enum InverterMpptExtensionModelRegister implements ModbusReference {
 
 	/** Current scale factor, as *10^X. */
 	ScaleFactorDcCurrent(0, Int16, ScaleFactor),
@@ -136,11 +134,6 @@ public enum InverterMpptExtensionModelRegister implements SunspecModbusReference
 	@Override
 	public ModbusDataType getDataType() {
 		return dataType;
-	}
-
-	@Override
-	public ModbusReadFunction getFunction() {
-		return ModbusReadFunction.ReadHoldingRegister;
 	}
 
 	@Override

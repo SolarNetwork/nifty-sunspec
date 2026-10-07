@@ -46,12 +46,11 @@ import net.solarnetwork.sunspec.api.der.DerAcWiringType;
 import net.solarnetwork.sunspec.api.der.DerOperationalCharacteristic;
 import net.solarnetwork.sunspec.core.BaseModelAccessor;
 import net.solarnetwork.sunspec.core.GenericModelAccessor;
+import net.solarnetwork.sunspec.core.support.IntShortMap;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
 import net.solarnetwork.sunspec.modbus.support.StaticDataMapModbusConnection;
-import net.solarnetwork.util.IntShortMap;
 
 /**
  * Test cases for the {@link BaseModelAccessor} class.
@@ -62,7 +61,7 @@ import net.solarnetwork.util.IntShortMap;
 public class BaseModelAccessorTests {
 
 	/** Test registers, relative to the model block address. */
-	private enum TestRegister implements SunspecModbusReference {
+	private enum TestRegister implements ModbusReference {
 
 		UInt32Value(0, UInt32, null),
 
@@ -124,11 +123,6 @@ public class BaseModelAccessorTests {
 		@Override
 		public ModbusDataType getDataType() {
 			return dataType;
-		}
-
-		@Override
-		public ModbusReadFunction getFunction() {
-			return ModbusReadFunction.ReadHoldingRegister;
 		}
 
 		@Override

@@ -19,14 +19,13 @@
 
 package net.solarnetwork.sunspec.api.der;
 
-import net.solarnetwork.domain.CodedValue;
+import net.solarnetwork.sunspec.api.CodedValue;
 
 /**
  * DER adopt request result, for curves, curve sets, and controls.
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public enum DerAdoptResult implements CodedValue {
 

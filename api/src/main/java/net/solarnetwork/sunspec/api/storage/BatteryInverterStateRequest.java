@@ -19,14 +19,13 @@
 
 package net.solarnetwork.sunspec.api.storage;
 
-import net.solarnetwork.domain.CodedValue;
+import net.solarnetwork.sunspec.api.CodedValue;
 
 /**
  * Battery request to start or stop the inverter.
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public enum BatteryInverterStateRequest implements CodedValue {
 

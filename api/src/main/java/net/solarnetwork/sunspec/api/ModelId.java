@@ -23,7 +23,7 @@ package net.solarnetwork.sunspec.api;
  * API for a model identifier.
  * 
  * @author matt
- * @version 1.1
+ * @version 1.0
  */
 public interface ModelId {
 

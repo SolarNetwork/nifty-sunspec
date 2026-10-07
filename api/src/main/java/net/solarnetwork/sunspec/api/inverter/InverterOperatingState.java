@@ -19,7 +19,6 @@
 
 package net.solarnetwork.sunspec.api.inverter;
 
-import net.solarnetwork.domain.DeviceOperatingState;
 import net.solarnetwork.sunspec.api.OperatingState;
 import net.solarnetwork.sunspec.modbus.ModbusConstants;
 
@@ -27,7 +26,7 @@ import net.solarnetwork.sunspec.modbus.ModbusConstants;
  * Operating state for inverters.
  * 
  * @author matt
- * @version 1.3
+ * @version 1.0
  */
 public enum InverterOperatingState implements OperatingState {
 
@@ -77,25 +76,6 @@ public enum InverterOperatingState implements OperatingState {
 	@Override
 	public String getDescription() {
 		return description;
-	}
-
-	/**
-	 * Get a {@link DeviceOperatingState}.
-	 * 
-	 * @return the device operating state, never {@code null}
-	 * @since 1.2
-	 */
-	@Override
-	public DeviceOperatingState asDeviceOperatingState() {
-		return switch (this) {
-			case Normal, Mppt -> DeviceOperatingState.Normal;
-			case Off, ShuttingDown -> DeviceOperatingState.Shutdown;
-			case Sleeping, Standby -> DeviceOperatingState.Standby;
-			case Starting, Test -> DeviceOperatingState.Starting;
-			case Throttled -> DeviceOperatingState.Override;
-			case Fault -> DeviceOperatingState.Fault;
-			default -> DeviceOperatingState.Unknown;
-		};
 	}
 
 	/**

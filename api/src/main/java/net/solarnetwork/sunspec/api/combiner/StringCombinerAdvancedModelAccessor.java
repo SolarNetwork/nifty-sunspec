@@ -27,7 +27,6 @@ import org.jspecify.annotations.Nullable;
  *
  * @author matt
  * @version 1.0
- * @since 1.4
  */
 public interface StringCombinerAdvancedModelAccessor extends StringCombinerModelAccessor {
 

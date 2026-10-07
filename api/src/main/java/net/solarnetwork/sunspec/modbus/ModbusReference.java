@@ -19,16 +19,15 @@
 
 package net.solarnetwork.sunspec.modbus;
 
-import java.util.Set;
 import org.jspecify.annotations.Nullable;
-import net.solarnetwork.util.IntRangeSet;
+import net.solarnetwork.sunspec.api.DataClassification;
+import net.solarnetwork.sunspec.api.PointAccess;
 
 /**
  * A reference to a Modbus register (or registers).
  *
  * @author matt
- * @version 2.0
- * @since 2.8
+ * @version 1.0
  */
 public interface ModbusReference {
 
@@ -47,13 +46,6 @@ public interface ModbusReference {
 	ModbusDataType getDataType();
 
 	/**
-	 * Get the read function for accessing the register.
-	 *
-	 * @return the read function
-	 */
-	ModbusReadFunction getFunction();
-
-	/**
 	 * Get the number of Modbus words to include.
 	 *
 	 * @return the word length
@@ -61,62 +53,22 @@ public interface ModbusReference {
 	int getWordLength();
 
 	/**
-	 * Create a Modbus register address set from enum {@link ModbusReference}
-	 * values.
+	 * Return the classification of this modbus reference.
 	 *
-	 * @param <T>
-	 *        the enum type that also implements {@link ModbusReference}
-	 * @param clazz
-	 *        the enum class to extract the register set from
-	 * @param prefixes
-	 *        an optional set of enum prefixes to restrict the result to; if not
-	 *        provided then all enum values will be included
-	 * @return the range set, never {@code null}
-	 * @see #createAddressSet(ModbusReference[], Set)
-	 * @since 2.0
+	 * @return the classification, or {@code null} if none
 	 */
-	static <T extends Enum<?> & ModbusReference> IntRangeSet createAddressSet(Class<T> clazz,
-			@Nullable Set<String> prefixes) {
-		return createAddressSet(clazz.getEnumConstants(), prefixes);
+	default @Nullable DataClassification getClassification() {
+		return null;
 	}
 
 	/**
-	 * Create a Modbus register address set from an array of
-	 * {@link ModbusReference} values.
+	 * Get the access level of this modbus reference.
 	 *
-	 * @param refs
-	 *        the list of references to extract addresses from
-	 * @param prefixes
-	 *        an optional set of enum prefixes to restrict the result to, which
-	 *        are compared to the {@link Object#toString()} value of each
-	 *        {@link ModbusReference} in {@code refs}; if not provided then all
-	 *        values will be included
-	 * @return the range set, never {@code null}
-	 * @since 2.0
+	 * @return the access level, never {@code null}; this implementation returns
+	 *         {@link PointAccess#ReadOnly}
 	 */
-	static IntRangeSet createAddressSet(ModbusReference[] refs, @Nullable Set<String> prefixes) {
-		IntRangeSet set = new IntRangeSet();
-		for ( ModbusReference r : refs ) {
-			if ( prefixes != null ) {
-				String name = r.toString();
-				boolean found = false;
-				for ( String prefix : prefixes ) {
-					if ( name.startsWith(prefix) ) {
-						found = true;
-						break;
-					}
-				}
-				if ( !found ) {
-					continue;
-				}
-			}
-
-			int len = r.getWordLength();
-			if ( len > 0 ) {
-				set.addRange(r.getAddress(), r.getAddress() + len - 1);
-			}
-		}
-		return set;
+	default PointAccess getAccess() {
+		return PointAccess.ReadOnly;
 	}
 
 }

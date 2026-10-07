@@ -41,8 +41,7 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
  * Data access object for an inverter MPPT extensions model.
  *
  * @author matt
- * @version 1.2
- * @since 1.4
+ * @version 1.0
  */
 public class InverterMpptExtensionModelAccessorImpl extends BaseModelAccessor
 		implements InverterMpptExtensionModelAccessor {

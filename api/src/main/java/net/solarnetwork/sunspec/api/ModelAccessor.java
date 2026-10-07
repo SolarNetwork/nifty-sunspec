@@ -24,13 +24,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.jspecify.annotations.Nullable;
-import net.solarnetwork.util.IntRange;
 
 /**
  * API for accessing model data.
  *
  * @author matt
- * @version 2.1
+ * @version 1.0
  */
 public interface ModelAccessor {
 
@@ -80,7 +79,7 @@ public interface ModelAccessor {
 		for ( int address = getBlockAddress(); address < end; ) {
 			final IntRange range = getAddressRange(address, maxRangeLength);
 			result.add(range);
-			address = range.getMax() + 1;
+			address = range.max() + 1;
 		}
 		return result.toArray(IntRange[]::new);
 	}
@@ -111,7 +110,6 @@ public interface ModelAccessor {
 	 * @throws IllegalArgumentException
 	 *         if {@code maxRangeLength} is less than {@literal 1}, or
 	 *         {@code address} is outside the model
-	 * @since 2.1
 	 */
 	default IntRange getAddressRange(int address, int maxRangeLength) {
 		if ( maxRangeLength < 1 ) {
@@ -129,10 +127,10 @@ public interface ModelAccessor {
 		}
 		int rangeEnd = address + maxRangeLength;
 		for ( IntRange r : mergedRanges(getUnsplittableAddressRanges()) ) {
-			if ( r.getMin() < rangeEnd && rangeEnd <= r.getMax() ) {
+			if ( r.min() < rangeEnd && rangeEnd <= r.max() ) {
 				// the range would end inside r, so end before r if possible
-				if ( r.getMin() > address ) {
-					rangeEnd = r.getMin();
+				if ( r.min() > address ) {
+					rangeEnd = r.min();
 				}
 				break;
 			}
@@ -156,7 +154,6 @@ public interface ModelAccessor {
 	 * @return the ranges, as absolute register addresses, in any order and
 	 *         possibly overlapping, never {@code null}; this implementation
 	 *         returns an empty list
-	 * @since 2.1
 	 */
 	default List<IntRange> getUnsplittableAddressRanges() {
 		return Collections.emptyList();

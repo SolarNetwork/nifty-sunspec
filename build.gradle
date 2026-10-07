@@ -19,7 +19,6 @@ ext {
 	logbackClassicVersion = '1.5.38'
 	mockitoVersion = '5.24.0'
 	slf4jVersion = '2.0.18'
-	snCommonVersion = '4.53.0'
 	ossrhUsername = 'ossrh-username'
 	ossrhPassword = 'ossrh-password'
 	

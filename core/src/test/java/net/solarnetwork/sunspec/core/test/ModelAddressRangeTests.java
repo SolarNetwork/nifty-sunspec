@@ -36,11 +36,11 @@ import java.util.Map;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.api.GenericModelId;
+import net.solarnetwork.sunspec.api.IntRange;
 import net.solarnetwork.sunspec.api.ModelAccessor;
 import net.solarnetwork.sunspec.api.ModelId;
 import net.solarnetwork.sunspec.core.ModelDataFactory;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
-import net.solarnetwork.util.IntRange;
 
 /**
  * Test cases for reading model data in address ranges that do not split
@@ -97,7 +97,7 @@ public class ModelAddressRangeTests {
 
 	private static List<IntRange> sorted(Collection<IntRange> ranges) {
 		final List<IntRange> result = new ArrayList<>(ranges);
-		result.sort(Comparator.comparingInt(IntRange::getMin).thenComparingInt(IntRange::getMax));
+		result.sort(Comparator.comparingInt(IntRange::min).thenComparingInt(IntRange::max));
 		return result;
 	}
 
@@ -111,8 +111,7 @@ public class ModelAddressRangeTests {
 	private static List<IntRange> modelRanges(ModelAccessor model) {
 		final int end = model.getBlockAddress() + model.getModelLength();
 		return sorted(model.getUnsplittableAddressRanges().stream()
-				.filter(r -> r.getMin() >= model.getBlockAddress() && r.getMax() < end).distinct()
-				.toList());
+				.filter(r -> r.min() >= model.getBlockAddress() && r.max() < end).distinct().toList());
 	}
 
 	private static ModelAccessor findModel(ModelData data, ModelPoints model) {
@@ -347,8 +346,8 @@ public class ModelAddressRangeTests {
 								first, last));
 					}
 					for ( IntRange p : points ) {
-						if ( (p.getMin() < first && first <= p.getMax())
-								|| (p.getMin() <= last && last < p.getMax()) ) {
+						if ( (p.min() < first && first <= p.max())
+								|| (p.min() <= last && last < p.max()) ) {
 							errors.add(String.format("%s max %d: read %d-%d splits point %s", e.getKey(),
 									max, first, last, p));
 						}

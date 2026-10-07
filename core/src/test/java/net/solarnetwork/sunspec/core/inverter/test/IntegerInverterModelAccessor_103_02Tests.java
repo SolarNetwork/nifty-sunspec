@@ -19,9 +19,9 @@
 
 package net.solarnetwork.sunspec.core.inverter.test;
 
-import static net.solarnetwork.domain.AcPhase.PhaseA;
-import static net.solarnetwork.domain.AcPhase.PhaseB;
-import static net.solarnetwork.domain.AcPhase.PhaseC;
+import static net.solarnetwork.sunspec.api.AcPhase.PhaseA;
+import static net.solarnetwork.sunspec.api.AcPhase.PhaseB;
+import static net.solarnetwork.sunspec.api.AcPhase.PhaseC;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.assertj.core.api.BDDAssertions.within;
@@ -48,7 +48,7 @@ import net.solarnetwork.sunspec.modbus.support.ModbusData.MutableModbusData;
  * Test cases for the {@link IntegerInverterModelAccessor} class.
  * 
  * @author matt
- * @version 1.2
+ * @version 1.0
  */
 public class IntegerInverterModelAccessor_103_02Tests {
 

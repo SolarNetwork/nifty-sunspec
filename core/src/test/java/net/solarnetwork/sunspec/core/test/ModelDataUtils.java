@@ -27,17 +27,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.solarnetwork.sunspec.core.ModelDataFactory;
 import net.solarnetwork.sunspec.core.meter.test.IntegerMeterModelAccessorTests;
+import net.solarnetwork.sunspec.core.support.IntShortMap;
 import net.solarnetwork.sunspec.modbus.ModbusConnection;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
 import net.solarnetwork.sunspec.modbus.support.StaticDataMapReadonlyModbusConnection;
 import net.solarnetwork.sunspec.test.DataUtils;
-import net.solarnetwork.util.IntShortMap;
 
 /**
  * Helper utility methods for model data testing.
  *
  * @author matt
- * @version 2.3
+ * @version 1.0
  */
 public final class ModelDataUtils {
 
@@ -90,7 +90,7 @@ public final class ModelDataUtils {
 					new BufferedReader(new InputStreamReader(clazz.getResourceAsStream(resource))));
 			if ( m != null ) {
 				for ( Map.Entry<Integer, Integer> e : m.entrySet() ) {
-					result.put(e.getKey(), e.getValue().shortValue());
+					result.putValue(e.getKey(), e.getValue().shortValue());
 				}
 			}
 		} catch ( IOException e ) {
@@ -181,7 +181,6 @@ public final class ModelDataUtils {
 	 * @param words
 	 *        the register values to replace, starting at {@code address}
 	 * @return the model data
-	 * @since 2.3
 	 */
 	public static ModelData getModelDataInstanceWithRegisters(Class<?> clazz, String resource,
 			int address, int... words) {
@@ -205,7 +204,6 @@ public final class ModelDataUtils {
 	 * @param resource
 	 *        the data resource to load
 	 * @return the connection
-	 * @since 2.3
 	 */
 	public static RecordingModbusConnection getWritableModbusConnection(Class<?> clazz,
 			String resource) {
@@ -232,7 +230,6 @@ public final class ModelDataUtils {
 	 * @param words
 	 *        the register values to replace, starting at {@code address}
 	 * @return the connection
-	 * @since 2.3
 	 */
 	public static RecordingModbusConnection getWritableModbusConnectionWithRegisters(Class<?> clazz,
 			String resource, int address, int... words) {
@@ -256,7 +253,6 @@ public final class ModelDataUtils {
 	 * @param conn
 	 *        the connection
 	 * @return the model data
-	 * @since 2.3
 	 */
 	public static ModelData getModelDataInstance(ModbusConnection conn) {
 		try {

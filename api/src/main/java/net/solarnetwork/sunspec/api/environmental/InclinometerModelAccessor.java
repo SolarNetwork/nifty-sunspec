@@ -28,7 +28,6 @@ import net.solarnetwork.sunspec.api.ModelAccessor;
  *
  * @author matt
  * @version 1.0
- * @since 4.2
  */
 public interface InclinometerModelAccessor extends ModelAccessor {
 

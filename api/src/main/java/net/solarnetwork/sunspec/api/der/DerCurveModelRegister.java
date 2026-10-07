@@ -27,8 +27,7 @@ import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
 import net.solarnetwork.sunspec.api.PointAccess;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * Enumeration of the Modbus register mappings shared by the SunSpec DER curve
@@ -49,9 +48,8 @@ import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
-public enum DerCurveModelRegister implements SunspecModbusReference {
+public enum DerCurveModelRegister implements ModbusReference {
 
 	/** The function enable setting. */
 	Enabled(0, UInt16, Enumeration, ReadWrite),
@@ -118,11 +116,6 @@ public enum DerCurveModelRegister implements SunspecModbusReference {
 	@Override
 	public ModbusDataType getDataType() {
 		return dataType;
-	}
-
-	@Override
-	public ModbusReadFunction getFunction() {
-		return ModbusReadFunction.ReadHoldingRegister;
 	}
 
 	@Override

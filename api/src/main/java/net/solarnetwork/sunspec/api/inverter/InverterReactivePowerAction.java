@@ -20,7 +20,7 @@
 package net.solarnetwork.sunspec.api.inverter;
 
 import org.jspecify.annotations.Nullable;
-import net.solarnetwork.domain.CodedValue;
+import net.solarnetwork.sunspec.api.CodedValue;
 import net.solarnetwork.sunspec.api.ReactivePowerAction;
 import net.solarnetwork.sunspec.modbus.ModbusConstants;
 
@@ -28,8 +28,7 @@ import net.solarnetwork.sunspec.modbus.ModbusConstants;
  * Reactive power action for inverters.
  *
  * @author matt
- * @version 1.1
- * @since 1.2
+ * @version 1.0
  */
 public enum InverterReactivePowerAction implements ReactivePowerAction, CodedValue {
 

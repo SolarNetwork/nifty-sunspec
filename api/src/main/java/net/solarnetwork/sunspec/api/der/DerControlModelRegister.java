@@ -27,8 +27,7 @@ import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
 import net.solarnetwork.sunspec.api.PointAccess;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * Enumeration of Modbus register mappings for the SunSpec DER control model.
@@ -44,9 +43,8 @@ import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
-public enum DerControlModelRegister implements SunspecModbusReference {
+public enum DerControlModelRegister implements ModbusReference {
 
 	/** Local or remote control mode, see {@link DerLocalRemoteControl}. */
 	LocalRemoteControl(0, UInt16, Enumeration),
@@ -99,11 +97,6 @@ public enum DerControlModelRegister implements SunspecModbusReference {
 	@Override
 	public ModbusDataType getDataType() {
 		return dataType;
-	}
-
-	@Override
-	public ModbusReadFunction getFunction() {
-		return ModbusReadFunction.ReadHoldingRegister;
 	}
 
 	@Override

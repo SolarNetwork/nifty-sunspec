@@ -31,7 +31,6 @@ import net.solarnetwork.sunspec.api.ModelAccessor;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public interface DerStorageCapacityModelAccessor extends ModelAccessor {
 

@@ -27,8 +27,7 @@ import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt32;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * Enumeration of Modbus register mappings for SunSpec compliant integer meter
@@ -51,9 +50,9 @@ import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
  * </p>
  *
  * @author matt
- * @version 1.1
+ * @version 1.0
  */
-public enum IntegerMeterModelRegister implements SunspecModbusReference {
+public enum IntegerMeterModelRegister implements ModbusReference {
 
 	// Current
 
@@ -325,11 +324,6 @@ public enum IntegerMeterModelRegister implements SunspecModbusReference {
 	@Override
 	public ModbusDataType getDataType() {
 		return dataType;
-	}
-
-	@Override
-	public ModbusReadFunction getFunction() {
-		return ModbusReadFunction.ReadHoldingRegister;
 	}
 
 	/**

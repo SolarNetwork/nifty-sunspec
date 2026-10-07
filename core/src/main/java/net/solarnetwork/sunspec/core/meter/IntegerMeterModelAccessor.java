@@ -25,7 +25,8 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
-import net.solarnetwork.domain.AcPhase;
+import net.solarnetwork.sunspec.api.AcPhase;
+import net.solarnetwork.sunspec.api.IntRange;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.ModelId;
 import net.solarnetwork.sunspec.api.meter.IntegerMeterModelRegister;
@@ -35,13 +36,12 @@ import net.solarnetwork.sunspec.api.meter.MeterModelId;
 import net.solarnetwork.sunspec.core.BaseModelAccessor;
 import net.solarnetwork.sunspec.modbus.ModbusReference;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
-import net.solarnetwork.util.IntRange;
 
 /**
  * Data object for an integer meter model.
  *
  * @author matt
- * @version 2.1
+ * @version 1.0
  */
 public class IntegerMeterModelAccessor extends BaseModelAccessor implements MeterModelAccessor {
 
@@ -76,7 +76,6 @@ public class IntegerMeterModelAccessor extends BaseModelAccessor implements Mete
 	 *        the base address for this model's data
 	 * @param modelId
 	 *        the model ID
-	 * @since 1.2
 	 */
 	public IntegerMeterModelAccessor(ModelData data, int baseAddress, int modelId) {
 		this(data, baseAddress, MeterModelId.forId(modelId));

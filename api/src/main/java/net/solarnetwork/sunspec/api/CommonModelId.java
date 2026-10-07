@@ -23,7 +23,7 @@ package net.solarnetwork.sunspec.api;
  * {@link ModelId} for the SunSpec common model standard.
  * 
  * @author matt
- * @version 1.1
+ * @version 1.0
  */
 public enum CommonModelId implements ModelId {
 

@@ -25,8 +25,7 @@ import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt32;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * Enumeration of Modbus register mappings for SunSpec compliant floating point
@@ -50,9 +49,8 @@ import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
-public enum FloatingPointMeterModelRegister implements SunspecModbusReference {
+public enum FloatingPointMeterModelRegister implements ModbusReference {
 
 	// Current
 
@@ -285,11 +283,6 @@ public enum FloatingPointMeterModelRegister implements SunspecModbusReference {
 	@Override
 	public ModbusDataType getDataType() {
 		return dataType;
-	}
-
-	@Override
-	public ModbusReadFunction getFunction() {
-		return ModbusReadFunction.ReadHoldingRegister;
 	}
 
 	@Override

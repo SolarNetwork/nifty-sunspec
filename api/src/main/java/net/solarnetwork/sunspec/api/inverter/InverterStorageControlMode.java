@@ -19,14 +19,13 @@
 
 package net.solarnetwork.sunspec.api.inverter;
 
-import net.solarnetwork.domain.Bitmaskable;
+import net.solarnetwork.sunspec.api.Bitmaskable;
 
 /**
  * Inverter storage control modes.
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public enum InverterStorageControlMode implements Bitmaskable {
 

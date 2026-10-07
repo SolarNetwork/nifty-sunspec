@@ -30,8 +30,7 @@ import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt64;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * Enumeration of Modbus register mappings for the SunSpec inverter controls
@@ -48,9 +47,8 @@ import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
-public enum InverterExtendedMeasurementsModelRegister implements SunspecModbusReference {
+public enum InverterExtendedMeasurementsModelRegister implements ModbusReference {
 
 	/** PV inverter connection status, see {@link InverterConnectionStatus}. */
 	PvConnectionStatus(0, UInt16, Bitfield),
@@ -163,11 +161,6 @@ public enum InverterExtendedMeasurementsModelRegister implements SunspecModbusRe
 	@Override
 	public ModbusDataType getDataType() {
 		return dataType;
-	}
-
-	@Override
-	public ModbusReadFunction getFunction() {
-		return ModbusReadFunction.ReadHoldingRegister;
 	}
 
 	@Override

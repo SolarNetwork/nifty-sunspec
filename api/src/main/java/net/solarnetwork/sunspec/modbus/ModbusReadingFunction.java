@@ -1,8 +1,8 @@
 /* ==================================================================
- * ModelDataProvider.java - 10/07/2023 10:25:25 am
- *
- * Copyright 2023 SolarNetwork.net Dev Team
- *
+ * ModbusReadingFunction.java - 7 Oct 2026 10:41:48 am
+ * 
+ * Copyright 2026 SolarNetwork.net Dev Team
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,35 +17,14 @@
  * ==================================================================
  */
 
-package net.solarnetwork.sunspec.modbus.support;
-
-import org.jspecify.annotations.Nullable;
-import net.solarnetwork.service.Identifiable;
-import net.solarnetwork.sunspec.modbus.ModbusConnection;
+package net.solarnetwork.sunspec.modbus;
 
 /**
- * API for an identifiable provider of {@link ModelData} instances.
- *
+ * A modbus function that reads data.
+ * 
  * @author matt
  * @version 1.0
- * @since 4.2
  */
-public interface ModelDataProvider extends Identifiable {
-
-	/**
-	 * Get the model data.
-	 *
-	 * @return the model data
-	 */
-	@Nullable
-	ModelData modelData();
-
-	/**
-	 * Get a {@link ModbusConnection} suitable for refreshing model data.
-	 *
-	 * @return a modbus connection
-	 */
-	@Nullable
-	ModbusConnection modelDataModbusConnection();
+public interface ModbusReadingFunction extends ModbusFunction {
 
 }

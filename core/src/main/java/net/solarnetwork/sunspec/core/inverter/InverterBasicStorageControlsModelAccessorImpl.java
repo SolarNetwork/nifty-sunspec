@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
-import net.solarnetwork.domain.Bitmaskable;
+import net.solarnetwork.sunspec.api.Bitmaskable;
 import net.solarnetwork.sunspec.api.ModelId;
 import net.solarnetwork.sunspec.api.inverter.InverterBasicStorageControlsModelAccessor;
 import net.solarnetwork.sunspec.api.inverter.InverterBasicStorageControlsModelRegister;
@@ -42,7 +42,6 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public class InverterBasicStorageControlsModelAccessorImpl extends BaseModelAccessor
 		implements InverterBasicStorageControlsModelAccessor {

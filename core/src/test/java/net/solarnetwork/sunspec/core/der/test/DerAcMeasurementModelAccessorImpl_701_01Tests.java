@@ -23,7 +23,7 @@ import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
-import net.solarnetwork.domain.AcPhase;
+import net.solarnetwork.sunspec.api.AcPhase;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.der.DerAcMeasurementModelAccessor;
 import net.solarnetwork.sunspec.api.der.DerAcWiringType;

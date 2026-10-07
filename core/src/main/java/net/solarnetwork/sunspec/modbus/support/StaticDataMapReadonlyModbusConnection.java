@@ -20,12 +20,11 @@
 package net.solarnetwork.sunspec.modbus.support;
 
 import java.nio.charset.Charset;
-import java.util.BitSet;
 import org.jspecify.annotations.Nullable;
+import net.solarnetwork.sunspec.core.support.IntShortMap;
+import net.solarnetwork.sunspec.core.support.ObjectUtils;
 import net.solarnetwork.sunspec.modbus.ModbusConnection;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.util.IntShortMap;
-import net.solarnetwork.util.ObjectUtils;
+import net.solarnetwork.sunspec.modbus.ModbusReadingFunction;
 
 /**
  * {@link ModbusConnection} for reading static data.
@@ -35,8 +34,7 @@ import net.solarnetwork.util.ObjectUtils;
  * </p>
  *
  * @author matt
- * @version 3.0
- * @since 2.16
+ * @version 1.0
  */
 public class StaticDataMapReadonlyModbusConnection extends AbstractModbusConnection {
 
@@ -107,18 +105,9 @@ public class StaticDataMapReadonlyModbusConnection extends AbstractModbusConnect
 	}
 
 	@Override
-	public int[] readWordsUnsigned(ModbusReadFunction function, int address, int count) {
-		int[] out = new int[count];
-		data.forEachOrdered(address, address + count, (k, v) -> {
-			out[k - address] = v & 0xFFFF;
-		});
-		return out;
-	}
-
-	@Override
-	public @Nullable String readString(ModbusReadFunction function, int address, int count, boolean trim,
-			Charset charset) {
-		final byte[] bytes = readBytes(function, address, count);
+	public @Nullable String readString(ModbusReadingFunction function, int address, int count,
+			boolean trim, Charset charset) {
+		final byte[] bytes = readBytes(address, count);
 		String result = null;
 		if ( bytes != null ) {
 			result = new String(bytes, charset);
@@ -130,7 +119,7 @@ public class StaticDataMapReadonlyModbusConnection extends AbstractModbusConnect
 	}
 
 	@Override
-	public short[] readWords(ModbusReadFunction function, int address, int count) {
+	public short[] readWords(ModbusReadingFunction function, int address, int count) {
 		short[] out = new short[count];
 		data.forEachOrdered(address, address + count, (k, v) -> {
 			out[k - address] = v;
@@ -138,32 +127,7 @@ public class StaticDataMapReadonlyModbusConnection extends AbstractModbusConnect
 		return out;
 	}
 
-	@Override
-	public BitSet readInputDiscreteValues(final int address, final int count) {
-		return readDiscreteValues(address, count);
-	}
-
-	@Override
-	public BitSet readDiscreteValues(final int address, final int count) {
-		return readDiscreteValues(new int[] { address }, count);
-	}
-
-	@Override
-	public BitSet readDiscreteValues(final int[] addresses, final int count) {
-		BitSet out = new BitSet();
-		for ( int i = 0, w = 0; i < addresses.length; i++ ) {
-			final int d = data.getValue(addresses[i]);
-			for ( int j = 0; j < count; j++, w++ ) {
-				if ( ((d >> j) & 0x1) == 1 ) {
-					out.set(w);
-				}
-			}
-		}
-		return out;
-	}
-
-	@Override
-	public byte[] readBytes(ModbusReadFunction function, int address, int count) {
+	private byte[] readBytes(int address, int count) {
 		byte[] result = new byte[count * 2];
 		for ( int i = 0; i < count; i++ ) {
 			final int d = data.getValue(address + i);

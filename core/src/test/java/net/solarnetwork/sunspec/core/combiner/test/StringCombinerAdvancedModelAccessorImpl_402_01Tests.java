@@ -45,7 +45,7 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
  * </p>
  *
  * @author matt
- * @version 1.1
+ * @version 1.0
  */
 public class StringCombinerAdvancedModelAccessorImpl_402_01Tests {
 

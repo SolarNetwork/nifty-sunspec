@@ -22,7 +22,6 @@ package net.solarnetwork.sunspec.api;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.StringUtf8;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
 import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
@@ -34,7 +33,7 @@ import net.solarnetwork.sunspec.modbus.ModbusReference;
  * </p>
  * 
  * @author matt
- * @version 1.1
+ * @version 1.0
  */
 public enum CommonModelRegister implements ModbusReference {
 
@@ -78,11 +77,6 @@ public enum CommonModelRegister implements ModbusReference {
 	@Override
 	public ModbusDataType getDataType() {
 		return dataType;
-	}
-
-	@Override
-	public ModbusReadFunction getFunction() {
-		return ModbusReadFunction.ReadHoldingRegister;
 	}
 
 	/**

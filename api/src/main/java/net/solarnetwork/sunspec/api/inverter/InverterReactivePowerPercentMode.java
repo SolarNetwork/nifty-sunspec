@@ -19,14 +19,13 @@
 
 package net.solarnetwork.sunspec.api.inverter;
 
-import net.solarnetwork.domain.CodedValue;
+import net.solarnetwork.sunspec.api.CodedValue;
 
 /**
  * Inverter reactive power percentage mode.
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public enum InverterReactivePowerPercentMode implements CodedValue {
 

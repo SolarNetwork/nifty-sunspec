@@ -32,7 +32,6 @@ import net.solarnetwork.sunspec.api.der.DerWattVarModelAccessor;
 import net.solarnetwork.sunspec.api.der.DerWattVarModelRegister;
 import net.solarnetwork.sunspec.modbus.ModbusConnection;
 import net.solarnetwork.sunspec.modbus.ModbusReference;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
 
 /**
@@ -40,7 +39,6 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public class DerWattVarModelAccessorImpl extends BaseDerCurveModelAccessor
 		implements DerWattVarModelAccessor {
@@ -107,12 +105,12 @@ public class DerWattVarModelAccessorImpl extends BaseDerCurveModelAccessor
 	}
 
 	@Override
-	protected SunspecModbusReference getCurveReadOnlyRegister() {
+	protected ModbusReference getCurveReadOnlyRegister() {
 		return DerWattVarModelRegister.CurveReadOnly;
 	}
 
 	@Override
-	protected SunspecModbusReference getPointXRegister() {
+	protected ModbusReference getPointXRegister() {
 		return DerWattVarModelRegister.PointActivePower;
 	}
 
@@ -122,7 +120,7 @@ public class DerWattVarModelAccessorImpl extends BaseDerCurveModelAccessor
 	}
 
 	@Override
-	protected SunspecModbusReference getPointYRegister() {
+	protected ModbusReference getPointYRegister() {
 		return DerWattVarModelRegister.PointReactivePower;
 	}
 

@@ -19,14 +19,13 @@
 
 package net.solarnetwork.sunspec.api.inverter;
 
-import net.solarnetwork.domain.CodedValue;
+import net.solarnetwork.sunspec.api.CodedValue;
 
 /**
  * Inverter pricing signal type, which defines the meaning of a pricing signal.
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public enum InverterPricingSignalType implements CodedValue {
 

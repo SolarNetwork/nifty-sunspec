@@ -37,8 +37,7 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
  * Implementatino of {@link InclinometerModelAccessor}.
  *
  * @author matt
- * @version 1.1
- * @since 4.2
+ * @version 1.0
  */
 public class InclinometerModelAccessorImpl extends BaseModelAccessor
 		implements InclinometerModelAccessor {

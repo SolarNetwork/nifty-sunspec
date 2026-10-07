@@ -22,7 +22,7 @@ package net.solarnetwork.sunspec.core.environmental;
 import java.util.Collection;
 import java.util.EnumSet;
 import org.jspecify.annotations.Nullable;
-import net.solarnetwork.domain.CodedValue;
+import net.solarnetwork.sunspec.api.CodedValue;
 import net.solarnetwork.sunspec.api.ModelId;
 import net.solarnetwork.sunspec.api.environmental.EnvironmentalModelId;
 import net.solarnetwork.sunspec.api.environmental.MeteorologicalModelAccessor;
@@ -36,8 +36,7 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
  * Implementation of {@link MeteorologicalModelAccessor}.
  *
  * @author matt
- * @version 1.1
- * @since 4.2
+ * @version 1.0
  */
 public class MeteorologicalModelAccessorImpl extends BaseModelAccessor
 		implements MeteorologicalModelAccessor {

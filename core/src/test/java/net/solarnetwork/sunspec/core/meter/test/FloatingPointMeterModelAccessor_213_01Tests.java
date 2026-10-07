@@ -19,9 +19,9 @@
 
 package net.solarnetwork.sunspec.core.meter.test;
 
-import static net.solarnetwork.domain.AcPhase.PhaseA;
-import static net.solarnetwork.domain.AcPhase.PhaseB;
-import static net.solarnetwork.domain.AcPhase.PhaseC;
+import static net.solarnetwork.sunspec.api.AcPhase.PhaseA;
+import static net.solarnetwork.sunspec.api.AcPhase.PhaseB;
+import static net.solarnetwork.sunspec.api.AcPhase.PhaseC;
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import java.util.Set;

@@ -21,6 +21,8 @@ package net.solarnetwork.sunspec.test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.util.BitSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -31,7 +33,7 @@ import java.util.regex.Pattern;
  * other tools for use in unit tests.
  *
  * @author matt
- * @version 1.1
+ * @version 1.0
  */
 public final class DataUtils {
 
@@ -170,25 +172,26 @@ public final class DataUtils {
 	}
 
 	/**
-	 * Extract an array of integer values based on a range of keys in a map.
+	 * Get a bit set with the bits of a non-negative integer.
 	 *
-	 * @param data
-	 *        the data map
-	 * @param start
-	 *        the starting address (map key)
-	 * @param len
-	 *        the length of the output slice
-	 * @return the slice of data
-	 * @since 1.1
+	 * @param value
+	 *        the integer
+	 * @return the bit set, with bit {@code i} set if bit {@code i} of
+	 *         {@code value} is set
+	 * @throws IllegalArgumentException
+	 *         if {@code value} is negative
 	 */
-	public static int[] mapSlice(Map<Integer, Integer> data, int start, int len) {
-		int[] slice = new int[len];
-		for ( int i = start, end = start + len; i < end; i++ ) {
-			Integer k = i;
-			Integer v = data.get(k);
-			slice[i - start] = (v != null ? v.intValue() : 0);
+	public static BitSet bitSetForBigInteger(BigInteger value) {
+		if ( value.signum() < 0 ) {
+			throw new IllegalArgumentException("Only non-negative values are allowed.");
 		}
-		return slice;
+		BitSet bs = new BitSet();
+		for ( int i = 0, len = value.bitLength(); i < len; i++ ) {
+			if ( value.testBit(i) ) {
+				bs.set(i);
+			}
+		}
+		return bs;
 	}
 
 	// @formatter:off

@@ -27,8 +27,7 @@ import net.solarnetwork.sunspec.api.SunSpecUtils;
  * String combiner type events.
  *
  * @author matt
- * @version 1.1
- * @since 1.4
+ * @version 1.0
  */
 public enum StringCombinerModelEvent implements ModelEvent {
 

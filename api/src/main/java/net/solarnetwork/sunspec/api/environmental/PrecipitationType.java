@@ -22,7 +22,7 @@ package net.solarnetwork.sunspec.api.environmental;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import net.solarnetwork.domain.CodedValue;
+import net.solarnetwork.sunspec.api.CodedValue;
 
 /**
  * Precipitation types, from WMO 4680 SYNOP code reference.

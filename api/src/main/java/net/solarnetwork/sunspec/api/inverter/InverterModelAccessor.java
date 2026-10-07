@@ -22,7 +22,7 @@ package net.solarnetwork.sunspec.api.inverter;
 import java.util.BitSet;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
-import net.solarnetwork.domain.AcPhase;
+import net.solarnetwork.sunspec.api.AcPhase;
 import net.solarnetwork.sunspec.api.ModelAccessor;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.OperatingState;
@@ -31,7 +31,7 @@ import net.solarnetwork.sunspec.api.OperatingState;
  * API for accessing inverter model data.
  *
  * @author matt
- * @version 2.3
+ * @version 1.0
  */
 public interface InverterModelAccessor extends ModelAccessor {
 
@@ -55,7 +55,6 @@ public interface InverterModelAccessor extends ModelAccessor {
 	 * Get the line voltage, in V.
 	 *
 	 * @return the voltage
-	 * @since 1.1
 	 */
 	@Nullable
 	Float getLineVoltage();
@@ -201,7 +200,6 @@ public interface InverterModelAccessor extends ModelAccessor {
 	 *
 	 * @return the vendor operating state value, or {@code null} if not
 	 *         supported or known
-	 * @since 2.2
 	 */
 	default @Nullable Integer getVendorOperatingState() {
 		return null;
@@ -228,7 +226,6 @@ public interface InverterModelAccessor extends ModelAccessor {
 	 * </p>
 	 *
 	 * @return the vendor events, or {@code null} if not supported or known
-	 * @since 2.2
 	 */
 	default @Nullable BitSet getVendorEvents() {
 		return null;
@@ -248,7 +245,6 @@ public interface InverterModelAccessor extends ModelAccessor {
 	 * switched.
 	 *
 	 * @return the reversed accessor
-	 * @since 2.1
 	 */
 	default InverterModelAccessor reversed() {
 		return new ReversedInverterModelAccessor(this);

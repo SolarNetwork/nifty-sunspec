@@ -19,139 +19,120 @@
 
 package net.solarnetwork.sunspec.api.inverter;
 
-import static net.solarnetwork.util.NumberUtils.narrow;
-import static net.solarnetwork.util.NumberUtils.roundDown;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelAccessor;
-import net.solarnetwork.util.NullRemoveMap;
 
 /**
  * API for accessing inverter nameplate ratings model data.
  *
  * @author matt
- * @version 1.1
- * @since 1.2
+ * @version 1.0
  */
 public interface InverterNameplateRatingsModelAccessor extends ModelAccessor {
 
 	/**
 	 * Key for the {@link DistributedEnergyResourceType} name, as a String.
 	 *
-	 * @since 1.1
 	 */
 	String INFO_KEY_DER_TYPE = "derType";
 
 	/**
 	 * Key for the {@link DistributedEnergyResourceType} code, as an Integer.
 	 *
-	 * @since 1.1
 	 */
 	String INFO_KEY_DER_TYPE_CODE = "derTypeCode";
 
 	/**
 	 * Key for the active power rating in W, as an Integer.
 	 *
-	 * @since 1.1
 	 */
 	String INFO_KEY_ACTIVE_POWER_RATING = "activePowerRating";
 
 	/**
 	 * Key for the apparent power rating in W, as an Integer.
 	 *
-	 * @since 1.1
 	 */
 	String INFO_KEY_APPARENT_POWER_RATING = "apparentPowerRating";
 
 	/**
 	 * Key for the reactive power Q1 rating in VAR, as an Integer.
 	 *
-	 * @since 1.1
 	 */
 	String INFO_KEY_REACTIVE_POWER_Q1_RATING = "reactivePowerQ1Rating";
 
 	/**
 	 * Key for the reactive power Q2 rating in VAR, as an Integer.
 	 *
-	 * @since 1.1
 	 */
 	String INFO_KEY_REACTIVE_POWER_Q2_RATING = "reactivePowerQ2Rating";
 
 	/**
 	 * Key for the reactive power Q3 rating in VAR, as an Integer.
 	 *
-	 * @since 1.1
 	 */
 	String INFO_KEY_REACTIVE_POWER_Q3_RATING = "reactivePowerQ3Rating";
 
 	/**
 	 * Key for the reactive power Q4 rating in VAR, as an Integer.
 	 *
-	 * @since 1.1
 	 */
 	String INFO_KEY_REACTIVE_POWER_Q4_RATING = "reactivePowerQ4Rating";
 
 	/**
 	 * Key for the current rating in A, as a Float.
 	 *
-	 * @since 1.1
 	 */
 	String INFO_KEY_CURRENT_RATING = "currentRating";
 
 	/**
 	 * Key for the power factor Q1 rating, as a Float.
 	 *
-	 * @since 1.1
 	 */
 	String INFO_KEY_POWER_FACTOR_Q1_RATING = "powerFactorQ1Rating";
 
 	/**
 	 * Key for the power factor Q2 rating, as a Float.
 	 *
-	 * @since 1.1
 	 */
 	String INFO_KEY_POWER_FACTOR_Q2_RATING = "powerFactorQ2Rating";
 
 	/**
 	 * Key for the power factor Q3 rating, as a Float.
 	 *
-	 * @since 1.1
 	 */
 	String INFO_KEY_POWER_FACTOR_Q3_RATING = "powerFactorQ3Rating";
 
 	/**
 	 * Key for the power factor Q4 rating, as a Float.
 	 *
-	 * @since 1.1
 	 */
 	String INFO_KEY_POWER_FACTOR_Q4_RATING = "powerFactorQ4Rating";
 
 	/**
 	 * Key for the stored energy inport power rating in Wh, as an Integer.
 	 *
-	 * @since 1.1
 	 */
 	String INFO_KEY_STORED_ENERGY_RATING = "storedEnergyRating";
 
 	/**
 	 * Key for the stored charge capacity rating in Wh, as an Integer.
 	 *
-	 * @since 1.1
 	 */
 	String INFO_KEY_STORED_CHARGE_CAPACITY = "storedChargeCapacity";
 
 	/**
 	 * Key for the stored energy inport power rating in W, as an Integer.
 	 *
-	 * @since 1.1
 	 */
 	String INFO_KEY_STORED_ENERGY_IMPORT_POWER_RATING = "storedEnergyImportPowerRating";
 
 	/**
 	 * Key for the stored energy export power rating in W, as an Integer.
 	 *
-	 * @since 1.1
 	 */
 	String INFO_KEY_STORED_ENERGY_EXPORT_POWER_RATING = "storedEnergyExportPowerRating";
 
@@ -295,10 +276,9 @@ public interface InverterNameplateRatingsModelAccessor extends ModelAccessor {
 	 * Get an information mapping if the nameplate ratings.
 	 *
 	 * @return the information mapping
-	 * @since 1.1
 	 */
 	default Map<String, Object> nameplateRatingsInfo() {
-		Map<String, Object> result = new NullRemoveMap<>(new LinkedHashMap<>(17));
+		Map<String, Object> result = new LinkedHashMap<>(17);
 
 		DistributedEnergyResourceType derType = getDerType();
 		if ( derType != null ) {
@@ -306,22 +286,65 @@ public interface InverterNameplateRatingsModelAccessor extends ModelAccessor {
 			result.put(INFO_KEY_DER_TYPE_CODE, derType.getCode());
 		}
 
-		result.put(INFO_KEY_ACTIVE_POWER_RATING, getActivePowerRating());
-		result.put(INFO_KEY_APPARENT_POWER_RATING, getApparentPowerRating());
-		result.put(INFO_KEY_REACTIVE_POWER_Q1_RATING, getReactivePowerQ1Rating());
-		result.put(INFO_KEY_REACTIVE_POWER_Q2_RATING, getReactivePowerQ2Rating());
-		result.put(INFO_KEY_REACTIVE_POWER_Q3_RATING, getReactivePowerQ3Rating());
-		result.put(INFO_KEY_REACTIVE_POWER_Q4_RATING, getReactivePowerQ4Rating());
-		result.put(INFO_KEY_CURRENT_RATING, narrow(roundDown(getCurrentRating(), 1), 2));
-		result.put(INFO_KEY_POWER_FACTOR_Q1_RATING, narrow(roundDown(getPowerFactorQ1Rating(), 3), 2));
-		result.put(INFO_KEY_POWER_FACTOR_Q2_RATING, narrow(roundDown(getPowerFactorQ2Rating(), 3), 2));
-		result.put(INFO_KEY_POWER_FACTOR_Q3_RATING, narrow(roundDown(getPowerFactorQ3Rating(), 3), 2));
-		result.put(INFO_KEY_POWER_FACTOR_Q4_RATING, narrow(roundDown(getPowerFactorQ4Rating(), 3), 2));
-		result.put(INFO_KEY_STORED_ENERGY_RATING, getStoredEnergyRating());
-		result.put(INFO_KEY_STORED_CHARGE_CAPACITY, getStoredChargeCapacity());
-		result.put(INFO_KEY_STORED_ENERGY_IMPORT_POWER_RATING, getStoredEnergyImportPowerRating());
-		result.put(INFO_KEY_STORED_ENERGY_EXPORT_POWER_RATING, getStoredEnergyExportPowerRating());
+		putInfo(result, INFO_KEY_ACTIVE_POWER_RATING, getActivePowerRating());
+		putInfo(result, INFO_KEY_APPARENT_POWER_RATING, getApparentPowerRating());
+		putInfo(result, INFO_KEY_REACTIVE_POWER_Q1_RATING, getReactivePowerQ1Rating());
+		putInfo(result, INFO_KEY_REACTIVE_POWER_Q2_RATING, getReactivePowerQ2Rating());
+		putInfo(result, INFO_KEY_REACTIVE_POWER_Q3_RATING, getReactivePowerQ3Rating());
+		putInfo(result, INFO_KEY_REACTIVE_POWER_Q4_RATING, getReactivePowerQ4Rating());
+		putInfo(result, INFO_KEY_CURRENT_RATING, roundDown(getCurrentRating(), 1));
+		putInfo(result, INFO_KEY_POWER_FACTOR_Q1_RATING, roundDown(getPowerFactorQ1Rating(), 3));
+		putInfo(result, INFO_KEY_POWER_FACTOR_Q2_RATING, roundDown(getPowerFactorQ2Rating(), 3));
+		putInfo(result, INFO_KEY_POWER_FACTOR_Q3_RATING, roundDown(getPowerFactorQ3Rating(), 3));
+		putInfo(result, INFO_KEY_POWER_FACTOR_Q4_RATING, roundDown(getPowerFactorQ4Rating(), 3));
+		putInfo(result, INFO_KEY_STORED_ENERGY_RATING, getStoredEnergyRating());
+		putInfo(result, INFO_KEY_STORED_CHARGE_CAPACITY, getStoredChargeCapacity());
+		putInfo(result, INFO_KEY_STORED_ENERGY_IMPORT_POWER_RATING, getStoredEnergyImportPowerRating());
+		putInfo(result, INFO_KEY_STORED_ENERGY_EXPORT_POWER_RATING, getStoredEnergyExportPowerRating());
 
 		return result;
+	}
+
+	/**
+	 * Add a value to an information mapping, unless the value is {@code null}.
+	 *
+	 * @param info
+	 *        the mapping to add to
+	 * @param key
+	 *        the key to add
+	 * @param value
+	 *        the value to add
+	 */
+	private static void putInfo(Map<String, Object> info, String key, @Nullable Object value) {
+		if ( value != null ) {
+			info.put(key, value);
+		}
+	}
+
+	/**
+	 * Round a value down to a maximum number of decimal digits.
+	 *
+	 * @param value
+	 *        the value to round
+	 * @param scale
+	 *        the maximum number of decimal digits
+	 * @return the rounded value, as an {@code Integer} if it is a whole number
+	 *         or a {@code Float} otherwise, or {@code null} if {@code value} is
+	 *         {@code null}
+	 */
+	private static @Nullable Number roundDown(@Nullable Float value, int scale) {
+		if ( value == null ) {
+			return null;
+		}
+		BigDecimal d = new BigDecimal(value.toString());
+		if ( d.scale() > scale ) {
+			d = d.setScale(scale, RoundingMode.DOWN);
+		}
+		try {
+			return d.intValueExact();
+		} catch ( ArithmeticException e ) {
+			// not a whole number
+			return d.floatValue();
+		}
 	}
 }

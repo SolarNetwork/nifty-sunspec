@@ -34,7 +34,6 @@ package net.solarnetwork.sunspec.api.der;
  *        the y coordinate
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public record DerCurvePoint(float x, float y) {
 

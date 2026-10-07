@@ -25,7 +25,7 @@ import org.jspecify.annotations.Nullable;
  * API for accessing common model data.
  *
  * @author matt
- * @version 1.1
+ * @version 1.0
  */
 public interface CommonModelAccessor extends ModelAccessor {
 

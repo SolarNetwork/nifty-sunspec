@@ -21,10 +21,10 @@ package net.solarnetwork.sunspec.core.test;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.ModbusWriteFunction;
+import net.solarnetwork.sunspec.core.support.IntShortMap;
+import net.solarnetwork.sunspec.modbus.ModbusReadingFunction;
+import net.solarnetwork.sunspec.modbus.ModbusWritingFunction;
 import net.solarnetwork.sunspec.modbus.support.StaticDataMapModbusConnection;
-import net.solarnetwork.util.IntShortMap;
 
 /**
  * A writable static data Modbus connection that records the read and write
@@ -49,25 +49,13 @@ public class RecordingModbusConnection extends StaticDataMapModbusConnection {
 	}
 
 	@Override
-	public short[] readWords(ModbusReadFunction function, int address, int count) {
+	public short[] readWords(ModbusReadingFunction function, int address, int count) {
 		reads.add(List.of(address, count));
 		return super.readWords(function, address, count);
 	}
 
 	@Override
-	public int[] readWordsUnsigned(ModbusReadFunction function, int address, int count) {
-		reads.add(List.of(address, count));
-		return super.readWordsUnsigned(function, address, count);
-	}
-
-	@Override
-	public void writeWords(ModbusWriteFunction function, int address, short[] values) {
-		writes.add(List.of(address, values.length));
-		super.writeWords(function, address, values);
-	}
-
-	@Override
-	public void writeWords(ModbusWriteFunction function, int address, int[] values) {
+	public void writeWords(ModbusWritingFunction function, int address, short[] values) {
 		writes.add(List.of(address, values.length));
 		super.writeWords(function, address, values);
 	}

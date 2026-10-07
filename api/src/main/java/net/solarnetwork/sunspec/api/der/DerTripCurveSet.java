@@ -36,7 +36,6 @@ import org.jspecify.annotations.Nullable;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public interface DerTripCurveSet {
 

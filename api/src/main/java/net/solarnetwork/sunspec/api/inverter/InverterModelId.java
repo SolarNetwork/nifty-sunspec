@@ -26,7 +26,7 @@ import net.solarnetwork.sunspec.api.ModelId;
  * Enumeration of SunSpec inverter model IDs.
  * 
  * @author matt
- * @version 1.1
+ * @version 1.0
  */
 public enum InverterModelId implements ModelId {
 

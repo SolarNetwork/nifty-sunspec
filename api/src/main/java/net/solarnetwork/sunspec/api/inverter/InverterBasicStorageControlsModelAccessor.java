@@ -39,7 +39,6 @@ import net.solarnetwork.sunspec.modbus.ModbusConnection;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public interface InverterBasicStorageControlsModelAccessor extends ModelAccessor {
 

@@ -30,8 +30,7 @@ import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt64;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * Enumeration of Modbus register mappings for the SunSpec DER DC measurement
@@ -49,9 +48,8 @@ import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
-public enum DerDcMeasurementModelRegister implements SunspecModbusReference {
+public enum DerDcMeasurementModelRegister implements ModbusReference {
 
 	/**
 	 * Bitmask of the ports with active alarms, where bit 0 is the first port.
@@ -159,11 +157,6 @@ public enum DerDcMeasurementModelRegister implements SunspecModbusReference {
 	@Override
 	public ModbusDataType getDataType() {
 		return dataType;
-	}
-
-	@Override
-	public ModbusReadFunction getFunction() {
-		return ModbusReadFunction.ReadHoldingRegister;
 	}
 
 	@Override

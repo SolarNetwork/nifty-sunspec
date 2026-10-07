@@ -20,8 +20,8 @@
 package net.solarnetwork.sunspec.modbus.support;
 
 import java.util.List;
+import net.solarnetwork.sunspec.api.IntRange;
 import net.solarnetwork.sunspec.modbus.ModbusReference;
-import net.solarnetwork.util.IntRange;
 
 /**
  * Modbus utilities.
@@ -45,7 +45,6 @@ public final class ModbusUtils {
 	 *        the address the register addresses are relative to
 	 * @param refs
 	 *        the registers
-	 * @since 2.1
 	 */
 	public static void addMultiRegisterAddressRanges(final List<IntRange> ranges, final int address,
 			final Iterable<? extends ModbusReference> refs) {

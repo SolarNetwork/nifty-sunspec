@@ -34,8 +34,7 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
  * Implementation of {@link MiniMeteorologicalModelAccessor}.
  *
  * @author matt
- * @version 1.1
- * @since 4.2
+ * @version 1.0
  */
 public class MiniMeteorologicalModelAccessorImpl extends BaseModelAccessor
 		implements MiniMeteorologicalModelAccessor {

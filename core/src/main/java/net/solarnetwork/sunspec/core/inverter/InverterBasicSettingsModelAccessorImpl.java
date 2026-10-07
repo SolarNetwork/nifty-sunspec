@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.EnumSet;
 import org.jspecify.annotations.Nullable;
-import net.solarnetwork.domain.AcPhase;
+import net.solarnetwork.sunspec.api.AcPhase;
 import net.solarnetwork.sunspec.api.ModelId;
 import net.solarnetwork.sunspec.api.ReactivePowerAction;
 import net.solarnetwork.sunspec.api.inverter.ApparentPowerCalculationMethod;
@@ -41,8 +41,7 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
  * Data access object for an inverter basic settings model.
  *
  * @author matt
- * @version 2.1
- * @since 1.2
+ * @version 1.0
  */
 public class InverterBasicSettingsModelAccessorImpl extends BaseModelAccessor
 		implements InverterBasicSettingsModelAccessor {

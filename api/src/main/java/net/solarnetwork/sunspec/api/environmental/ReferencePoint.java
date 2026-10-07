@@ -26,7 +26,6 @@ import org.jspecify.annotations.Nullable;
  *
  * @author matt
  * @version 1.0
- * @since 4.2
  */
 public class ReferencePoint {
 

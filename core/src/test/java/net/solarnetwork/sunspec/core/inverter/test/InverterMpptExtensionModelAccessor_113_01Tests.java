@@ -43,7 +43,7 @@ import net.solarnetwork.sunspec.modbus.support.StaticDataMapReadonlyModbusConnec
  * Test cases for {@link InverterMpptExtensionModelAccessor}.
  *
  * @author matt
- * @version 1.1
+ * @version 1.0
  */
 public class InverterMpptExtensionModelAccessor_113_01Tests {
 

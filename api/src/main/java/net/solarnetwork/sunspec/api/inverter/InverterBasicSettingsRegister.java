@@ -25,13 +25,12 @@ import static net.solarnetwork.sunspec.api.PointAccess.ReadWrite;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
 import org.jspecify.annotations.Nullable;
-import net.solarnetwork.domain.AcPhase;
+import net.solarnetwork.sunspec.api.AcPhase;
 import net.solarnetwork.sunspec.api.DataClassification;
 import net.solarnetwork.sunspec.api.PointAccess;
 import net.solarnetwork.sunspec.api.ReactivePowerAction;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * Enumeration of Modbus register mappings for SunSpec model 121.
@@ -42,10 +41,9 @@ import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
  * </p>
  *
  * @author matt
- * @version 2.1
- * @since 1.2
+ * @version 1.0
  */
-public enum InverterBasicSettingsRegister implements SunspecModbusReference {
+public enum InverterBasicSettingsRegister implements ModbusReference {
 
 	// Active (Real) Power (W)
 
@@ -193,11 +191,6 @@ public enum InverterBasicSettingsRegister implements SunspecModbusReference {
 	@Override
 	public ModbusDataType getDataType() {
 		return dataType;
-	}
-
-	@Override
-	public ModbusReadFunction getFunction() {
-		return ModbusReadFunction.ReadHoldingRegister;
 	}
 
 	/**

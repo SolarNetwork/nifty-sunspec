@@ -30,7 +30,6 @@ package net.solarnetwork.sunspec.api.der;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public interface DerTripHighVoltageModelAccessor extends DerTripModelAccessor {
 

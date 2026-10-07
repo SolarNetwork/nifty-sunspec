@@ -27,7 +27,6 @@ import net.solarnetwork.sunspec.api.ModelId;
  * 
  * @author matt
  * @version 1.0
- * @since 1.4
  */
 public enum StringCombinerModelId implements ModelId {
 

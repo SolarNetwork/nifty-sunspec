@@ -19,14 +19,13 @@
 
 package net.solarnetwork.sunspec.api.der;
 
-import net.solarnetwork.domain.Bitmaskable;
+import net.solarnetwork.sunspec.api.Bitmaskable;
 
 /**
  * DER intentional island categories.
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public enum DerIntentionalIslandCategory implements Bitmaskable {
 

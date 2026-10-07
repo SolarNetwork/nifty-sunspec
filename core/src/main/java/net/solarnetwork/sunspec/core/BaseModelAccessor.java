@@ -19,12 +19,11 @@
 
 package net.solarnetwork.sunspec.core;
 
-import static net.solarnetwork.util.NumberUtils.bigDecimalForNumber;
-import static net.solarnetwork.util.NumberUtils.bigIntegerForNumber;
-import static net.solarnetwork.util.NumberUtils.maximumDecimalScale;
-import static net.solarnetwork.util.NumberUtils.unsignedNumber;
-import static net.solarnetwork.util.ObjectUtils.nonnull;
-import static net.solarnetwork.util.ObjectUtils.requireNonNullArgument;
+import static net.solarnetwork.sunspec.core.support.NumberUtils.bigDecimalForNumber;
+import static net.solarnetwork.sunspec.core.support.NumberUtils.bigIntegerForNumber;
+import static net.solarnetwork.sunspec.core.support.NumberUtils.maximumDecimalScale;
+import static net.solarnetwork.sunspec.core.support.ObjectUtils.nonnull;
+import static net.solarnetwork.sunspec.core.support.ObjectUtils.requireNonNullArgument;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -38,9 +37,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import org.jspecify.annotations.Nullable;
-import net.solarnetwork.domain.Bitmaskable;
-import net.solarnetwork.domain.CodedValue;
+import net.solarnetwork.sunspec.api.Bitmaskable;
+import net.solarnetwork.sunspec.api.CodedValue;
 import net.solarnetwork.sunspec.api.DataClassification;
+import net.solarnetwork.sunspec.api.IntRange;
 import net.solarnetwork.sunspec.api.ModelAccessor;
 import net.solarnetwork.sunspec.api.ModelId;
 import net.solarnetwork.sunspec.api.ModelRegister;
@@ -51,23 +51,21 @@ import net.solarnetwork.sunspec.modbus.ModbusConstants;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
 import net.solarnetwork.sunspec.modbus.ModbusReference;
 import net.solarnetwork.sunspec.modbus.ModbusWriteFunction;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
 import net.solarnetwork.sunspec.modbus.support.ModbusDataUtils;
 import net.solarnetwork.sunspec.modbus.support.ModbusUtils;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
-import net.solarnetwork.util.IntRange;
 
 /**
  * Base class for {@link ModelAccessor} implementations.
  *
  * @author matt
- * @version 2.1
+ * @version 1.0
  */
 public abstract class BaseModelAccessor implements ModelAccessor {
 
 	/** Cached "not implemented" value for a SunSpec "uint64" data type. */
-	private static final Number NAN_UINT64 = nonnull(unsignedNumber(ModbusConstants.NAN_UINT64),
-			"NAN_UINT64");
+	private static final BigInteger NAN_UINT64 = new BigInteger(
+			Long.toUnsignedString(ModbusConstants.NAN_UINT64));
 
 	/** The largest valid SunSpec "uint64" value. */
 	private static final BigInteger UINT64_MAX = new BigInteger("FFFFFFFFFFFFFFFE", 16);
@@ -142,7 +140,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * repeating block instance.
 	 * </p>
 	 *
-	 * @since 2.1
 	 */
 	@Override
 	public List<IntRange> getUnsplittableAddressRanges() {
@@ -169,7 +166,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *
 	 * @return the registers, relative to the block address, never {@code null};
 	 *         this implementation returns an empty list
-	 * @since 2.1
 	 */
 	protected Collection<? extends ModbusReference> getFixedBlockRegisters() {
 		return Collections.emptyList();
@@ -187,7 +183,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * @return the registers, relative to the start of a repeating block
 	 *         instance, never {@code null}; this implementation returns an
 	 *         empty list
-	 * @since 2.1
 	 */
 	protected Collection<? extends ModbusReference> getRepeatingBlockRegisters() {
 		return Collections.emptyList();
@@ -200,21 +195,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 */
 	protected ModelData getData() {
 		return data;
-	}
-
-	/**
-	 * Get a decimal value suitable for multiplication against a data property
-	 * for a scale factor.
-	 *
-	 * @param ref
-	 *        the block address relative reference to the scale factor register,
-	 *        which is expected to contain a signed integer from -10..10
-	 * @return the decimal multiplier to use, or {@code null} if the scale
-	 *         factor is not available or not implemented
-	 * @see #getScaleFactor(ModbusReference, int)
-	 */
-	protected @Nullable BigDecimal getScaleFactor(ModbusReference ref) {
-		return getScaleFactor(ref, blockAddress);
 	}
 
 	/**
@@ -234,7 +214,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        the address offset to add to {@link ModbusReference#getAddress()}
 	 * @return the decimal multiplier to use, or {@code null} if the scale
 	 *         factor is not available or not implemented
-	 * @since 1.2
 	 */
 	protected @Nullable BigDecimal getScaleFactor(ModbusReference ref, int offset) {
 		final Integer factor = scaleFactorExponent(ref, offset);
@@ -272,7 +251,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * @param ref
 	 *        the block address relative reference to the bitfield register(s)
 	 * @return the value, never {@code null}
-	 * @since 1.1
 	 */
 	protected @Nullable Number getBitfield(ModbusReference ref) {
 		return getBitfield(ref, blockAddress);
@@ -286,7 +264,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * @param offset
 	 *        the address offset to add to {@link ModbusReference#getAddress()}
 	 * @return the value, never {@code null}
-	 * @since 1.2
 	 */
 	protected @Nullable Number getBitfield(ModbusReference ref, int offset) {
 		Number v = data.getNumber(ref, offset);
@@ -294,17 +271,15 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 			return 0;
 		}
 
-		if ( ref instanceof SunspecModbusReference snref ) {
-			DataClassification classification = snref.getClassification();
-			if ( DataClassification.Bitfield == classification ) {
-				// for bit fields, if the most significant bit is set, it is NaN
-				if ( ref.getWordLength() == 1 && (v.intValue()
-						& ModbusConstants.NAN_BITFIELD16) == ModbusConstants.NAN_BITFIELD16 ) {
-					return 0;
-				} else if ( ref.getWordLength() == 2 && (v.intValue()
-						& ModbusConstants.NAN_BITFIELD32) == ModbusConstants.NAN_BITFIELD32 ) {
-					return 0;
-				}
+		DataClassification classification = ref.getClassification();
+		if ( DataClassification.Bitfield == classification ) {
+			// for bit fields, if the most significant bit is set, it is NaN
+			if ( ref.getWordLength() == 1 && (v.intValue()
+					& ModbusConstants.NAN_BITFIELD16) == ModbusConstants.NAN_BITFIELD16 ) {
+				return 0;
+			} else if ( ref.getWordLength() == 2 && (v.intValue()
+					& ModbusConstants.NAN_BITFIELD32) == ModbusConstants.NAN_BITFIELD32 ) {
+				return 0;
 			}
 		}
 
@@ -368,7 +343,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * @param dataRef
 	 *        the block address relative reference to the data property
 	 * @return the value, or {@code null} if not available
-	 * @since 1.2
 	 */
 	public @Nullable Number getValue(ModbusReference dataRef) {
 		return getValue(dataRef, blockAddress);
@@ -383,7 +357,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        the data address offset to add to
 	 *        {@link ModbusReference#getAddress()}
 	 * @return the value, or {@code null} if not available
-	 * @since 1.2
 	 */
 	public @Nullable Number getValue(ModbusReference dataRef, int dataOffset) {
 		Number v = data.getNumber(dataRef, dataOffset);
@@ -391,10 +364,7 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 			return null;
 		}
 
-		DataClassification classification = null;
-		if ( dataRef instanceof SunspecModbusReference snref ) {
-			classification = snref.getClassification();
-		}
+		DataClassification classification = dataRef.getClassification();
 
 		// check for NaN
 		if ( DataClassification.Accumulator == classification ) {
@@ -431,7 +401,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * @param dataRef
 	 *        the block address relative reference to the data property
 	 * @return the value, or {@code null} if not available
-	 * @since 1.2
 	 */
 	public @Nullable Float getFloatValue(ModbusReference dataRef) {
 		return getFloatValue(dataRef, blockAddress);
@@ -446,7 +415,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        the data address offset to add to
 	 *        {@link ModbusReference#getAddress()}
 	 * @return the value, or {@code null} if not available
-	 * @since 1.2
 	 */
 	public @Nullable Float getFloatValue(ModbusReference dataRef, int dataOffset) {
 		Number n = getValue(dataRef, dataOffset);
@@ -463,7 +431,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * @param dataRef
 	 *        the block address relative reference to the data property
 	 * @return the value, or {@code null} if not available
-	 * @since 1.2
 	 */
 	public @Nullable Integer getIntegerValue(ModbusReference dataRef) {
 		return getIntegerValue(dataRef, blockAddress);
@@ -482,7 +449,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        the data address offset to add to
 	 *        {@link ModbusReference#getAddress()}
 	 * @return the value, or {@code null} if not available
-	 * @since 1.2
 	 */
 	public @Nullable Integer getIntegerValue(ModbusReference dataRef, int dataOffset) {
 		Number n = maximumDecimalScale(getValue(dataRef, dataOffset), 0);
@@ -499,7 +465,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * @param dataRef
 	 *        the block address relative reference to the data property
 	 * @return the value, or {@code null} if not available
-	 * @since 1.2
 	 */
 	public @Nullable Long getLongValue(ModbusReference dataRef) {
 		return getLongValue(dataRef, blockAddress);
@@ -520,7 +485,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        the data address offset to add to
 	 *        {@link ModbusReference#getAddress()}
 	 * @return the value, or {@code null} if not available
-	 * @since 1.2
 	 */
 	public @Nullable Long getLongValue(ModbusReference dataRef, int dataOffset) {
 		BigInteger n = bigIntegerForNumber(maximumDecimalScale(getValue(dataRef, dataOffset), 0));
@@ -536,7 +500,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        the block address relative reference to the scale factor
 	 * @return the value, or {@code null} if not available
 	 * @see #getScaledValue(ModbusReference, ModbusReference)
-	 * @since 2.1
 	 */
 	public @Nullable Float getScaledFloatValue(ModbusReference dataRef, ModbusReference scaleRef) {
 		return getScaledFloatValue(dataRef, scaleRef, blockAddress, blockAddress);
@@ -557,7 +520,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        {@link ModbusReference#getAddress()}
 	 * @return the value, or {@code null} if not available
 	 * @see #getScaledValue(ModbusReference, ModbusReference, int, int)
-	 * @since 2.1
 	 */
 	public @Nullable Float getScaledFloatValue(ModbusReference dataRef, ModbusReference scaleRef,
 			int dataOffset, int scaleOffset) {
@@ -574,7 +536,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        the block address relative reference to the scale factor
 	 * @return the value, or {@code null} if not available
 	 * @see #getScaledValue(ModbusReference, ModbusReference)
-	 * @since 2.1
 	 */
 	public @Nullable Integer getScaledIntegerValue(ModbusReference dataRef, ModbusReference scaleRef) {
 		return getScaledIntegerValue(dataRef, scaleRef, blockAddress, blockAddress);
@@ -600,7 +561,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        {@link ModbusReference#getAddress()}
 	 * @return the value, or {@code null} if not available
 	 * @see #getScaledValue(ModbusReference, ModbusReference, int, int)
-	 * @since 2.1
 	 */
 	public @Nullable Integer getScaledIntegerValue(ModbusReference dataRef, ModbusReference scaleRef,
 			int dataOffset, int scaleOffset) {
@@ -617,7 +577,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        the block address relative reference to the scale factor
 	 * @return the value, or {@code null} if not available
 	 * @see #getScaledValue(ModbusReference, ModbusReference)
-	 * @since 2.1
 	 */
 	public @Nullable Long getScaledLongValue(ModbusReference dataRef, ModbusReference scaleRef) {
 		return getScaledLongValue(dataRef, scaleRef, blockAddress, blockAddress);
@@ -644,7 +603,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        {@link ModbusReference#getAddress()}
 	 * @return the value, or {@code null} if not available
 	 * @see #getScaledValue(ModbusReference, ModbusReference, int, int)
-	 * @since 2.1
 	 */
 	public @Nullable Long getScaledLongValue(ModbusReference dataRef, ModbusReference scaleRef,
 			int dataOffset, int scaleOffset) {
@@ -680,7 +638,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        the block address relative reference to the data property
 	 * @return the value, or {@code null} if not available
 	 * @see ModelData#getStringValue(ModbusReference, int)
-	 * @since 2.1
 	 */
 	public @Nullable String getStringValue(ModbusReference dataRef) {
 		return getStringValue(dataRef, blockAddress);
@@ -696,7 +653,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        {@link ModbusReference#getAddress()}
 	 * @return the value, or {@code null} if not available
 	 * @see ModelData#getStringValue(ModbusReference, int)
-	 * @since 2.1
 	 */
 	public @Nullable String getStringValue(ModbusReference dataRef, int dataOffset) {
 		return data.getStringValue(dataRef, dataOffset);
@@ -709,7 +665,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        the block address relative reference to the data property
 	 * @return the value, or {@code null} if not available
 	 * @see #getBooleanValue(ModbusReference, int)
-	 * @since 2.1
 	 */
 	public @Nullable Boolean getBooleanValue(ModbusReference dataRef) {
 		return getBooleanValue(dataRef, blockAddress);
@@ -731,7 +686,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        the data address offset to add to
 	 *        {@link ModbusReference#getAddress()}
 	 * @return the value, or {@code null} if not available
-	 * @since 2.1
 	 */
 	public @Nullable Boolean getBooleanValue(ModbusReference dataRef, int dataOffset) {
 		Number n = getValue(dataRef, dataOffset);
@@ -756,7 +710,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        the enumeration type
 	 * @return the value, or {@code null} if not available
 	 * @see #getCodedValue(ModbusReference, int, Class)
-	 * @since 2.1
 	 */
 	public <T extends Enum<T> & CodedValue> @Nullable T getCodedValue(ModbusReference dataRef,
 			Class<T> type) {
@@ -781,7 +734,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * @param type
 	 *        the enumeration type
 	 * @return the value, or {@code null} if not available
-	 * @since 2.1
 	 */
 	public <T extends Enum<T> & CodedValue> @Nullable T getCodedValue(ModbusReference dataRef,
 			int dataOffset, Class<T> type) {
@@ -800,7 +752,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        the enumeration type
 	 * @return the values, never {@code null}
 	 * @see #getBitmaskableValues(ModbusReference, int, Class)
-	 * @since 2.1
 	 */
 	public <T extends Enum<T> & Bitmaskable> Set<T> getBitmaskableValues(ModbusReference dataRef,
 			Class<T> type) {
@@ -827,7 +778,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * @param type
 	 *        the enumeration type
 	 * @return the values, never {@code null}
-	 * @since 2.1
 	 */
 	public <T extends Enum<T> & Bitmaskable> Set<T> getBitmaskableValues(ModbusReference dataRef,
 			int dataOffset, Class<T> type) {
@@ -842,7 +792,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        the block address relative reference to the data property
 	 * @return the bit indexes, in ascending order, never {@code null}
 	 * @see #getBitfieldIndexes(ModbusReference, int)
-	 * @since 2.1
 	 */
 	public Set<Integer> getBitfieldIndexes(ModbusReference dataRef) {
 		return getBitfieldIndexes(dataRef, blockAddress);
@@ -864,7 +813,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        the data address offset to add to
 	 *        {@link ModbusReference#getAddress()}
 	 * @return the bit indexes, in ascending order, never {@code null}
-	 * @since 2.1
 	 */
 	public Set<Integer> getBitfieldIndexes(ModbusReference dataRef, int dataOffset) {
 		Number n = data.getNumber(dataRef, dataOffset);
@@ -893,7 +841,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        the block address relative references to the data properties
 	 * @return the bit set, never {@code null}
 	 * @see #getBitfieldBits(int, ModbusReference...)
-	 * @since 2.1
 	 */
 	public BitSet getBitfieldBits(ModbusReference... dataRefs) {
 		return getBitfieldBits(blockAddress, dataRefs);
@@ -918,7 +865,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * @param dataRefs
 	 *        the block address relative references to the data properties
 	 * @return the bit set, never {@code null}
-	 * @since 2.1
 	 */
 	public BitSet getBitfieldBits(int dataOffset, ModbusReference... dataRefs) {
 		final BitSet result = new BitSet();
@@ -943,7 +889,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * @return {@literal true} if the bit is set, {@literal false} if it is not,
 	 *         or {@code null} if not available
 	 * @see #getBitfieldBit(ModbusReference, int, int)
-	 * @since 2.1
 	 */
 	public @Nullable Boolean getBitfieldBit(ModbusReference dataRef, int index) {
 		return getBitfieldBit(dataRef, blockAddress, index);
@@ -969,7 +914,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        significant bit
 	 * @return {@literal true} if the bit is set, {@literal false} if it is not,
 	 *         or {@code null} if not available
-	 * @since 2.1
 	 */
 	public @Nullable Boolean getBitfieldBit(ModbusReference dataRef, int dataOffset, int index) {
 		Number n = data.getNumber(dataRef, dataOffset);
@@ -997,10 +941,9 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *         for the point
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @see #writeValue(ModbusConnection, SunspecModbusReference, int, Number)
-	 * @since 2.1
+	 * @see #writeValue(ModbusConnection, ModbusReference, int, Number)
 	 */
-	public void writeValue(ModbusConnection conn, SunspecModbusReference dataRef, Number value)
+	public void writeValue(ModbusConnection conn, ModbusReference dataRef, Number value)
 			throws IOException {
 		writeValue(conn, dataRef, blockAddress, value);
 	}
@@ -1009,9 +952,8 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * Write a point value to a device.
 	 *
 	 * <p>
-	 * The value is encoded with
-	 * {@link #encodeValue(SunspecModbusReference, Number)} and written with
-	 * {@link #writeWords(ModbusConnection, int, short[])}.
+	 * The value is encoded with {@link #encodeValue(ModbusReference, Number)}
+	 * and written with {@link #writeWords(ModbusConnection, int, short[])}.
 	 * </p>
 	 *
 	 * @param conn
@@ -1028,10 +970,9 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *         for the point
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
-	public void writeValue(ModbusConnection conn, SunspecModbusReference dataRef, int dataOffset,
-			Number value) throws IOException {
+	public void writeValue(ModbusConnection conn, ModbusReference dataRef, int dataOffset, Number value)
+			throws IOException {
 		requireWritable(dataRef);
 		writeWords(conn, dataRef.getAddress() + dataOffset, encodeValue(dataRef, value));
 	}
@@ -1054,11 +995,10 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *         if the scale factor has not been read or is not implemented
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @see #writeScaledValue(ModbusConnection, SunspecModbusReference,
+	 * @see #writeScaledValue(ModbusConnection, ModbusReference,
 	 *      ModbusReference, int, int, Number)
-	 * @since 2.1
 	 */
-	public void writeScaledValue(ModbusConnection conn, SunspecModbusReference dataRef,
+	public void writeScaledValue(ModbusConnection conn, ModbusReference dataRef,
 			ModbusReference scaleRef, Number value) throws IOException {
 		writeScaledValue(conn, dataRef, scaleRef, blockAddress, blockAddress, value);
 	}
@@ -1068,7 +1008,7 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *
 	 * <p>
 	 * The value is encoded with
-	 * {@link #encodeScaledValue(SunspecModbusReference, ModbusReference, int, Number)}
+	 * {@link #encodeScaledValue(ModbusReference, ModbusReference, int, Number)}
 	 * and written with {@link #writeWords(ModbusConnection, int, short[])}.
 	 * </p>
 	 *
@@ -1093,9 +1033,8 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *         if the scale factor has not been read or is not implemented
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
-	public void writeScaledValue(ModbusConnection conn, SunspecModbusReference dataRef,
+	public void writeScaledValue(ModbusConnection conn, ModbusReference dataRef,
 			ModbusReference scaleRef, int dataOffset, int scaleOffset, Number value) throws IOException {
 		requireWritable(dataRef);
 		writeWords(conn, dataRef.getAddress() + dataOffset,
@@ -1119,9 +1058,8 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 * @throws IllegalArgumentException
 	 *         if {@code value} is not valid for the point, or the point data
 	 *         type is not supported
-	 * @since 2.1
 	 */
-	protected short[] encodeValue(SunspecModbusReference ref, Number value) {
+	protected short[] encodeValue(ModbusReference ref, Number value) {
 		final ModbusDataType type = ref.getDataType();
 		final Number n;
 		if ( type == ModbusDataType.Float32 ) {
@@ -1149,8 +1087,8 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *
 	 * <p>
 	 * The value is divided by the scale factor and then encoded with
-	 * {@link #encodeValue(SunspecModbusReference, Number)}. The scale factor
-	 * must have been read from the device, and be implemented as described in
+	 * {@link #encodeValue(ModbusReference, Number)}. The scale factor must have
+	 * been read from the device, and be implemented as described in
 	 * {@link #getScaleFactor(ModbusReference, int)}.
 	 * </p>
 	 *
@@ -1169,10 +1107,9 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *         type is not supported
 	 * @throws IllegalStateException
 	 *         if the scale factor has not been read or is not implemented
-	 * @since 2.1
 	 */
-	protected short[] encodeScaledValue(SunspecModbusReference ref, ModbusReference scaleRef,
-			int scaleOffset, Number value) {
+	protected short[] encodeScaledValue(ModbusReference ref, ModbusReference scaleRef, int scaleOffset,
+			Number value) {
 		if ( !data.dataRegisters().containsKey(scaleRef.getAddress() + scaleOffset) ) {
 			throw new IllegalStateException(String
 					.format("The %s scale factor for the %s point has not been read.", scaleRef, ref));
@@ -1204,7 +1141,6 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 	 *        the register values to write
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	protected void writeWords(ModbusConnection conn, int address, short[] words) throws IOException {
 		conn.writeWords(ModbusWriteFunction.WriteMultipleHoldingRegisters, address, words);
@@ -1214,13 +1150,13 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 		});
 	}
 
-	private static void requireWritable(SunspecModbusReference ref) {
+	private static void requireWritable(ModbusReference ref) {
 		if ( ref.getAccess() != PointAccess.ReadWrite ) {
 			throw new IllegalArgumentException(String.format("The %s point is not writable.", ref));
 		}
 	}
 
-	private static BigDecimal decimalValue(Number value, SunspecModbusReference ref) {
+	private static BigDecimal decimalValue(Number value, ModbusReference ref) {
 		if ( !Double.isFinite(value.doubleValue()) ) {
 			throw new IllegalArgumentException(
 					String.format("The value %s is not valid for the %s point.", value, ref));
@@ -1228,7 +1164,7 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 		return nonnull(bigDecimalForNumber(value), "Decimal value");
 	}
 
-	private static BigInteger minimumIntegerValue(SunspecModbusReference ref) {
+	private static BigInteger minimumIntegerValue(ModbusReference ref) {
 		return switch (ref.getDataType()) {
 			case Int16 -> BigInteger.valueOf(-0x7FFF);
 			case Int32 -> BigInteger.valueOf(-0x7FFFFFFFL);
@@ -1239,7 +1175,7 @@ public abstract class BaseModelAccessor implements ModelAccessor {
 		};
 	}
 
-	private static BigInteger maximumIntegerValue(SunspecModbusReference ref) {
+	private static BigInteger maximumIntegerValue(ModbusReference ref) {
 		final DataClassification classification = ref.getClassification();
 		return switch (ref.getDataType()) {
 			case Int16 -> BigInteger.valueOf(0x7FFF);

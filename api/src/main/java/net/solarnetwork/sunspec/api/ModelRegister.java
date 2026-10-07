@@ -21,15 +21,12 @@ package net.solarnetwork.sunspec.api;
 
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.StringAscii;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
 import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
- * Enumeration of Modbus model metadata mappings for SunSpec compliant meters.
+ * Enumeration of Modbus model metadata mappings for SunSpec compliant devices.
  * 
  * @author matt
  * @version 1.0
@@ -75,8 +72,8 @@ public enum ModelRegister implements ModbusReference {
 	public static final String BASE_ADDRESS_MAGIC_STRING = "SunS";
 
 	/** A list of the base address registers, in order of priority. */
-	public static final List<ModelRegister> BASE_ADDRESSES = Collections.unmodifiableList(Arrays.asList(
-			ModelRegister.BaseAddress, ModelRegister.BaseAddressAlt1, ModelRegister.BaseAddressAlt2));
+	public static final List<ModelRegister> BASE_ADDRESSES = List.of(ModelRegister.BaseAddress,
+			ModelRegister.BaseAddressAlt1, ModelRegister.BaseAddressAlt2);
 
 	private final int address;
 	private final ModbusDataType dataType;
@@ -102,16 +99,6 @@ public enum ModelRegister implements ModbusReference {
 		return dataType;
 	}
 
-	@Override
-	public ModbusReadFunction getFunction() {
-		return ModbusReadFunction.ReadHoldingRegister;
-	}
-
-	/**
-	 * Get the data type word length.
-	 * 
-	 * @return the word length
-	 */
 	@Override
 	public int getWordLength() {
 		return wordLength;

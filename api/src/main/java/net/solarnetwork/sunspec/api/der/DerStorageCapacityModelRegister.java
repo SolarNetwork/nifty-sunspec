@@ -26,8 +26,7 @@ import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * Enumeration of Modbus register mappings for the SunSpec DER storage capacity
@@ -44,9 +43,8 @@ import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
-public enum DerStorageCapacityModelRegister implements SunspecModbusReference {
+public enum DerStorageCapacityModelRegister implements ModbusReference {
 
 	/** Energy rating of the storage, in Wh. */
 	EnergyRating(0, UInt16),
@@ -94,11 +92,6 @@ public enum DerStorageCapacityModelRegister implements SunspecModbusReference {
 	@Override
 	public ModbusDataType getDataType() {
 		return dataType;
-	}
-
-	@Override
-	public ModbusReadFunction getFunction() {
-		return ModbusReadFunction.ReadHoldingRegister;
 	}
 
 	@Override

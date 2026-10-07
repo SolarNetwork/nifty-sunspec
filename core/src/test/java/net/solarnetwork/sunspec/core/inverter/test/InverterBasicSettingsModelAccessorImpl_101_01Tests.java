@@ -28,7 +28,7 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import net.solarnetwork.domain.AcPhase;
+import net.solarnetwork.sunspec.api.AcPhase;
 import net.solarnetwork.sunspec.api.CommonModelAccessor;
 import net.solarnetwork.sunspec.api.inverter.InverterApparentPowerCalculationMethod;
 import net.solarnetwork.sunspec.api.inverter.InverterBasicSettingsModelAccessor;
@@ -45,7 +45,7 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
  * Test cases for the {@link InverterBasicSettingsModelAccessor} class.
  * 
  * @author matt
- * @version 1.1
+ * @version 1.0
  */
 public class InverterBasicSettingsModelAccessorImpl_101_01Tests {
 

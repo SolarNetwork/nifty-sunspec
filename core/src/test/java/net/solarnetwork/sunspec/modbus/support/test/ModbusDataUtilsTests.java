@@ -19,23 +19,19 @@
 
 package net.solarnetwork.sunspec.modbus.support.test;
 
-import static net.solarnetwork.sunspec.modbus.ModbusWordOrder.LeastToMostSignificant;
-import static net.solarnetwork.sunspec.modbus.ModbusWordOrder.MostToLeastSignificant;
 import static org.assertj.core.api.BDDAssertions.catchThrowable;
-import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.assertj.core.api.BDDAssertions.within;
 import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
 import net.solarnetwork.sunspec.modbus.support.ModbusDataUtils;
-import net.solarnetwork.util.Half;
 
 /**
  * Test cases for the {@link ModbusDataUtils} class.
  *
  * @author matt
- * @version 2.1
+ * @version 1.0
  */
 public class ModbusDataUtilsTests {
 
@@ -169,20 +165,6 @@ public class ModbusDataUtilsTests {
 	}
 
 	@Test
-	public void encodeInt32_leastToMostSignificant() {
-		// WHEN
-		short[] words = ModbusDataUtils.encodeInt32(-12313489, LeastToMostSignificant);
-
-		// THEN
-		// @formatter:off
-		then(words)
-			.as("Words encoded in least to most significant order")
-			.containsExactly(0x1C6F, 0xFF44)
-			;
-		// @formatter:on
-	}
-
-	@Test
 	public void encodeUnsignedInt32() {
 		// WHEN
 		short[] words = ModbusDataUtils.encodeUnsignedInt32(3000000000L);
@@ -192,20 +174,6 @@ public class ModbusDataUtilsTests {
 		then(words)
 			.as("Words encoded for a value larger than an int")
 			.containsExactly(0xB2D0, 0x5E00)
-			;
-		// @formatter:on
-	}
-
-	@Test
-	public void encodeUnsignedInt32_leastToMostSignificant() {
-		// WHEN
-		short[] words = ModbusDataUtils.encodeUnsignedInt32(3000000000L, LeastToMostSignificant);
-
-		// THEN
-		// @formatter:off
-		then(words)
-			.as("Words encoded in least to most significant order")
-			.containsExactly(0x5E00, 0xB2D0)
 			;
 		// @formatter:on
 	}
@@ -234,20 +202,6 @@ public class ModbusDataUtilsTests {
 		then(words)
 			.as("Words encoded")
 			.containsExactly(0x0123, 0x4567, 0x89AB, 0xCDEF)
-			;
-		// @formatter:on
-	}
-
-	@Test
-	public void encodeInt64_leastToMostSignificant() {
-		// WHEN
-		short[] words = ModbusDataUtils.encodeInt64(0x0123456789ABCDEFL, LeastToMostSignificant);
-
-		// THEN
-		// @formatter:off
-		then(words)
-			.as("Words encoded in least to most significant order")
-			.containsExactly(0xCDEF, 0x89AB, 0x4567, 0x0123)
 			;
 		// @formatter:on
 	}
@@ -386,24 +340,6 @@ public class ModbusDataUtilsTests {
 	}
 
 	@Test
-	public void encodeUnsignedInt64_many_leastToMostSignificant() {
-		for ( long l = 0; l < 5000000; l += 3 ) {
-			// WHEN
-			short[] words = ModbusDataUtils.encodeUnsignedInt64(new BigInteger(String.valueOf(l)),
-					LeastToMostSignificant);
-
-			// THEN
-			// @formatter:off
-			then(words)
-				.as("%d converted", l)
-				.containsExactly((int) (l & 0xFFFF), (int) ((l >> 16) & 0xFFFF),
-						(int) ((l >> 32) & 0xFFFF), (int) ((l >> 48) & 0xFFFF))
-				;
-			// @formatter:on
-		}
-	}
-
-	@Test
 	public void encodeUnsignedInt64_small() {
 		// GIVEN
 		BigInteger bint = new BigInteger("12345678", 16);
@@ -416,23 +352,6 @@ public class ModbusDataUtilsTests {
 		then(words)
 			.as("Words encoded, padded to 64 bits")
 			.containsExactly(0, 0, 0x1234, 0x5678)
-			;
-		// @formatter:on
-	}
-
-	@Test
-	public void encodeUnsignedInt64_small_leastToMostSignificant() {
-		// GIVEN
-		BigInteger bint = new BigInteger("12345678", 16);
-
-		// WHEN
-		short[] words = ModbusDataUtils.encodeUnsignedInt64(bint, LeastToMostSignificant);
-
-		// THEN
-		// @formatter:off
-		then(words)
-			.as("Words encoded in least to most significant order, padded to 64 bits")
-			.containsExactly(0x5678, 0x1234, 0, 0)
 			;
 		// @formatter:on
 	}
@@ -455,23 +374,6 @@ public class ModbusDataUtilsTests {
 	}
 
 	@Test
-	public void encodeUnsignedInt64_big_leastToMostSignificant() {
-		// GIVEN
-		BigInteger bint = new BigInteger("175816FE2F85866B", 16);
-
-		// WHEN
-		short[] words = ModbusDataUtils.encodeUnsignedInt64(bint, LeastToMostSignificant);
-
-		// THEN
-		// @formatter:off
-		then(words)
-			.as("Words encoded in least to most significant order")
-			.containsExactly(0x866B, 0x2F85, 0x16FE, 0x1758)
-			;
-		// @formatter:on
-	}
-
-	@Test
 	public void encodeUnsignedInt64_droppingExcessBytes() {
 		// GIVEN
 		BigInteger bint = new BigInteger("FF00175816FE2F85866B", 16);
@@ -489,23 +391,6 @@ public class ModbusDataUtilsTests {
 	}
 
 	@Test
-	public void encodeUnsignedInt64_droppingExcessBytes_leastToMostSignificant() {
-		// GIVEN
-		BigInteger bint = new BigInteger("FF00175816FE2F85866B", 16);
-
-		// WHEN
-		short[] words = ModbusDataUtils.encodeUnsignedInt64(bint, LeastToMostSignificant);
-
-		// THEN
-		// @formatter:off
-		then(words)
-			.as("Words encoded in least to most significant order, bytes beyond 64 bits dropped")
-			.containsExactly(0x866B, 0x2F85, 0x16FE, 0x1758)
-			;
-		// @formatter:on
-	}
-
-	@Test
 	public void encodeUnsignedInteger_largerThan64() {
 		// GIVEN
 		BigInteger bint = new BigInteger("FF00175816FE2F85866B", 16);
@@ -518,23 +403,6 @@ public class ModbusDataUtilsTests {
 		then(words)
 			.as("Words encoded")
 			.containsExactly(0xFF00, 0x1758, 0x16FE, 0x2F85, 0x866B)
-			;
-		// @formatter:on
-	}
-
-	@Test
-	public void encodeUnsignedInteger_largerThan64_leastToMostSignificant() {
-		// GIVEN
-		BigInteger bint = new BigInteger("FF00175816FE2F85866B", 16);
-
-		// WHEN
-		short[] words = ModbusDataUtils.encodeUnsignedInteger(bint, LeastToMostSignificant);
-
-		// THEN
-		// @formatter:off
-		then(words)
-			.as("Words encoded in least to most significant order")
-			.containsExactly(0x866B, 0x2F85, 0x16FE, 0x1758, 0xFF00)
 			;
 		// @formatter:on
 	}
@@ -558,68 +426,15 @@ public class ModbusDataUtilsTests {
 	}
 
 	@Test
-	public void encodeUnsignedInteger_wayLargerThan64_leastToMostSignificant() {
-		// GIVEN
-		BigInteger bint = new BigInteger("00328586616F5866FF001755866816FE2F586685866B5866", 16);
-
+	public void encodeNumber_int32() {
 		// WHEN
-		short[] words = ModbusDataUtils.encodeUnsignedInteger(bint, LeastToMostSignificant);
+		short[] words = ModbusDataUtils.encodeNumber(ModbusDataType.Int32, -12313489);
 
 		// THEN
 		// @formatter:off
 		then(words)
-			.as("Words encoded in least to most significant order")
-			.containsExactly(0x5866, 0x866B, 0x6685, 0x2F58, 0x16FE, 0x8668, 0x1755, 0xFF00, 0x5866,
-					0x616F, 0x8586, 0x0032)
-			;
-		// @formatter:on
-	}
-
-	@Test
-	public void encodeFloat16() {
-		// GIVEN
-		Half h = new Half(Half.intBitsToHalf(0x4240));
-
-		// WHEN
-		short s = ModbusDataUtils.encodeFloat16(h);
-
-		// THEN
-		// @formatter:off
-		then(s)
-			.as("Word encoded")
-			.isEqualTo((short) 0x4240)
-			;
-		// @formatter:on
-	}
-
-	@Test
-	public void encodeNumber_Float16() {
-		// GIVEN
-		Half h = new Half(Half.intBitsToHalf(0x4240));
-
-		// WHEN
-		short[] words = ModbusDataUtils.encodeNumber(ModbusDataType.Float16, h);
-
-		// THEN
-		// @formatter:off
-		then(words)
-			.as("Words encoded")
-			.containsExactly(0x4240)
-			;
-		// @formatter:on
-	}
-
-	@Test
-	public void encodeNumber_leastToMostSignificant() {
-		// WHEN
-		short[] words = ModbusDataUtils.encodeNumber(ModbusDataType.Int32, -12313489,
-				LeastToMostSignificant);
-
-		// THEN
-		// @formatter:off
-		then(words)
-			.as("Words encoded in least to most significant order")
-			.containsExactly(0x1C6F, 0xFF44)
+			.as("Words encoded with the most significant first")
+			.containsExactly(0xFF44, 0x1C6F)
 			;
 		// @formatter:on
 	}
@@ -627,7 +442,7 @@ public class ModbusDataUtilsTests {
 	@Test
 	public void encodeNumber_nullNumber() {
 		// WHEN
-		short[] words = ModbusDataUtils.encodeNumber(ModbusDataType.Int32, null, MostToLeastSignificant);
+		short[] words = ModbusDataUtils.encodeNumber(ModbusDataType.Int32, null);
 
 		// THEN
 		// @formatter:off
@@ -641,8 +456,7 @@ public class ModbusDataUtilsTests {
 	@Test
 	public void encodeNumber_unsupportedType() {
 		// WHEN
-		Throwable t = catchThrowable(() -> ModbusDataUtils.encodeNumber(ModbusDataType.StringAscii, 1,
-				MostToLeastSignificant));
+		Throwable t = catchThrowable(() -> ModbusDataUtils.encodeNumber(ModbusDataType.StringAscii, 1));
 
 		// THEN
 		// @formatter:off
@@ -671,23 +485,6 @@ public class ModbusDataUtilsTests {
 	}
 
 	@Test
-	public void encodeFloat32_leastToMostSignificant() {
-		// GIVEN
-		Float f = Float.intBitsToFloat(0x403FA7F6);
-
-		// WHEN
-		short[] words = ModbusDataUtils.encodeFloat32(f, LeastToMostSignificant);
-
-		// THEN
-		// @formatter:off
-		then(words)
-			.as("Words encoded in least to most significant order")
-			.containsExactly(0xA7F6, 0x403F)
-			;
-		// @formatter:on
-	}
-
-	@Test
 	public void encodeFloat64() {
 		// GIVEN
 		Double d = Double.longBitsToDouble(0x403FA7F6403FA7F6L);
@@ -700,107 +497,6 @@ public class ModbusDataUtilsTests {
 		then(words)
 			.as("Words encoded")
 			.containsExactly(0x403F, 0xA7F6, 0x403F, 0xA7F6)
-			;
-		// @formatter:on
-	}
-
-	@Test
-	public void encodeFloat64_leastToMostSignificant() {
-		// GIVEN
-		Double d = Double.longBitsToDouble(0x403FA7F6403FA7F6L);
-
-		// WHEN
-		short[] words = ModbusDataUtils.encodeFloat64(d, LeastToMostSignificant);
-
-		// THEN
-		// @formatter:off
-		then(words)
-			.as("Words encoded in least to most significant order")
-			.containsExactly(0xA7F6, 0x403F, 0xA7F6, 0x403F)
-			;
-		// @formatter:on
-	}
-
-	@Test
-	public void encodeBytes() {
-		// GIVEN
-		byte[] data = new byte[] { 1, 3, 5, 7, 9, 0xb, 0xd };
-
-		// WHEN
-		short[] words = ModbusDataUtils.encodeBytes(data, MostToLeastSignificant);
-
-		// THEN
-		// @formatter:off
-		then(words)
-			.as("Words encoded, with the last word padded")
-			.containsExactly(0x0103, 0x0507, 0x090b, 0x0d00)
-			;
-		// @formatter:on
-	}
-
-	@Test
-	public void encodeBytes_leastToMostSignificant() {
-		// GIVEN
-		byte[] data = new byte[] { 1, 3, 5, 7, 9, 0xb, 0xd };
-
-		// WHEN
-		short[] words = ModbusDataUtils.encodeBytes(data, LeastToMostSignificant);
-
-		// THEN
-		// @formatter:off
-		then(words)
-			.as("Words encoded in least to most significant order, with the last word padded")
-			.containsExactly(0x0d00, 0x090b, 0x0507, 0x0103)
-			;
-		// @formatter:on
-	}
-
-	@Test
-	public void parseFloat16() {
-		// WHEN
-		Half h = ModbusDataUtils.parseFloat16((short) 0x4240);
-
-		// THEN
-		// @formatter:off
-		then(h)
-			.as("Half value")
-			.isNotNull()
-			.as("Half value bits")
-			.returns((short) 0x4240, from(Half::halfValue))
-			;
-		// @formatter:on
-	}
-
-	@Test
-	public void swapWordOrder() {
-		// GIVEN
-		short[] words = new short[] { 1, 2, 3, 4 };
-
-		// WHEN
-		ModbusDataUtils.swapWordOrder(words);
-
-		// THEN
-		// @formatter:off
-		then(words)
-			.as("Word order reversed in place")
-			.containsExactly(4, 3, 2, 1)
-			;
-		// @formatter:on
-	}
-
-	@Test
-	public void swapWordOrder_oddLength() {
-		// GIVEN
-		short[] words = new short[] { 1, 2, 3 };
-
-		// WHEN
-		ModbusDataUtils.swapWordOrder(words);
-
-		// THEN
-		// @formatter:off
-		then(words)
-			.as("Word order reversed in place, around the middle word")
-			.containsExactly(3, 2, 1)
 			;
 		// @formatter:on
 	}

@@ -21,7 +21,7 @@ package net.solarnetwork.sunspec.api.inverter;
 
 import java.io.IOException;
 import org.jspecify.annotations.Nullable;
-import net.solarnetwork.domain.AcPhase;
+import net.solarnetwork.sunspec.api.AcPhase;
 import net.solarnetwork.sunspec.api.ModelAccessor;
 import net.solarnetwork.sunspec.api.ReactivePowerAction;
 import net.solarnetwork.sunspec.modbus.ModbusConnection;
@@ -38,8 +38,7 @@ import net.solarnetwork.sunspec.modbus.ModbusConnection;
  * </p>
  *
  * @author matt
- * @version 2.1
- * @since 1.2
+ * @version 1.0
  */
 public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 
@@ -60,7 +59,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the maximum active power, in W
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setActivePowerMaximum(ModbusConnection conn, int watts) throws IOException;
 
@@ -81,7 +79,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the voltage, in V
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setPccVoltage(ModbusConnection conn, float volts) throws IOException;
 
@@ -102,7 +99,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the voltage offset, in V
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setPccVoltageOffset(ModbusConnection conn, float volts) throws IOException;
 
@@ -123,7 +119,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the maximum voltage, in V
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setVoltageMaximum(ModbusConnection conn, float volts) throws IOException;
 
@@ -144,7 +139,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the minimum voltage, in V
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setVoltageMinimum(ModbusConnection conn, float volts) throws IOException;
 
@@ -165,7 +159,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the maximum apparent power, in VA
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setApparentPowerMaximum(ModbusConnection conn, int voltAmps) throws IOException;
 
@@ -187,7 +180,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the maximum reactive power, in VAR
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setReactivePowerQ1Maximum(ModbusConnection conn, int vars) throws IOException;
 
@@ -209,7 +201,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the maximum reactive power, in VAR
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setReactivePowerQ2Maximum(ModbusConnection conn, int vars) throws IOException;
 
@@ -231,7 +222,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the maximum reactive power, in VAR
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setReactivePowerQ3Maximum(ModbusConnection conn, int vars) throws IOException;
 
@@ -253,7 +243,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the maximum reactive power, in VAR
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setReactivePowerQ4Maximum(ModbusConnection conn, int vars) throws IOException;
 
@@ -276,7 +265,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the ramp rate, in maximum active power percentage/sec
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setActivePowerRampRate(ModbusConnection conn, float percentPerSecond) throws IOException;
 
@@ -298,7 +286,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the power factor, as a decimal from -1.0 to 1.0
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setPowerFactorQ1Minimum(ModbusConnection conn, float powerFactor) throws IOException;
 
@@ -320,7 +307,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the power factor, as a decimal from -1.0 to 1.0
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setPowerFactorQ2Minimum(ModbusConnection conn, float powerFactor) throws IOException;
 
@@ -342,7 +328,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the power factor, as a decimal from -1.0 to 1.0
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setPowerFactorQ3Minimum(ModbusConnection conn, float powerFactor) throws IOException;
 
@@ -364,7 +349,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the power factor, as a decimal from -1.0 to 1.0
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setPowerFactorQ4Minimum(ModbusConnection conn, float powerFactor) throws IOException;
 
@@ -385,7 +369,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the action
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setImportExportChangeReactivePowerAction(ModbusConnection conn, ReactivePowerAction action)
 			throws IOException;
@@ -407,7 +390,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the method
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setApparentPowerCalculationMethod(ModbusConnection conn, ApparentPowerCalculationMethod method)
 			throws IOException;
@@ -432,7 +414,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        {@link #getActivePowerRampRate()}
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setActivePowerRampRateMaximum(ModbusConnection conn, float percent) throws IOException;
 
@@ -454,7 +435,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *        the frequency, in Hz
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setEcpFrequency(ModbusConnection conn, float hertz) throws IOException;
 
@@ -478,7 +458,6 @@ public interface InverterBasicSettingsModelAccessor extends ModelAccessor {
 	 *         if {@code phase} is not one of the supported phases
 	 * @throws IOException
 	 *         if any communication error occurs
-	 * @since 2.1
 	 */
 	void setConnectedPhase(ModbusConnection conn, AcPhase phase) throws IOException;
 

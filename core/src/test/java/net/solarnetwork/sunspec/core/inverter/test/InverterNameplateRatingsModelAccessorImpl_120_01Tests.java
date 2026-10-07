@@ -37,7 +37,7 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
  * Test cases for the {@link InverterNameplateRatingsModelAccessorImpl} class.
  *
  * @author matt
- * @version 1.2
+ * @version 1.0
  */
 public class InverterNameplateRatingsModelAccessorImpl_120_01Tests {
 
@@ -425,5 +425,41 @@ public class InverterNameplateRatingsModelAccessorImpl_120_01Tests {
 			;
 		// @formatter:on
 
+	}
+
+	@Test
+	public void infoMap_wholeNumberRating() {
+		// GIVEN
+		// ARtg and ARtg_SF, for 47.0 A
+		InverterNameplateRatingsModelAccessor model = getTestModel(BLOCK_ADDRESS + 10, 470, 0xFFFF);
+
+		// WHEN
+		Map<String, Object> result = model.nameplateRatingsInfo();
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("Whole number rating provided as integer")
+			.containsEntry(InverterNameplateRatingsModelAccessor.INFO_KEY_CURRENT_RATING, 47)
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void infoMap_roundedDownRating() {
+		// GIVEN
+		// ARtg and ARtg_SF, for 47.59 A
+		InverterNameplateRatingsModelAccessor model = getTestModel(BLOCK_ADDRESS + 10, 4759, 0xFFFE);
+
+		// WHEN
+		Map<String, Object> result = model.nameplateRatingsInfo();
+
+		// THEN
+		// @formatter:off
+		then(result)
+			.as("Rating rounded down to one decimal place")
+			.containsEntry(InverterNameplateRatingsModelAccessor.INFO_KEY_CURRENT_RATING, 47.5f)
+			;
+		// @formatter:on
 	}
 }

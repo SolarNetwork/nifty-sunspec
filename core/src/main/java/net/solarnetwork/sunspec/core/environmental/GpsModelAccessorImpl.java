@@ -33,16 +33,15 @@ import net.solarnetwork.sunspec.api.environmental.EnvironmentalModelId;
 import net.solarnetwork.sunspec.api.environmental.GpsModelAccessor;
 import net.solarnetwork.sunspec.api.environmental.GpsModelRegister;
 import net.solarnetwork.sunspec.core.BaseModelAccessor;
+import net.solarnetwork.sunspec.core.support.NumberUtils;
 import net.solarnetwork.sunspec.modbus.ModbusReference;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
-import net.solarnetwork.util.NumberUtils;
 
 /**
  * Implementation of {@link GpsModelAccessor}.
  *
  * @author matt
- * @version 1.1
- * @since 4.2
+ * @version 1.0
  */
 public class GpsModelAccessorImpl extends BaseModelAccessor implements GpsModelAccessor {
 

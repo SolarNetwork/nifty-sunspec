@@ -27,8 +27,7 @@ import java.util.Set;
  * A basic immutable implementation of {@link ModelEvent}.
  *
  * @author matt
- * @version 1.2
- * @since 1.4
+ * @version 1.0
  */
 public class GenericModelEvent implements ModelEvent, Comparable<GenericModelEvent> {
 

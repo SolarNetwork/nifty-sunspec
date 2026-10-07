@@ -37,7 +37,7 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
  * Test cases for the {@link IntegerMeterModelAccessor} class.
  * 
  * @author matt
- * @version 1.1
+ * @version 1.0
  */
 public class IntegerMeterModelAccessor_204_01Tests {
 

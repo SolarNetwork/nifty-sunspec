@@ -22,7 +22,7 @@ package net.solarnetwork.sunspec.api.test;
 import static org.assertj.core.api.BDDAssertions.then;
 import java.util.EnumSet;
 import org.junit.jupiter.api.Test;
-import net.solarnetwork.domain.Bitmaskable;
+import net.solarnetwork.sunspec.api.Bitmaskable;
 import net.solarnetwork.sunspec.api.SunSpecUtils;
 
 /**

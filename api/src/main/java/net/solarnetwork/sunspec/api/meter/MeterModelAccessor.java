@@ -21,7 +21,7 @@ package net.solarnetwork.sunspec.api.meter;
 
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
-import net.solarnetwork.domain.AcPhase;
+import net.solarnetwork.sunspec.api.AcPhase;
 import net.solarnetwork.sunspec.api.ModelAccessor;
 import net.solarnetwork.sunspec.api.ModelEvent;
 
@@ -29,7 +29,7 @@ import net.solarnetwork.sunspec.api.ModelEvent;
  * API for accessing meter model data.
  *
  * @author matt
- * @version 1.2
+ * @version 1.0
  */
 public interface MeterModelAccessor extends ModelAccessor {
 
@@ -61,7 +61,6 @@ public interface MeterModelAccessor extends ModelAccessor {
 	 * Get the line voltage, in V.
 	 *
 	 * @return the voltage
-	 * @since 1.1
 	 */
 	@Nullable
 	Float getLineVoltage();
@@ -160,7 +159,6 @@ public interface MeterModelAccessor extends ModelAccessor {
 	 * switched.
 	 *
 	 * @return the reversed accessor
-	 * @since 1.1
 	 */
 	default MeterModelAccessor reversed() {
 		return new ReversedMeterModelAccessor(this);

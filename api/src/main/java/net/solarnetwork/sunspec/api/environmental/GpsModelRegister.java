@@ -24,8 +24,7 @@ import static net.solarnetwork.sunspec.modbus.ModbusDataType.StringUtf8;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * Enumeration of Modbus register mappings for SunSpec compliant GPS model 305.
@@ -36,10 +35,9 @@ import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
  * </p>
  *
  * @author matt
- * @version 1.1
- * @since 4.2
+ * @version 1.0
  */
-public enum GpsModelRegister implements SunspecModbusReference {
+public enum GpsModelRegister implements ModbusReference {
 
 	/** UTC 24 hour time stamp to millisecond {@code hhmmss.sssZ} format. */
 	Time(0, StringUtf8, 6),
@@ -90,11 +88,6 @@ public enum GpsModelRegister implements SunspecModbusReference {
 	@Override
 	public ModbusDataType getDataType() {
 		return dataType;
-	}
-
-	@Override
-	public ModbusReadFunction getFunction() {
-		return ModbusReadFunction.ReadHoldingRegister;
 	}
 
 	@Override

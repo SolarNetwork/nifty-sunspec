@@ -41,8 +41,7 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
  * Implementation of {@link StringCombinerAdvancedModelAccessor}.
  *
  * @author matt
- * @version 1.1
- * @since 1.4
+ * @version 1.0
  */
 public class StringCombinerAdvancedModelAccessorImpl extends BaseModelAccessor
 		implements StringCombinerAdvancedModelAccessor {

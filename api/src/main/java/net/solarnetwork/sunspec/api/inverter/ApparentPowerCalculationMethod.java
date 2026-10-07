@@ -24,7 +24,6 @@ package net.solarnetwork.sunspec.api.inverter;
  * 
  * @author matt
  * @version 1.0
- * @since 1.2
  */
 public interface ApparentPowerCalculationMethod {
 

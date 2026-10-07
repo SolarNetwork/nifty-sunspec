@@ -27,7 +27,7 @@ import net.solarnetwork.sunspec.api.SunSpecUtils;
  * Meter type events.
  * 
  * @author matt
- * @version 1.2
+ * @version 1.0
  */
 public enum MeterModelEvent implements ModelEvent {
 

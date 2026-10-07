@@ -42,7 +42,6 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public class DerAcControlsModelAccessorImpl extends BaseModelAccessor
 		implements DerAcControlsModelAccessor {

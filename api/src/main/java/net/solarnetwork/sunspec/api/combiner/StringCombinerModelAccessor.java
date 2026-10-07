@@ -29,8 +29,7 @@ import net.solarnetwork.sunspec.api.ModelEvent;
  * API for accessing string combiner model data.
  *
  * @author matt
- * @version 1.1
- * @since 1.4
+ * @version 1.0
  */
 public interface StringCombinerModelAccessor extends ModelAccessor {
 

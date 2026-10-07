@@ -19,8 +19,6 @@
 
 package net.solarnetwork.sunspec.modbus;
 
-import org.jspecify.annotations.Nullable;
-
 /**
  * Modbus write functions.
  *
@@ -30,76 +28,33 @@ import org.jspecify.annotations.Nullable;
  * </p>
  *
  * @author matt
- * @version 2.1
- * @since 2.5
+ * @version 1.0
  */
-public enum ModbusWriteFunction implements ModbusFunction {
+public enum ModbusWriteFunction implements ModbusWritingFunction {
 
 	/** Write a coil register. */
-	WriteCoil(5, ModbusRegisterBlockType.Coil),
+	WriteCoil(5),
 
 	/** Write a holding register. */
-	WriteHoldingRegister(6, ModbusRegisterBlockType.Holding),
+	WriteHoldingRegister(6),
 
 	/** Write multiple coils. */
-	WriteMultipleCoils(15, ModbusRegisterBlockType.Coil),
+	WriteMultipleCoils(15),
 
 	/** Write multiple holding. */
-	WriteMultipleHoldingRegisters(16, ModbusRegisterBlockType.Holding);
+	WriteMultipleHoldingRegisters(16),
+
+	;
 
 	private final int code;
-	private final ModbusRegisterBlockType blockType;
 
-	private ModbusWriteFunction(int code, ModbusRegisterBlockType blockType) {
+	private ModbusWriteFunction(int code) {
 		this.code = code;
-		this.blockType = blockType;
 	}
 
 	@Override
 	public int getCode() {
 		return code;
-	}
-
-	@Override
-	public String toDisplayString() {
-		return this.toString().replaceAll("([a-z])([A-Z])", "$1 $2") + " (" + this.code + ")";
-	}
-
-	/**
-	 * Get an enum instance for a code value.
-	 *
-	 * @param code
-	 *        the code
-	 * @return the enum
-	 * @throws IllegalArgumentException
-	 *         if {@code code} is not a valid value
-	 */
-	public static ModbusWriteFunction forCode(int code) {
-		for ( ModbusWriteFunction e : ModbusWriteFunction.values() ) {
-			if ( code == e.code ) {
-				return e;
-			}
-		}
-		throw new IllegalArgumentException("Unknown ModbusWriteFunction code [" + code + "]");
-	}
-
-	@Override
-	public boolean isReadFunction() {
-		return false;
-	}
-
-	@Override
-	public @Nullable ModbusFunction oppositeFunction() {
-		return switch (this) {
-			case WriteCoil, WriteMultipleCoils -> ModbusReadFunction.ReadCoil;
-			case WriteHoldingRegister, WriteMultipleHoldingRegisters -> ModbusReadFunction.ReadHoldingRegister;
-			default -> null;
-		};
-	}
-
-	@Override
-	public ModbusRegisterBlockType blockType() {
-		return blockType;
 	}
 
 }

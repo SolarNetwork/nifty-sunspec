@@ -22,14 +22,12 @@ package net.solarnetwork.sunspec.api;
 import java.util.Collections;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
-import net.solarnetwork.domain.Bitmaskable;
 
 /**
  * General SunSpec helper methods.
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public final class SunSpecUtils {
 

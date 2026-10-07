@@ -19,14 +19,13 @@
 
 package net.solarnetwork.sunspec.api.storage;
 
-import net.solarnetwork.domain.CodedValue;
+import net.solarnetwork.sunspec.api.CodedValue;
 
 /**
  * Inverter state, as given to the battery.
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public enum BatteryInverterState implements CodedValue {
 

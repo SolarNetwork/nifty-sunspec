@@ -19,13 +19,11 @@
 
 package net.solarnetwork.sunspec.modbus.support;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.BitSet;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.modbus.ModbusConnection;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.ModbusWriteFunction;
+import net.solarnetwork.sunspec.modbus.ModbusReadingFunction;
+import net.solarnetwork.sunspec.modbus.ModbusWritingFunction;
 
 /**
  * Supporting class for {@link ModbusConnection} implementations to extend.
@@ -33,7 +31,7 @@ import net.solarnetwork.sunspec.modbus.ModbusWriteFunction;
  * <p>
  * This class has been created to help with Modbus testing. All write methods
  * throw an {@link UnsupportedOperationException} and all read methods return
- * {@code null}. The {@link #open()} and {@link #close()} methods do nothing.
+ * {@code null}.
  * </p>
  *
  * @author matt
@@ -71,80 +69,19 @@ public abstract class AbstractModbusConnection implements ModbusConnection {
 	}
 
 	@Override
-	public void open() throws IOException {
-		// nothing to do
-	}
-
-	@Override
-	public void close() {
-		// nothing to do
-	}
-
-	@Override
-	public void writeWords(ModbusWriteFunction function, int address, int[] values) {
+	public void writeWords(ModbusWritingFunction function, int address, short[] values) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void writeString(ModbusWriteFunction function, int address, String value, Charset charset) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void writeWords(ModbusWriteFunction function, int address, short[] values) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void writeBytes(ModbusWriteFunction function, int address, byte[] values) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public int[] readWordsUnsigned(ModbusReadFunction function, int address, int count) {
-		return new int[0];
-	}
-
-	@Override
-	public @Nullable String readString(ModbusReadFunction function, int address, int count, boolean trim,
-			Charset charset) {
+	public @Nullable String readString(ModbusReadingFunction function, int address, int count,
+			boolean trim, Charset charset) {
 		return null;
 	}
 
 	@Override
-	public short[] readWords(ModbusReadFunction function, int address, int count) {
+	public short[] readWords(ModbusReadingFunction function, int address, int count) {
 		return new short[0];
-	}
-
-	@Override
-	public BitSet readDiscreteValues(int address, int count) throws IOException {
-		return new BitSet();
-	}
-
-	@Override
-	public BitSet readDiscreteValues(int[] addresses, int count) throws IOException {
-		return new BitSet();
-	}
-
-	@Override
-	public void writeDiscreteValues(int[] addresses, BitSet bits) throws IOException {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void writeDiscreteValues(ModbusWriteFunction function, int address, int count, BitSet bits)
-			throws IOException {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public BitSet readInputDiscreteValues(final int address, final int count) {
-		return new BitSet();
-	}
-
-	@Override
-	public byte[] readBytes(ModbusReadFunction function, int address, int count) {
-		return new byte[0];
 	}
 
 }

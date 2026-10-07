@@ -34,8 +34,7 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
  * Implementation of {@link IrradianceModelAccessor}.
  *
  * @author matt
- * @version 1.1
- * @since 4.2
+ * @version 1.0
  */
 public class IrradianceModelAccessorImpl extends BaseModelAccessor implements IrradianceModelAccessor {
 

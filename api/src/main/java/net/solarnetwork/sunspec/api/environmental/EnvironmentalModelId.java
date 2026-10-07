@@ -27,7 +27,6 @@ import net.solarnetwork.sunspec.api.ModelId;
  * 
  * @author matt
  * @version 1.0
- * @since 4.2
  */
 public enum EnvironmentalModelId implements ModelId {
 

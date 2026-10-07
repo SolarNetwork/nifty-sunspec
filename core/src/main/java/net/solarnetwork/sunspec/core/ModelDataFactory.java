@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
+import java.util.HexFormat;
 import java.util.Properties;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
@@ -34,7 +36,6 @@ import net.solarnetwork.sunspec.api.ModelRegister;
 import net.solarnetwork.sunspec.modbus.ModbusConnection;
 import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
-import net.solarnetwork.util.ByteUtils;
 
 /**
  * A factory for creating concrete {@link ModelData} instances based on
@@ -62,7 +63,7 @@ import net.solarnetwork.util.ByteUtils;
  * </p>
  *
  * @author matt
- * @version 1.11
+ * @version 1.0
  */
 public class ModelDataFactory {
 
@@ -70,7 +71,6 @@ public class ModelDataFactory {
 	 * The default value for the maximum number of Modbus words to read at one
 	 * time.
 	 *
-	 * @since 1.1
 	 */
 	public static final int DEFAULT_MAX_READ_WORDS_COUNT = 100;
 
@@ -78,7 +78,6 @@ public class ModelDataFactory {
 	 * The name of the class-path resource with the {@code ModelAccessor}
 	 * properties mapping.
 	 *
-	 * @since 1.2
 	 */
 	public static final String MODEL_ACCESSOR_PROPERTIES_RESOURCE_NAME = "META-INF/sunspec/model-accessors.properties";
 
@@ -86,7 +85,6 @@ public class ModelDataFactory {
 	 * The name of the class-path resource with the built-in default
 	 * {@code ModelAccessor} properties mapping.
 	 *
-	 * @since 1.2
 	 */
 	public static final String DEFAULT_MODEL_ACCESSOR_PROPERTIES_RESOURCE_NAME = "net/solarnetwork/sunspec/core/internal/model-accessors-default.properties";
 
@@ -130,7 +128,6 @@ public class ModelDataFactory {
 	 * @return the discovered address
 	 * @throws IOException
 	 *         if the address is not discovered or any IO error occurs
-	 * @since 1.11
 	 */
 	public int findSunSpecBaseAddress(ModbusConnection conn) throws IOException {
 		for ( ModelRegister r : ModelRegister.BASE_ADDRESSES ) {
@@ -144,15 +141,15 @@ public class ModelDataFactory {
 	private boolean isSunSpecBaseAddress(ModbusConnection conn, final int address) {
 		try {
 			String s = conn.readString(ModbusReadFunction.ReadHoldingRegister, address,
-					ModelRegister.BaseAddress.getWordLength(), true, ByteUtils.ASCII);
+					ModelRegister.BaseAddress.getWordLength(), true, StandardCharsets.US_ASCII);
 			if ( ModelRegister.BASE_ADDRESS_MAGIC_STRING.equals(s) ) {
 				return true;
 			}
 			if ( log.isDebugEnabled() ) {
 				String hex = null;
 				if ( s != null ) {
-					byte[] data = s.getBytes(ByteUtils.ASCII);
-					hex = ByteUtils.encodeHexString(data, 0, data.length, false);
+					hex = HexFormat.of().withUpperCase()
+							.formatHex(s.getBytes(StandardCharsets.US_ASCII));
 				}
 				log.debug("SunSpec ID 'SunS' not found at base address {}; found [{}]", address, hex);
 			}
@@ -204,7 +201,6 @@ public class ModelDataFactory {
 	 * @throws IOException
 	 *         if any communication error occurs or no supported model data can
 	 *         be discovered
-	 * @since 1.11
 	 */
 	public ModelData getModelData(ModbusConnection conn, boolean load) throws IOException {
 		final int sunSpecBaseAddress = findSunSpecBaseAddress(conn);
@@ -251,7 +247,6 @@ public class ModelDataFactory {
 	 * @throws IOException
 	 *         if any communication error occurs or no supported model data can
 	 *         be discovered
-	 * @since 1.5
 	 */
 	public ModelData getModelData(ModbusConnection conn, int maxReadWordsCount, int baseAddress)
 			throws IOException {
@@ -282,7 +277,6 @@ public class ModelDataFactory {
 	 * @throws IOException
 	 *         if any communication error occurs or no supported model data can
 	 *         be discovered
-	 * @since 1.9
 	 */
 	public ModelData getModelData(ModbusConnection conn, int maxReadWordsCount, int baseAddress,
 			boolean load) throws IOException {
@@ -332,7 +326,6 @@ public class ModelDataFactory {
 	 * @throws IOException
 	 *         if any communication error occurs or no supported model data can
 	 *         be discovered
-	 * @since 1.9
 	 */
 	public ModelData discoverModels(ModbusConnection conn, int maxReadWordsCount) throws IOException {
 		final int sunSpecBaseAddress = findSunSpecBaseAddress(conn);
@@ -354,7 +347,6 @@ public class ModelDataFactory {
 	 * @throws IOException
 	 *         if any communication error occurs or no supported model data can
 	 *         be discovered
-	 * @since 1.9
 	 */
 	public ModelData discoverModels(ModbusConnection conn, int maxReadWordsCount, int baseAddress)
 			throws IOException {

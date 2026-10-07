@@ -23,8 +23,7 @@ import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * Enumeration of Modbus register mappings for SunSpec compliant irradiance
@@ -37,9 +36,8 @@ import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
  *
  * @author matt
  * @version 1.0
- * @since 4.2
  */
-public enum IrradianceModelRegister implements SunspecModbusReference {
+public enum IrradianceModelRegister implements ModbusReference {
 
 	/** Global Horizontal Irradiance, in W/m2. */
 	GHI(0, UInt16),
@@ -87,11 +85,6 @@ public enum IrradianceModelRegister implements SunspecModbusReference {
 	@Override
 	public ModbusDataType getDataType() {
 		return dataType;
-	}
-
-	@Override
-	public ModbusReadFunction getFunction() {
-		return ModbusReadFunction.ReadHoldingRegister;
 	}
 
 	@Override

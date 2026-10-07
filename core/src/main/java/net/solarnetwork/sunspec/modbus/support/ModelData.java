@@ -32,19 +32,19 @@ import org.slf4j.LoggerFactory;
 import net.solarnetwork.sunspec.api.CommonModelAccessor;
 import net.solarnetwork.sunspec.api.CommonModelId;
 import net.solarnetwork.sunspec.api.CommonModelRegister;
+import net.solarnetwork.sunspec.api.IntRange;
 import net.solarnetwork.sunspec.api.ModelAccessor;
 import net.solarnetwork.sunspec.api.ModelId;
 import net.solarnetwork.sunspec.api.ModelRegister;
 import net.solarnetwork.sunspec.modbus.ModbusConnection;
 import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
 import net.solarnetwork.sunspec.modbus.ModbusReference;
-import net.solarnetwork.util.IntRange;
 
 /**
  * Base object for model data.
  *
  * @author matt
- * @version 2.5
+ * @version 1.0
  */
 public class ModelData extends ModbusData implements CommonModelAccessor {
 
@@ -153,7 +153,6 @@ public class ModelData extends ModbusData implements CommonModelAccessor {
 	 * @param type
 	 *        the type of model to get
 	 * @return the found model, or {@code null} if not found
-	 * @since 1.1
 	 */
 	public <T extends ModelAccessor> @Nullable T findTypedModel(Class<T> type) {
 		if ( CommonModelAccessor.class.isAssignableFrom(type) ) {
@@ -235,7 +234,6 @@ public class ModelData extends ModbusData implements CommonModelAccessor {
 	 * This implementation returns the ranges of the common model strings.
 	 * </p>
 	 *
-	 * @since 2.5
 	 */
 	@Override
 	public List<IntRange> getUnsplittableAddressRanges() {
@@ -289,11 +287,11 @@ public class ModelData extends ModbusData implements CommonModelAccessor {
 			ModbusReadFunction function, IntRange[] ranges) throws IOException {
 		for ( IntRange r : ranges ) {
 			if ( LOG.isDebugEnabled() ) {
-				LOG.debug("Reading modbus {} range {}-{} ({})", conn.getUnitId(), r.getMin(),
-						r.getMin() + r.length(), r.length());
+				LOG.debug("Reading modbus {} range {}-{} ({})", conn.getUnitId(), r.min(),
+						r.min() + r.length(), r.length());
 			}
-			short[] data = conn.readWords(function, r.getMin(), r.length());
-			m.saveDataArray(data, r.getMin());
+			short[] data = conn.readWords(function, r.min(), r.length());
+			m.saveDataArray(data, r.min());
 		}
 	}
 
@@ -324,7 +322,7 @@ public class ModelData extends ModbusData implements CommonModelAccessor {
 		for ( int address = accessor.getBlockAddress(); address < end; ) {
 			final IntRange range = accessor.getAddressRange(address, maxReadWordsCount);
 			updateData(conn, m, new IntRange[] { range });
-			address = range.getMax() + 1;
+			address = range.max() + 1;
 		}
 	}
 
@@ -407,7 +405,6 @@ public class ModelData extends ModbusData implements CommonModelAccessor {
 	 *        the connection
 	 * @param accessors
 	 *        the models to read data for
-	 * @since 1.1
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
@@ -440,7 +437,6 @@ public class ModelData extends ModbusData implements CommonModelAccessor {
 	 *        the connection
 	 * @param accessors
 	 *        the models to read data for
-	 * @since 2.4
 	 * @throws IOException
 	 *         if any communication error occurs
 	 */
@@ -501,7 +497,6 @@ public class ModelData extends ModbusData implements CommonModelAccessor {
 	 *        the address offset to add to {@link ModbusReference#getAddress()}
 	 * @return the string value, or {@code null} if the string is empty, which
 	 *         includes the SunSpec "not implemented" value
-	 * @since 2.5
 	 */
 	public @Nullable String getStringValue(ModbusReference ref, int offset) {
 		final byte[] bytes = getBytes(ref.getAddress() + offset, ref.getWordLength());
@@ -525,7 +520,6 @@ public class ModelData extends ModbusData implements CommonModelAccessor {
 	 * @param key
 	 *        the key of the metadata to get
 	 * @return the metadata value, or {@code null}
-	 * @since 1.1
 	 */
 	public @Nullable Object getMetadataValue(String key) {
 		ConcurrentMap<String, Object> m = this.metadata;
@@ -544,7 +538,6 @@ public class ModelData extends ModbusData implements CommonModelAccessor {
 	 * @param value
 	 *        the value to set, or {@code null} to remove the value associated
 	 *        with {@code key}
-	 * @since 1.1
 	 */
 	public void putMetadataValue(String key, @Nullable Object value) {
 		ConcurrentMap<String, Object> m = this.metadata;

@@ -23,17 +23,16 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
-import net.solarnetwork.domain.AcPhase;
+import net.solarnetwork.sunspec.api.AcPhase;
+import net.solarnetwork.sunspec.api.IntRange;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.ModelId;
-import net.solarnetwork.util.IntRange;
 
 /**
  * A "reversed" meter model accessor that swaps import/export values.
  *
  * @author matt
- * @version 2.1
- * @since 1.3
+ * @version 1.0
  */
 public class ReversedMeterModelAccessor implements MeterModelAccessor {
 

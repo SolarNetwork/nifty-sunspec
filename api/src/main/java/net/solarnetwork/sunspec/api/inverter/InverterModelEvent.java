@@ -27,7 +27,7 @@ import net.solarnetwork.sunspec.api.SunSpecUtils;
  * Inverter type events.
  * 
  * @author matt
- * @version 1.1
+ * @version 1.0
  */
 public enum InverterModelEvent implements ModelEvent {
 

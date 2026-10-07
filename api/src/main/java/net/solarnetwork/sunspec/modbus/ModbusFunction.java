@@ -19,14 +19,11 @@
 
 package net.solarnetwork.sunspec.modbus;
 
-import org.jspecify.annotations.Nullable;
-
 /**
  * API for a modbus function.
  *
  * @author matt
- * @version 2.1
- * @since 2.5
+ * @version 1.0
  */
 public interface ModbusFunction {
 
@@ -36,65 +33,5 @@ public interface ModbusFunction {
 	 * @return the code
 	 */
 	int getCode();
-
-	/**
-	 * Get a friendly display string for this function.
-	 *
-	 * @return a display string
-	 */
-	String toDisplayString();
-
-	/**
-	 * Return {@literal true} if this function represents a read operation.
-	 *
-	 * @return {@literal true} if this function represents a read operation,
-	 *         {@literal false} if a write operation
-	 */
-	boolean isReadFunction();
-
-	/**
-	 * Get an "opposite" function from this function.
-	 *
-	 * <p>
-	 * This method is used to get a read function for a given write function,
-	 * and a write function for a given read function.
-	 * </p>
-	 *
-	 * @return the function, or {@code null} if not applicable
-	 */
-	@Nullable
-	ModbusFunction oppositeFunction();
-
-	/**
-	 * Get the register block type related to this function.
-	 *
-	 * @return the block type
-	 * @since 2.1
-	 */
-	ModbusRegisterBlockType blockType();
-
-	/**
-	 * Get a {@link ModbusFunction} for a code value.
-	 *
-	 * @param code
-	 *        the code
-	 * @return the function
-	 * @throws IllegalArgumentException
-	 *         if {@code code} is not supported
-	 * @since 2.0
-	 */
-	static ModbusFunction functionForCode(int code) {
-		ModbusFunction f;
-		try {
-			f = ModbusReadFunction.forCode(code);
-		} catch ( IllegalArgumentException e ) {
-			try {
-				f = ModbusWriteFunction.forCode(code);
-			} catch ( IllegalArgumentException e2 ) {
-				throw new IllegalArgumentException("Unknown Modbus function code: " + code);
-			}
-		}
-		return f;
-	}
 
 }

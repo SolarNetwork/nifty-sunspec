@@ -36,7 +36,7 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
  * Data access object for an inverter nameplate ratings model.
  *
  * @author matt
- * @version 1.1
+ * @version 1.0
  */
 public class InverterNameplateRatingsModelAccessorImpl extends BaseModelAccessor
 		implements InverterNameplateRatingsModelAccessor {

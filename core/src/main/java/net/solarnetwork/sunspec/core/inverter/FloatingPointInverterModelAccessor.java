@@ -26,7 +26,8 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
-import net.solarnetwork.domain.AcPhase;
+import net.solarnetwork.sunspec.api.AcPhase;
+import net.solarnetwork.sunspec.api.IntRange;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.ModelId;
 import net.solarnetwork.sunspec.api.OperatingState;
@@ -38,14 +39,12 @@ import net.solarnetwork.sunspec.api.inverter.InverterOperatingState;
 import net.solarnetwork.sunspec.core.BaseModelAccessor;
 import net.solarnetwork.sunspec.modbus.ModbusReference;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
-import net.solarnetwork.util.IntRange;
 
 /**
  * Data access object for an floating point inverter models.
  *
  * @author matt
- * @version 3.3
- * @since 1.4
+ * @version 1.0
  */
 public class FloatingPointInverterModelAccessor extends BaseModelAccessor
 		implements InverterModelAccessor {
@@ -89,7 +88,6 @@ public class FloatingPointInverterModelAccessor extends BaseModelAccessor
 	 *        the base address for this model's data
 	 * @param modelId
 	 *        the model ID
-	 * @since 1.1
 	 */
 	public FloatingPointInverterModelAccessor(ModelData data, int baseAddress, int modelId) {
 		this(data, baseAddress, InverterModelId.forId(modelId));

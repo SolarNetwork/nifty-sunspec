@@ -30,8 +30,7 @@ import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt64;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * Enumeration of Modbus register mappings for the SunSpec DER AC measurement
@@ -48,9 +47,8 @@ import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
-public enum DerAcMeasurementModelRegister implements SunspecModbusReference {
+public enum DerAcMeasurementModelRegister implements ModbusReference {
 
 	/** AC wiring type, see {@link DerAcWiringType}. */
 	AcWiringType(0, UInt16, Enumeration),
@@ -323,11 +321,6 @@ public enum DerAcMeasurementModelRegister implements SunspecModbusReference {
 	@Override
 	public ModbusDataType getDataType() {
 		return dataType;
-	}
-
-	@Override
-	public ModbusReadFunction getFunction() {
-		return ModbusReadFunction.ReadHoldingRegister;
 	}
 
 	@Override

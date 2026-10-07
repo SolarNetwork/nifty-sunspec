@@ -19,8 +19,6 @@
 
 package net.solarnetwork.sunspec.modbus;
 
-import org.jspecify.annotations.Nullable;
-
 /**
  * Modbus read functions.
  *
@@ -30,76 +28,33 @@ import org.jspecify.annotations.Nullable;
  * </p>
  *
  * @author matt
- * @version 2.1
- * @since 2.5
+ * @version 1.0
  */
-public enum ModbusReadFunction implements ModbusFunction {
+public enum ModbusReadFunction implements ModbusReadingFunction {
 
 	/** Read coil. */
-	ReadCoil(1, ModbusRegisterBlockType.Coil),
+	ReadCoil(1),
 
 	/** Read discreet input. */
-	ReadDiscreteInput(2, ModbusRegisterBlockType.Discrete),
+	ReadDiscreteInput(2),
 
 	/** Read holding register. */
-	ReadHoldingRegister(3, ModbusRegisterBlockType.Holding),
+	ReadHoldingRegister(3),
 
 	/** Read input register. */
-	ReadInputRegister(4, ModbusRegisterBlockType.Input);
+	ReadInputRegister(4),
+
+	;
 
 	private final int code;
-	private final ModbusRegisterBlockType blockType;
 
-	private ModbusReadFunction(int code, ModbusRegisterBlockType blockType) {
+	private ModbusReadFunction(int code) {
 		this.code = code;
-		this.blockType = blockType;
 	}
 
 	@Override
 	public int getCode() {
 		return code;
-	}
-
-	@Override
-	public String toDisplayString() {
-		return this.toString().replaceAll("([a-z])([A-Z])", "$1 $2") + " (" + this.code + ")";
-	}
-
-	/**
-	 * Get an enum instance for a code value.
-	 *
-	 * @param code
-	 *        the code
-	 * @return the enum
-	 * @throws IllegalArgumentException
-	 *         if {@code code} is not a valid value
-	 */
-	public static ModbusReadFunction forCode(int code) {
-		for ( ModbusReadFunction e : ModbusReadFunction.values() ) {
-			if ( code == e.code ) {
-				return e;
-			}
-		}
-		throw new IllegalArgumentException("Unknown ModbusReadFunction code [" + code + "]");
-	}
-
-	@Override
-	public boolean isReadFunction() {
-		return true;
-	}
-
-	@Override
-	public @Nullable ModbusFunction oppositeFunction() {
-		return switch (this) {
-			case ReadCoil -> ModbusWriteFunction.WriteCoil;
-			case ReadHoldingRegister -> ModbusWriteFunction.WriteHoldingRegister;
-			default -> null;
-		};
-	}
-
-	@Override
-	public ModbusRegisterBlockType blockType() {
-		return blockType;
 	}
 
 }

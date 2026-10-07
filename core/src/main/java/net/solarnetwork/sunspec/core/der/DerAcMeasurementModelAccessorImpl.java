@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
-import net.solarnetwork.domain.AcPhase;
+import net.solarnetwork.sunspec.api.AcPhase;
 import net.solarnetwork.sunspec.api.ModelEvent;
 import net.solarnetwork.sunspec.api.ModelId;
 import net.solarnetwork.sunspec.api.OperatingState;
@@ -48,7 +48,6 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public class DerAcMeasurementModelAccessorImpl extends BaseModelAccessor
 		implements DerAcMeasurementModelAccessor {

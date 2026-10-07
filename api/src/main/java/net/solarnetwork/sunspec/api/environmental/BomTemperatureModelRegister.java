@@ -23,8 +23,7 @@ import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
 import net.solarnetwork.sunspec.modbus.ModbusDataType;
-import net.solarnetwork.sunspec.modbus.ModbusReadFunction;
-import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
+import net.solarnetwork.sunspec.modbus.ModbusReference;
 
 /**
  * Enumeration of Modbus register mappings for SunSpec compliant irradiance
@@ -37,9 +36,8 @@ import net.solarnetwork.sunspec.modbus.SunspecModbusReference;
  *
  * @author matt
  * @version 1.0
- * @since 4.2
  */
-public enum BomTemperatureModelRegister implements SunspecModbusReference {
+public enum BomTemperatureModelRegister implements ModbusReference {
 
 	/** Temperature, back of module, in degrees Celsius. */
 	TemperatureBOM(0, Int16),
@@ -75,11 +73,6 @@ public enum BomTemperatureModelRegister implements SunspecModbusReference {
 	@Override
 	public ModbusDataType getDataType() {
 		return dataType;
-	}
-
-	@Override
-	public ModbusReadFunction getFunction() {
-		return ModbusReadFunction.ReadHoldingRegister;
 	}
 
 	@Override

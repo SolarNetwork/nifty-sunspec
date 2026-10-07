@@ -19,14 +19,13 @@
 
 package net.solarnetwork.sunspec.api.der;
 
-import net.solarnetwork.domain.CodedValue;
+import net.solarnetwork.sunspec.api.CodedValue;
 
 /**
  * DER DC port type.
  *
  * @author matt
  * @version 1.0
- * @since 5.2
  */
 public enum DerDcPortType implements CodedValue {
 
