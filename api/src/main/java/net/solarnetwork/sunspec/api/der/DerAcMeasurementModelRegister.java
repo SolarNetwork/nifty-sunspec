@@ -22,6 +22,16 @@ package net.solarnetwork.sunspec.api.der;
 import static net.solarnetwork.sunspec.api.DataClassification.Bitfield;
 import static net.solarnetwork.sunspec.api.DataClassification.Enumeration;
 import static net.solarnetwork.sunspec.api.DataClassification.ScaleFactor;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.DEGREE_CELSIUS;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.HERTZ;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.PERCENT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE_REACTIVE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE_REACTIVE_HOUR;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT_HOUR;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.StringUtf8;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
@@ -362,6 +372,34 @@ public enum DerAcMeasurementModelRegister implements ModbusReference {
 			case OperationalCharacteristicsBitmask -> "OperationalCharacteristics";
 			case ThrottleSourcesBitmask -> "ThrottleSources";
 			default -> name();
+		};
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case ActivePowerTotal, ActivePowerPhaseA, ActivePowerPhaseB, ActivePowerPhaseC -> WATT;
+			case ApparentPowerTotal, ApparentPowerPhaseA, ApparentPowerPhaseB -> VOLT_AMPERE;
+			case ApparentPowerPhaseC -> VOLT_AMPERE;
+			case ReactivePowerTotal, ReactivePowerPhaseA, ReactivePowerPhaseB -> VOLT_AMPERE_REACTIVE;
+			case ReactivePowerPhaseC -> VOLT_AMPERE_REACTIVE;
+			case CurrentTotal, CurrentPhaseA, CurrentPhaseB, CurrentPhaseC -> AMPERE;
+			case VoltageLineLineAverage, VoltageLineNeutralAverage, VoltagePhaseAPhaseB -> VOLT;
+			case VoltagePhaseANeutral, VoltagePhaseBPhaseC, VoltagePhaseBNeutral -> VOLT;
+			case VoltagePhaseCPhaseA, VoltagePhaseCNeutral -> VOLT;
+			case Frequency -> HERTZ;
+			case ActiveEnergyInjectedTotal, ActiveEnergyAbsorbedTotal -> WATT_HOUR;
+			case ActiveEnergyInjectedPhaseA, ActiveEnergyAbsorbedPhaseA -> WATT_HOUR;
+			case ActiveEnergyInjectedPhaseB, ActiveEnergyAbsorbedPhaseB -> WATT_HOUR;
+			case ActiveEnergyInjectedPhaseC, ActiveEnergyAbsorbedPhaseC -> WATT_HOUR;
+			case ReactiveEnergyInjectedTotal, ReactiveEnergyAbsorbedTotal -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyInjectedPhaseA, ReactiveEnergyAbsorbedPhaseA -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyInjectedPhaseB, ReactiveEnergyAbsorbedPhaseB -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyInjectedPhaseC, ReactiveEnergyAbsorbedPhaseC -> VOLT_AMPERE_REACTIVE_HOUR;
+			case TemperatureAmbient, TemperatureCabinet, TemperatureHeatSink -> DEGREE_CELSIUS;
+			case TemperatureTransformer, TemperatureSwitch, TemperatureOther -> DEGREE_CELSIUS;
+			case ThrottlePercent -> PERCENT;
+			default -> null;
 		};
 	}
 

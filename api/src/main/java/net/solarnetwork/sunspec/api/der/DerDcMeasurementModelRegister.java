@@ -22,6 +22,11 @@ package net.solarnetwork.sunspec.api.der;
 import static net.solarnetwork.sunspec.api.DataClassification.Bitfield;
 import static net.solarnetwork.sunspec.api.DataClassification.Enumeration;
 import static net.solarnetwork.sunspec.api.DataClassification.ScaleFactor;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.DEGREE_CELSIUS;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT_HOUR;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.StringUtf8;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
@@ -183,6 +188,19 @@ public enum DerDcMeasurementModelRegister implements ModbusReference {
 			case AlarmedPortsBitmask -> "AlarmedPorts";
 			case PortAlarmsBitmask -> "PortAlarms";
 			default -> name();
+		};
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case DcCurrent, PortDcCurrent -> AMPERE;
+			case DcPower, PortDcPower -> WATT;
+			case DcEnergyInjected, DcEnergyAbsorbed, PortDcEnergyInjected -> WATT_HOUR;
+			case PortDcEnergyAbsorbed -> WATT_HOUR;
+			case PortDcVoltage -> VOLT;
+			case PortTemperature -> DEGREE_CELSIUS;
+			default -> null;
 		};
 	}
 

@@ -21,6 +21,12 @@ package net.solarnetwork.sunspec.api.inverter;
 
 import static net.solarnetwork.sunspec.api.DataClassification.Enumeration;
 import static net.solarnetwork.sunspec.api.DataClassification.ScaleFactor;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.AMPERE_HOUR;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE_REACTIVE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT_HOUR;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
 import org.jspecify.annotations.Nullable;
@@ -182,6 +188,20 @@ public enum InverterNameplateRatingsRegister implements ModbusReference {
 	@Override
 	public String getName() {
 		return name();
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case ActivePowerRating, StoredEnergyImportPowerRating, StoredEnergyExportPowerRating -> WATT;
+			case ApparentPowerRating -> VOLT_AMPERE;
+			case ReactivePowerQ1Rating, ReactivePowerQ2Rating -> VOLT_AMPERE_REACTIVE;
+			case ReactivePowerQ3Rating, ReactivePowerQ4Rating -> VOLT_AMPERE_REACTIVE;
+			case CurrentRating -> AMPERE;
+			case StoredEnergyRating -> WATT_HOUR;
+			case StoredChargeCapacity -> AMPERE_HOUR;
+			default -> null;
+		};
 	}
 
 }

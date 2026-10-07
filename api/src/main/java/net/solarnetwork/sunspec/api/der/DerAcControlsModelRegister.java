@@ -21,6 +21,11 @@ package net.solarnetwork.sunspec.api.der;
 
 import static net.solarnetwork.sunspec.api.DataClassification.Enumeration;
 import static net.solarnetwork.sunspec.api.DataClassification.ScaleFactor;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.PERCENT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.PERCENT_PER_SECOND;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.SECOND;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE_REACTIVE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT;
 import static net.solarnetwork.sunspec.api.PointAccess.ReadWrite;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int32;
@@ -320,6 +325,26 @@ public enum DerAcControlsModelRegister implements ModbusReference {
 	@Override
 	public String getName() {
 		return name();
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case PowerFactorWhenInjectingReversionTime -> SECOND;
+			case PowerFactorWhenInjectingReversionTimeRemaining -> SECOND;
+			case PowerFactorWhenAbsorbingReversionTime -> SECOND;
+			case PowerFactorWhenAbsorbingReversionTimeRemaining, ActivePowerLimitReversionTime -> SECOND;
+			case ActivePowerLimitReversionTimeRemaining, ActivePowerSetpointReversionTime -> SECOND;
+			case ActivePowerSetpointReversionTimeRemaining, ReactivePowerSetpointReversionTime -> SECOND;
+			case ReactivePowerSetpointReversionTimeRemaining -> SECOND;
+			case ActivePowerLimitPercent, ReversionActivePowerLimitPercent -> PERCENT;
+			case ActivePowerSetpointPercent, ReversionActivePowerSetpointPercent -> PERCENT;
+			case ReactivePowerSetpointPercent, ReversionReactivePowerSetpointPercent -> PERCENT;
+			case ActivePowerSetpoint, ReversionActivePowerSetpoint -> WATT;
+			case ReactivePowerSetpoint, ReversionReactivePowerSetpoint -> VOLT_AMPERE_REACTIVE;
+			case ActivePowerRampRate, ReactivePowerRampRate -> PERCENT_PER_SECOND;
+			default -> null;
+		};
 	}
 
 }

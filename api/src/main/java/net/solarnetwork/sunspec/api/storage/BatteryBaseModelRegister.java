@@ -22,6 +22,13 @@ package net.solarnetwork.sunspec.api.storage;
 import static net.solarnetwork.sunspec.api.DataClassification.Bitfield;
 import static net.solarnetwork.sunspec.api.DataClassification.Enumeration;
 import static net.solarnetwork.sunspec.api.DataClassification.ScaleFactor;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.AMPERE_HOUR;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.PERCENT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.PERCENT_PER_DAY;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT_HOUR;
 import static net.solarnetwork.sunspec.api.PointAccess.ReadWrite;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
@@ -293,6 +300,23 @@ public enum BatteryBaseModelRegister implements ModbusReference {
 	@Override
 	public PointAccess getAccess() {
 		return access;
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case ChargeCapacityRating -> AMPERE_HOUR;
+			case EnergyCapacityRating -> WATT_HOUR;
+			case ChargeRateMaximumRating, DischargeRateMaximumRating, DcPower, PowerRequest -> WATT;
+			case SelfDischargeRate -> PERCENT_PER_DAY;
+			case StateOfChargeMaximumRating, StateOfChargeMinimumRating -> PERCENT;
+			case StateOfChargeReserveMaximum, StateOfChargeReserveMinimum, StateOfCharge -> PERCENT;
+			case DepthOfDischarge, StateOfHealth -> PERCENT;
+			case DcVoltage, MaximumVoltage, MinimumVoltage, MaximumCellVoltage -> VOLT;
+			case MinimumCellVoltage, AverageCellVoltage -> VOLT;
+			case DcCurrent, MaximumChargeCurrent, MaximumDischargeCurrent -> AMPERE;
+			default -> null;
+		};
 	}
 
 }

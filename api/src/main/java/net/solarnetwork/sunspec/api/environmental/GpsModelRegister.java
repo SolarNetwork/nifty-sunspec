@@ -19,6 +19,8 @@
 
 package net.solarnetwork.sunspec.api.environmental;
 
+import static net.solarnetwork.sunspec.api.MeasurementUnits.DEGREE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.METRE;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int32;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.StringUtf8;
 import org.jspecify.annotations.Nullable;
@@ -114,6 +116,15 @@ public enum GpsModelRegister implements ModbusReference {
 		return switch (this) {
 			case Time -> "Timestamp";
 			default -> name();
+		};
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case Latitude, Longitude -> DEGREE;
+			case Altitude -> METRE;
+			default -> null;
 		};
 	}
 

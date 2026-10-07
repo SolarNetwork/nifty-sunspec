@@ -19,6 +19,9 @@
 
 package net.solarnetwork.sunspec.api.environmental;
 
+import static net.solarnetwork.sunspec.api.MeasurementUnits.DEGREE_CELSIUS;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.METRE_PER_SECOND;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT_PER_SQUARE_METRE;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
 import org.jspecify.annotations.Nullable;
@@ -98,6 +101,16 @@ public enum MiniMeteorologicalModelRegister implements ModbusReference {
 	@Override
 	public String getName() {
 		return name();
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case IrradianceGH -> WATT_PER_SQUARE_METRE;
+			case TemperatureBOM, TemperatureAmbient -> DEGREE_CELSIUS;
+			case WindSpeed -> METRE_PER_SECOND;
+			default -> null;
+		};
 	}
 
 }

@@ -21,6 +21,8 @@ package net.solarnetwork.sunspec.api.der;
 
 import static net.solarnetwork.sunspec.api.DataClassification.Enumeration;
 import static net.solarnetwork.sunspec.api.DataClassification.ScaleFactor;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.PERCENT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.SECOND;
 import static net.solarnetwork.sunspec.api.PointAccess.ReadWrite;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
@@ -151,6 +153,16 @@ public enum DerVoltVarModelRegister implements ModbusReference {
 	@Override
 	public PointAccess getAccess() {
 		return access;
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case CurveVoltageReference, CurveAutonomousVoltageReference, PointVoltage -> PERCENT;
+			case PointReactivePower -> PERCENT;
+			case CurveAutonomousVoltageReferenceTimeConstant, CurveOpenLoopResponseTime -> SECOND;
+			default -> null;
+		};
 	}
 
 }

@@ -23,6 +23,14 @@ import static net.solarnetwork.sunspec.api.DataClassification.Accumulator;
 import static net.solarnetwork.sunspec.api.DataClassification.Bitfield;
 import static net.solarnetwork.sunspec.api.DataClassification.Enumeration;
 import static net.solarnetwork.sunspec.api.DataClassification.ScaleFactor;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.DEGREE_CELSIUS;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.HERTZ;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE_REACTIVE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT_HOUR;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt32;
@@ -282,6 +290,24 @@ public enum IntegerInverterModelRegister implements ModbusReference {
 			case Events3VendorBitmask -> "VendorEvents3";
 			case Events4VendorBitmask -> "VendorEvents4";
 			default -> name();
+		};
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case CurrentTotal, CurrentPhaseA, CurrentPhaseB, CurrentPhaseC, DcCurrentTotal -> AMPERE;
+			case VoltagePhaseAPhaseB, VoltagePhaseBPhaseC, VoltagePhaseCPhaseA -> VOLT;
+			case VoltagePhaseANeutral, VoltagePhaseBNeutral, VoltagePhaseCNeutral -> VOLT;
+			case DcVoltageTotal -> VOLT;
+			case ActivePowerTotal, DcPowerTotal -> WATT;
+			case Frequency -> HERTZ;
+			case ApparentPowerTotal -> VOLT_AMPERE;
+			case ReactivePowerTotal -> VOLT_AMPERE_REACTIVE;
+			case ActiveEnergyExportedTotal -> WATT_HOUR;
+			case TemperatureCabinet, TemperatureHeatSink, TemperatureTransformer -> DEGREE_CELSIUS;
+			case TemperatureOther -> DEGREE_CELSIUS;
+			default -> null;
 		};
 	}
 

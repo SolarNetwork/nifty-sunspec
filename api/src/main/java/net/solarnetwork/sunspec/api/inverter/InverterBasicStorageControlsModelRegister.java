@@ -22,6 +22,13 @@ package net.solarnetwork.sunspec.api.inverter;
 import static net.solarnetwork.sunspec.api.DataClassification.Bitfield;
 import static net.solarnetwork.sunspec.api.DataClassification.Enumeration;
 import static net.solarnetwork.sunspec.api.DataClassification.ScaleFactor;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.AMPERE_HOUR;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.PERCENT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.PERCENT_PER_SECOND;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.SECOND;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT;
 import static net.solarnetwork.sunspec.api.PointAccess.ReadWrite;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
@@ -190,6 +197,22 @@ public enum InverterBasicStorageControlsModelRegister implements ModbusReference
 	@Override
 	public PointAccess getAccess() {
 		return access;
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case ActivePowerChargeRateMaximum -> WATT;
+			case ChargeRampRate, DischargeRampRate -> PERCENT_PER_SECOND;
+			case ApparentPowerChargeRateMaximum -> VOLT_AMPERE;
+			case StateOfChargeReserveMinimum, StateOfCharge, DischargeRatePercent -> PERCENT;
+			case ChargeRatePercent -> PERCENT;
+			case StorageAvailable -> AMPERE_HOUR;
+			case BatteryVoltage -> VOLT;
+			case ChargeDischargeRateTimeWindow, ChargeDischargeRateReversionTime -> SECOND;
+			case ChargeDischargeRateRampTime -> SECOND;
+			default -> null;
+		};
 	}
 
 }

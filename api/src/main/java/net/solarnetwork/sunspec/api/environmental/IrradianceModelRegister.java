@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.api.environmental;
 
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT_PER_SQUARE_METRE;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
@@ -100,6 +101,14 @@ public enum IrradianceModelRegister implements ModbusReference {
 	@Override
 	public String getName() {
 		return name();
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case GHI, POAI, DFI, DNI, OTI -> WATT_PER_SQUARE_METRE;
+			default -> null;
+		};
 	}
 
 }

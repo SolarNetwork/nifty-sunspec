@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.api.environmental;
 
+import static net.solarnetwork.sunspec.api.MeasurementUnits.DEGREE_CELSIUS;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
@@ -88,6 +89,14 @@ public enum BomTemperatureModelRegister implements ModbusReference {
 	@Override
 	public String getName() {
 		return name();
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case TemperatureBOM -> DEGREE_CELSIUS;
+			default -> null;
+		};
 	}
 
 }

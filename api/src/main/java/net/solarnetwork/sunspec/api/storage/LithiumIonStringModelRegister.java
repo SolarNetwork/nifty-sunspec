@@ -22,6 +22,10 @@ package net.solarnetwork.sunspec.api.storage;
 import static net.solarnetwork.sunspec.api.DataClassification.Bitfield;
 import static net.solarnetwork.sunspec.api.DataClassification.Enumeration;
 import static net.solarnetwork.sunspec.api.DataClassification.ScaleFactor;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.DEGREE_CELSIUS;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.PERCENT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT;
 import static net.solarnetwork.sunspec.api.PointAccess.ReadWrite;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
@@ -276,6 +280,21 @@ public enum LithiumIonStringModelRegister implements ModbusReference {
 	@Override
 	public PointAccess getAccess() {
 		return access;
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case StateOfCharge, DepthOfDischarge, StateOfHealth, ModuleStateOfCharge -> PERCENT;
+			case ModuleStateOfHealth -> PERCENT;
+			case DcCurrent -> AMPERE;
+			case DcVoltage, MaximumCellVoltage, MinimumCellVoltage, AverageCellVoltage -> VOLT;
+			case ModuleMaximumCellVoltage, ModuleMinimumCellVoltage, ModuleAverageCellVoltage -> VOLT;
+			case MaximumModuleTemperature, MinimumModuleTemperature -> DEGREE_CELSIUS;
+			case AverageModuleTemperature, ModuleMaximumCellTemperature -> DEGREE_CELSIUS;
+			case ModuleMinimumCellTemperature, ModuleAverageCellTemperature -> DEGREE_CELSIUS;
+			default -> null;
+		};
 	}
 
 }

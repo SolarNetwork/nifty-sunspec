@@ -21,6 +21,7 @@ package net.solarnetwork.sunspec.modbus;
 
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
+import net.solarnetwork.sunspec.api.MeasurementUnits;
 import net.solarnetwork.sunspec.api.PointAccess;
 import net.solarnetwork.sunspec.api.PointGroup;
 import net.solarnetwork.sunspec.api.PointMapMode;
@@ -80,6 +81,25 @@ public interface ModbusReference {
 	 * @return the point name
 	 */
 	String getName();
+
+	/**
+	 * Get the unit of measurement of the point this reference is associated
+	 * with.
+	 *
+	 * <p>
+	 * The unit applies to the value of the point, after any scale factor is
+	 * applied, and is one of the abbreviations in {@link MeasurementUnits},
+	 * such as {@code W} for watts. Points without a unit, such as power
+	 * factors, counts, enumerations, bitfields, strings, and scale factors,
+	 * have none.
+	 * </p>
+	 *
+	 * @return the unit abbreviation, or {@code null} if the point has no unit;
+	 *         this implementation returns {@code null}
+	 */
+	default @Nullable String getMeasurementUnit() {
+		return null;
+	}
 
 	/**
 	 * Get the access level of this modbus reference.

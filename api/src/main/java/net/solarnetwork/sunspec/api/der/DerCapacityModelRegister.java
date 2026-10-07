@@ -22,6 +22,12 @@ package net.solarnetwork.sunspec.api.der;
 import static net.solarnetwork.sunspec.api.DataClassification.Bitfield;
 import static net.solarnetwork.sunspec.api.DataClassification.Enumeration;
 import static net.solarnetwork.sunspec.api.DataClassification.ScaleFactor;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.SIEMENS;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE_REACTIVE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT;
 import static net.solarnetwork.sunspec.api.PointAccess.ReadWrite;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
@@ -277,6 +283,28 @@ public enum DerCapacityModelRegister implements ModbusReference {
 	@Override
 	public PointAccess getAccess() {
 		return access;
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case ActivePowerMaximumRating, ActivePowerOverExcitedRating -> WATT;
+			case ActivePowerUnderExcitedRating, ActivePowerChargeRateMaximumRating -> WATT;
+			case ActivePowerDischargeRateMaximumRating, ActivePowerMaximum -> WATT;
+			case ActivePowerOverExcited, ActivePowerUnderExcited, ActivePowerChargeRateMaximum -> WATT;
+			case ActivePowerDischargeRateMaximum -> WATT;
+			case ApparentPowerMaximumRating, ApparentPowerChargeRateMaximumRating -> VOLT_AMPERE;
+			case ApparentPowerDischargeRateMaximumRating, ApparentPowerMaximum -> VOLT_AMPERE;
+			case ApparentPowerChargeRateMaximum, ApparentPowerDischargeRateMaximum -> VOLT_AMPERE;
+			case ReactivePowerInjectedMaximumRating -> VOLT_AMPERE_REACTIVE;
+			case ReactivePowerAbsorbedMaximumRating -> VOLT_AMPERE_REACTIVE;
+			case ReactivePowerInjectedMaximum, ReactivePowerAbsorbedMaximum -> VOLT_AMPERE_REACTIVE;
+			case VoltageNominalRating, VoltageMaximumRating, VoltageMinimumRating -> VOLT;
+			case VoltageNominal, VoltageMaximum, VoltageMinimum -> VOLT;
+			case CurrentMaximumRating, CurrentMaximum -> AMPERE;
+			case ReactiveSusceptanceRating -> SIEMENS;
+			default -> null;
+		};
 	}
 
 }

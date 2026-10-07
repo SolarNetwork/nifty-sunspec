@@ -21,6 +21,8 @@ package net.solarnetwork.sunspec.api.der;
 
 import static net.solarnetwork.sunspec.api.DataClassification.Enumeration;
 import static net.solarnetwork.sunspec.api.DataClassification.ScaleFactor;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.PERCENT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT_HOUR;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
 import org.jspecify.annotations.Nullable;
@@ -107,6 +109,15 @@ public enum DerStorageCapacityModelRegister implements ModbusReference {
 	@Override
 	public String getName() {
 		return name();
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case EnergyRating, EnergyAvailable -> WATT_HOUR;
+			case StateOfCharge, StateOfHealth -> PERCENT;
+			default -> null;
+		};
 	}
 
 }

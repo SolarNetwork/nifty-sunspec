@@ -22,6 +22,12 @@ package net.solarnetwork.sunspec.api.inverter;
 import static net.solarnetwork.sunspec.api.DataClassification.Accumulator;
 import static net.solarnetwork.sunspec.api.DataClassification.Bitfield;
 import static net.solarnetwork.sunspec.api.DataClassification.ScaleFactor;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.DEGREE_CELSIUS;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.SECOND;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT_HOUR;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.StringUtf8;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
@@ -160,6 +166,19 @@ public enum InverterMpptExtensionModelRegister implements ModbusReference {
 			case EventsBitmask -> "Events";
 			case ModuleEventsBitmask -> "ModuleEvents";
 			default -> name();
+		};
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case ModuleDcCurrent -> AMPERE;
+			case ModuleDcVoltage -> VOLT;
+			case ModuleDcPower -> WATT;
+			case ModuleLifetimeEnergy -> WATT_HOUR;
+			case ModuleTimestamp -> SECOND;
+			case ModuleTemperature -> DEGREE_CELSIUS;
+			default -> null;
 		};
 	}
 

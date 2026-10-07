@@ -22,6 +22,12 @@ package net.solarnetwork.sunspec.api.combiner;
 import static net.solarnetwork.sunspec.api.DataClassification.Accumulator;
 import static net.solarnetwork.sunspec.api.DataClassification.Bitfield;
 import static net.solarnetwork.sunspec.api.DataClassification.ScaleFactor;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.AMPERE_HOUR;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.DEGREE_CELSIUS;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT_HOUR;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt32;
@@ -256,6 +262,19 @@ public enum StringCombinerAdvancedModelRegister implements ModbusReference {
 			case InputDcVoltageV2 -> "InputDcVoltage";
 			case InputDcEnergyV2 -> "InputDcEnergy";
 			default -> name();
+		};
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case DcCurrentMaxRating, DcCurrent, InputDcCurrent -> AMPERE;
+			case DcCharge, DcChargeV2, InputDcCharge, InputDcChargeV2 -> AMPERE_HOUR;
+			case DcVoltage, DcVoltageV2, InputDcVoltage, InputDcVoltageV2 -> VOLT;
+			case Temperature -> DEGREE_CELSIUS;
+			case DcPower, InputDcPower -> WATT;
+			case DcEnergy, DcEnergyV2, InputDcEnergy, InputDcEnergyV2 -> WATT_HOUR;
+			default -> null;
 		};
 	}
 

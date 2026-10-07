@@ -20,6 +20,15 @@
 package net.solarnetwork.sunspec.api.meter;
 
 import static net.solarnetwork.sunspec.api.DataClassification.Bitfield;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.HERTZ;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE_HOUR;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE_REACTIVE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE_REACTIVE_HOUR;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT_HOUR;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Float32;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt32;
 import org.jspecify.annotations.Nullable;
@@ -326,6 +335,47 @@ public enum FloatingPointMeterModelRegister implements ModbusReference {
 			case ReactiveEnergyExportedQ4Total -> "ReactiveEnergyExportedQ4";
 			case EventsBitmask -> "Events";
 			default -> name();
+		};
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case CurrentTotal, CurrentPhaseA, CurrentPhaseB, CurrentPhaseC -> AMPERE;
+			case VoltageLineNeutralAverage, VoltagePhaseANeutral, VoltagePhaseBNeutral -> VOLT;
+			case VoltagePhaseCNeutral, VoltageLineLineAverage, VoltagePhaseAPhaseB -> VOLT;
+			case VoltagePhaseBPhaseC, VoltagePhaseCPhaseA -> VOLT;
+			case Frequency -> HERTZ;
+			case ActivePowerTotal, ActivePowerPhaseA, ActivePowerPhaseB, ActivePowerPhaseC -> WATT;
+			case ApparentPowerTotal, ApparentPowerPhaseA, ApparentPowerPhaseB -> VOLT_AMPERE;
+			case ApparentPowerPhaseC -> VOLT_AMPERE;
+			case ReactivePowerTotal, ReactivePowerPhaseA, ReactivePowerPhaseB -> VOLT_AMPERE_REACTIVE;
+			case ReactivePowerPhaseC -> VOLT_AMPERE_REACTIVE;
+			case ActiveEnergyExportedTotal, ActiveEnergyExportedPhaseA -> WATT_HOUR;
+			case ActiveEnergyExportedPhaseB, ActiveEnergyExportedPhaseC -> WATT_HOUR;
+			case ActiveEnergyImportedTotal, ActiveEnergyImportedPhaseA -> WATT_HOUR;
+			case ActiveEnergyImportedPhaseB, ActiveEnergyImportedPhaseC -> WATT_HOUR;
+			case ApparentEnergyExportedTotal, ApparentEnergyExportedPhaseA -> VOLT_AMPERE_HOUR;
+			case ApparentEnergyExportedPhaseB, ApparentEnergyExportedPhaseC -> VOLT_AMPERE_HOUR;
+			case ApparentEnergyImportedTotal, ApparentEnergyImportedPhaseA -> VOLT_AMPERE_HOUR;
+			case ApparentEnergyImportedPhaseB, ApparentEnergyImportedPhaseC -> VOLT_AMPERE_HOUR;
+			case ReactiveEnergyImportedQ1Total -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyImportedQ1PhaseA -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyImportedQ1PhaseB -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyImportedQ1PhaseC -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyImportedQ2Total -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyImportedQ2PhaseA -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyImportedQ2PhaseB -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyImportedQ2PhaseC -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyExportedQ3Total -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyExportedQ3PhaseA -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyExportedQ3PhaseB -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyExportedQ3PhaseC -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyExportedQ4Total -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyExportedQ4PhaseA -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyExportedQ4PhaseB -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyExportedQ4PhaseC -> VOLT_AMPERE_REACTIVE_HOUR;
+			default -> null;
 		};
 	}
 

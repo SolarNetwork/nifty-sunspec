@@ -22,6 +22,12 @@ package net.solarnetwork.sunspec.api.inverter;
 import static net.solarnetwork.sunspec.api.DataClassification.Accumulator;
 import static net.solarnetwork.sunspec.api.DataClassification.Bitfield;
 import static net.solarnetwork.sunspec.api.DataClassification.ScaleFactor;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.OHM;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE_HOUR;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE_REACTIVE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE_REACTIVE_HOUR;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT_HOUR;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.StringUtf8;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
@@ -176,6 +182,20 @@ public enum InverterExtendedMeasurementsModelRegister implements ModbusReference
 	@Override
 	public String getName() {
 		return name();
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case ActiveEnergyExported -> WATT_HOUR;
+			case ApparentEnergyExported -> VOLT_AMPERE_HOUR;
+			case ReactiveEnergyQ1, ReactiveEnergyQ2, ReactiveEnergyQ3 -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactiveEnergyQ4 -> VOLT_AMPERE_REACTIVE_HOUR;
+			case ReactivePowerAvailable -> VOLT_AMPERE_REACTIVE;
+			case ActivePowerAvailable -> WATT;
+			case IsolationResistance -> OHM;
+			default -> null;
+		};
 	}
 
 }

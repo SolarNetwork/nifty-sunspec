@@ -19,6 +19,14 @@
 
 package net.solarnetwork.sunspec.api.environmental;
 
+import static net.solarnetwork.sunspec.api.MeasurementUnits.DEGREE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.DEGREE_CELSIUS;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.METRE_PER_SECOND;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.MILLIMETRE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.OHM;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.PASCAL;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.PERCENT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_PER_METRE;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
@@ -118,6 +126,21 @@ public enum MeteorologicalModelRegister implements ModbusReference {
 	@Override
 	public String getName() {
 		return name();
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case TemperatureAmbient -> DEGREE_CELSIUS;
+			case RelativeHumidity, SoilMoisture -> PERCENT;
+			case BarometricPressure -> PASCAL;
+			case WindSpeed -> METRE_PER_SECOND;
+			case WindDirection -> DEGREE;
+			case Rain, Snow -> MILLIMETRE;
+			case ElectricField -> VOLT_PER_METRE;
+			case SurfaceWetness -> OHM;
+			default -> null;
+		};
 	}
 
 }

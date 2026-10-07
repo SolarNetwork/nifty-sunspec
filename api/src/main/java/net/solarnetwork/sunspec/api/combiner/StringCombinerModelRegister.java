@@ -22,6 +22,10 @@ package net.solarnetwork.sunspec.api.combiner;
 import static net.solarnetwork.sunspec.api.DataClassification.Accumulator;
 import static net.solarnetwork.sunspec.api.DataClassification.Bitfield;
 import static net.solarnetwork.sunspec.api.DataClassification.ScaleFactor;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.AMPERE_HOUR;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.DEGREE_CELSIUS;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt32;
@@ -191,6 +195,17 @@ public enum StringCombinerModelRegister implements ModbusReference {
 			case InputVendorEventsBitmask -> "InputVendorEvents";
 			case InputDcChargeV2 -> "InputDcCharge";
 			default -> name();
+		};
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case DcCurrentMaxRating, DcCurrent, InputDcCurrent -> AMPERE;
+			case DcCharge, DcChargeV2, InputDcCharge, InputDcChargeV2 -> AMPERE_HOUR;
+			case DcVoltage, DcVoltageV2 -> VOLT;
+			case Temperature -> DEGREE_CELSIUS;
+			default -> null;
 		};
 	}
 

@@ -21,6 +21,13 @@ package net.solarnetwork.sunspec.api.inverter;
 
 import static net.solarnetwork.sunspec.api.DataClassification.Enumeration;
 import static net.solarnetwork.sunspec.api.DataClassification.ScaleFactor;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.HERTZ;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.PERCENT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.PERCENT_PER_SECOND;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT_AMPERE_REACTIVE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT;
 import static net.solarnetwork.sunspec.api.PointAccess.ReadWrite;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
@@ -216,6 +223,21 @@ public enum InverterBasicSettingsRegister implements ModbusReference {
 	@Override
 	public PointAccess getAccess() {
 		return access;
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case ActivePowerMaximum -> WATT;
+			case VoltagePcc, VoltagePccOffset, VoltageMaximum, VoltageMinimum -> VOLT;
+			case ApparentPowerMaximum -> VOLT_AMPERE;
+			case ReactivePowerQ1Maximum, ReactivePowerQ2Maximum -> VOLT_AMPERE_REACTIVE;
+			case ReactivePowerQ3Maximum, ReactivePowerQ4Maximum -> VOLT_AMPERE_REACTIVE;
+			case ActivePowerRampRate -> PERCENT_PER_SECOND;
+			case ActivePowerRampRateMaximum -> PERCENT;
+			case EcpNominalFrequency -> HERTZ;
+			default -> null;
+		};
 	}
 
 }

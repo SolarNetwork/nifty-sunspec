@@ -19,6 +19,10 @@
 
 package net.solarnetwork.sunspec.api.environmental;
 
+import static net.solarnetwork.sunspec.api.MeasurementUnits.AMPERE;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.DEGREE_CELSIUS;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.VOLT;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.WATT_PER_SQUARE_METRE;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
@@ -97,6 +101,17 @@ public enum ReferencePointModelRegister implements ModbusReference {
 	@Override
 	public String getName() {
 		return name();
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case GHI -> WATT_PER_SQUARE_METRE;
+			case Amps -> AMPERE;
+			case Voltage -> VOLT;
+			case Temperature -> DEGREE_CELSIUS;
+			default -> null;
+		};
 	}
 
 }

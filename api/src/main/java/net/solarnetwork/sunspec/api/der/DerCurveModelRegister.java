@@ -20,6 +20,7 @@
 package net.solarnetwork.sunspec.api.der;
 
 import static net.solarnetwork.sunspec.api.DataClassification.Enumeration;
+import static net.solarnetwork.sunspec.api.MeasurementUnits.SECOND;
 import static net.solarnetwork.sunspec.api.PointAccess.ReadWrite;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt32;
@@ -136,6 +137,14 @@ public enum DerCurveModelRegister implements ModbusReference {
 	@Override
 	public PointAccess getAccess() {
 		return access;
+	}
+
+	@Override
+	public @Nullable String getMeasurementUnit() {
+		return switch (this) {
+			case ReversionTime, ReversionTimeRemaining -> SECOND;
+			default -> null;
+		};
 	}
 
 }
