@@ -19,6 +19,7 @@
 
 package net.solarnetwork.sunspec.api.environmental;
 
+import java.util.List;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelAccessor;
 
@@ -31,42 +32,73 @@ import net.solarnetwork.sunspec.api.ModelAccessor;
 public interface IrradianceModelAccessor extends ModelAccessor {
 
 	/**
-	 * Get the global horizontal irradiance, in W/m2.
-	 *
-	 * @return the irradiance
+	 * API for a single set of irradiance measurements.
 	 */
-	@Nullable
-	Integer getGlobalHorizontalIrradiance();
+	interface Irradiance {
+
+		/**
+		 * Get the global horizontal irradiance.
+		 *
+		 * @return the irradiance, in W/m2, or {@code null} if not available
+		 */
+		@Nullable
+		Integer getGlobalHorizontalIrradiance();
+
+		/**
+		 * Get the plane-of-array irradiance.
+		 *
+		 * @return the irradiance, in W/m2, or {@code null} if not available
+		 */
+		@Nullable
+		Integer getPlaneOfArrayIrradiance();
+
+		/**
+		 * Get the diffuse irradiance.
+		 *
+		 * @return the irradiance, in W/m2, or {@code null} if not available
+		 */
+		@Nullable
+		Integer getDiffuseIrradiance();
+
+		/**
+		 * Get the direct normal irradiance.
+		 *
+		 * @return the irradiance, in W/m2, or {@code null} if not available
+		 */
+		@Nullable
+		Integer getDirectNormalIrradiance();
+
+		/**
+		 * Get some other irradiance.
+		 *
+		 * @return the irradiance, in W/m2, or {@code null} if not available
+		 */
+		@Nullable
+		Integer getOtherIrradiance();
+
+	}
 
 	/**
-	 * Get the plane-of-array irradiance, in W/m2.
+	 * Get the irradiance measurements.
 	 *
-	 * @return the irradiance
+	 * <p>
+	 * The model holds one set of measurements in each repeating block instance,
+	 * so the number of sets is determined by the model length.
+	 * </p>
+	 *
+	 * @return the irradiance measurements, never {@code null}
 	 */
-	@Nullable
-	Integer getPlaneOfArrayIrradiance();
+	List<Irradiance> getIrradiances();
 
 	/**
-	 * Get the diffuse irradiance, in W/m2.
+	 * Get the first available irradiance measurements.
 	 *
-	 * @return the irradiance
+	 * @return the first available irradiance measurements, or {@code null} if
+	 *         there are none
 	 */
-	@Nullable
-	Integer getDiffuseIrradiance();
+	default @Nullable Irradiance getIrradiance() {
+		List<Irradiance> irradiances = getIrradiances();
+		return (!irradiances.isEmpty() ? irradiances.get(0) : null);
+	}
 
-	/**
-	 * Get the direct normal irradiance, in W/m2.
-	 *
-	 * @return the irradiance
-	 */
-	@Nullable
-	Integer getDirectNormalIrradiance();
-
-	/**
-	 * Get some other irradiance, in W/m2.
-	 *
-	 * @return the irradiance
-	 */
-	@Nullable
-	Integer getOtherIrradiance();
 }

@@ -31,11 +31,14 @@
 /net/solarnetwork/sunspec/core/der/test/test-data-der-01.txt 713 1211
 /net/solarnetwork/sunspec/core/der/test/test-data-der-01.txt 714 1220 1222-1223,1227-1230,1231-1234,1242-1249,1253-1256,1257-1260,1263-1264
 /net/solarnetwork/sunspec/core/der/test/test-data-der-01.txt 715 1265 1268-1269,1270-1271
+/net/solarnetwork/sunspec/core/environmental/test/test-data-302-01.txt 1 2 4-19,20-35,36-43,44-51,52-67
+/net/solarnetwork/sunspec/core/environmental/test/test-data-302-01.txt 302 70
 /net/solarnetwork/sunspec/core/environmental/test/test-data-304-01.txt 1 2 4-19,20-35,36-43,44-51,52-67
 /net/solarnetwork/sunspec/core/environmental/test/test-data-304-01.txt 304 70 72-73,74-75,76-77,78-79,80-81,82-83
 /net/solarnetwork/sunspec/core/environmental/test/test-data-305-01.txt 1 2 4-19,20-35,36-43,44-51,52-67
 /net/solarnetwork/sunspec/core/environmental/test/test-data-305-01.txt 305 70 72-77,78-81,82-101,102-103,104-105,106-107
 /net/solarnetwork/sunspec/core/environmental/test/test-data-306-01.txt 1 2 4-19,20-35,36-43,44-51,52-67
+/net/solarnetwork/sunspec/core/environmental/test/test-data-306-01.txt 306 70
 /net/solarnetwork/sunspec/core/environmental/test/test-data-307-01.txt 1 2 4-19,20-35,36-43,44-51,52-67
 /net/solarnetwork/sunspec/core/environmental/test/test-data-307-01.txt 307 70
 /net/solarnetwork/sunspec/core/environmental/test/test-data-307-01.txt 302 83

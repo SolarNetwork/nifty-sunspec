@@ -1,8 +1,8 @@
 /* ==================================================================
  * ReferencePointModelAccessorImpl_306_01Tests.java - 9/07/2023 4:53:29 pm
- * 
+ *
  * Copyright 2023 SolarNetwork.net Dev Team
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -21,12 +21,10 @@ package net.solarnetwork.sunspec.core.environmental.test;
 
 import static org.assertj.core.api.BDDAssertions.from;
 import static org.assertj.core.api.BDDAssertions.then;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.solarnetwork.sunspec.api.environmental.EnvironmentalModelId;
-import net.solarnetwork.sunspec.api.environmental.ReferencePoint;
 import net.solarnetwork.sunspec.api.environmental.ReferencePointModelAccessor;
 import net.solarnetwork.sunspec.core.environmental.ReferencePointModelAccessorImpl;
 import net.solarnetwork.sunspec.core.test.ModelDataUtils;
@@ -34,17 +32,28 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
 
 /**
  * Test cases for the {@link ReferencePointModelAccessorImpl} class.
- * 
+ *
  * @author matt
  * @version 1.0
  */
 public class ReferencePointModelAccessorImpl_306_01Tests {
 
 	private static final Logger log = LoggerFactory
-			.getLogger(InclinometerModelAccessorImpl_304_01Tests.class);
+			.getLogger(ReferencePointModelAccessorImpl_306_01Tests.class);
+
+	/** Synthetic data, as there is no capture from a device. */
+	private static final String TEST_DATA = "test-data-306-01.txt";
+
+	/** The model block address in the test data. */
+	private static final int BLOCK_ADDRESS = 72;
 
 	private ModelData getTestDataInstance() {
-		return ModelDataUtils.getModelDataInstance(getClass(), "test-data-306-01.txt");
+		return ModelDataUtils.getModelDataInstance(getClass(), TEST_DATA);
+	}
+
+	private ReferencePointModelAccessor getTestModel(int address, int... words) {
+		return ModelDataUtils.getModelDataInstanceWithRegisters(getClass(), TEST_DATA, address, words)
+				.findTypedModel(ReferencePointModelAccessor.class);
 	}
 
 	@Test
@@ -82,17 +91,17 @@ public class ReferencePointModelAccessorImpl_306_01Tests {
 			.as("Model base address")
 			.returns(70, from(ReferencePointModelAccessor::getBaseAddress))
 			.as("Model block address")
-			.returns(72, from(ReferencePointModelAccessor::getBlockAddress))
+			.returns(BLOCK_ADDRESS, from(ReferencePointModelAccessor::getBlockAddress))
 			.as("Model ID")
 			.returns(EnvironmentalModelId.ReferencePoint, from(ReferencePointModelAccessor::getModelId))
 			.as("Model fixed length")
-			.returns(0, from(ReferencePointModelAccessor::getFixedBlockLength))
+			.returns(4, from(ReferencePointModelAccessor::getFixedBlockLength))
 			.as("Model repeating instance length")
-			.returns(7, from(ReferencePointModelAccessor::getRepeatingBlockInstanceLength))
+			.returns(0, from(ReferencePointModelAccessor::getRepeatingBlockInstanceLength))
 			.as("Model length")
-			.returns(14, from(ReferencePointModelAccessor::getModelLength))
-			.as("Model length")
-			.returns(2, from(ReferencePointModelAccessor::getRepeatingBlockInstanceCount))
+			.returns(4, from(ReferencePointModelAccessor::getModelLength))
+			.as("Model repeating instance count")
+			.returns(0, from(ReferencePointModelAccessor::getRepeatingBlockInstanceCount))
 			;
 		// @formatter:on
 	}
@@ -103,40 +112,57 @@ public class ReferencePointModelAccessorImpl_306_01Tests {
 		ReferencePointModelAccessor model = getTestDataInstance()
 				.findTypedModel(ReferencePointModelAccessor.class);
 
-		// WHEN
-		List<ReferencePoint> points = model.getReferencePoints();
+		// THEN
+		// @formatter:off
+		then(model)
+			.as("GHI")
+			.returns(950, from(ReferencePointModelAccessor::getGlobalHorizontalIrradiance))
+			.as("Current")
+			.returns(9, from(ReferencePointModelAccessor::getCurrent))
+			.as("Voltage")
+			.returns(38, from(ReferencePointModelAccessor::getVoltage))
+			.as("Temperature")
+			.returns(25, from(ReferencePointModelAccessor::getTemperature))
+			;
+		// @formatter:on
+	}
+
+	@Test
+	public void data_maximum() {
+		// GIVEN
+		ReferencePointModelAccessor model = getTestModel(BLOCK_ADDRESS, 0xFFFE, 0xFFFE, 0xFFFE, 0xFFFE);
 
 		// THEN
 		// @formatter:off
-		then(points)
-			.as("2 reference points returned")
-			.hasSize(2)
+		then(model)
+			.as("GHI read as unsigned")
+			.returns(65534, from(ReferencePointModelAccessor::getGlobalHorizontalIrradiance))
+			.as("Current read as unsigned")
+			.returns(65534, from(ReferencePointModelAccessor::getCurrent))
+			.as("Voltage read as unsigned")
+			.returns(65534, from(ReferencePointModelAccessor::getVoltage))
+			.as("Temperature read as unsigned")
+			.returns(65534, from(ReferencePointModelAccessor::getTemperature))
 			;
 		// @formatter:on
-		ReferencePoint p = points.get(0);
+	}
+
+	@Test
+	public void data_notImplemented() {
+		// GIVEN
+		ReferencePointModelAccessor model = getTestModel(BLOCK_ADDRESS, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF);
+
+		// THEN
 		// @formatter:off
-		then(p)
-			.as("ReferencePoint 1 irradiance")
-			.returns(12345, from(ReferencePoint::getIrradiance))
-			.as("ReferencePoint 1 current")
-			.returns(1.23f, from(ReferencePoint::getCurrent))
-			.as("ReferencePoint 1 voltage")
-			.returns(2.34f, from(ReferencePoint::getVoltage))
-			.as("ReferencePoint 1 temperature")
-			.returns(34.5f, from(ReferencePoint::getTemperature))
-			;
-		// @formatter:on
-		p = points.get(1);
-		// @formatter:off
-		then(p)
-			.as("ReferencePoint 2 irradiance")
-			.returns(23456, from(ReferencePoint::getIrradiance))
-			.as("ReferencePoint 2 current")
-			.returns(-2.34f, from(ReferencePoint::getCurrent))
-			.as("ReferencePoint 2 voltage")
-			.returns(-3.45f, from(ReferencePoint::getVoltage))
-			.as("ReferencePoint 2 temperature")
-			.returns(-45.6f, from(ReferencePoint::getTemperature))
+		then(model)
+			.as("GHI not implemented")
+			.returns(null, from(ReferencePointModelAccessor::getGlobalHorizontalIrradiance))
+			.as("Current not implemented")
+			.returns(null, from(ReferencePointModelAccessor::getCurrent))
+			.as("Voltage not implemented")
+			.returns(null, from(ReferencePointModelAccessor::getVoltage))
+			.as("Temperature not implemented")
+			.returns(null, from(ReferencePointModelAccessor::getTemperature))
 			;
 		// @formatter:on
 	}

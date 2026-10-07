@@ -19,14 +19,11 @@
 
 package net.solarnetwork.sunspec.core.environmental;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.List;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelId;
 import net.solarnetwork.sunspec.api.environmental.EnvironmentalModelId;
-import net.solarnetwork.sunspec.api.environmental.ReferencePoint;
 import net.solarnetwork.sunspec.api.environmental.ReferencePointModelAccessor;
 import net.solarnetwork.sunspec.api.environmental.ReferencePointModelRegister;
 import net.solarnetwork.sunspec.core.BaseModelAccessor;
@@ -42,8 +39,8 @@ import net.solarnetwork.sunspec.modbus.support.ModelData;
 public class ReferencePointModelAccessorImpl extends BaseModelAccessor
 		implements ReferencePointModelAccessor {
 
-	/** The model repeating block length. */
-	public static final int REPEATING_BLOCK_LENGTH = 7;
+	/** The model fixed block length. */
+	public static final int FIXED_BLOCK_LENGTH = 4;
 
 	/**
 	 * Constructor.
@@ -80,35 +77,32 @@ public class ReferencePointModelAccessorImpl extends BaseModelAccessor
 
 	@Override
 	public int getFixedBlockLength() {
-		return 0;
+		return FIXED_BLOCK_LENGTH;
 	}
 
 	@Override
-	public int getRepeatingBlockInstanceLength() {
-		return REPEATING_BLOCK_LENGTH;
-	}
-
-	@Override
-	protected Collection<? extends ModbusReference> getRepeatingBlockRegisters() {
+	protected Collection<? extends ModbusReference> getFixedBlockRegisters() {
 		return EnumSet.allOf(ReferencePointModelRegister.class);
 	}
 
-	@SuppressWarnings("EnumOrdinal")
 	@Override
-	public List<ReferencePoint> getReferencePoints() {
-		final int count = getModelLength();
-		final int baseAddr = getBlockAddress();
-		final List<ReferencePoint> points = new ArrayList<>(count);
-		final int propCount = ReferencePointModelRegister.values().length;
-		final @Nullable Integer[] data = new Integer[propCount];
-		for ( int i = 0; i < count; i += REPEATING_BLOCK_LENGTH ) {
-			final int blockAddr = baseAddr + i;
-			for ( int j = 0; j < propCount; j++ ) {
-				data[j] = getIntegerValue(ReferencePointModelRegister.values()[j], blockAddr);
-			}
-			points.add(new ReferencePoint(data));
-		}
-		return points;
+	public @Nullable Integer getGlobalHorizontalIrradiance() {
+		return getIntegerValue(ReferencePointModelRegister.GHI);
+	}
+
+	@Override
+	public @Nullable Integer getCurrent() {
+		return getIntegerValue(ReferencePointModelRegister.Amps);
+	}
+
+	@Override
+	public @Nullable Integer getVoltage() {
+		return getIntegerValue(ReferencePointModelRegister.Voltage);
+	}
+
+	@Override
+	public @Nullable Integer getTemperature() {
+		return getIntegerValue(ReferencePointModelRegister.Temperature);
 	}
 
 }

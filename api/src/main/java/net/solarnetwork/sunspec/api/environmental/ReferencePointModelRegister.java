@@ -19,7 +19,6 @@
 
 package net.solarnetwork.sunspec.api.environmental;
 
-import static net.solarnetwork.sunspec.modbus.ModbusDataType.Int32;
 import static net.solarnetwork.sunspec.modbus.ModbusDataType.UInt16;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.DataClassification;
@@ -44,13 +43,13 @@ public enum ReferencePointModelRegister implements ModbusReference {
 	GHI(0, UInt16),
 
 	/** Current measurement at reference point, in amps. */
-	Amps(1, Int32),
+	Amps(1, UInt16),
 
 	/** Voltage measurement at reference point, in volts. */
-	Voltage(3, Int32),
+	Voltage(2, UInt16),
 
 	/** Temperature measurement at reference point, in degrees Celsius. */
-	Temperature(5, Int32),
+	Temperature(3, UInt16),
 
 	;
 

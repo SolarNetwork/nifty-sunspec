@@ -19,12 +19,16 @@
 
 package net.solarnetwork.sunspec.api.environmental;
 
-import java.util.List;
 import org.jspecify.annotations.Nullable;
 import net.solarnetwork.sunspec.api.ModelAccessor;
 
 /**
  * API for accessing reference point model data.
+ *
+ * <p>
+ * SunSpec defines every reference point value as an unsigned 16-bit integer
+ * without a scale factor.
+ * </p>
  *
  * @author matt
  * @version 1.0
@@ -32,20 +36,35 @@ import net.solarnetwork.sunspec.api.ModelAccessor;
 public interface ReferencePointModelAccessor extends ModelAccessor {
 
 	/**
-	 * Get the list of available reference points.
+	 * Get the global horizontal irradiance.
 	 *
-	 * @return the reference points, never {@code null}
+	 * @return the irradiance, in W/m2
 	 */
-	List<ReferencePoint> getReferencePoints();
+	@Nullable
+	Integer getGlobalHorizontalIrradiance();
 
 	/**
-	 * Get the first available reference point element.
+	 * Get the current measurement at the reference point.
 	 *
-	 * @return the first available reference point, or {@code null}
+	 * @return the current, in amps
 	 */
-	default @Nullable ReferencePoint getReferencePoint() {
-		List<ReferencePoint> points = getReferencePoints();
-		return (points != null && !points.isEmpty() ? points.get(0) : null);
-	}
+	@Nullable
+	Integer getCurrent();
+
+	/**
+	 * Get the voltage measurement at the reference point.
+	 *
+	 * @return the voltage, in volts
+	 */
+	@Nullable
+	Integer getVoltage();
+
+	/**
+	 * Get the temperature measurement at the reference point.
+	 *
+	 * @return the temperature, in degrees Celsius
+	 */
+	@Nullable
+	Integer getTemperature();
 
 }

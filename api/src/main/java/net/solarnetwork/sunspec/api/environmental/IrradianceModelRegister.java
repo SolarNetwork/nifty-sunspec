@@ -30,8 +30,8 @@ import net.solarnetwork.sunspec.modbus.ModbusReference;
  * model 302.
  *
  * <p>
- * Note that all register addresses are encoded as an offset from the block
- * address of the model block.
+ * The model has no fixed block, so all register addresses are encoded as an
+ * offset from the start of each repeating block instance.
  * </p>
  *
  * @author matt
