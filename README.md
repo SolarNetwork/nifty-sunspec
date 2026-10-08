@@ -11,6 +11,8 @@ many, many moons.
 The [shell](shell/) project is an interactive command-line application for interrogating SunSpec
 devices over Modbus TCP or RTU, which can be compiled into a native executable with GraalVM.
 
+[![API JavaDoc](https://javadoc.io/badge2/net.solarnetwork.common/nifty-sunspec-api/JavaDoc%20API.svg)](https://javadoc.io/doc/net.solarnetwork.common/nifty-sunspec-api)
+[![Core JavaDoc](https://javadoc.io/badge2/net.solarnetwork.common/nifty-sunspec-core/JavaDoc%20Core.svg)](https://javadoc.io/doc/net.solarnetwork.common/nifty-sunspec-core)
 
 # Modbus connection
 
