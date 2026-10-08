@@ -27,7 +27,6 @@ all of which use the `net.solarnetwork.common` Group identifier:
 |:---------|:------|
 | `nifty-sunspec-api`  | The high-level interfaces. |
 | `nifty-sunspec-core` | The core implementation. |
-| `nifty-sunspec-shell` | An interactive SunSpec modbus client shell. |
 
 Typically it is sufficient to declare just the `nifty-sunspec-core` in your project. For example in
 a Gradle project:
