@@ -4,6 +4,7 @@ plugins {
 }
 
 apply plugin: 'java-library'
+apply plugin: 'com.vanniktech.maven.publish'
 
 description = 'Nifty SunSpec: Core'
 
@@ -31,4 +32,41 @@ tasks.withType(Jar).matching { it.name.contains('sources') }.configureEach {
 				+ version + '";roots:="."'
 		)
 	}
+}
+
+mavenPublishing {
+	coordinates(group, project.name, version)
+	publishToMavenCentral()
+	signAllPublications()
+	
+	pom {
+		name = project.description
+		description = 'A delightful little SunSpec modbus client library for Java.'
+		url = 'https://github.com/SolarNetwork/nifty-sunspec'
+		inceptionYear = '2026'
+		licenses {
+			license {
+				name = 'Apache License, Version 2.0'
+				url = 'https://opensource.org/license/Apache-2.0'
+			}
+		}
+		developers {
+			developer {
+				id = 'msqr'
+				name = 'Matt Magoffin'
+				email = 'matt@solarnetwork.net'
+				organization = 'SolarNetwork Foundation'
+				organizationUrl = 'https://solarnetwork.org.nz'
+			}
+		}
+		scm {
+			connection = 'scm:git:https://github.com/SolarNetwork/nifty-sunspec.git'
+			developerConnection = 'scm:git:git@github.com:SolarNetwork/nifty-sunspec.git'
+			url = 'https://github.com/SolarNetwork/nifty-sunspec'
+		}
+	}
+}
+
+signing {
+	useGpgCmd()
 }
