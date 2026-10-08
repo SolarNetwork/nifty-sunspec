@@ -62,6 +62,8 @@ processResources {
 graalvmNative {
 	binaries.main {
 		imageName = 'sunspec-shell'
+		// run on any ARMv8 CPU, not just ones with LSE
+		buildArgs.add('-march=compatibility')
 		// jSerialComm loads a native library
 		buildArgs.add('--enable-native-access=ALL-UNNAMED')
 	}
