@@ -25,7 +25,7 @@ tasks.withType(Jar).matching { it.name.contains('sources') }.configureEach {
 	manifest {
 		attributes(
 			'Bundle-SymbolicName': 'net.solarnetwork.sunspec.core.sources',
-			'Bundle-Name': 'SolarNetwork SunSpec Core Sources',
+			'Bundle-Name': 'Nifty SunSpec Core Sources',
 			'Bundle-Version': version,
 			'Bundle-ManifestVersion': '2',
 			'Eclipse-SourceBundle': 'net.solarnetwork.sunspec.core;version="'
@@ -41,7 +41,7 @@ mavenPublishing {
 	
 	pom {
 		name = project.description
-		description = 'A delightful little SunSpec modbus client library for Java.'
+		description = 'Core implementation of the Nifty SunSpec API.'
 		url = 'https://github.com/SolarNetwork/nifty-sunspec'
 		inceptionYear = '2026'
 		licenses {

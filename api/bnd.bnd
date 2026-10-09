@@ -1,5 +1,5 @@
 Bundle-SymbolicName: net.solarnetwork.sunspec.api
-Bundle-Name: SolarNetwork SunSpec API
+Bundle-Name: Nifty SunSpec API
 Bundle-Description: Core SunSpec API.
 Bundle-Vendor: SolarNetwork
 Export-Package: \

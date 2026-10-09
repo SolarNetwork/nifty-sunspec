@@ -1,0 +1,10 @@
+Bundle-SymbolicName: net.solarnetwork.sunspec.modbus.nifty
+Bundle-Name: Nifty SunSpec Modbus Integration - Nifty Modbus
+Bundle-Description: Core SunSpec implementation.
+Bundle-Vendor: SolarNetwork
+Export-Package: \
+	net.solarnetwork.sunspec.modbus.nifty.*
+Import-Package: \
+	!java.*,\
+	!org.jspecify.annotations,\
+	*

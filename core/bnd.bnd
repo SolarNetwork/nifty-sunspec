@@ -1,5 +1,5 @@
 Bundle-SymbolicName: net.solarnetwork.sunspec.core
-Bundle-Name: SolarNetwork SunSpec Core
+Bundle-Name: Nifty SunSpec Core
 Bundle-Description: Core SunSpec implementation.
 Bundle-Vendor: SolarNetwork
 Export-Package: \

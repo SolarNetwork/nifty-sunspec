@@ -12,10 +12,12 @@ rootProject.name = 'nifty-sunspec'
 
 include('api')
 include('core')
+include('modbus-nifty')
 include('shell')
 include('test')
 
 project(':api').name = 'nifty-sunspec-api'
 project(':core').name = 'nifty-sunspec-core'
+project(':modbus-nifty').name = 'nifty-sunspec-modbus-nifty'
 project(':shell').name = 'nifty-sunspec-shell'
 project(':test').name = 'nifty-sunspec-test'
