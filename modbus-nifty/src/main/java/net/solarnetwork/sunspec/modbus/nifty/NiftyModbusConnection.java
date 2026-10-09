@@ -17,7 +17,7 @@
  * ==================================================================
  */
 
-package net.solarnetwork.sunspec.shell;
+package net.solarnetwork.sunspec.modbus.nifty;
 
 import static net.solarnetwork.io.modbus.netty.msg.RegistersModbusMessage.readHoldingsRequest;
 import static net.solarnetwork.io.modbus.netty.msg.RegistersModbusMessage.readInputsRequest;

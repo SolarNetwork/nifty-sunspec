@@ -48,6 +48,7 @@ import net.solarnetwork.sunspec.api.ModelAccessor;
 import net.solarnetwork.sunspec.core.GenericModelAccessor;
 import net.solarnetwork.sunspec.core.ModelDataFactory;
 import net.solarnetwork.sunspec.modbus.ModbusConnection;
+import net.solarnetwork.sunspec.modbus.nifty.NiftyModbusConnection;
 import net.solarnetwork.sunspec.modbus.support.ModelData;
 
 /**

@@ -21,8 +21,6 @@ package net.solarnetwork.sunspec.shell.test;
 
 import static net.solarnetwork.sunspec.modbus.ModbusReadFunction.ReadHoldingRegister;
 import static net.solarnetwork.sunspec.shell.SunSpecShell.PROMPT;
-import static net.solarnetwork.sunspec.shell.test.NiftyModbusConnectionTests.freePort;
-import static net.solarnetwork.sunspec.shell.test.NiftyModbusConnectionTests.startServer;
 import static net.solarnetwork.sunspec.shell.test.TestDevices.DER_DUMP;
 import static net.solarnetwork.sunspec.shell.test.TestDevices.INVERTER_DUMP;
 import static net.solarnetwork.sunspec.shell.test.TestDevices.connection;
@@ -39,6 +37,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.ServerSocket;
 import org.junit.jupiter.api.Test;
 import net.solarnetwork.io.modbus.tcp.netty.NettyTcpModbusServer;
 import net.solarnetwork.sunspec.api.inverter.InverterMpptExtensionModelAccessor;
@@ -73,6 +72,27 @@ public class SunSpecShellTests {
 	private SunSpecShell shell(String input) {
 		return new SunSpecShell(conn, data, new BufferedReader(new StringReader(input)),
 				new PrintWriter(out, true));
+	}
+
+	/**
+	 * Get a free TCP port.
+	 *
+	 * @return the port
+	 * @throws IOException
+	 *         if no port is available
+	 */
+	public static int freePort() throws IOException {
+		try (ServerSocket s = new ServerSocket(0)) {
+			return s.getLocalPort();
+		}
+	}
+
+	private static NettyTcpModbusServer startServer(int port, SunSpecDeviceSimulator device)
+			throws IOException {
+		NettyTcpModbusServer server = new NettyTcpModbusServer("127.0.0.1", port);
+		server.setMessageHandler(device);
+		server.start();
+		return server;
 	}
 
 	@Test

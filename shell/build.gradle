@@ -8,6 +8,7 @@ description = 'Nifty SunSpec: Shell'
 dependencies {
 	implementation project(':nifty-sunspec-api')
 	implementation project(':nifty-sunspec-core')
+	implementation project(':nifty-sunspec-modbus-nifty')
 	implementation "com.github.freva:ascii-table:${rootProject.ext.asciiTableVersion}"
 	implementation "net.solarnetwork.common:nifty-modbus-api:${rootProject.ext.niftyModbusVersion}"
 	implementation "net.solarnetwork.common:nifty-modbus-core:${rootProject.ext.niftyModbusVersion}"

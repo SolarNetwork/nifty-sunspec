@@ -17,7 +17,7 @@
  * ==================================================================
  */
 
-package net.solarnetwork.sunspec.shell.test;
+package net.solarnetwork.sunspec.modbus.nifty.test;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static net.solarnetwork.sunspec.modbus.ModbusReadFunction.ReadCoil;
@@ -39,7 +39,7 @@ import net.solarnetwork.io.modbus.netty.channel.MultiThreadIoEventLoopGroupFacto
 import net.solarnetwork.io.modbus.tcp.netty.NettyTcpModbusClientConfig;
 import net.solarnetwork.io.modbus.tcp.netty.NettyTcpModbusServer;
 import net.solarnetwork.io.modbus.tcp.netty.TcpNettyModbusClient;
-import net.solarnetwork.sunspec.shell.NiftyModbusConnection;
+import net.solarnetwork.sunspec.modbus.nifty.NiftyModbusConnection;
 
 /**
  * Test cases for the {@link NiftyModbusConnection} class, with a simulated

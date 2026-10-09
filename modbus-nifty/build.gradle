@@ -1,0 +1,79 @@
+plugins {
+    id 'java-library'
+    id 'biz.aQute.bnd.builder'
+}
+
+apply plugin: 'java-library'
+apply plugin: 'com.vanniktech.maven.publish'
+
+description = 'Nifty SunSpec: Modbus Integration - Nifty Modbus'
+
+dependencies {
+	implementation project(':nifty-sunspec-api')
+	implementation "org.jspecify:jspecify:${rootProject.ext.jSpecifyVersion}"
+	implementation "org.slf4j:slf4j-api:${rootProject.ext.slf4jVersion}"
+	
+	// Nifty Modbus
+	implementation "net.solarnetwork.common:nifty-modbus-api:${rootProject.ext.niftyModbusVersion}"
+	implementation "net.solarnetwork.common:nifty-modbus-core:${rootProject.ext.niftyModbusVersion}"
+	
+	// Testing
+	testImplementation project(':nifty-sunspec-test')
+	testImplementation project(':nifty-sunspec-core')
+	testImplementation "io.netty:netty-transport:${rootProject.ext.nettyVersion}"
+	testImplementation "net.solarnetwork.common:nifty-modbus-tcp:${rootProject.ext.niftyModbusVersion}"
+}
+
+jar.manifest {
+    attributes('Implementation-Version': version)
+}
+
+tasks.withType(Jar).matching { it.name.contains('sources') }.configureEach {
+	manifest {
+		attributes(
+			'Bundle-SymbolicName': 'net.solarnetwork.sunspec.modbus.nifty.sources',
+			'Bundle-Name': 'Nifty SunSpec Modbus Integration - Nifty Modbus Sources',
+			'Bundle-Version': version,
+			'Bundle-ManifestVersion': '2',
+			'Eclipse-SourceBundle': 'net.solarnetwork.sunspec.modbus.nifty;version="'
+				+ version + '";roots:="."'
+		)
+	}
+}
+
+mavenPublishing {
+	coordinates(group, project.name, version)
+	publishToMavenCentral()
+	signAllPublications()
+	
+	pom {
+		name = project.description
+		description = 'Nifty Modbus implementation of the Nifty SunSpec Modbus API.'
+		url = 'https://github.com/SolarNetwork/nifty-sunspec'
+		inceptionYear = '2026'
+		licenses {
+			license {
+				name = 'Apache License, Version 2.0'
+				url = 'https://opensource.org/license/Apache-2.0'
+			}
+		}
+		developers {
+			developer {
+				id = 'msqr'
+				name = 'Matt Magoffin'
+				email = 'matt@solarnetwork.net'
+				organization = 'SolarNetwork Foundation'
+				organizationUrl = 'https://solarnetwork.org.nz'
+			}
+		}
+		scm {
+			connection = 'scm:git:https://github.com/SolarNetwork/nifty-sunspec.git'
+			developerConnection = 'scm:git:git@github.com:SolarNetwork/nifty-sunspec.git'
+			url = 'https://github.com/SolarNetwork/nifty-sunspec'
+		}
+	}
+}
+
+signing {
+	useGpgCmd()
+}
