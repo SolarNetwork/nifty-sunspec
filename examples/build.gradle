@@ -1,0 +1,23 @@
+plugins {
+    id 'java-library'
+}
+
+apply plugin: 'java-library'
+
+description = 'Nifty SunSpec: Examples'
+
+dependencies {
+	implementation project(':nifty-sunspec-api')
+	implementation project(':nifty-sunspec-core')
+	implementation "org.jspecify:jspecify:${rootProject.ext.jSpecifyVersion}"
+	implementation "org.slf4j:slf4j-api:${rootProject.ext.slf4jVersion}"
+}
+
+jar.manifest {
+    attributes('Implementation-Version': version)
+}
+
+
+javadoc {
+	enabled = false
+}
