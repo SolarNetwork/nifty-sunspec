@@ -48,7 +48,7 @@ nextDevRelease () {
     local patch=0
     local special=0
     semverParseInto $1 major minor patch special
-    echo "$major.$minor.$(($patch + 1))-dev.0"
+    echo "$major.$minor.$(($patch + 1)).dev0"
 }
 
 doRelease () {
