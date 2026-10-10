@@ -52,8 +52,8 @@ public class ModelData extends ModbusData implements CommonModelAccessor {
 
 	private final int baseAddress;
 	private final int blockAddress;
+	private final List<ModelAccessor> models;
 	private int maxReadWordsCount;
-	private List<ModelAccessor> models;
 
 	private volatile @Nullable ConcurrentMap<String, Object> metadata;
 
@@ -160,14 +160,27 @@ public class ModelData extends ModbusData implements CommonModelAccessor {
 			T result = (T) this;
 			return result;
 		}
-		List<ModelAccessor> list = getModels();
-		if ( list != null ) {
-			for ( ModelAccessor ma : list ) {
-				if ( type.isAssignableFrom(ma.getClass()) ) {
-					@SuppressWarnings("unchecked")
-					T result = (T) ma;
-					return result;
-				}
+		for ( ModelAccessor ma : getModels() ) {
+			if ( type.isAssignableFrom(ma.getClass()) ) {
+				@SuppressWarnings("unchecked")
+				T result = (T) ma;
+				return result;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Find the first-avaialble model based on a model ID.
+	 *
+	 * @param id
+	 *        the ID of the model to find
+	 * @return the found model, or {@code null} if not found
+	 */
+	public @Nullable ModelAccessor findModel(int id) {
+		for ( ModelAccessor ma : getModels() ) {
+			if ( id == ma.getModelId().getId() ) {
+				return ma;
 			}
 		}
 		return null;
