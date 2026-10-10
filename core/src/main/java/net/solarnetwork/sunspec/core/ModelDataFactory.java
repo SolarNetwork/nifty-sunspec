@@ -449,6 +449,7 @@ public class ModelDataFactory {
 		if ( props != null ) {
 			String accessorClassName = props.getProperty(String.valueOf(modelId));
 			if ( accessorClassName != null ) {
+				Throwable t = null;
 				for ( ClassLoader cl : new ClassLoader[] {
 						Thread.currentThread().getContextClassLoader(),
 						data.getClass().getClassLoader() } ) {
@@ -467,10 +468,12 @@ public class ModelDataFactory {
 					} catch ( ClassNotFoundException | NoSuchMethodException | SecurityException
 							| InstantiationException | IllegalAccessException | IllegalArgumentException
 							| InvocationTargetException e ) {
-						log.warn(
-								"Error loading SunSpec ModelAccessor class {} for model {} using class loader {}: {}",
-								accessorClassName, modelId, cl, e.toString());
+						t = e;
 					}
+				}
+				if ( t != null ) {
+					log.warn("Error loading SunSpec ModelAccessor class {} for model {} {}: {}",
+							accessorClassName, modelId, t.toString());
 				}
 			}
 		}
