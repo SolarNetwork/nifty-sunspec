@@ -148,7 +148,7 @@ public interface ModelAccessor extends PointGroup {
 ## PointGroup API
 
 The `ModelAccessor` API actually extends a lower-level `PointGroup` API, so you can view the data
-(points) available in the model without known its more specific `ModelAccessor` extension. If a
+(points) available in the model without knowing its more specific `ModelAccessor` extension. If a
 model has any repeating blocks, those will show up as nested `PointGroup` objects, available via the
 `getPointGroups()` method.
 
