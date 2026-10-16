@@ -219,4 +219,5 @@ The component artifacts will be created within the `build/libs` directory of eac
 
  * `api/build/libs/nifty-sunspec-api-X.Y.Z.jar`
  * `core/build/libs/nifty-sunspec-core-X.Y.Z.jar`
+ * `modbus-nifty/build/libs/nifty-sunspec-modbus-nifty-X.Y.Z.jar`
  * `shell/build/libs/nifty-sunspec-shell-X.Y.Z.jar`
